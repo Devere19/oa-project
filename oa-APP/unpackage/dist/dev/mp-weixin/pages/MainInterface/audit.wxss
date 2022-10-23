@@ -1,0 +1,39 @@
+
+.numberCard {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: center;
+	top: 210rpx;
+	height: 165rpx;
+	width: 92%;
+	margin-left: 3.5%;
+	border-radius: 30rpx;
+	border: #00ffff solid 5rpx;
+	background-color: #ffffff;
+	box-shadow: -5rpx 5rpx 15rpx #00ffff;
+	position: absolute;
+}
+.numberCardItem {
+	height: 150rpx;
+	border-radius: 50rpx;
+	flex: 1;
+}
+.numberCardItemBorder {
+	position: relative;
+
+	display: flex;
+
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.count {
+	color: #0081ff;
+	font-size: 50rpx;
+	margin-bottom: 3%;
+}
+.tips {
+	color: #8799a3;
+}
+
