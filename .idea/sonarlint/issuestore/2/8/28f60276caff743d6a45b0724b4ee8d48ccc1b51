@@ -1,0 +1,21 @@
+
+~javascript:S1172"]Remove the unused function parameter "key" or rename it to "_key" to make intention explicit.(÷‡Ã ÿÿÿÿÿ
+€javascript:S1172Q"_Remove the unused function parameter "data" or rename it to "_data" to make intention explicit.(Í‡©©ÿÿÿÿÿ
+|javascript:S1488T"`Immediately return this expression instead of assigning it to the temporary variable "realname".(Ü¥–Ô
+Kjavascript:S1854T"/Remove this useless assignment to variable "a".(Ü¥–Ô
+>javascript:S1788h""Default parameters should be last.(°óÒ
+{javascript:S1172h"_Remove the unused function parameter "name" or rename it to "_name" to make intention explicit.(°óÒ
+Qjavascript:S6353"4Use concise quantifier syntax '+' instead of '{1,}'.(´×Ş
+Xjavascript:S6353";Use concise character class syntax '\d' instead of '[0-9]'.(´×Ş
+njavascript:S4138Ç"LExpected a `for-of` loop instead of a `for` loop with this simple iteration.(ŞÕ¡ƒıÿÿÿÿ
+Fjavascript:S3504×")Unexpected var, use let or const instead.(Â¶Ô
+ƒjavascript:S1172Ú"aRemove the unused function parameter "index" or rename it to "_index" to make intention explicit.(‘• ıÿÿÿÿ
+qjavascript:S3776ë"TRefactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.(±Ì„Ú
+Kjavascript:S3504ö")Unexpected var, use let or const instead.(îôµüùÿÿÿÿ
+ijavascript:S1764„"LCorrect one of the identical sub-expressions on both sides of operator "!=="(±µª²
+njavascript:S1764…"LCorrect one of the identical sub-expressions on both sides of operator "!=="( Òä³ûÿÿÿÿ
+Kjavascript:S3504")Unexpected var, use let or const instead.(áÿÀ£ıÿÿÿÿ
+ijavascript:S4138•"LExpected a `for-of` loop instead of a `for` loop with this simple iteration.(ÄûÄë
+Fjavascript:S3504•")Unexpected var, use let or const instead.(ÄûÄë
+Fjavascript:S3504–")Unexpected var, use let or const instead.(¹ŠŸı
+Yjavascript:S1126 "<Replace this if-then-else flow by a single return statement.(³ªù­

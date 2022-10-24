@@ -1,0 +1,8 @@
+
+IWeb:AvoidCommentedOutCodeCheck"Remove this commented out code.(®“èô
+IWeb:AvoidCommentedOutCodeCheck"Remove this commented out code.(¬ìò˜
+NWeb:AvoidCommentedOutCodeCheck"Remove this commented out code.(éØ¶îıÿÿÿÿ
+NWeb:AvoidCommentedOutCodeCheck"Remove this commented out code.(‹·Êşÿÿÿÿ
+pjavascript:S3776x"TRefactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.(Õê—À
+\javascript:S2589"@This always evaluates to truthy. Consider refactoring this code.(¶ŞÿK
+bjavascript:S2589‚"@This always evaluates to truthy. Consider refactoring this code.(Ò†Ù¬ÿÿÿÿÿ

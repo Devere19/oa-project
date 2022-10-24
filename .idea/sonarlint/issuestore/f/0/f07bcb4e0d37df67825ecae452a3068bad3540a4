@@ -1,0 +1,11 @@
+
+ujavascript:S3776e"TRefactor this function to reduce its Cognitive Complexity from 30 to the 15 allowed.(å™õºşÿÿÿÿ
+Zjavascript:S1481w"9Remove the declaration of the unused 'dateStar' variable.(öÅæÿÿÿÿÿ
+Wjavascript:S1854w"6Remove this useless assignment to variable "dateStar".(öÅæÿÿÿÿÿ
+Tjavascript:S1481x"8Remove the declaration of the unused 'dateEnd' variable.(¥Óê¼
+Qjavascript:S1854x"5Remove this useless assignment to variable "dateEnd".(¥Óê¼
+vjavascript:S3776œ"TRefactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.(óò›§üÿÿÿÿ
+javascript:S1172œ"_Remove the unused function parameter "type" or rename it to "_type" to make intention explicit.(óò›§üÿÿÿÿ
+\javascript:S1481":Remove the declaration of the unused 'dateGroup' variable.(˜“•ûøÿÿÿÿ
+qjavascript:S3776¾"TRefactor this function to reduce its Cognitive Complexity from 59 to the 15 allowed.(æäúĞ
+vjavascript:S3776½"TRefactor this function to reduce its Cognitive Complexity from 22 to the 15 allowed.(«Åàøüÿÿÿÿ

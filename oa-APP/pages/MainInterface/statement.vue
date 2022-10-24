@@ -1,16 +1,16 @@
 <template>
 	<view>
-		<view>
+		<view :style="{marginTop:statusBarHeight+'px'}">
 			<!-- 公司选择器 -->
 			<picker @change="changeCompany($event)" :range="companyList">
 				<uni-nav-bar :title="companyList[chooseCompany]+'▼'" backgroundColor="#F8F8F8" />
 			</picker>
 		</view>
-		<swiper :style="{height:screenheight+'px',backgroundColor:'#ffffff'}" :current="currentSwiper" indicator-dots
+		<swiper :style="{height:screenheight-statusBarHeight+'px',backgroundColor:'#ffffff'}" :current="currentSwiper" indicator-dots
 			circular @change="changeSwiper">
 			<swiper-item v-for="(item,index) in companyList">
 				<view class="horizontalCenter">
-					<view class="swiperItem" :style="{height:screenheight*17/20+'px',marginTop:screenheight*1/20+'px'}">
+					<view class="swiperItem" :style="{height:(screenheight-statusBarHeight)*17/20+'px',marginTop:screenheight*1/20+'px'}">
 						<view class="horizontalCenter">
 							<uni-segmented-control class="segmentdControl" :current="timeCurrent" :values="timeItems"
 								styleType="button" activeColor="#007aff" @clickItem="chooseTimeItems">
@@ -238,6 +238,7 @@
 		data() {
 			return {
 				screenheight: 0,
+				statusBarHeight:0,
 				chooseCompany: 0,
 				currentSwiper: 0,
 				timeItems: ['日', '月', '季', '年'],
@@ -257,7 +258,7 @@
 			uni.setNavigationBarTitle({
 				title: this.companyList[0].companyName
 			});
-			this.screenheight = this.getscreenheight();
+			this.getscreenheight();
 
 			this.nowDate = new Date().toISOString().slice(0, 10);
 
@@ -266,14 +267,16 @@
 		methods: {
 			getscreenheight() {
 				var resultheight = 0;
+				const that=this;
 				uni.getSystemInfo({
 					success: function(res) {
 						console.log(res.windowHeight);
-						resultheight = res.windowHeight - 45
+						console.log(res.statusBarHeight);
+						that.statusBarHeight=res.statusBarHeight;
+						that.screenheight=res.windowHeight-45;
 					}
 				});
 				console.log(resultheight);
-				return resultheight;
 			},
 			changeCompany(e) {
 				this.chooseCompany = e.detail.value;
@@ -335,11 +338,6 @@
 			url('/static/fontUtil/UnidreamLED.woff') format('woff'),
 			local('UnidreamLED'), url("/static/fontUtil/UnidreamLED.woff");
 		/***默认使用本地的***/
-	}
-
-	.navbarGroup {
-		background-color: #F8F8F8;
-		font-size: 16px;
 	}
 
 	.horizontalCenter {

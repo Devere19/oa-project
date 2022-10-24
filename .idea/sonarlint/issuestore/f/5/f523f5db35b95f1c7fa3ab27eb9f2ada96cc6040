@@ -1,0 +1,11 @@
+
+IWeb:AvoidCommentedOutCodeCheckQ"Remove this commented out code.(³Ÿá
+€javascript:S1172½"cRemove the unused function parameter "oldVal" or rename it to "_oldVal" to make intention explicit.(Ï­ûß
+Hjavascript:S2688’"+Use the isNaN function to compare with NaN.(æÇ©·
+vjavascript:S3776º"TRefactor this function to reduce its Cognitive Complexity from 20 to the 15 allowed.(Í»ý†ùÿÿÿÿ
+bjavascript:S1121Ö"@Extract the assignment of "this.startYear" from this expression.(¨þöÒÿÿÿÿÿ
+`javascript:S1121Ö">Extract the assignment of "this.endYear" from this expression.(¨þöÒÿÿÿÿÿ
+Mjavascript:S2688Ù"+Use the isNaN function to compare with NaN.(÷ã¼Òýÿÿÿÿ
+]javascript:S6353Ý";Use concise character class syntax '\d' instead of '[0-9]'.(É’îÑùÿÿÿÿ
+]javascript:S6353Ý";Use concise character class syntax '\d' instead of '[0-9]'.(É’îÑùÿÿÿÿ
+vjavascript:S1172ë"YRemove the unused function parameter "e" or rename it to "_e" to make intention explicit.(¹¿Ë×
