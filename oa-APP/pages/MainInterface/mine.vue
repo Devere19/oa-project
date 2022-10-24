@@ -6,15 +6,15 @@
 				<text class="user-name">{{user.name}}</text>
 			</view>
 		</view>
-		<uni-grid class="grid" :column="4" :showBorder="false" :square="true">
+<!-- 		<uni-grid class="grid" :column="4" :showBorder="false" :square="true">
 			<uni-grid-item class="item" v-for="(item,index) in gridList" @tap.native="tapGrid(item.text)"
 				:key="index">
 				<uni-icons class="icon" color="#007AFF" :type="item.icon" size="26"></uni-icons>
 				<text class="text">{{item.text}}</text>
 			</uni-grid-item>
-		</uni-grid>
+		</uni-grid> -->
 		<uni-list class="center-list" v-for="(sublist , index) in ucenterList" :key="index">
-			<uni-list-item v-for="(item,i) in sublist" :title="item.title" link :rightText="item.rightText" :key="i"
+			<uni-list-item class="functionItem" v-for="(item,i) in sublist" :title="item.title" link :rightText="item.rightText" :key="i"
 				:clickable="true" :to="item.to" :show-extra-icon="true" :extraIcon="{type:item.icon,color:'#999'}"
 				@tap="tapList(item.title)">
 			</uni-list-item>
@@ -197,4 +197,8 @@
 	}
 
 	/* #endif */
+	
+	.functionItem{
+		height: 100rpx;
+	}
 </style>

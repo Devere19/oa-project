@@ -1,57 +1,56 @@
 {
-	"pages": [
-		{
-		"path": "pages/MainInterface/audit",
-		"style": {
-			"navigationBarTitleText": "审批"
+	"pages": [{
+			"path": "pages/MainInterface/audit",
+			"style": {
+				"navigationBarTitleText": "审批"
 			}
 		},
 		{
-		"path": "pages/MainInterface/statement",
-		"style": {
-			"navigationBarTitleText": "统计"
+			"path": "pages/MainInterface/statement",
+			"style": {
+				"navigationStyle": "custom"
 			}
 		},
 		{
-		"path": "pages/MainInterface/mine",
-		"style": {
-			"navigationBarTitleText": "我的"
+			"path": "pages/MainInterface/mine",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		},
 		{
-		"path": "pages/audit/purchase",
-		"style": {
-			"navigationBarTitleText": "采购"
+			"path": "pages/audit/purchase",
+			"style": {
+				"navigationBarTitleText": "采购"
 			}
 		},
 		{
-		"path": "pages/audit/logistics",
-		"style": {
-			"navigationBarTitleText": "物流"
+			"path": "pages/audit/logistics",
+			"style": {
+				"navigationBarTitleText": "物流"
 			}
 		},
 		{
-		"path": "pages/audit/shipping",
-		"style": {
-			"navigationBarTitleText": "物流航运"
+			"path": "pages/audit/shipping",
+			"style": {
+				"navigationBarTitleText": "物流航运"
 			}
 		},
 		{
-		"path": "pages/detail/purchaseDetail",
-		"style": {
-			"navigationBarTitleText": "采购详情"
+			"path": "pages/detail/purchaseDetail",
+			"style": {
+				"navigationBarTitleText": "采购详情"
 			}
 		},
 		{
-		"path": "pages/detail/logisticsDetail",
-		"style": {
-			"navigationBarTitleText": "物流详情"
+			"path": "pages/detail/logisticsDetail",
+			"style": {
+				"navigationBarTitleText": "物流详情"
 			}
 		},
 		{
-		"path": "pages/detail/shippingDetail",
-		"style": {
-			"navigationBarTitleText": "航运详情"
+			"path": "pages/detail/shippingDetail",
+			"style": {
+				"navigationBarTitleText": "航运详情"
 			}
 		}
 	],
@@ -60,8 +59,7 @@
 		"height": "60px",
 		"iconWidth": "30px",
 		"fontSize": "12px",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/MainInterface/audit",
 				"text": "审批",
 				"iconPath": "static/tabbar/aduit.png",
