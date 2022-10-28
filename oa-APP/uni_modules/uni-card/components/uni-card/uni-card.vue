@@ -15,7 +15,7 @@
 						<image class="uni-card__header-avatar-image" :src="thumbnail" mode="aspectFit" />
 					</view>
 					<view class="uni-card__header-content">
-						<text class="uni-card__header-content-title uni-ellipsis" :style="{'color':title=='物流航运类'||title=='航运物流单'?'#ff557f':title=='物流类'||title=='物流单'?'#ff5500':'#0081ff'}">{{ title }}</text>
+						<text class="uni-card__header-content-title uni-ellipsis" :style="{'color':title=='物流海运类'||title=='海运物流单'?'#ff557f':title=='物流类'||title=='物流单'?'#ff5500':'#0081ff'}">{{ title }}</text>
 						<text v-if="title&&subTitle"
 							class="uni-card__header-content-subtitle uni-ellipsis">{{ subTitle }}</text>
 					</view>

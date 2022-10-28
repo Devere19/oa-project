@@ -47,7 +47,7 @@
 					</uni-list>
 				</view>
 			</uni-card>
-			<uni-card :isFull="true" title="物流航运类" extra="更多>" :style="'margin-top:30rpx'" @tap="toShipping">
+			<uni-card :isFull="true" title="物流海运类" extra="更多>" :style="'margin-top:30rpx'" @tap="toShipping">
 				<uni-grid :column="3" :highlight="true" :showBorder="false" :square="false" @change="shippingClick">
 					<uni-grid-item v-for="(item, index) in shoppingCount" :index="index">
 						<view class="numberCardItem">
@@ -67,6 +67,13 @@
 					</uni-list>
 				</view>
 			</uni-card>
+<!-- 			<uni-card :isFull="true" :padding="0" title="办公类" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
+				<view>
+					<uni-list v-for="(item,index) in purchaseList">
+						<uni-list-item :title="item.goodsName" :rightText="item.supplier" link="" @tap="toDetail('purchase',item.contractNo)" showArrow></uni-list-item>
+					</uni-list>
+				</view>
+			</uni-card> -->
 		</view>
 	</view>
 </template>

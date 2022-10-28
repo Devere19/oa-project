@@ -79,9 +79,9 @@
 						<view class="actionGroupItem" @tap="actionsClick('pass',item,index)">
 							<button class="buttonGroup" type="primary">通过</button>
 						</view>
-						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
+<!-- 						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
 							<button class="buttonGroup" type="warn">拒绝</button>
-						</view>
+						</view> -->
 						<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
 							<button class="buttonGroup">详情</button>
 						</view>
@@ -315,6 +315,11 @@
 			}else if(data.chooseForm==2){
 				this.chooseForm=2;
 			}
+		},
+		onNavigationBarButtonTap(){
+			uni.switchTab({
+				url:"/pages/MainInterface/audit"
+			})
 		},
 		onReachBottom() {
 			if(this.chooseForm==0){

@@ -87,6 +87,16 @@
 						<view class="contractContent">{{shippingContract.expenses}}</view>
 					</uni-col>
 				</uni-row>
+				<uni-row>
+					<uni-col class="subTitle">
+						<view>合同</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col class="screenShotCenter">
+						<image class="screenShot" mode="aspectFit" :src="shippingContract.contractPhoto" @tap="viewContractPhoto"></image>
+					</uni-col>
+				</uni-row>
 			</view>
 			<view>
 				<uni-row>
@@ -166,9 +176,9 @@
 				<view class="actionGroupItem" @tap="actionsClick('pass')">
 					<button class="buttonGroup" type="primary">通过</button>
 				</view>
-				<view class="actionGroupItem" @tap="actionsClick('refuse')">
+<!-- 				<view class="actionGroupItem" @tap="actionsClick('refuse')">
 					<button class="buttonGroup" type="warn">拒绝</button>
-				</view>
+				</view> -->
 				<view class="actionGroupItem" @tap="actionsClick('back')">
 					<button class="buttonGroup">返回</button>
 				</view>
@@ -212,7 +222,8 @@
 					thridState: 1,
 					paymentAmount: 27000,
 					paymentTime: "2022-10-23",
-					paymentPhoto: "/static/UIImages/purchaseScreenShot.png"
+					paymentPhoto: "/static/UIImages/purchaseScreenShot.png",
+					contractPhoto: "/static/UIImages/contract.png"
 				},
 				directorList: [{
 						directorId: "00001",
@@ -234,10 +245,20 @@
 			// 普通参数接收
 			console.log("合同号：" + data.contractNo);
 		},
+		onNavigationBarButtonTap(){
+			uni.switchTab({
+				url:"/pages/MainInterface/audit"
+			})
+		},
 		methods: {
 			viewscreenShot(){
 				uni.previewImage({
 					urls: [this.shippingContract.paymentPhoto]
+				})
+			},
+			viewContractPhoto(){
+				uni.previewImage({
+					urls: [this.shippingContract.contractPhoto]
 				})
 			},
 			actionsClick(result) {
@@ -278,9 +299,12 @@
 						}
 					})
 				} else {
-					uni.navigateTo({
-						url:'/pages/audit/shipping'
+					uni.navigateBack({
+						delta:1
 					});
+					// uni.navigateTo({
+					// 	url:'/pages/audit/shipping'
+					// });
 				}
 			}
 		}

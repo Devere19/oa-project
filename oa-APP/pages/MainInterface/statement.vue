@@ -63,6 +63,19 @@
 													{{Math.round((revenue-expenditures)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
+<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+											<uni-row>
+												<uni-col>
+													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
+												</uni-col>
+											</uni-row>
+											<uni-row>
+												<uni-col>
+													<view class="officeNumber horizontalCenter">
+														{{officeSpending}}</view>
+												</uni-col>
+											</uni-row>
+										</view> -->
 									</view>
 								</view>
 								<view v-show="timeCurrent === 1">
@@ -113,6 +126,19 @@
 													{{Math.round((revenue-expenditures)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
+<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+											<uni-row>
+												<uni-col>
+													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
+												</uni-col>
+											</uni-row>
+											<uni-row>
+												<uni-col>
+													<view class="officeNumber horizontalCenter">
+														{{officeSpending}}</view>
+												</uni-col>
+											</uni-row>
+										</view> -->
 									</view>
 								</view>
 								<view v-show="timeCurrent === 2">
@@ -169,6 +195,19 @@
 													{{Math.round((revenue-expenditures)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
+<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+											<uni-row>
+												<uni-col>
+													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
+												</uni-col>
+											</uni-row>
+											<uni-row>
+												<uni-col>
+													<view class="officeNumber horizontalCenter">
+														{{officeSpending}}</view>
+												</uni-col>
+											</uni-row>
+										</view> -->
 									</view>
 								</view>
 								<view v-show="timeCurrent === 3">
@@ -218,6 +257,19 @@
 													{{Math.round((revenue-expenditures)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
+<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+											<uni-row>
+												<uni-col>
+													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
+												</uni-col>
+											</uni-row>
+											<uni-row>
+												<uni-col>
+													<view class="officeNumber horizontalCenter">
+														{{officeSpending}}</view>
+												</uni-col>
+											</uni-row>
+										</view> -->
 									</view>
 								</view>
 							</view>
@@ -246,6 +298,7 @@
 				nowDate: "",
 				revenue: 0,
 				expenditures: 0,
+				officeSpending:0,
 				// chooseYearTF: true,
 				// chooseSeasonTF: true,
 				currentSeason:0,
@@ -281,10 +334,12 @@
 			changeCompany(e) {
 				this.chooseCompany = e.detail.value;
 				this.currentSwiper = this.chooseCompany;
+				console.log(this.currentSwiper);
 				this.setNumber();
 			},
 			changeSwiper(e) {
 				this.chooseCompany = e.detail.current;
+				this.currentSwiper=this.chooseCompany;
 				this.setNumber();
 			},
 			chooseTimeItems(e) {
@@ -307,6 +362,7 @@
 			setNumber() {
 				this.revenue = this.getRandom(10000, 100000);
 				this.expenditures = this.getRandom(10000, this.revenue);
+				this.officeSpending=this.getRandom(1000, 10000);
 				console.log(this.revenue);
 				console.log(this.expenditures);
 			},
@@ -381,11 +437,18 @@
 
 	.bigTitle {
 		font-size: 42rpx;
-		color: #007aff;
+		color: #009999;
 	}
 
 	.number {
 		color: #009999;
+		font-family: 'UnidreamLED';
+		height: 150rpx;
+		font-size: 100rpx;
+	}
+	
+	.officeNumber{
+		color: #aaaa7f;
 		font-family: 'UnidreamLED';
 		height: 150rpx;
 		font-size: 100rpx;

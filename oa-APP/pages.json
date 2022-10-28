@@ -20,37 +20,92 @@
 		{
 			"path": "pages/audit/purchase",
 			"style": {
-				"navigationBarTitleText": "采购"
+				"navigationBarTitleText": "采购",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/audit/logistics",
 			"style": {
-				"navigationBarTitleText": "物流"
+				"navigationBarTitleText": "物流",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/audit/shipping",
 			"style": {
-				"navigationBarTitleText": "物流航运"
+				"navigationBarTitleText": "物流海运"
 			}
 		},
 		{
 			"path": "pages/detail/purchaseDetail",
 			"style": {
-				"navigationBarTitleText": "采购详情"
+				"navigationBarTitleText": "采购详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/detail/logisticsDetail",
 			"style": {
-				"navigationBarTitleText": "物流详情"
+				"navigationBarTitleText": "物流详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
 			"path": "pages/detail/shippingDetail",
 			"style": {
-				"navigationBarTitleText": "航运详情"
+				"navigationBarTitleText": "航运详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
 			}
 		}
 	],

@@ -78,18 +78,12 @@
 					<view slot="actions" class="actionGroup">
 						<view class="actionGroupItem" @tap="actionsClick('pass',item,index)">
 							<button class="buttonGroup" type="primary">通过</button>
-							<!-- 						<uni-icons type="redo" size="18" color="#999"></uni-icons>
-							<text>分享</text> -->
 						</view>
-						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
+<!-- 						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
 							<button class="buttonGroup" type="warn">拒绝</button>
-							<!-- 						<uni-icons type="heart" size="18" color="#999"></uni-icons>
-							<text>点赞</text> -->
-						</view>
+						</view> -->
 						<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
 							<button class="buttonGroup">详情</button>
-							<!-- 						<uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
-							<text>评论</text> -->
 						</view>
 					</view>
 				</uni-card>
@@ -359,6 +353,11 @@
 			} else if (data.chooseForm == 2) {
 				this.chooseForm = 2;
 			}
+		},
+		onNavigationBarButtonTap(){
+			uni.switchTab({
+				url:"/pages/MainInterface/audit"
+			})
 		},
 		onReachBottom() {
 			if (this.chooseForm == 0) {

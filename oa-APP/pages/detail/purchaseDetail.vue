@@ -55,6 +55,33 @@
 						<view class="contractContent">{{purchaseContract.goodsUnit}}</view>
 					</uni-col>
 				</uni-row>
+				<uni-row>
+					<uni-col class="subTitle">
+						<view>入库详情</view>
+					</uni-col>
+				</uni-row>
+				<uni-table class="tableGroup" border stripe emptyText="暂无更多数据">
+					<uni-tr>
+						<uni-th width="10" align="center">厂名</uni-th>
+						<uni-th width="10" align="center">入库量</uni-th>
+						<uni-th width="10" align="center">当前库存量</uni-th>
+					</uni-tr>
+					<uni-tr v-for="(inBoundItem) in purchaseContract.inBoundData">
+						<uni-td align="center">{{ inBoundItem.factoryName }}</uni-td>
+						<uni-td align="center">{{ inBoundItem.receipt }}</uni-td>
+						<uni-td align="center">{{ inBoundItem.stock }}</uni-td>
+					</uni-tr>
+				</uni-table>
+				<uni-row>
+					<uni-col class="subTitle">
+						<view>合同</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col class="screenShotCenter">
+						<image class="screenShot" mode="aspectFit" :src="purchaseContract.contractPhoto" @tap="viewContractPhoto"></image>
+					</uni-col>
+				</uni-row>
 			</view>
 			<view>
 				<uni-row>
@@ -134,9 +161,9 @@
 				<view class="actionGroupItem" @tap="actionsClick('pass')">
 					<button class="buttonGroup" type="primary">通过</button>
 				</view>
-				<view class="actionGroupItem" @tap="actionsClick('refuse')">
+<!-- 				<view class="actionGroupItem" @tap="actionsClick('refuse')">
 					<button class="buttonGroup" type="warn">拒绝</button>
-				</view>
+				</view> -->
 				<view class="actionGroupItem" @tap="actionsClick('back')">
 					<button class="buttonGroup">返回</button>
 				</view>
@@ -161,13 +188,41 @@
 					goodsName: "白糖",
 					goodsCount: 200,
 					goodsUnit: "吨",
+					inBoundData:[
+						{
+							factoryName:"A厂",
+							receipt:"40",
+							stock:"100",
+						},
+						{
+							factoryName:"B厂",
+							receipt:"30",
+							stock:"20",
+						},
+						{
+							factoryName:"C厂",
+							receipt:"70",
+							stock:"10",
+						},
+						{
+							factoryName:"D厂",
+							receipt:"20",
+							stock:"80",
+						},
+						{
+							factoryName:"E厂",
+							receipt:"40",
+							stock:"20",
+						},
+					],
 					financeStaff: "李某某",
 					firstState: 0,
 					secondState: 1,
 					thridState: 1,
 					paymentAmount: 27000,
 					paymentTime: "2022-10-23",
-					paymentPhoto: "/static/UIImages/purchaseScreenShot.png"
+					paymentPhoto: "/static/UIImages/purchaseScreenShot.png",
+					contractPhoto: "/static/UIImages/contract.png"
 				},
 				directorList: [{
 						directorId: "00001",
@@ -189,10 +244,20 @@
 			// 普通参数接收
 			console.log("合同号：" + data.contractNo);
 		},
+		onNavigationBarButtonTap(){
+			uni.switchTab({
+				url:"/pages/MainInterface/audit"
+			})
+		},
 		methods: {
 			viewscreenShot(){
 				uni.previewImage({
 					urls: [this.purchaseContract.paymentPhoto]
+				})
+			},
+			viewContractPhoto(){
+				uni.previewImage({
+					urls: [this.purchaseContract.contractPhoto]
 				})
 			},
 			actionsClick(result) {
@@ -233,12 +298,12 @@
 						}
 					})
 				} else {
-					// uni.navigateBack({
-					// 	delta:2
-					// })
-					uni.navigateTo({
-						url:'/pages/audit/purchase'
-					});
+					uni.navigateBack({
+						delta:1
+					})
+					// uni.navigateTo({
+					// 	url:'/pages/audit/purchase'
+					// });
 				}
 			}
 		}
@@ -321,6 +386,11 @@
 		color: #0081ff;
 		font-size: 28rpx;
 		font-weight: bolder;
+	}
+	
+	.tableGroup{
+		margin-top: 20rpx;
+		margin-bottom: 20rpx;
 	}
 
 	.screenShotCenter {

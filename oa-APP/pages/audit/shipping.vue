@@ -26,7 +26,7 @@
 		</view>
 		<view v-show="chooseForm==0" v-for="(item,index) in unauditedList" :key="item.contractNo" class="formCard">
 			<uni-transition custom-class="transition" :duration=500 :mode-class="item.modeClass" :show="item.show">
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="航运物流单" :subTitle="item.contractNo"
+				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运物流单" :subTitle="item.contractNo"
 					:extra="item.carrierCompanyName">
 					<view class="cardContent">
 						<uni-row style="width: 100%;">
@@ -79,9 +79,9 @@
 						<view class="actionGroupItem" @tap="actionsClick('pass',item,index)">
 							<button class="buttonGroup" type="primary">通过</button>
 						</view>
-						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
+<!-- 						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
 							<button class="buttonGroup" type="warn">拒绝</button>
-						</view>
+						</view> -->
 						<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
 							<button class="buttonGroup">详情</button>
 						</view>
@@ -90,7 +90,7 @@
 			</uni-transition>
 		</view>
 		<view v-show="chooseForm==1" v-for="(item,index) in auditedList" :key="item.contractNo" class="formCard">
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="航运物流单" :subTitle="item.contractNo"
+				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运物流单" :subTitle="item.contractNo"
 					:extra="item.carrierCompanyName">
 					<view class="cardContent">
 						<uni-row style="width: 100%;">
@@ -147,7 +147,7 @@
 				</uni-card>
 		</view>
 		<view v-show="chooseForm==2" v-for="(item,index) in completedList" :key="item.contractNo" class="formCard">
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="航运物流单" :subTitle="item.contractNo"
+				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运物流单" :subTitle="item.contractNo"
 					:extra="item.carrierCompanyName">
 					<view class="cardContent">
 						<uni-row style="width: 100%;">
@@ -316,6 +316,11 @@
 			}else if(data.chooseForm==2){
 				this.chooseForm=2;
 			}
+		},
+		onNavigationBarButtonTap(){
+			uni.switchTab({
+				url:"/pages/MainInterface/audit"
+			})
 		},
 		onReachBottom() {
 			if(this.chooseForm==0){

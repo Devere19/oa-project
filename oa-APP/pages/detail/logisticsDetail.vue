@@ -15,7 +15,12 @@
 						<view class="contractContent">{{logisticsContract.saleContractNo}}</view>
 					</uni-col>
 				</uni-row>
-				<uni-row>
+<!-- 				<uni-row>
+					<uni-col class="screenShotCenter">
+						<image class="logisticsPhoto" mode="aspectFit" :src="logisticsContract.logisticsPhoto"></image>
+					</uni-col>
+				</uni-row> -->
+<!-- 				<uni-row>
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">采购合同编号：</view>
 					</uni-col>
@@ -54,16 +59,16 @@
 					<uni-col :span="14">
 						<view class="contractContent">{{logisticsContract.outboundGoodsCount}}</view>
 					</uni-col>
-				</uni-row>
-				<uni-row>
+				</uni-row> -->
+				<!-- 				<uni-row>
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">卸货货物量：</view>
 					</uni-col>
 					<uni-col :span="14">
 						<view class="contractContent">{{logisticsContract.unloadedGoodsCount}}</view>
 					</uni-col>
-				</uni-row>
-				<uni-row>
+				</uni-row> -->
+<!-- 				<uni-row>
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">出库皮重：</view>
 					</uni-col>
@@ -86,8 +91,8 @@
 					<uni-col :span="14">
 						<view class="contractContent">{{logisticsContract.outboundGrossWeight}}</view>
 					</uni-col>
-				</uni-row>
-				<uni-row>
+				</uni-row> -->
+				<!-- 				<uni-row>
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">卸货净重：</view>
 					</uni-col>
@@ -97,13 +102,12 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="7" :offset="2">
-						<!-- 损耗（出库量-卸货量） -->
 						<view class="headLine">损耗：</view>
 					</uni-col>
 					<uni-col :span="14">
 						<view class="contractContent">{{logisticsContract.outboundGoodsCount-logisticsContract.unloadedGoodsCount}}</view>
 					</uni-col>
-				</uni-row>
+				</uni-row> -->
 				<uni-row>
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">运费：</view>
@@ -112,6 +116,27 @@
 						<view class="contractContent">{{logisticsContract.freight}}</view>
 					</uni-col>
 				</uni-row>
+				<uni-row>
+					<uni-col class="subTitle">
+						<view>出库详情</view>
+					</uni-col>
+				</uni-row>
+				<uni-table class="tableGroup" border stripe emptyText="暂无更多数据">
+					<uni-tr>
+						<uni-th align="center">采购订单号</uni-th>
+						<uni-th align="center">出库厂名</uni-th>
+						<uni-th align="center">出库日期</uni-th>
+						<uni-th align="center">车牌号</uni-th>
+						<uni-th align="center">载货量</uni-th>
+					</uni-tr>
+					<uni-tr v-for="(outboundItem) in logisticsContract.outboundData">
+						<uni-td align="center">{{ outboundItem.purchaseContractNo }}</uni-td>
+						<uni-td align="center">{{ outboundItem.factoryName }}</uni-td>
+						<uni-td align="center">{{ outboundItem.outboundTime }}</uni-td>
+						<uni-td align="center">{{ outboundItem.outboundCarNo }}</uni-td>
+						<uni-td align="center">{{ outboundItem.outboundGoodsCount }}</uni-td>
+					</uni-tr>
+				</uni-table>
 			</view>
 			<view>
 				<uni-row>
@@ -153,7 +178,8 @@
 					</view>
 				</view>
 			</view>
-			<view v-show="logisticsContract.firstState==1&&logisticsContract.secondState==1&&logisticsContract.thridState==1">
+			<view
+				v-show="logisticsContract.firstState==1&&logisticsContract.secondState==1&&logisticsContract.thridState==1">
 				<uni-row>
 					<uni-col class="center">
 						<view>出纳付款情况</view>
@@ -182,27 +208,28 @@
 				</uni-row>
 				<uni-row>
 					<uni-col class="screenShotCenter">
-						<image class="screenShot" mode="aspectFit" :src="logisticsContract.paymentPhoto" @tap="viewscreenShot"></image>
+						<image class="screenShot" mode="aspectFit" :src="logisticsContract.paymentPhoto"
+							@tap="viewscreenShot"></image>
 					</uni-col>
 				</uni-row>
 			</view>
-					</view>
-			<view v-show="logisticsContract.firstState==0" class="actionGroup">
-				<view class="actionGroupItem" @tap="actionsClick('pass')">
-					<button class="buttonGroup" type="primary">通过</button>
-				</view>
-				<view class="actionGroupItem" @tap="actionsClick('refuse')">
+		</view>
+		<view v-show="logisticsContract.firstState==0" class="actionGroup">
+			<view class="actionGroupItem" @tap="actionsClick('pass')">
+				<button class="buttonGroup" type="primary">通过</button>
+			</view>
+			<!-- 				<view class="actionGroupItem" @tap="actionsClick('refuse')">
 					<button class="buttonGroup" type="warn">拒绝</button>
-				</view>
-				<view class="actionGroupItem" @tap="actionsClick('back')">
-					<button class="buttonGroup">返回</button>
-				</view>
+				</view> -->
+			<view class="actionGroupItem" @tap="actionsClick('back')">
+				<button class="buttonGroup">返回</button>
 			</view>
-			<view v-show="logisticsContract.firstState!=0" class="actionGroup">
-				<view class="actionGroupItem" @tap="actionsClick('bcak')">
-					<button class="buttonGroup">返回</button>
-				</view>
+		</view>
+		<view v-show="logisticsContract.firstState!=0" class="actionGroup">
+			<view class="actionGroupItem" @tap="actionsClick('bcak')">
+				<button class="buttonGroup">返回</button>
 			</view>
+		</view>
 	</view>
 </template>
 
@@ -212,23 +239,62 @@
 			return {
 				logisticsContract: {
 					contractNo: "YS00389367824",
-					saleContractNo:"XS00187492233",
-					purchaseContractNo:"TR00272839456",
-					factoryName:"1号仓库",
-					outboundTime:"2022-10-23",
+					saleContractNo: "XS00187492233",
+					outboundData:[
+						{
+							purchaseContractNo: "TR00272839456",
+							factoryName: "1号仓库",
+							outboundTime: "2022-10-23",
+							outboundCarNo: "桂C1431",
+							// 出库货物量
+							outboundGoodsCount: 200,
+						},{
+							purchaseContractNo: "TR00272839450",
+							factoryName: "2号仓库",
+							outboundTime: "2022-10-23",
+							outboundCarNo: "桂C2431",
+							// 出库货物量
+							outboundGoodsCount: 200,
+						},{
+							purchaseContractNo: "TR00272839451",
+							factoryName: "3号仓库",
+							outboundTime: "2022-10-23",
+							outboundCarNo: "桂C3431",
+							// 出库货物量
+							outboundGoodsCount: 200,
+						},{
+							purchaseContractNo: "TR00272839452",
+							factoryName: "4号仓库",
+							outboundTime: "2022-10-23",
+							outboundCarNo: "桂C4431",
+							// 出库货物量
+							outboundGoodsCount: 200,
+						},{
+							purchaseContractNo: "TR00272839453",
+							factoryName: "5号仓库",
+							outboundTime: "2022-10-23",
+							outboundCarNo: "桂C5431",
+							// 出库货物量
+							outboundGoodsCount: 200,
+						},
+						
+					],
+					purchaseContractNo: "TR00272839456",
+					factoryName: "1号仓库",
+					outboundTime: "2022-10-23",
 					outboundCarNo: "桂C1431",
 					// 出库货物量
-					outboundGoodsCount:200,
+					outboundGoodsCount: 200,
 					// 卸货货物量
-					unloadedGoodsCount:185,
+					unloadedGoodsCount: 185,
 					// 出库皮重
-					outboundTare:200,
+					outboundTare: 200,
 					// 出库净重
-					outboundNetWeight:200,
+					outboundNetWeight: 200,
 					// 出库毛重
-					outboundGrossWeight:200,
+					outboundGrossWeight: 200,
 					// 卸货净重
-					unloadedNetWeight:200,
+					unloadedNetWeight: 200,
 					// 运费
 					freight: 4000,
 					financeStaff: "李某某",
@@ -237,7 +303,8 @@
 					thridState: 1,
 					paymentAmount: 27000,
 					paymentTime: "2022-10-23",
-					paymentPhoto: "/static/UIImages/purchaseScreenShot.png"
+					paymentPhoto: "/static/UIImages/purchaseScreenShot.png",
+					contractPhoto: "/static/UIImages/contract.png"
 				},
 				directorList: [{
 						directorId: "00001",
@@ -259,14 +326,24 @@
 			// 普通参数接收
 			console.log("合同号：" + data.contractNo);
 		},
+		onNavigationBarButtonTap() {
+			uni.switchTab({
+				url: "/pages/MainInterface/audit"
+			})
+		},
 		methods: {
-			viewscreenShot(){
+			viewscreenShot() {
 				uni.previewImage({
 					urls: [this.logisticsContract.paymentPhoto]
 				})
 			},
+			viewContractPhoto() {
+				uni.previewImage({
+					urls: [this.logisticsContract.contractPhoto]
+				})
+			},
 			actionsClick(result) {
-				const that=this;
+				const that = this;
 				if (result == "pass") {
 					uni.showModal({
 						content: "操作后无法再进行修改，您确定要‘通过’该单吗？",
@@ -290,22 +367,25 @@
 							if (res.confirm) {
 								that.logisticsContract.firstState = 2;
 								uni.showToast({
-									icon:'none',
-									title:"本单已打回，将通知相关人员进行修改"
+									icon: 'none',
+									title: "本单已打回，将通知相关人员进行修改"
 								})
 								console.log("发送请求,修改审核状态为‘拒绝’");
-								setTimeout(()=>{
+								setTimeout(() => {
 									uni.navigateTo({
-										url:'/pages/audit/logistics'
+										url: '/pages/audit/logistics'
 									});
-								},1200);
+								}, 1200);
 							}
 						}
 					})
 				} else {
-					uni.navigateTo({
-						url:'/pages/audit/logistics'
-					});
+					uni.navigateBack({
+						delta: 1
+					})
+					// uni.navigateTo({
+					// 	url:'/pages/audit/logistics'
+					// });
 				}
 			}
 		}
@@ -344,20 +424,20 @@
 		margin-top: 10rpx;
 		margin-bottom: 10rpx;
 	}
-	
-	.contractContent{
+
+	.contractContent {
 		font-size: 28rpx;
 		margin-top: 10rpx;
 		margin-bottom: 10rpx;
 	}
-	
-	.financeStatus{
+
+	.financeStatus {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		flex-direction: row;
 		justify-content: center;
-/* 		padding-top: 10rpx; */
+		/* 		padding-top: 10rpx; */
 	}
 
 	.auditStatusGroup {
@@ -389,6 +469,11 @@
 		font-size: 28rpx;
 		font-weight: bolder;
 	}
+	
+	.tableGroup{
+		margin-top: 20rpx;
+		margin-bottom: 40rpx;
+	}
 
 	.screenShotCenter {
 		position: relative;
@@ -399,10 +484,15 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
-	.screenShot{
+
+	.screenShot {
 		height: 640rpx;
 		width: 320rpx;
+	}
+	
+	.logisticsPhoto {
+		height: 600rpx;
+		width: 640rpx;
 	}
 
 	.actionGroup {
