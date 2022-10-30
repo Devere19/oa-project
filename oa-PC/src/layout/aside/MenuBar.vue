@@ -15,6 +15,7 @@ import MenuItem from './MenuItem.vue'
 import { useRoute } from 'vue-router';
 import { navTreeStore } from '@/store/navTree';
 import { reactive } from "vue";
+import Layout from "@/layout/Index.vue";
 // const store = navTreeStore()
 const route = useRoute()
 defineProps({
@@ -85,6 +86,189 @@ let menus = reactive([
       },
     ],
   },
+  {
+      path: '/purchaseContract',
+      component:'Layout',
+      name: 'purchaseContract',
+      meta: {
+        title: '采购单',
+        icon: 'Setting',
+        // roles: ['sys:manage'],
+      },
+  },
+  {
+    path: '/cashier',
+    component: 'Layout',
+    name: 'cashier',
+    meta: {
+      title: '出纳',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+    children: [
+      {
+        path: '/cashier/cashierPurchaseList',
+        component: '/cashier/purchase/cashierPurchaseList',
+        name: 'cashierPurchaseList',
+        meta: {
+          title: '出纳采购单',
+          icon: 'UserFilled',
+          // roles: ['sys:user'],
+        },
+      },
+      {
+        path: '/cashier/cashierSaleList',
+        component: '/cashier/sale/cashierSaleList',
+        name: 'cashierSaleList',
+        meta: {
+          title: '出纳销售单',
+          icon: 'Wallet',
+          // roles: ['sys:role'],
+        },
+      },
+      {
+        path: '/cashier/cashierLogisticsList',
+        component: '/cashier/logistics/cashierLogisticsList',
+        name: 'cashierLogisticsList',
+        meta: {
+          title: '出纳物流单',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+      {
+        path: '/cashier/cashierShippingList',
+        component: '/cashier/shipping/cashierShippingList',
+        name: 'cashierShippingList',
+        meta: {
+          title: '出纳海运单',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+    ],
+  },
+  {
+    path: '/warehouseManagement',
+    component:'Layout',
+    name: 'warehouseManagement',
+    meta: {
+      title: '仓库管理',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+  },
+  {
+    path: '/saleContract',
+    component:'Layout',
+    name: 'saleContract',
+    meta: {
+      title: '销售单',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+  },
+  {
+    path: '/outbound',
+    component: 'Layout',
+    name: 'outbound',
+    meta: {
+      title: '出库信息',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+    children: [
+      {
+        path: '/outbound/outboundLogisticsList',
+        component: '/outbound/logistics/outboundLogisticsList',
+        name: 'outboundLogisticsList',
+        meta: {
+          title: '出库物流单',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+      {
+        path: '/outbound/outboundShippingList',
+        component: '/outbound/shipping/outboundShippingList',
+        name: 'outboundShippingList',
+        meta: {
+          title: '出库海运单',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+    ],
+  },
+  {
+    path: '/finance',
+    component: 'Layout',
+    name: 'finance',
+    meta: {
+      title: '财务管理',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+    children: [
+      {
+        path: '/finance/reportAnalysis',
+        component: '/finance/reportAnalysis/reportAnalysis',
+        name: 'reportAnalysis',
+        meta: {
+          title: '报表分析',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+      {
+        path: '/finance/officeExpense',
+        component: '/finance/officeExpense/officeExpense',
+        name: 'officeExpense',
+        meta: {
+          title: '办公经费',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+    ],
+  },
+  {
+    path: '/purchasePaymentContract',
+    component:'Layout',
+    name: 'purchasePaymentContract',
+    meta: {
+      title: '采购付款单',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+  },
+  {
+    path: '/logisticsPaymentContract',
+    component:'Layout',
+    name: 'logisticsPaymentContract',
+    meta: {
+      title: '物流付款单',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+  },
+  // {
+  //   path: '/system',
+  //   component: 'Layout',
+  //   name: 'system',
+  //   meta: {
+  //     title: '系统管理',
+  //     icon: 'Setting',
+  //     roles: ['sys:manage'],
+  //   },
+  //   children:[
+  //     {
+  //
+  //
+  //     }
+  //
+  //   ]
+  // },
   // {
   //   path: '/memberRoot',
   //   component: 'Layout',
