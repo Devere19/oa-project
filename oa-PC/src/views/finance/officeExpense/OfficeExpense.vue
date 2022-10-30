@@ -1,10 +1,10 @@
 <template>
-报表分析
+办公经费
 </template>
 
 <script>
 export default {
-name: "reportAnalysis"
+name: "OfficeExpense"
 }
 </script>
 

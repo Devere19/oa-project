@@ -1,10 +1,10 @@
 <template>
-出库物流单
+报表分析
 </template>
 
 <script>
 export default {
-name: "outboundLogisticsList"
+name: "ReportAnalysis"
 }
 </script>
 

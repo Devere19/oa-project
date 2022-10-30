@@ -1,10 +1,10 @@
 <template>
-出库海运单
+  仓库管理
 </template>
 
 <script>
 export default {
-name: "outboundShippingList"
+name: "WarehouseManagement"
 }
 </script>
 
