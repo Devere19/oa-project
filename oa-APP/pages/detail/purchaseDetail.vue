@@ -28,7 +28,7 @@
 						<view class="headLine">入库时间：</view>
 					</uni-col>
 					<uni-col :span="14">
-						<view class="contractContent">{{purchaseContract.InboundTime}}</view>
+						<view class="contractContent">{{purchaseContract.signingTime}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -184,7 +184,7 @@
 					contractNo: "TR00272839456",
 					supplier: "桂林骏泰信息科技有限公司",
 					ownCompanyName: "广西丰沣顺国际物流有限公司",
-					InboundTime: "2022-10-09",
+					signingTime: "2022-10-09",
 					goodsName: "白糖",
 					goodsCount: 200,
 					goodsUnit: "吨",
