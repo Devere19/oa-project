@@ -1,10 +1,10 @@
 <template>
-办公经费
+销售单
 </template>
 
 <script>
 export default {
-name: "officeExpense"
+name: "SaleContract"
 }
 </script>
 

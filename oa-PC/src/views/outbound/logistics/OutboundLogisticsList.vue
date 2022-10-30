@@ -1,10 +1,10 @@
 <template>
-出纳物流单
+出库物流单
 </template>
 
 <script>
 export default {
-name: "cashierLogisticsList"
+name: "OutboundLogisticsList"
 }
 </script>
 

@@ -1,10 +1,10 @@
 <template>
-出纳采购单
+采购付款单
 </template>
 
 <script>
 export default {
-name: "cashierPurchaseList"
+name: "PurchasePaymentContract"
 }
 </script>
 

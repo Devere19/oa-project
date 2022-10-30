@@ -1,10 +1,10 @@
 <template>
-销售单
+出纳海运单
 </template>
 
 <script>
 export default {
-name: "saleContract"
+name: "CashierShippingList"
 }
 </script>
 

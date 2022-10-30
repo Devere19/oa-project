@@ -67,7 +67,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/purchaseContract',
     children: [{
       path: '/purchaseContract',
-      component:  ()=>import('@/views/purchase/purchaseContract.vue'),
+      component:  ()=>import('@/views/purchase/PurchaseContract.vue'),
       name: 'purchaseContract',
       meta: {
         title: '采购单',
@@ -89,7 +89,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/cashier/cashierPurchaseList',
         name: 'cashierPurchaseList',
-        component: () => import('@/views/cashier/purchase/cashierPurchaseList.vue'),
+        component: () => import('@/views/cashier/purchase/CashierPurchaseList.vue'),
         meta: {
           name: '出纳采购单',
           icon: 'User',
@@ -99,7 +99,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/cashier/cashierSaleList',
         name: 'cashierSaleList',
-        component: () => import('@/views/cashier/sale/cashierSaleList.vue'),
+        component: () => import('@/views/cashier/sale/CashierSaleList.vue'),
         meta: {
           name: '出纳销售单',
           icon: 'Avatar',
@@ -109,7 +109,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/cashier/cashierLogisticsList',
         name: 'cashierLogisticsList',
-        component: () => import('@/views/cashier/logistics/cashierLogisticsList.vue'),
+        component: () => import('@/views/cashier/logistics/CashierLogisticsList.vue'),
         meta: {
           name: '出纳物流单',
           icon: 'Menu',
@@ -119,7 +119,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/cashier/cashierShippingList',
         name: 'cashierShippingList',
-        component: () => import('@/views/cashier/shipping/cashierShippingList.vue'),
+        component: () => import('@/views/cashier/shipping/CashierShippingList.vue'),
         meta: {
           name: '出纳海运单',
           icon: 'Menu',
@@ -134,7 +134,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/warehouseManagement',
     children: [{
       path: '/warehouseManagement',
-      component:  ()=>import('@/views/warehouse/warehouseManagement.vue'),
+      component:  ()=>import('@/views/warehouse/WarehouseManagement.vue'),
       name: 'warehouseManagement',
       meta: {
         title: '仓库管理',
@@ -149,7 +149,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/saleContract',
     children: [{
       path: '/saleContract',
-      component:  ()=>import('@/views/sale/saleContract.vue'),
+      component:  ()=>import('@/views/sale/SaleContract.vue'),
       name: 'saleContract',
       meta: {
         title: '销售单',
@@ -171,7 +171,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/outbound/outboundLogisticsList',
         name: 'outboundLogisticsList',
-        component: () => import('@/views/outbound/logistics/outboundLogisticsList.vue'),
+        component: () => import('@/views/outbound/logistics/OutboundLogisticsList.vue'),
         meta: {
           name: '出库物流单',
           icon: 'User',
@@ -181,7 +181,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/outbound/outboundShippingList',
         name: 'outboundShippingList',
-        component: () => import('@/views/outbound/shipping/outboundShippingList.vue'),
+        component: () => import('@/views/outbound/shipping/OutboundShippingList.vue'),
         meta: {
           name: '出库海运单',
           icon: 'Avatar',
@@ -203,7 +203,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/finance/reportAnalysis',
         name: 'reportAnalysis',
-        component: () => import('@/views/finance/reportAnalysis/reportAnalysis.vue'),
+        component: () => import('@/views/finance/reportAnalysis/ReportAnalysis.vue'),
         meta: {
           name: '报表分析',
           icon: 'User',
@@ -213,7 +213,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/finance/officeExpense',
         name: 'officeExpense',
-        component: () => import('@/views/finance/officeExpense/officeExpense.vue'),
+        component: () => import('@/views/finance/officeExpense/OfficeExpense.vue'),
         meta: {
           name: '办公经费',
           icon: 'Avatar',
@@ -228,7 +228,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/purchasePaymentContract',
     children: [{
       path: '/purchasePaymentContract',
-      component:  ()=>import('@/views/purchasePayment/purchasePaymentContract.vue'),
+      component:  ()=>import('@/views/purchasePayment/PurchasePaymentContract.vue'),
       name: 'purchasePaymentContract',
       meta: {
         title: '采购付款单',
@@ -243,7 +243,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/logisticsPaymentContract',
     children: [{
       path: '/logisticsPaymentContract',
-      component:  ()=>import('@/views/logisticsPayment/logisticsPaymentContract.vue'),
+      component:  ()=>import('@/views/logisticsPayment/LogisticsPaymentContract.vue'),
       name: 'logisticsPaymentContract',
       meta: {
         title: '物流付款单',

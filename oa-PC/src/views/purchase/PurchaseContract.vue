@@ -1,10 +1,10 @@
 <template>
-  仓库管理
+  采购单
 </template>
 
 <script>
 export default {
-name: "warehouseManagement"
+name: "PurchaseContract"
 }
 </script>
 

@@ -108,7 +108,7 @@ let menus = reactive([
     children: [
       {
         path: '/cashier/cashierPurchaseList',
-        component: '/cashier/purchase/cashierPurchaseList',
+        component: '/cashier/purchase/CashierPurchaseList',
         name: 'cashierPurchaseList',
         meta: {
           title: '出纳采购单',
@@ -118,7 +118,7 @@ let menus = reactive([
       },
       {
         path: '/cashier/cashierSaleList',
-        component: '/cashier/sale/cashierSaleList',
+        component: '/cashier/sale/CashierSaleList',
         name: 'cashierSaleList',
         meta: {
           title: '出纳销售单',
@@ -128,7 +128,7 @@ let menus = reactive([
       },
       {
         path: '/cashier/cashierLogisticsList',
-        component: '/cashier/logistics/cashierLogisticsList',
+        component: '/cashier/logistics/CashierLogisticsList',
         name: 'cashierLogisticsList',
         meta: {
           title: '出纳物流单',
@@ -138,7 +138,7 @@ let menus = reactive([
       },
       {
         path: '/cashier/cashierShippingList',
-        component: '/cashier/shipping/cashierShippingList',
+        component: '/cashier/shipping/CashierShippingList',
         name: 'cashierShippingList',
         meta: {
           title: '出纳海运单',
@@ -180,7 +180,7 @@ let menus = reactive([
     children: [
       {
         path: '/outbound/outboundLogisticsList',
-        component: '/outbound/logistics/outboundLogisticsList',
+        component: '/outbound/logistics/OutboundLogisticsList',
         name: 'outboundLogisticsList',
         meta: {
           title: '出库物流单',
@@ -190,7 +190,7 @@ let menus = reactive([
       },
       {
         path: '/outbound/outboundShippingList',
-        component: '/outbound/shipping/outboundShippingList',
+        component: '/outbound/shipping/OutboundShippingList',
         name: 'outboundShippingList',
         meta: {
           title: '出库海运单',
@@ -212,7 +212,7 @@ let menus = reactive([
     children: [
       {
         path: '/finance/reportAnalysis',
-        component: '/finance/reportAnalysis/reportAnalysis',
+        component: '/finance/reportAnalysis/ReportAnalysis',
         name: 'reportAnalysis',
         meta: {
           title: '报表分析',
@@ -222,7 +222,7 @@ let menus = reactive([
       },
       {
         path: '/finance/officeExpense',
-        component: '/finance/officeExpense/officeExpense',
+        component: '/finance/officeExpense/OfficeExpense',
         name: 'officeExpense',
         meta: {
           title: '办公经费',
