@@ -7,22 +7,244 @@
 使用银玉世家的系统管理模块的代码和权限管理，前期先写死，把所有的功能菜单露出来，写完之后再用后端查出来的菜单代替写死的。
 ## 数据库表
 
-- 公司表（id）
--
+#### 采购单（purchase_contract）
+
+```sql
+CREATE TABLE `purchase_contract` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `purchase_contract_no` varchar(255) NOT NULL COMMENT '采购合同编号',
+  `supplier` varchar(255) DEFAULT NULL COMMENT '供货商',
+  `own_company_name` varchar(255) DEFAULT NULL COMMENT '己方公司名',
+  `squeeze_season` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '榨季',
+  `inbound_time` datetime DEFAULT NULL COMMENT '入库时间（合同实际签订时间）',
+  `goods_name` varchar(255) DEFAULT NULL COMMENT '采购货物名称',
+  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '采购货物数量',
+  `goods_unit` varchar(255) DEFAULT NULL COMMENT '采购货物单位',
+  `goods_unit_price` decimal(18,2) DEFAULT NULL COMMENT '采购货物单价',
+  `payment_amount` decimal(18,2) DEFAULT NULL COMMENT '采购总金额',
+  `contract_photo` text COMMENT '采购合同照片',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `purchase_unique` (`purchase_contract_no`) USING BTREE COMMENT '保证采购合同编号唯一'
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 采购付款单（purchase_payment_contract）
+
+```sql
+CREATE TABLE `purchase_payment_contract` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '采购付款单ID',
+  `purchase_contract_no` varchar(255) DEFAULT NULL COMMENT '销售单合同编号',
+  `payment_count` decimal(18,2) DEFAULT NULL COMMENT '本次付款金额',
+  `payment_time` date DEFAULT NULL COMMENT '付款时间',
+  `payment_photo` text COMMENT '付款流水截图',
+  `finance_staff` varchar(255) DEFAULT NULL COMMENT '财务名称',
+  `finance_state` int DEFAULT NULL COMMENT '财务审核状态',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 采购付款单董事状态表（purchase_director_state）
+
+```sql
+CREATE TABLE `purchase_director_state` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `purchase_payment_contract_id` int DEFAULT NULL COMMENT '采购付款单ID',
+  `userId` int DEFAULT NULL COMMENT '董事会用户ID',
+  `state` int DEFAULT NULL COMMENT '董事会审核状态',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 销售单（sale_contract）
+
+```sql
+CREATE TABLE `sale_contract` (
+  `id` int NOT NULL,
+  `sale_contract_no` varchar(255) NOT NULL COMMENT '销售单合同编号',
+  `sale_company_name` varchar(255) DEFAULT NULL COMMENT '销售方公司名',
+  `own_company_name` varchar(255) DEFAULT NULL COMMENT '己方公司名',
+  `goods_name` varchar(255) DEFAULT NULL COMMENT '销售货物名称',
+  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '销售货物数量',
+  `goods_unit` varchar(255) DEFAULT NULL COMMENT '销售货物单位',
+  `goods_unit_price` decimal(18,2) DEFAULT NULL COMMENT '销售货物单价',
+  `goods_total_price` decimal(18,2) DEFAULT NULL COMMENT '销售合同总价钱',
+  `payment_method` varchar(255) DEFAULT NULL COMMENT '结款方式',
+  `transport_method` varchar(255) DEFAULT NULL COMMENT '运输方式',
+  `contract_photo` text COMMENT '销售合同照片',
+  `revenue_amount` decimal(18,2) DEFAULT NULL COMMENT '收款金额',
+  `revenue_time` datetime DEFAULT NULL COMMENT '收款时间',
+  `revenue_photo` varchar(255) DEFAULT NULL COMMENT '收款流水截图',
+  `revenue_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '出纳操作人姓名',
+  `pigeonhole` varchar(2) DEFAULT NULL COMMENT '归档  0表示隐藏  1表示显示',
+  `squeezeSeason` varchar(255) DEFAULT NULL COMMENT '榨季  ',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sale_unique` (`sale_contract_no`) USING BTREE COMMENT '保证销售合同编号唯一'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 物流单（logistics_contract）
+
+```sql
+CREATE TABLE `logistics_contract` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `logistics_contract_no` varchar(255) NOT NULL COMMENT '物流单合同编号（运输合同编号）',
+  `sale_contract_no` int DEFAULT NULL COMMENT '销售单合同编号',
+  `packing_location` varchar(255) DEFAULT NULL COMMENT '装货地点',
+  `unpacking_location` varchar(255) DEFAULT NULL COMMENT '卸货地点',
+  `unit_price` decimal(18,2) DEFAULT NULL COMMENT '运输单价',
+  `freight` decimal(18,2) DEFAULT NULL COMMENT '运费',
+  `contract_photo` text COMMENT '物流合同照片',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `logistics_unique` (`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 自家仓库库存表（own_warehouse）
+
+```sql
+CREATE TABLE `own_warehouse` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '自家仓库ID',
+  `factory_name` varchar(255) DEFAULT NULL COMMENT '厂名',
+  `goods_name` varchar(255) DEFAULT NULL COMMENT '存储货物名称',
+  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '存储货物库存量',
+  `goods_unit` varchar(255) DEFAULT NULL COMMENT '存储货物单位',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 外商仓库库存表（other_warehouse）
+
+```sql
+CREATE TABLE `other_warehouse` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '外商仓库ID',
+  `factory_name` varchar(255) DEFAULT NULL COMMENT '厂名',
+  `goods_name` varchar(255) DEFAULT NULL COMMENT '存储货物名称',
+  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '存储货物库存量',
+  `goods_unit` varchar(255) DEFAULT NULL COMMENT '存储货物单位',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 自家仓库出入库表（own_in_out）
+
+```sql
+CREATE TABLE `own_in_out` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '自家仓库出入库流水ID',
+  `own_warehouse_id` int DEFAULT NULL COMMENT '自家仓库ID',
+  `in_out_type` int DEFAULT NULL COMMENT '出入库类型（出库0，入库1）',
+  `in_out_contract_no` varchar(255) DEFAULT NULL COMMENT '采购合同编号/销售合同编号',
+  `in_out_goods_name` varchar(255) DEFAULT NULL COMMENT '出入库货物名称',
+  `in_out_goods_count` decimal(18,2) DEFAULT NULL COMMENT '出入库货物数量',
+  `in_out_goods_unit` varchar(255) DEFAULT NULL COMMENT '出入库货物单位',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 外商仓库出入库表（other_in_out）
+
+```sql
+CREATE TABLE `other_in_out` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '外商仓库出入库流水ID',
+  `other_warehouse_id` int DEFAULT NULL COMMENT '外商仓库ID',
+  `in_out_type` int DEFAULT NULL COMMENT '出入库类型（出库0，入库1）',
+  `in_out_contract_no` varchar(255) DEFAULT NULL COMMENT '采购合同编号/销售合同编号',
+  `in_out_goods_name` varchar(255) DEFAULT NULL COMMENT '出入库货物名称',
+  `in_out_goods_count` decimal(18,2) DEFAULT NULL COMMENT '出入库货物数量',
+  `in_out_goods_unit` varchar(255) DEFAULT NULL COMMENT '出入库货物单位',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 海运单（shipping_contract）
+
+```sql
+CREATE TABLE `logistics_contract` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `logistics_contract_no` varchar(255) NOT NULL COMMENT '物流单合同编号（运输合同编号）',
+  `sale_contract_no` int DEFAULT NULL COMMENT '销售单合同编号',
+  `packing_location` varchar(255) DEFAULT NULL COMMENT '装货地点',
+  `unpacking_location` varchar(255) DEFAULT NULL COMMENT '卸货地点',
+  `unit_price` decimal(18,2) DEFAULT NULL COMMENT '运输单价',
+  `freight` decimal(18,2) DEFAULT NULL COMMENT '运费',
+  `contract_photo` text COMMENT '物流合同照片',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `logistics_unique` (`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 海运单董事状态表（shipping_director_state）
+
+```sql
+CREATE TABLE `shipping_director_state` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `shipping_contract_no` int DEFAULT NULL COMMENT '海运单合同编号',
+  `userId` int DEFAULT NULL COMMENT '董事会用户ID',
+  `state` int DEFAULT NULL COMMENT '董事会审核状态',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 客户表（customer）
+
+```sql
+CREATE TABLE `customer` (
+  `id` int NOT NULL COMMENT '客户表主键',
+  `customer_enterprise_name` varchar(255) DEFAULT NULL COMMENT '公司名称',
+  `customer_name` varchar(255) DEFAULT NULL COMMENT '联系人',
+  `customer_phone` varchar(255) DEFAULT NULL COMMENT '联系方式',
+  `customer_address` varchar(255) DEFAULT NULL COMMENT '邮寄地址',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
 
 ## 菜单栏
 
-+ 系统管理
-    - 用户管理
-    - 角色管理
-    - 菜单管理
-+ 财务管理（财务、董事会）
-    - 报表分析（主要是财务看 业务支出与收入）
-
-- 企业管理
-
-  自家三个企业的增删改查信息
-
-- 采购单管理
-
-  采购单的增删改查（采购员新增采购单）
++ 

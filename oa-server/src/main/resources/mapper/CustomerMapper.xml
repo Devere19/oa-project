@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.CustomerMapper">
+    <resultMap id="customerMap" type="cn.edu.guet.bean.customer.Customer">
+        <id column="id"  property="id"></id>
+        <result column="customer_enterprise_name" property="customerEnterpriseName"></result>
+        <result column="customer_name" property="customerName"></result>
+        <result column="customer_phone" property="customerPhone"></result>
+        <result column="customer_address" property="customerAddress"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="create_by" property="createby"></result>
+        <result column="last_update_time" property="lastUpdateTime"></result>
+        <result column="last_update_by" property="lastUpdateBy"></result>
+    </resultMap>
+</mapper>
