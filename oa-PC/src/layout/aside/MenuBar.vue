@@ -33,7 +33,7 @@ const activeIndex = computed(() => {
 //   let tree = store.getNavTree
 //   return tree
 // })
-let menus = reactive([
+const menus = reactive([
   {
     path: '/dashboard',
     component: 'Layout',
@@ -44,113 +44,113 @@ let menus = reactive([
       roles: ['sys:dashboard'],
     },
   },
+  // {
+  //   path: '/system',
+  //   component: 'Layout',
+  //   name: 'system',
+  //   meta: {
+  //     title: '系统管理',
+  //     icon: 'Setting',
+  //     roles: ['sys:manage'],
+  //   },
+  //   children: [
+  //     {
+  //       path: '/userList',
+  //       component: '/system/user/UserList',
+  //       name: 'userList',
+  //       meta: {
+  //         title: '员工管理',
+  //         icon: 'UserFilled',
+  //         roles: ['sys:user'],
+  //       },
+  //     },
+  //     {
+  //       path: '/roleList',
+  //       component: '/system/role/RoleList',
+  //       name: 'roleList',
+  //       meta: {
+  //         title: '角色管理',
+  //         icon: 'Wallet',
+  //         roles: ['sys:role'],
+  //       },
+  //     },
+  //     {
+  //       path: '/menuList',
+  //       component: '/system/menu/MenuList',
+  //       name: 'menuList',
+  //       meta: {
+  //         title: '菜单管理',
+  //         icon: 'Menu',
+  //         roles: ['sys:menu'],
+  //       },
+  //     },
+  //   ],
+  // },
   {
-    path: '/system',
+    path: '/purchaseContract',
     component: 'Layout',
-    name: 'system',
+    name: 'purchaseContract',
     meta: {
-      title: '系统管理',
-      icon: 'Setting',
-      roles: ['sys:manage'],
-    },
-    children: [
-      {
-        path: '/userList',
-        component: '/system/user/UserList',
-        name: 'userList',
-        meta: {
-          title: '员工管理',
-          icon: 'UserFilled',
-          roles: ['sys:user'],
-        },
-      },
-      {
-        path: '/roleList',
-        component: '/system/role/RoleList',
-        name: 'roleList',
-        meta: {
-          title: '角色管理',
-          icon: 'Wallet',
-          roles: ['sys:role'],
-        },
-      },
-      {
-        path: '/menuList',
-        component: '/system/menu/MenuList',
-        name: 'menuList',
-        meta: {
-          title: '菜单管理',
-          icon: 'Menu',
-          roles: ['sys:menu'],
-        },
-      },
-    ],
-  },
-  {
-      path: '/purchaseContract',
-      component:'Layout',
-      name: 'purchaseContract',
-      meta: {
-        title: '采购单',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
-      },
-  },
-  {
-    path: '/cashier',
-    component: 'Layout',
-    name: 'cashier',
-    meta: {
-      title: '出纳',
+      title: '采购单',
       icon: 'Setting',
       // roles: ['sys:manage'],
     },
-    children: [
-      {
-        path: '/cashier/cashierPurchaseList',
-        component: '/cashier/purchase/CashierPurchaseList',
-        name: 'cashierPurchaseList',
-        meta: {
-          title: '出纳采购单',
-          icon: 'UserFilled',
-          // roles: ['sys:user'],
-        },
-      },
-      {
-        path: '/cashier/cashierSaleList',
-        component: '/cashier/sale/CashierSaleList',
-        name: 'cashierSaleList',
-        meta: {
-          title: '出纳销售单',
-          icon: 'Wallet',
-          // roles: ['sys:role'],
-        },
-      },
-      {
-        path: '/cashier/cashierLogisticsList',
-        component: '/cashier/logistics/CashierLogisticsList',
-        name: 'cashierLogisticsList',
-        meta: {
-          title: '出纳物流单',
-          icon: 'Menu',
-          // roles: ['sys:menu'],
-        },
-      },
-      {
-        path: '/cashier/cashierShippingList',
-        component: '/cashier/shipping/CashierShippingList',
-        name: 'cashierShippingList',
-        meta: {
-          title: '出纳海运单',
-          icon: 'Menu',
-          // roles: ['sys:menu'],
-        },
-      },
-    ],
   },
+  // {
+  //   path: '/cashier',
+  //   component: 'Layout',
+  //   name: 'cashier',
+  //   meta: {
+  //     title: '出纳',
+  //     icon: 'Setting',
+  //     // roles: ['sys:manage'],
+  //   },
+  //   children: [
+  //     {
+  //       path: '/cashier/cashierPurchaseList',
+  //       component: '/cashier/purchase/CashierPurchaseList',
+  //       name: 'cashierPurchaseList',
+  //       meta: {
+  //         title: '出纳采购单',
+  //         icon: 'UserFilled',
+  //         // roles: ['sys:user'],
+  //       },
+  //     },
+  //     {
+  //       path: '/cashier/cashierSaleList',
+  //       component: '/cashier/sale/CashierSaleList',
+  //       name: 'cashierSaleList',
+  //       meta: {
+  //         title: '出纳销售单',
+  //         icon: 'Wallet',
+  //         // roles: ['sys:role'],
+  //       },
+  //     },
+  //     {
+  //       path: '/cashier/cashierLogisticsList',
+  //       component: '/cashier/logistics/CashierLogisticsList',
+  //       name: 'cashierLogisticsList',
+  //       meta: {
+  //         title: '出纳物流单',
+  //         icon: 'Menu',
+  //         // roles: ['sys:menu'],
+  //       },
+  //     },
+  //     {
+  //       path: '/cashier/cashierShippingList',
+  //       component: '/cashier/shipping/CashierShippingList',
+  //       name: 'cashierShippingList',
+  //       meta: {
+  //         title: '出纳海运单',
+  //         icon: 'Menu',
+  //         // roles: ['sys:menu'],
+  //       },
+  //     },
+  //   ],
+  // },
   {
     path: '/warehouseManagement',
-    component:'Layout',
+    component: 'Layout',
     name: 'warehouseManagement',
     meta: {
       title: '仓库管理',
@@ -160,7 +160,7 @@ let menus = reactive([
   },
   {
     path: '/saleContract',
-    component:'Layout',
+    component: 'Layout',
     name: 'saleContract',
     meta: {
       title: '销售单',
@@ -200,41 +200,41 @@ let menus = reactive([
       },
     ],
   },
-  {
-    path: '/finance',
-    component: 'Layout',
-    name: 'finance',
-    meta: {
-      title: '财务管理',
-      icon: 'Setting',
-      // roles: ['sys:manage'],
-    },
-    children: [
-      {
-        path: '/finance/reportAnalysis',
-        component: '/finance/reportAnalysis/ReportAnalysis',
-        name: 'reportAnalysis',
-        meta: {
-          title: '报表分析',
-          icon: 'Menu',
-          // roles: ['sys:menu'],
-        },
-      },
-      {
-        path: '/finance/officeExpense',
-        component: '/finance/officeExpense/OfficeExpense',
-        name: 'officeExpense',
-        meta: {
-          title: '办公经费',
-          icon: 'Menu',
-          // roles: ['sys:menu'],
-        },
-      },
-    ],
-  },
+  // {
+  //   path: '/finance',
+  //   component: 'Layout',
+  //   name: 'finance',
+  //   meta: {
+  //     title: '财务管理',
+  //     icon: 'Setting',
+  //     // roles: ['sys:manage'],
+  //   },
+  //   children: [
+  //     {
+  //       path: '/finance/reportAnalysis',
+  //       component: '/finance/reportAnalysis/ReportAnalysis',
+  //       name: 'reportAnalysis',
+  //       meta: {
+  //         title: '报表分析',
+  //         icon: 'Menu',
+  //         // roles: ['sys:menu'],
+  //       },
+  //     },
+  //     {
+  //       path: '/finance/officeExpense',
+  //       component: '/finance/officeExpense/OfficeExpense',
+  //       name: 'officeExpense',
+  //       meta: {
+  //         title: '办公经费',
+  //         icon: 'Menu',
+  //         // roles: ['sys:menu'],
+  //       },
+  //     },
+  //   ],
+  // },
   {
     path: '/purchasePaymentContract',
-    component:'Layout',
+    component: 'Layout',
     name: 'purchasePaymentContract',
     meta: {
       title: '采购付款单',
@@ -244,7 +244,7 @@ let menus = reactive([
   },
   {
     path: '/logisticsPaymentContract',
-    component:'Layout',
+    component: 'Layout',
     name: 'logisticsPaymentContract',
     meta: {
       title: '物流付款单',

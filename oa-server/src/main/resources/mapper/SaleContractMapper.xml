@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.SaleContractMapper">
+    <resultMap id="saleContractMap" type="cn.edu.guet.bean.sale.SaleContract">
+        <id column="id"  property="id"></id>
+        <result column="sale_contract_no" property="saleContractNo"></result>
+        <result column="sale_company_name" property="saleCompanyName"></result>
+        <result column="own_company_name" property="ownCompanyName"></result>
+        <result column="goods_name" property="goodsName"></result>
+        <result column="goods_count" property="goodsCount"></result>
+        <result column="goods_unit" property="goodsUnit"></result>
+        <result column="goods_unit_price" property="goodsUnitPrice"></result>
+        <result column="goods_total_price" property="goodsTotalPrice"></result>
+        <result column="payment_method" property="paymentMethod"></result>
+        <result column="transport_method" property="transportMethod"></result>
+        <result column="contract_photo" property="contractPhoto"></result>
+        <result column="revenue_amount" property="revenueAmount"></result>
+        <result column="revenue_time" property="revenueTime"></result>
+        <result column="revenue_photo" property="revenuePhoto"></result>
+        <result column="revenue_by" property="revenueBy"></result>
+        <result column="pigeonhole" property="pigeonhole"></result>
+        <result column="squeezeSeason" property="squeezeSeason"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="create_by" property="createBy"></result>
+        <result column="last_update_time" property="lastUpdateTime"></result>
+        <result column="last_update_by" property="lastUpdateBy"></result>
+        <association property="customer" javaType="cn.edu.guet.bean.customer.Customer">
+            <id property="id" column="id"></id>
+            <result column="customer_enterprise_name" property="customerEnterpriseName" />
+            <result column="customer_name" property="customerName" />
+            <result column="customer_phone" property="customerPhone" />
+            <result column="customer_address" property="customerAddress" />
+            <result column="create_time" property="createTime" />
+            <result column="create_by" property="createby" />
+            <result column="last_update_time" property="lastUpdateTime" />
+            <result column="last_update_by" property="lastUpdateBy" />
+        </association>
+    </resultMap>
+</mapper>

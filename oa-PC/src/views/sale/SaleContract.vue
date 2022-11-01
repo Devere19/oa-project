@@ -1,5 +1,8 @@
 <template>
-销售单
+<el-main >
+  销售单
+</el-main>
+
 </template>
 
 <script>
