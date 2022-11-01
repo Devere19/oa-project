@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.PurchaseContractMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.guet.bean.PurchaseContract">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="purchaseContractNo" column="purchase_contract_no" jdbcType="VARCHAR"/>
+            <result property="supplier" column="supplier" jdbcType="VARCHAR"/>
+            <result property="ownCompanyName" column="own_company_name" jdbcType="VARCHAR"/>
+            <result property="squeezeSeason" column="squeezeSeason" jdbcType="VARCHAR"/>
+            <result property="inboundTime" column="inbound_time" jdbcType="TIMESTAMP"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="goodsCount" column="goods_count" jdbcType="DECIMAL"/>
+            <result property="goodsUnit" column="goods_unit" jdbcType="VARCHAR"/>
+            <result property="goodsUnitPrice" column="goods_unit_price" jdbcType="DECIMAL"/>
+            <result property="paymentAmount" column="payment_amount" jdbcType="DECIMAL"/>
+            <result property="contractPhoto" column="contract_photo" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
+            <result property="lastUpdateBy" column="last_update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,purchase_contract_no,supplier,
+        own_company_name,squeezeSeason,inbound_time,
+        goods_name,goods_count,goods_unit,
+        goods_unit_price,payment_amount,contract_photo,
+        create_time,create_by,last_update_time,
+        last_update_by
+    </sql>
+</mapper>
