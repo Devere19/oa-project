@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author Devere19
@@ -31,8 +32,8 @@ public class SaleContract {
     private int id;
     //销售单合同编号
     private String saleContractNo;
-    //销售方公司名
-    private String saleCompanyName;
+    //客户表id
+    private String saleCustomerId;
     //己方公司名
     private String ownCompanyName;
     //销售货物名称
@@ -51,6 +52,9 @@ public class SaleContract {
     private String transportMethod;
     //销售合同照片
     private String contractPhoto;
+    //销售合同照片集合
+    @TableField(exist = false)
+    private List<String> contractPhotoList;
     //收款金额
     private BigDecimal revenueAmount;
     //收款时间
@@ -74,6 +78,7 @@ public class SaleContract {
     //客户，关联销售方公司
     @TableField(exist = false)
     private Customer customer;
+
 
 
 }

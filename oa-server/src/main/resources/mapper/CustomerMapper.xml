@@ -10,7 +10,7 @@
         <result column="customer_phone" property="customerPhone"></result>
         <result column="customer_address" property="customerAddress"></result>
         <result column="create_time" property="createTime"></result>
-        <result column="create_by" property="createby"></result>
+        <result column="create_by" property="createBy"></result>
         <result column="last_update_time" property="lastUpdateTime"></result>
         <result column="last_update_by" property="lastUpdateBy"></result>
     </resultMap>

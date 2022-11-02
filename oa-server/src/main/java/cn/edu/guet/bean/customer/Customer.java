@@ -37,7 +37,7 @@ public class Customer {
     //创建时间
     private Date createTime;
     //创建者名称
-    private String createby;
+    private String createBy;
     //最近更新时间
     private Date lastUpdateTime;
     //最新更新着名称

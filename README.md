@@ -73,7 +73,7 @@ CREATE TABLE `purchase_director_state` (
 CREATE TABLE `sale_contract` (
   `id` int NOT NULL,
   `sale_contract_no` varchar(255) NOT NULL COMMENT '销售单合同编号',
-  `sale_company_name` varchar(255) DEFAULT NULL COMMENT '销售方公司名',
+  `sale_customer_id` int DEFAULT NULL COMMENT '客户表id',
   `own_company_name` varchar(255) DEFAULT NULL COMMENT '己方公司名',
   `goods_name` varchar(255) DEFAULT NULL COMMENT '销售货物名称',
   `goods_count` decimal(18,2) DEFAULT NULL COMMENT '销售货物数量',
@@ -88,7 +88,7 @@ CREATE TABLE `sale_contract` (
   `revenue_photo` varchar(255) DEFAULT NULL COMMENT '收款流水截图',
   `revenue_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '出纳操作人姓名',
   `pigeonhole` varchar(2) DEFAULT NULL COMMENT '归档  0表示隐藏  1表示显示',
-  `squeezeSeason` varchar(255) DEFAULT NULL COMMENT '榨季  ',
+  `squeeze_season` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '榨季  ',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
