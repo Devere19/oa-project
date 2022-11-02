@@ -44,48 +44,48 @@ const menus = reactive([
       roles: ['sys:dashboard'],
     },
   },
-  // {
-  //   path: '/system',
-  //   component: 'Layout',
-  //   name: 'system',
-  //   meta: {
-  //     title: '系统管理',
-  //     icon: 'Setting',
-  //     roles: ['sys:manage'],
-  //   },
-  //   children: [
-  //     {
-  //       path: '/userList',
-  //       component: '/system/user/UserList',
-  //       name: 'userList',
-  //       meta: {
-  //         title: '员工管理',
-  //         icon: 'UserFilled',
-  //         roles: ['sys:user'],
-  //       },
-  //     },
-  //     {
-  //       path: '/roleList',
-  //       component: '/system/role/RoleList',
-  //       name: 'roleList',
-  //       meta: {
-  //         title: '角色管理',
-  //         icon: 'Wallet',
-  //         roles: ['sys:role'],
-  //       },
-  //     },
-  //     {
-  //       path: '/menuList',
-  //       component: '/system/menu/MenuList',
-  //       name: 'menuList',
-  //       meta: {
-  //         title: '菜单管理',
-  //         icon: 'Menu',
-  //         roles: ['sys:menu'],
-  //       },
-  //     },
-  //   ],
-  // },
+  {
+    path: '/system',
+    component: 'Layout',
+    name: 'system',
+    meta: {
+      title: '系统管理',
+      icon: 'Setting',
+      roles: ['sys:manage'],
+    },
+    children: [
+      {
+        path: '/userList',
+        component: '/system/user/UserList',
+        name: 'userList',
+        meta: {
+          title: '员工管理',
+          icon: 'UserFilled',
+          roles: ['sys:user'],
+        },
+      },
+      {
+        path: '/roleList',
+        component: '/system/role/RoleList',
+        name: 'roleList',
+        meta: {
+          title: '角色管理',
+          icon: 'Wallet',
+          roles: ['sys:role'],
+        },
+      },
+      {
+        path: '/menuList',
+        component: '/system/menu/MenuList',
+        name: 'menuList',
+        meta: {
+          title: '菜单管理',
+          icon: 'Menu',
+          roles: ['sys:menu'],
+        },
+      },
+    ],
+  },
   {
     path: '/purchaseContract',
     component: 'Layout',

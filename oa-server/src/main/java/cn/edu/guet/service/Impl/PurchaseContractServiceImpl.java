@@ -1,9 +1,9 @@
 package cn.edu.guet.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.edu.guet.bean.PurchaseContract;
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.service.PurchaseContractService;
 import cn.edu.guet.mapper.PurchaseContractMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +22,26 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     private PurchaseContractMapper purchaseContractMapper;
 
     @Override
-    public Page<PurchaseContract> getPurchaseContractData(int currentPage, int pageSize) {
-        QueryWrapper<PurchaseContract> qw= new QueryWrapper<>();
-        qw.orderByDesc("create_time");
-        Page<PurchaseContract> page =new Page<>(currentPage,pageSize);
-        page=purchaseContractMapper.selectPage(page,qw);
-        return page;
+    public int deleteOnePurchaseContract(int id) {
+        return purchaseContractMapper.deleteById(id);
     }
 
     @Override
-    public Page<PurchaseContract> searchPurchaseContract(int currentPage, int pageSize,String searchWord) {
-        QueryWrapper<PurchaseContract> qw= new QueryWrapper<>();
-        qw.like("purchase_contract_no",searchWord).or().like("supplier",searchWord).or()
-                .like("own_company_name",searchWord).or().like("squeeze_season",searchWord).or()
-                .like("goods_name",searchWord).or().like("create_by",searchWord).orderByDesc("create_time");
-        Page<PurchaseContract> page =new Page<>(currentPage,pageSize);
-        page=purchaseContractMapper.selectPage(page,qw);
-        return page;
+    public int deleteMorePurchaseContract(JSONArray ids) {
+        LambdaQueryWrapper<PurchaseContract> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(PurchaseContract::getId,ids);
+        return purchaseContractMapper.delete(lambdaQueryWrapper);
+    }
+
+    @Override
+    public int setPurchaseContractPigeonhole(int id, int pigeonhole) {
+        PurchaseContract purchaseContract=purchaseContractMapper.selectById(id);
+        if(pigeonhole==1){
+            purchaseContract.setPigeonhole(0);
+        }else{
+            purchaseContract.setPigeonhole(1);
+        }
+        return purchaseContractMapper.updateById(purchaseContract);
     }
 }
 

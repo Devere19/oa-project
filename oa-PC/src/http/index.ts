@@ -5,6 +5,9 @@ import { ElMessage } from 'element-plus';
 //axios配置
 const config = {
   baseURL: 'http://localhost:9000',
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8'
+  },
   // baseURL: 'https://www.glypro19.com',
   timeout: 50000
 }
@@ -122,17 +125,17 @@ class Http {
 
   //resful api封装
   //GET请求
-  get<T = Result>(url: string, params?: object): Promise<T> {
+  get<T = Result>(url: string, params?: any): Promise<T> {
     return this.instance.get(url, { params })
   }
 
   //POST请求
-  post<T = Result>(url: string, data?: object): Promise<T> {
+  post<T = Result>(url: string, data?: any): Promise<T> {
     return this.instance.post(url, data)
   }
 
   //PUT请求
-  put<T = Result>(url: string, data?: object): Promise<T> {
+  put<T = Result>(url: string, data?: any): Promise<T> {
     return this.instance.put(url, data)
   }
 

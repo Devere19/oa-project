@@ -1,7 +1,7 @@
 package cn.edu.guet.service;
 
-import cn.edu.guet.bean.PurchaseContract;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2022-10-31 18:18:23
 */
 public interface PurchaseContractService extends IService<PurchaseContract> {
-    Page<PurchaseContract> getPurchaseContractData(int currentPage, int pageSize);
-    Page<PurchaseContract> searchPurchaseContract(int currentPage, int pageSize,String searchWord);
+    int deleteOnePurchaseContract(int id);
+    int deleteMorePurchaseContract(JSONArray ids);
+    int setPurchaseContractPigeonhole(int id,int pigeonhole);
 }
