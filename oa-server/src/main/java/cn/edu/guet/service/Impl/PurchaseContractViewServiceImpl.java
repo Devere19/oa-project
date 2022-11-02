@@ -40,11 +40,17 @@ public class PurchaseContractViewServiceImpl extends ServiceImpl<PurchaseContrac
     }
 
     @Override
-    public Page<PurchaseContractView> searchPurchaseContract(int currentPage, int pageSize,String searchWord) {
+    public Page<PurchaseContractView> searchPurchaseContract(int currentPage, int pageSize,String searchWord,boolean showPigeonhole) {
         QueryWrapper<PurchaseContractView> qw= new QueryWrapper<>();
-        qw.like("purchase_contract_no",searchWord).or().like("customer_enterprise_name",searchWord).or()
-                .like("own_company_name",searchWord).or().like("squeeze_season",searchWord).or()
-                .like("goods_name",searchWord).or().like("create_by",searchWord).orderByDesc("create_time");
+        if(showPigeonhole==false){
+            qw.eq("pigeonhole",1).and(q->{q.like("purchase_contract_no",searchWord).or().like("customer_enterprise_name",searchWord).or()
+                    .like("own_company_name",searchWord).or().like("squeeze_season",searchWord).or()
+                    .like("goods_name",searchWord).or().like("create_by",searchWord);}).orderByDesc("create_time");
+        }else{
+            qw.eq("pigeonhole",0).and(q->{q.like("purchase_contract_no",searchWord).or().like("customer_enterprise_name",searchWord).or()
+                    .like("own_company_name",searchWord).or().like("squeeze_season",searchWord).or()
+                    .like("goods_name",searchWord).or().like("create_by",searchWord);}).orderByDesc("create_time");
+        }
         Page<PurchaseContractView> page =new Page<>(currentPage,pageSize);
         page=purchaseContractViewMapper.selectPage(page,qw);
         return page;

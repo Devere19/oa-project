@@ -3,7 +3,7 @@
     <div class="headerGroup">
       <el-button class="showPigeonholeButton" type="info"
         @click="getPigeonholeData(showPigeonhole == false ? true : false)">
-        {{ showPigeonhole == false ? "显示归档数据" : "显示非归档数据" }}
+        {{ showPigeonhole == false ? "显示归档数据" : "显示原始数据" }}
       </el-button>
       <el-button class="showPigeonholeButton" type="primary" @click="openAddDialog">
         新增
@@ -38,9 +38,6 @@
       <el-table-column property="contractPhoto" align="center" label="合同照片" />
       <el-table-column property="createTime" :formatter="CTTOdate" sortable align="center" label="创建时间" width="165" />
       <el-table-column property="createBy" align="center" label="创建者" />
-      <!-- <el-table-column property="orderStatus" :formatter="tfChange" sortable align="center" label="订单状态"  />
-      <el-table-column property="createTime" :formatter="CTTOdate" sortable align="center" label="创建时间"  />
-      <el-table-column property="updateTime" :formatter="UTTOdate" sortable align="center" label="结束时间"  /> -->
       <el-table-column property="name" align="center" label="操作" width="300">
         <template #default="scope">
           <el-button :icon="MoreFilled" size="default" type="primary" @click="getSales(scope.row)">详情</el-button>
@@ -58,10 +55,11 @@
     <div class="paginationGroup">
       <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
         :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
-        :total="total" @size-change="getTableData" @current-change="getTableData" />
+        :total="total" @size-change="showPigeonhole == false ? getTTableData : getFTableData"
+        @current-change="showPigeonhole == false ? getTTableData : getFTableData" />
     </div>
     <el-dialog v-model="addDialogFlag" title="新增采购单" width="50%" draggable center>
-      <ul class="infinite-list" ref="top" style="overflow: auto;height:650px">
+      <ul ref="top" style="overflow: auto;height:600px">
         <el-form label-position="right" label-width="180px" :model="NewPurchaseContractData" style="max-width: 65%">
           <!-- <el-form label-position="right" label-width="180px" :model="NewPurchaseContractData"
         style="max-width: 65%;height:600px"> -->
@@ -85,7 +83,7 @@
           </el-form-item>
           <el-form-item label="入库时间" prop="inboundTime">
             <el-date-picker type="date" placeholder="即合同实际签订日期" v-model="NewPurchaseContractData.inboundTime"
-              style="width: 100%;" value-format="yyyy.MM.dd" size="large"></el-date-picker>
+              style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
           </el-form-item>
           <el-form-item label="采购货物名称" prop="goodsName">
             <el-input v-model="NewPurchaseContractData.goodsName" size="large" />
@@ -98,6 +96,21 @@
               <el-option label="吨" value="吨"></el-option>
               <el-option label="斤" value="斤"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form v-for="(item, index) in InboundData" label-position="right" label-width="200px">
+            <el-form-item>
+              <el-tag size="large" hit>{{ "入库单" + (index + 1) }}</el-tag>
+            </el-form-item>
+            <el-form-item label="厂名">
+              <el-input v-model="item.factoryName" size="large" />
+            </el-form-item>
+            <el-form-item label="入库数量">
+              <el-input v-model="item.inOutGoodsCount" size="large" />
+              <el-button v-show="index != 0" @click.prevent="removeInboundItem(item)">删除</el-button>
+            </el-form-item>
+          </el-form>
+          <el-form-item label="">
+            <el-button type="warning" icon="Plus" @click="addInboundItem">添加入库单</el-button>
           </el-form-item>
           <el-form-item label="采购货物单价" prop="goodsUnitPrice">
             <el-input v-model="NewPurchaseContractData.goodsUnitPrice" size="large" />
@@ -152,7 +165,7 @@
       </template>
     </el-dialog>
     <el-dialog v-model="previewImageFlag">
-      <img w-full :src="dialogImageUrl" alt="Preview Image" />
+      <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
     </el-dialog>
   </div>
 </template>
@@ -161,7 +174,9 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile } from 'element-plus'
 import { Delete, Search, MoreFilled, Hide, View } from "@element-plus/icons-vue";
+// import timeFormat from "@/utils/timeFormat"
 // import type from 'element-plus'
+import { purchaseContractModel, inboundDataModel } from '@/api/purchaseContract/PurchaseContractModel';
 import { getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi, deleteOnePurchaseContractApi, deleteMorePurchaseContractApi, setPurchaseContractPigeonholeApi } from '@/api/purchaseContract'
 
 
@@ -170,7 +185,7 @@ const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(10)
 const background = ref(true)
-const tableData = ref<PurchaseContract[]>([])
+const tableData = ref<purchaseContractModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
 const oneDeleteDialogFlag = ref(false)
@@ -181,7 +196,7 @@ const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const multipleSelection = ref<PurchaseContract[]>([])
+const multipleSelection = ref<purchaseContractModel[]>([])
 
 const NewPurchaseContractData = reactive({
   purchaseContractNo: '',
@@ -198,30 +213,27 @@ const NewPurchaseContractData = reactive({
   contractPhoto: ''
 })
 
-interface PurchaseContract {
-  id: number
-  purchaseContractNo: string
-  customerEnterpriseName: string
-  ownCompanyName: string
-  squeezeSeason: string
-  inboundTime: Date
-  goodsName: string
-  goodsCount: number
-  goodsUnit: string
-  goodsUnitPrice: number
-  paymentAmount: number
-  contractPhoto: string
-  createTime: Date
-  createBy: string
-}
+const InboundData = reactive<inboundDataModel[]>([
+  {
+    factoryName: '',
+    inOutGoodsCount: ''
+  }
+])
 
 onMounted(() => {
-  getTableData();
+  getTTableData();
 })
 
 
-const getTableData = () => {
+const getTTableData = () => {
   getTPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
+    total.value = res.data.total;//总记录
+    tableData.value = res.data.records;
+  });
+}
+
+const getFTableData = () => {
+  getFPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
     total.value = res.data.total;//总记录
     tableData.value = res.data.records;
   });
@@ -235,7 +247,7 @@ const getPigeonholeData = (flag: boolean) => {
       tableData.value = res.data.records;
     });
   } else {
-    getTableData();
+    getTTableData();
   }
 }
 
@@ -243,10 +255,11 @@ const CTTOdate = (row) => {
   let dateee = new Date(row.createTime).toJSON();
   return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 }
+// const { CTTOdate } = timeFormat(row)
 
 
 const searchTableData = () => {
-  searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value).then(res => {
+  searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value, showPigeonhole.value).then(res => {
     total.value = res.data.total;//总记录
     tableData.value = res.data.records;
     returnAll.value = true;
@@ -254,11 +267,15 @@ const searchTableData = () => {
 }
 
 const returnAllData = () => {
-  getTableData();
+  if (showPigeonhole.value == false) {
+    getTTableData();
+  } else {
+    getFTableData();
+  }
   returnAll.value = false
 }
 
-const handleSelectionChange = (val: PurchaseContract[]) => {
+const handleSelectionChange = (val: purchaseContractModel[]) => {
   multipleSelection.value = val;
 }
 
@@ -267,10 +284,11 @@ const openAddDialog = () => {
 }
 
 const addNewPurchaseContract = () => {
-  console.log("新增采购单");
+  console.log(NewPurchaseContractData);
+  console.log(InboundData);
 }
 
-const openOneDeleteDialog = (index: number, row: PurchaseContract) => {
+const openOneDeleteDialog = (index: number, row: purchaseContractModel) => {
   choosePurchaseContractNo.value = row.id;
   oneDeleteDialogFlag.value = true
 }
@@ -278,7 +296,7 @@ const openOneDeleteDialog = (index: number, row: PurchaseContract) => {
 const oneDeletePurchaseContract = () => {
   deleteOnePurchaseContractApi(choosePurchaseContractNo.value).then(res => {
     if (res.data == 1) {
-      getTableData()
+      getTTableData()
       oneDeleteDialogFlag.value = false
       ElMessage({
         message: '删除采购单成功！',
@@ -305,8 +323,9 @@ const moreDeletePurchaseContract = () => {
   });
   deleteMorePurchaseContractApi({ ids: JSON.stringify(purchaseContractIds) }).then(res => {
     if (res.data != 0) {
-      getTableData()
+      getTTableData()
       moreDeleteDialogFlag.value = false
+      returnAll.value = true
       ElMessage({
         message: '批量删除采购单成功！',
         type: 'success',
@@ -325,13 +344,14 @@ const changePigeonhole = (row) => {
   setPurchaseContractPigeonholeApi(row.id, row.pigeonhole).then(res => {
     if (res.data == 1) {
       if (showPigeonhole.value == false) {
-        getTableData()
+        getTTableData()
       } else {
         getFPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
           total.value = res.data.total;//总记录
           tableData.value = res.data.records;
         });
       }
+      returnAll.value = false;
       ElMessage({
         message: '修改状态成功！',
         type: 'success',
@@ -344,6 +364,20 @@ const changePigeonhole = (row) => {
       })
     }
   })
+}
+
+const addInboundItem = () => {
+  InboundData.push({
+    factoryName: '',
+    inOutGoodsCount: '',
+  })
+}
+
+const removeInboundItem = (item: inboundDataModel) => {
+  const index = InboundData.indexOf(item)
+  if (index !== -1) {
+    InboundData.splice(index, 1)
+  }
 }
 
 const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {

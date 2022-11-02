@@ -36,8 +36,8 @@ public class PurchaseContractController {
     }
 
     @RequestMapping("/searchPurchaseContract")
-    public HttpResult searchPurchaseContract(int current,int page,String searchWord){
-        return ResultUtils.success("查询成功",purchaseContractViewService.searchPurchaseContract(current,page,searchWord));
+    public HttpResult searchPurchaseContract(int current,int page,String searchWord,boolean showPigeonhole){
+        return ResultUtils.success("查询成功",purchaseContractViewService.searchPurchaseContract(current,page,searchWord,showPigeonhole));
     }
 
     @DeleteMapping("/deleteOnePurchaseContract/{id}")
