@@ -17,7 +17,10 @@
       <el-form-item>
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
-        <el-button type="primary" @click="" :icon="Plus">新增</el-button>
+        <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
+        </el-button>
+        <el-button type="success" @click="" :icon="Plus">导出</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格 -->
@@ -44,20 +47,27 @@
       </el-table-column>
       <el-table-column prop="revenueTime" label="收款时间"></el-table-column>
       <el-table-column prop="revenueAmount" label="收款金额"></el-table-column>
-      <el-table-column prop="revenuePhoto" label="收款流水单截图"></el-table-column>
+      <el-table-column prop="revenuePhoto" label="收款流水单截图">
+        <template #default="scope">
+          <el-image style="width: 100px; height: 100px" :src="scope.row.revenuePhoto"
+            :preview-src-list="[scope.row.revenuePhoto]" :initial-index="4" fit="cover" preview-teleported="true" />
+        </template>
+      </el-table-column>
       <el-table-column prop="revenueBy" label="出纳操作人姓名"></el-table-column>
       <!-- <el-table-column prop="pigeonhole" label="归档"></el-table-column> -->
       <el-table-column prop="squeezeSeason" label="榨季"></el-table-column>
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
-      <el-table-column fixed="right" label="操作" align="center" width="240">
+      <el-table-column fixed="right" label="操作" align="center" width="280">
         <template #default="scope">
           <el-button type="primary" size="default" @click="">详情
           </el-button>
-          <el-button type="success" size="default" @click="changePigeonhole(scope.row.id)">归档
+          <el-button type="success" size="default" @click="changePigeonhole(scope.row.id)">{{ isPigeonhole ? "归档" :
+              "取消归档"
+          }}
           </el-button>
           <!-- <el-button type="primary" size="default" @click="">修改
           </el-button> -->
-          <el-button type="danger" size="default" @click="">删除
+          <el-button type="danger" size="default" @click="deleteBtn(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -69,6 +79,11 @@
       layout="total, sizes, prev, pager, next, jumper" :total="listParm.total" background>
       :pager-count="7">
     </el-pagination>
+
+    <!-- 新增界面 -->
+    <AddSaleContract ref="addRef">
+
+    </AddSaleContract>
   </el-main>
 
 </template>
@@ -77,11 +92,11 @@
 import { Plus, Edit, Delete, Search, Close } from "@element-plus/icons-vue";
 import useTable from '@/composables/sale/useTable';
 import useSale from "@/composables/sale/useSale";
-import { getListApi } from "@/api/menu";
+import AddSaleContract from "@/views/sale/AddSaleContract.vue"
 //表格属性
-const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh,getList } = useTable()
-//销售单属性
-const { changePigeonhole } = useSale(getList)
+const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
+//销售单新增、编辑、删除
+const { changePigeonhole, deleteBtn, addBtn ,addRef} = useSale(refresh)
 </script>
 
 <style scoped>

@@ -13,9 +13,13 @@ import lombok.Data;
  */
 @Data
 public class ListParm {
+    //销售单合同号
     private String saleContractNo;
+    //销售方公司名称
     private String saleCompanyName;
+    //货物名称
     private String goodsName;
+    //榨季
     private String squeezeSeason;
     private int currentPage;
     private int pageSize;

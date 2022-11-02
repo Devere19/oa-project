@@ -92,11 +92,59 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         if (pigeonhole.equals("0")){
             saleContract.setPigeonhole("1");
             saleContractMapper.updateById(saleContract);
-        }
-        if (pigeonhole.equals("1")){
+        }else if (pigeonhole.equals("1")){
             saleContract.setPigeonhole("0");
             saleContractMapper.updateById(saleContract);
         }
 
+    }
+
+    @Override
+    public IPage<SaleContract> searchPigeonholeZero(ListParm listParm) {
+        Page<SaleContract> page = new Page<>(listParm.getCurrentPage(), listParm.getPageSize());
+        QueryWrapper<SaleContract> query = new QueryWrapper<>();
+        //构造查询条件
+        //合同编号
+        if (StringUtils.isNotEmpty(listParm.getSaleContractNo())) {
+            query.lambda().like(SaleContract::getSaleContractNo, listParm.getSaleContractNo());
+        }
+        //销售方公司id
+        if (StringUtils.isNotEmpty(listParm.getSaleCompanyName())) {
+            //通过公司名称拿到客户表对应的id
+            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
+            Customer customer = customerMapper.selectOne(queryWrapper);
+            query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+        }
+        //货物名称
+        if (StringUtils.isNotEmpty(listParm.getGoodsName())) {
+            query.lambda().like(SaleContract::getGoodsName, listParm.getGoodsName());
+        }
+        //榨季
+        if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
+            query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
+        }
+        //查看归档为1的数据
+        query.lambda().eq(SaleContract::getPigeonhole,0);
+
+        Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
+        //给里面的每一个customer赋值  根据saleCustomerId获取customer
+        for (SaleContract record : saleContractPage.getRecords()) {
+            String saleCustomerId = record.getSaleCustomerId();
+            Customer customer = customerMapper.selectById(saleCustomerId);
+            record.setCustomer(customer);
+            //处理图片，形成一个图片数组
+            String contractPhoto = record.getContractPhoto();
+            record.setContractPhotoList(Arrays.asList(contractPhoto));
+            //有多个照片
+            if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(contractPhoto);
+                record.setContractPhotoList(list);
+                //取第一个图片的url
+                record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
+            }
+        }
+        return saleContractPage;
     }
 }
