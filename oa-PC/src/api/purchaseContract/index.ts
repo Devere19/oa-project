@@ -1,5 +1,5 @@
 import http from "@/http";
-import { moreDeleteModel } from "./PurchaseContractModel";
+import { moreDeleteModel, purchaseContractModel } from "./PurchaseContractModel";
 
 //分页获取采购单
 export const getTPurchaseContractDataApi = (currentPage: number, pageSize: number) => {
@@ -18,11 +18,12 @@ export const getFPurchaseContractDataApi = (currentPage: number, pageSize: numbe
 }
 
 // 分页查询采购单
-export const searchPurchaseContractApi = (currentPage: number, pageSize: number, searchWord: string) => {
+export const searchPurchaseContractApi = (currentPage: number, pageSize: number, searchWord: string, showPigeonhole: boolean) => {
     return http.get("purchaseContract/searchPurchaseContract", {
         current: currentPage,
         page: pageSize,
-        searchWord: searchWord
+        searchWord: searchWord,
+        showPigeonhole: showPigeonhole,
     })
 }
 
@@ -42,5 +43,10 @@ export const setPurchaseContractPigeonholeApi = (id: number, pigeonhole: number)
         id: id,
         pigeonhole: pigeonhole
     })
+}
+
+//新增采购单
+export const addNewPurchaseContract = (purchaseContract: purchaseContractModel,) => {
+    return http.post("purchaseContract/deleteMorePurchaseContract")
 }
 

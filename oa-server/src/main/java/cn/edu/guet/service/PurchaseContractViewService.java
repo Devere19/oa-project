@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface PurchaseContractViewService extends IService<PurchaseContractView> {
     Page<PurchaseContractView> getTPurchaseContractData(int currentPage, int pageSize);
     Page<PurchaseContractView> getFPurchaseContractData(int currentPage, int pageSize);
-    Page<PurchaseContractView> searchPurchaseContract(int currentPage, int pageSize,String searchWord);
+    Page<PurchaseContractView> searchPurchaseContract(int currentPage, int pageSize,String searchWord,boolean showPigeonhole);
 }
