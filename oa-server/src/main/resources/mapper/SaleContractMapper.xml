@@ -6,7 +6,7 @@
     <resultMap id="saleContractMap" type="cn.edu.guet.bean.sale.SaleContract">
         <id column="id"  property="id"></id>
         <result column="sale_contract_no" property="saleContractNo"></result>
-        <result column="sale_company_name" property="saleCompanyName"></result>
+        <result column="sale_customer_id" property="saleCustomerId"></result>
         <result column="own_company_name" property="ownCompanyName"></result>
         <result column="goods_name" property="goodsName"></result>
         <result column="goods_count" property="goodsCount"></result>
@@ -21,7 +21,7 @@
         <result column="revenue_photo" property="revenuePhoto"></result>
         <result column="revenue_by" property="revenueBy"></result>
         <result column="pigeonhole" property="pigeonhole"></result>
-        <result column="squeezeSeason" property="squeezeSeason"></result>
+        <result column="squeeze_season" property="squeezeSeason"></result>
         <result column="create_time" property="createTime"></result>
         <result column="create_by" property="createBy"></result>
         <result column="last_update_time" property="lastUpdateTime"></result>
@@ -33,7 +33,7 @@
             <result column="customer_phone" property="customerPhone" />
             <result column="customer_address" property="customerAddress" />
             <result column="create_time" property="createTime" />
-            <result column="create_by" property="createby" />
+            <result column="create_by" property="createBy" />
             <result column="last_update_time" property="lastUpdateTime" />
             <result column="last_update_by" property="lastUpdateBy" />
         </association>

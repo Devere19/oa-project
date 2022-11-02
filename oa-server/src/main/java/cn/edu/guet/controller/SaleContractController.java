@@ -1,8 +1,13 @@
 package cn.edu.guet.controller;
 
+import cn.edu.guet.bean.SysUser;
+import cn.edu.guet.bean.sale.ListParm;
+import cn.edu.guet.bean.sale.SaleContract;
+import cn.edu.guet.http.HttpResult;
+import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.SaleContractService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -18,6 +23,17 @@ public class SaleContractController {
     @Resource
     private SaleContractService saleContractService;
 
+    @GetMapping("/list")
+    public HttpResult getList(ListParm listParm) {
+        IPage<SaleContract> list = saleContractService.getList(listParm);
+        return ResultUtils.success("查询成功", list);
+    }
+
+    @PutMapping("/changePigeonhole")
+    public HttpResult changePigeonHole(@RequestBody Integer id){
+        saleContractService.changePigeonhole(id);
+        return ResultUtils.success("修改成功");
+    }
 
 
 }
