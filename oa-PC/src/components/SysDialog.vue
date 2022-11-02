@@ -1,6 +1,6 @@
 <template>
   <el-dialog :model-value="visible" :title="title" :width="width + 'px'" :before-close="onClose" append-to-body
-    :close-on-click-modal="false">
+    :close-on-click-modal="false" draggable>
 
     <div class="container" :style="{ height: height + 'px' }">
       <!-- 内容展示：插槽方式展示 -->

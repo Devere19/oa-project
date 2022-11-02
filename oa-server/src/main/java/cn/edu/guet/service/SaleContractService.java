@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SaleContractService extends IService<SaleContract> {
     /**
-     * 分页查询销售单
+     * 分页查询销售单 归档为1
      * @param listParm
      * @return
      */
@@ -23,4 +23,11 @@ public interface SaleContractService extends IService<SaleContract> {
      * @param id
      */
     void changePigeonhole(Integer id);
+
+    /**
+     * 分页查询销售单 归档为0
+     * @param listParm
+     * @return
+     */
+    IPage<SaleContract> searchPigeonholeZero(ListParm listParm);
 }
