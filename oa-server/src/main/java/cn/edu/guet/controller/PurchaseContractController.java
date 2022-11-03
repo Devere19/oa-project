@@ -1,14 +1,23 @@
 package cn.edu.guet.controller;
 
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.PurchaseContractService;
 import cn.edu.guet.service.PurchaseContractViewService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author 陶祎祎
@@ -54,6 +63,15 @@ public class PurchaseContractController {
     @RequestMapping("/setPurchaseContractPigeonhole")
     public HttpResult setPurchaseContractPigeonhole(int id,int pigeonhole){
         return ResultUtils.success("修改成功",purchaseContractService.setPurchaseContractPigeonhole(id,pigeonhole));
+    }
+
+    @RequestMapping("/addNewPurchaseContract")
+    public HttpResult addNewPurchaseContract(@RequestBody PurchaseContract purchaseContract){
+//        purchaseContract.get("contractPhotoArray")[0];
+        System.out.println(purchaseContract);
+//        File[] multipartFiles= (File[]) purchaseContract.getContractPhotoArray();
+//        System.out.println(contractPhotoArray.length);
+        return ResultUtils.success("修改成功");
     }
 
 }
