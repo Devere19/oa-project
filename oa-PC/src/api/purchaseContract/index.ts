@@ -1,5 +1,5 @@
 import http from "@/http";
-import { moreDeleteModel, purchaseContractModel } from "./PurchaseContractModel";
+import { moreDeleteModel, purchaseContractModel, inboundDataModel } from "./PurchaseContractModel";
 
 //分页获取采购单
 export const getTPurchaseContractDataApi = (currentPage: number, pageSize: number) => {
@@ -46,7 +46,8 @@ export const setPurchaseContractPigeonholeApi = (id: number, pigeonhole: number)
 }
 
 //新增采购单
-export const addNewPurchaseContract = (purchaseContract: purchaseContractModel,) => {
-    return http.post("purchaseContract/deleteMorePurchaseContract")
+export const addNewPurchaseContractApi = (purchaseContract: purchaseContractModel, inboundData: inboundDataModel[]) => {
+    return http.post("purchaseContract/addNewPurchaseContract",
+        purchaseContract)
 }
 

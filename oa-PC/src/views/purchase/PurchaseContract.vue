@@ -2,7 +2,7 @@
   <div class="purchaseContract">
     <div class="headerGroup">
       <el-button class="showPigeonholeButton" type="info"
-        @click="getPigeonholeData(showPigeonhole == false ? true : false)">
+        @click="changePigeonholeData(showPigeonhole == false ? true : false)">
         {{ showPigeonhole == false ? "显示归档数据" : "显示原始数据" }}
       </el-button>
       <el-button class="showPigeonholeButton" type="primary" @click="openAddDialog">
@@ -40,7 +40,7 @@
       <el-table-column property="createBy" align="center" label="创建者" />
       <el-table-column property="name" align="center" label="操作" width="300">
         <template #default="scope">
-          <el-button :icon="MoreFilled" size="default" type="primary" @click="getSales(scope.row)">详情</el-button>
+          <el-button :icon="MoreFilled" size="default" type="primary" @click="">详情</el-button>
           <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
             :type="scope.row.pigeonhole == 1 ? 'info' : 'success'" @click="changePigeonhole(scope.row)">{{
                 scope.row.pigeonhole ==
@@ -118,10 +118,10 @@
           <el-form-item label="采购总价" prop="paymentAmount">
             <el-input v-model="NewPurchaseContractData.paymentAmount" size="large" />
           </el-form-item>
-          <el-form-item label="合同照片" prop="contractPhoto">
-            <el-upload v-model:file-list="NewPurchaseContractData.contractPhoto"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" list-type="picture-card"
-              :auto-upload="false" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+          <el-form-item label="合同照片">
+            <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+              list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
+              :on-success="handlePhotoSuccess">
               <el-icon>
                 <Plus />
               </el-icon>
@@ -131,7 +131,7 @@
       </ul>
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary" @click="addNewPurchaseContract">
+          <el-button type="primary" @click="sendNewPurchaseContract">
             确定
           </el-button>
           <el-button @click="addDialogFlag = false">取消</el-button>
@@ -176,8 +176,9 @@ import { ElTable, ElMessage, UploadProps, UploadUserFile } from 'element-plus'
 import { Delete, Search, MoreFilled, Hide, View } from "@element-plus/icons-vue";
 // import timeFormat from "@/utils/timeFormat"
 // import type from 'element-plus'
+import { deletePhotoApi } from '@/api/handlePhoto'
 import { purchaseContractModel, inboundDataModel } from '@/api/purchaseContract/PurchaseContractModel';
-import { getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi, deleteOnePurchaseContractApi, deleteMorePurchaseContractApi, setPurchaseContractPigeonholeApi } from '@/api/purchaseContract'
+import { getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi, deleteOnePurchaseContractApi, deleteMorePurchaseContractApi, setPurchaseContractPigeonholeApi, addNewPurchaseContractApi } from '@/api/purchaseContract'
 
 
 const searchData = ref("")
@@ -194,13 +195,15 @@ const choosePurchaseContractNo = ref(0)
 const showPigeonhole = ref(false)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
+const PhotoData = ref<UploadUserFile[]>([])
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<purchaseContractModel[]>([])
 
 const NewPurchaseContractData = reactive({
+  id: '',
   purchaseContractNo: '',
-  // supplier_no: 0,
+  supplierNo: '',
   customerEnterpriseName: '',
   ownCompanyName: '',
   squeezeSeason: '',
@@ -210,7 +213,9 @@ const NewPurchaseContractData = reactive({
   goodsUnit: '',
   goodsUnitPrice: '',
   paymentAmount: '',
-  contractPhoto: ''
+  contractPhotoArray: reactive<string[]>([]),
+  createTime: '',
+  createBy: ''
 })
 
 const InboundData = reactive<inboundDataModel[]>([
@@ -224,7 +229,7 @@ onMounted(() => {
   getTTableData();
 })
 
-
+// 获取显示数据
 const getTTableData = () => {
   getTPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
     total.value = res.data.total;//总记录
@@ -232,6 +237,7 @@ const getTTableData = () => {
   });
 }
 
+// 获取隐藏数据
 const getFTableData = () => {
   getFPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
     total.value = res.data.total;//总记录
@@ -239,7 +245,8 @@ const getFTableData = () => {
   });
 }
 
-const getPigeonholeData = (flag: boolean) => {
+// 切换归档或非归档数据
+const changePigeonholeData = (flag: boolean) => {
   showPigeonhole.value = flag;
   if (flag == true) {
     getFPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
@@ -251,13 +258,13 @@ const getPigeonholeData = (flag: boolean) => {
   }
 }
 
-const CTTOdate = (row) => {
+// 时间转换
+const CTTOdate = (row: any) => {
   let dateee = new Date(row.createTime).toJSON();
   return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 }
-// const { CTTOdate } = timeFormat(row)
 
-
+// 搜索数据
 const searchTableData = () => {
   searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value, showPigeonhole.value).then(res => {
     total.value = res.data.total;//总记录
@@ -266,6 +273,7 @@ const searchTableData = () => {
   })
 }
 
+// 搜索后，回到全部数据
 const returnAllData = () => {
   if (showPigeonhole.value == false) {
     getTTableData();
@@ -275,24 +283,31 @@ const returnAllData = () => {
   returnAll.value = false
 }
 
+// 处理多选变化
 const handleSelectionChange = (val: purchaseContractModel[]) => {
   multipleSelection.value = val;
 }
 
+// 打开新增窗口
 const openAddDialog = () => {
   addDialogFlag.value = true
 }
 
-const addNewPurchaseContract = () => {
+// 发送新增采购单请求
+const sendNewPurchaseContract = () => {
   console.log(NewPurchaseContractData);
-  console.log(InboundData);
+  addNewPurchaseContractApi(NewPurchaseContractData, InboundData).then(res => {
+    console.log(res);
+  })
 }
 
+// 打开单个删除提示窗口
 const openOneDeleteDialog = (index: number, row: purchaseContractModel) => {
   choosePurchaseContractNo.value = row.id;
   oneDeleteDialogFlag.value = true
 }
 
+// 发送单个删除请求
 const oneDeletePurchaseContract = () => {
   deleteOnePurchaseContractApi(choosePurchaseContractNo.value).then(res => {
     if (res.data == 1) {
@@ -312,10 +327,12 @@ const oneDeletePurchaseContract = () => {
   })
 }
 
+// 打开多选删除提示窗口
 const openMoreDeleteDialog = () => {
   moreDeleteDialogFlag.value = true
 }
 
+// 发送多选删除请求
 const moreDeletePurchaseContract = () => {
   let purchaseContractIds = new Array();
   multipleSelection.value.map((item) => {
@@ -340,7 +357,8 @@ const moreDeletePurchaseContract = () => {
   })
 }
 
-const changePigeonhole = (row) => {
+// 修改数据的是否归档状态
+const changePigeonhole = (row: any) => {
   setPurchaseContractPigeonholeApi(row.id, row.pigeonhole).then(res => {
     if (res.data == 1) {
       if (showPigeonhole.value == false) {
@@ -366,6 +384,7 @@ const changePigeonhole = (row) => {
   })
 }
 
+// 添加新入厂单
 const addInboundItem = () => {
   InboundData.push({
     factoryName: '',
@@ -373,6 +392,7 @@ const addInboundItem = () => {
   })
 }
 
+// 删除入厂单
 const removeInboundItem = (item: inboundDataModel) => {
   const index = InboundData.indexOf(item)
   if (index !== -1) {
@@ -380,14 +400,31 @@ const removeInboundItem = (item: inboundDataModel) => {
   }
 }
 
+// 照片移除后发送请求后台删除照片
 const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
+  console.log(uploadFile, uploadFiles);
+  NewPurchaseContractData.contractPhotoArray.splice(NewPurchaseContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
+  console.log("移出照片数据组");
+  deletePhotoApi(uploadFile.response.data);
 }
 
+// 处理照片预览
 const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url!
   previewImageFlag.value = true
+
 }
+
+// 上传照片成功后加入数组
+const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  if (response.code == 200) {
+    NewPurchaseContractData.contractPhotoArray.push(response.data);
+    console.log(NewPurchaseContractData.contractPhotoArray);
+    console.log("加入照片数据组");
+  }
+}
+
+
 </script>
 
 <style scoped>
