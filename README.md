@@ -106,8 +106,6 @@ CREATE TABLE `logistics_contract` (
   `id` int NOT NULL AUTO_INCREMENT,
   `logistics_contract_no` varchar(255) NOT NULL COMMENT '物流单合同编号（运输合同编号）',
   `sale_contract_no` int DEFAULT NULL COMMENT '销售单合同编号',
-  `packing_location` varchar(255) DEFAULT NULL COMMENT '装货地点',
-  `unpacking_location` varchar(255) DEFAULT NULL COMMENT '卸货地点',
   `unit_price` decimal(18,2) DEFAULT NULL COMMENT '运输单价',
   `freight` decimal(18,2) DEFAULT NULL COMMENT '运费',
   `contract_photo` text COMMENT '物流合同照片',
@@ -118,6 +116,27 @@ CREATE TABLE `logistics_contract` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `logistics_unique` (`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+#### 物流详情单（logistics_detail）
+
+```sql
+CREATE TABLE `logistics_detail` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键id  自增',
+  `sale_contract_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '物流单合同编号（运输合同编号）',
+  `purchase_contract_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '采购合同编号',
+  `goods_factory` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '取货厂名',
+  `outbound_time` datetime DEFAULT NULL COMMENT '出库日期',
+  `license_plate_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '车牌号',
+  `goods_weight` decimal(18,2) DEFAULT NULL COMMENT '载货量',
+  `unloading_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '卸货地点',
+  `unit_price` decimal(10,2) DEFAULT NULL COMMENT '运输单价',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+  `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 ```
 
 #### 自家仓库库存表（own_warehouse）

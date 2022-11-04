@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @Author Devere19
@@ -41,7 +42,7 @@ public class SaleContractController {
      * @return
      */
     @PutMapping("/changePigeonhole")
-    public HttpResult changePigeonHole(@RequestBody Integer id){
+    public HttpResult changePigeonHole( Integer id){
         saleContractService.changePigeonhole(id);
         return ResultUtils.success("修改成功");
     }
@@ -52,7 +53,7 @@ public class SaleContractController {
      * @return
      */
     @GetMapping("/searchPigeonholeZero")
-    public HttpResult searchPigeonholeZero(ListParm listParm) {
+    public HttpResult searchPigeonholeZero( ListParm listParm) {
         IPage<SaleContract> list = saleContractService.searchPigeonholeZero(listParm);
         return ResultUtils.success("查询成功", list);
     }
@@ -73,10 +74,19 @@ public class SaleContractController {
 
     //新增销售单
     @PostMapping("add")
-    public HttpResult add(@RequestBody MultipartFile[] filex){
-        System.out.println(111);
-        System.out.println(filex);
-        return null;
+    public HttpResult add(@RequestBody SaleContract saleContract){
+        if (saleContract.equals(null)){
+            return ResultUtils.error("表单数据不能为空");
+        }
+        String contractPhotoStr="";
+        for (String time : saleContract.getContractPhotoList()) {
+            contractPhotoStr+=time+",";
+        }
+        //赋值contractPhoto
+        saleContract.setContractPhoto(contractPhotoStr.substring(0, contractPhotoStr.length() - 1));
+        saleContract.setPigeonhole("1");
+        saleContractService.save(saleContract);
+        return ResultUtils.success("新增成功");
     }
 
 

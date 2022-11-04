@@ -96,10 +96,10 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-form-item label="合同照片" prop="contractPhotoList">
-            <el-upload ref="uploadRef" v-model:file-list="addModel.contractPhotoList"
-              action="http://localhost:9000/api/saleContract/add" list-type="picture-card" :auto-upload="false"
-              :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+          <el-form-item prop="contractPhotoList" label="合同照片">
+            <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+              list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
+              :on-success="handlePhotoSuccess">
               <el-icon>
                 <Plus />
               </el-icon>
@@ -118,8 +118,10 @@ import useDialog from '@/hooks/useDialog';
 import { AddSaleModel } from "@/api/sale/SaleModel"
 import { reactive, ref } from "vue";
 import { SelectCustomer } from "@/api/customer/CustomerModel";
-import { getSelectApi, uploadImageApi } from "@/api/sale/index";
-import { FormInstance, UploadFile, UploadFiles, UploadInstance, UploadProps } from "element-plus";
+import { getSelectApi, addSaleContractApi } from "@/api/sale/index";
+import { ElMessage, FormInstance, UploadFile, UploadFiles, UploadInstance, UploadProps, UploadUserFile } from "element-plus";
+import { add } from "lodash";
+import { deletePhotoApi } from "@/api/handlePhoto";
 //弹框属性
 const { onClose, dialog, onConfirm, onShow } = useDialog()
 
@@ -142,32 +144,48 @@ const customerData = reactive<SelectCustomer>({
 })
 
 //图片上传-----------------------------------------------------------------------------------------------------
-
-const uploadRef = ref<UploadInstance>()
-const submitUpload = () => {
-  uploadRef.value!.submit()
-}
-
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
+const PhotoData = ref<UploadUserFile[]>([])
+// 照片移除后发送请求后台删除照片
+const handleRemove: UploadProps['onRemove'] = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+  console.log(uploadFile, uploadFiles);
+  addModel.contractPhotoList.splice(addModel.contractPhotoList.indexOf(uploadFile.response.data), 1);
+  console.log("移出照片数据组");
+  deletePhotoApi(uploadFile.response.data);
 }
 
+// 处理照片预览
 const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url!
   previewImageFlag.value = true
+
 }
 
+// 上传照片成功后加入数组
+const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  if (response.code == 200) {
+    addModel.contractPhotoList.push(response.data);
+    console.log(addModel.contractPhotoList);
+    // console.log("加入照片数据组");
+  }
+}
 
-
-
+//注册事件
+const emits = defineEmits(['refresh'])
 
 //提交新增数据
-const commit = () => {
-  submitUpload()
-  console.log(uploadRef.value)
+const commit = async () => {
+  addModel.createBy = "张三"
+  // console.log(addModel)
+  let res = await addSaleContractApi(addModel)
+  if (res && res.code == 200) {
+    ElMessage.success(res.msg)
+    //刷新表格
+    emits('refresh')
+    onClose()
+  }
 }
 
 //表单绑定的对象
@@ -193,6 +211,7 @@ const addModel = reactive<AddSaleModel>({
   createBy: '',
   saleContractTime: '',
 })
+
 
 
 //暴露出去给父组件调用
