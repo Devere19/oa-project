@@ -71,7 +71,7 @@ CREATE TABLE `purchase_director_state` (
 
 ```sql
 CREATE TABLE `sale_contract` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `sale_contract_no` varchar(255) NOT NULL COMMENT '销售单合同编号',
   `sale_customer_id` int DEFAULT NULL COMMENT '客户表id',
   `own_company_name` varchar(255) DEFAULT NULL COMMENT '己方公司名',
@@ -80,6 +80,7 @@ CREATE TABLE `sale_contract` (
   `goods_unit` varchar(255) DEFAULT NULL COMMENT '销售货物单位',
   `goods_unit_price` decimal(18,2) DEFAULT NULL COMMENT '销售货物单价',
   `goods_total_price` decimal(18,2) DEFAULT NULL COMMENT '销售合同总价钱',
+  `sale_contract_time` datetime DEFAULT NULL COMMENT '销售合同时间',
   `payment_method` varchar(255) DEFAULT NULL COMMENT '结款方式',
   `transport_method` varchar(255) DEFAULT NULL COMMENT '运输方式',
   `contract_photo` text COMMENT '销售合同照片',
@@ -95,7 +96,7 @@ CREATE TABLE `sale_contract` (
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sale_unique` (`sale_contract_no`) USING BTREE COMMENT '保证销售合同编号唯一'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 物流单（logistics_contract）
