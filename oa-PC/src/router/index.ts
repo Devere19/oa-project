@@ -252,6 +252,22 @@ const routes: Array<RouteRecordRaw> = [
       },
     }]
   },
+  {
+    path: '/client',
+    component:Layout,
+    redirect: '/clientGetList',
+    children: [{
+      path: '/clientGetList',
+      component:  ()=>import('@/views/client/clientGetList.vue'),
+      name: 'clientGetList',
+      meta: {
+        title: '客户管理',
+        icon: 'Setting',
+        // roles: ['sys:manage'],
+      },
+    }]
+  },
+
   // {
   //   path: '/goodsList',
   //   redirect: '/goodsList',

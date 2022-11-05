@@ -18,7 +18,6 @@ public class SysMenu extends BaseModel {
     private Long parentId;
 
     private String name;
-
     private String url;
 
     private String perms;
