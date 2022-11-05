@@ -6,6 +6,9 @@
         <el-input v-model="listParm.saleContractNo" placeholder="请输入合同编号"></el-input>
       </el-form-item>
       <el-form-item label="">
+        <el-input v-model="listParm.saleContractNo" placeholder="请输入合同编号"></el-input>
+      </el-form-item>
+      <el-form-item label="">
         <el-input v-model="listParm.saleCompanyName" placeholder="请输入销售方公司名"></el-input>
       </el-form-item>
       <el-form-item label="">
