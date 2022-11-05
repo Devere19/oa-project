@@ -5,9 +5,9 @@ export type ListParm = {
   //销售方公司名
   saleCompanyName: string,
   //货物名称
-  goodsName:string,
+  goodsName: string,
   //榨季
-  squeezeSeason:string
+  squeezeSeason: string
   currentPage: number,
   pageSize: number,
   total: number
@@ -22,16 +22,17 @@ export type AddSaleModel = {
   goodsName: string,
   goodsCount: string,
   goodsUnit: string,
-  goodsUnitPrice: string
-  goodsTotalPrice: string
-  paymentMethod: string
-  transportMethod: string
-  contractPhoto: string
-  contractPhotoList: Array<string> 
-  revenueAmount: string
-  revenuePhoto: string
-  revenueBy: string
-  pigeonhole: string
-  squeezeSeason: string
-  createBy: string
+  goodsUnitPrice: string,
+  goodsTotalPrice: string,
+  paymentMethod: string,
+  transportMethod: string,
+  contractPhoto: string,
+  contractPhotoList: any,
+  revenueAmount: string,
+  revenuePhoto: string,
+  revenueBy: string,
+  pigeonhole: string,
+  squeezeSeason: string,
+  createBy: string,
+  saleContractTime: string,
 }

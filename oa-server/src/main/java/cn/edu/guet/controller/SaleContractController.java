@@ -8,6 +8,7 @@ import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.SaleContractService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -56,6 +57,11 @@ public class SaleContractController {
         return ResultUtils.success("查询成功", list);
     }
 
+    /**
+     * 根据id 删除某个销售单
+     * @param id
+     * @return
+     */
     @DeleteMapping("/deleteById/{id}")
     public HttpResult deleteByIdApi(@PathVariable("id") Integer id){
         if (saleContractService.removeById(id)){
@@ -65,6 +71,13 @@ public class SaleContractController {
         }
     }
 
+    //新增销售单
+    @PostMapping("add")
+    public HttpResult add(@RequestBody MultipartFile[] filex){
+        System.out.println(111);
+        System.out.println(filex);
+        return null;
+    }
 
 
 }

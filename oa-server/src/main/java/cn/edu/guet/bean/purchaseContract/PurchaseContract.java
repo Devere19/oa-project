@@ -1,9 +1,16 @@
 package cn.edu.guet.bean.purchaseContract;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Array;
+import java.sql.Blob;
 import java.util.Date;
+import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
@@ -73,6 +80,13 @@ public class PurchaseContract implements Serializable {
     private String contractPhoto;
 
     /**
+     * 前端数据传输*
+     * 采购合同照片
+     */
+    @TableField(exist = false)
+    private MultipartFile[] contractPhotoArray;
+
+    /**
      * 归档 0表示隐藏，1表示显示*
      */
     private Integer pigeonhole;
@@ -123,6 +137,7 @@ public class PurchaseContract implements Serializable {
             && (this.getGoodsUnitPrice() == null ? other.getGoodsUnitPrice() == null : this.getGoodsUnitPrice().equals(other.getGoodsUnitPrice()))
             && (this.getPaymentAmount() == null ? other.getPaymentAmount() == null : this.getPaymentAmount().equals(other.getPaymentAmount()))
             && (this.getContractPhoto() == null ? other.getContractPhoto() == null : this.getContractPhoto().equals(other.getContractPhoto()))
+            && (this.getContractPhotoArray() == null ? other.getContractPhotoArray() == null : this.getContractPhotoArray().equals(other.getContractPhotoArray()))
             && (this.getPigeonhole() == null ? other.getPigeonhole() == null : this.getPigeonhole().equals(other.getPigeonhole()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCreateBy() == null ? other.getCreateBy() == null : this.getCreateBy().equals(other.getCreateBy()))
@@ -146,6 +161,7 @@ public class PurchaseContract implements Serializable {
         result = prime * result + ((getGoodsUnitPrice() == null) ? 0 : getGoodsUnitPrice().hashCode());
         result = prime * result + ((getPaymentAmount() == null) ? 0 : getPaymentAmount().hashCode());
         result = prime * result + ((getContractPhoto() == null) ? 0 : getContractPhoto().hashCode());
+        result = prime * result + ((getContractPhotoArray() == null) ? 0 : getContractPhotoArray().hashCode());
         result = prime * result + ((getPigeonhole() == null) ? 0 : getPigeonhole().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getCreateBy() == null) ? 0 : getCreateBy().hashCode());
@@ -162,7 +178,7 @@ public class PurchaseContract implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", purchaseContractNo=").append(purchaseContractNo);
-        sb.append(", supplier=").append(supplierNo);
+        sb.append(", supplierNo=").append(supplierNo);
         sb.append(", ownCompanyName=").append(ownCompanyName);
         sb.append(", squeezeSeason=").append(squeezeSeason);
         sb.append(", inboundTime=").append(inboundTime);
@@ -172,6 +188,7 @@ public class PurchaseContract implements Serializable {
         sb.append(", goodsUnitPrice=").append(goodsUnitPrice);
         sb.append(", paymentAmount=").append(paymentAmount);
         sb.append(", contractPhoto=").append(contractPhoto);
+        sb.append(", contractPhotoArray=").append(contractPhotoArray);
         sb.append(", pigeonhole=").append(pigeonhole);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);

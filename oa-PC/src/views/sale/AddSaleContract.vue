@@ -1,6 +1,6 @@
 <template>
   <SysDialog :title="dialog.title" :height="dialog.height" :width="dialog.width" :visible="dialog.visible"
-    @onClose="onClose" @onConfirm="onConfirm">
+    @onClose="onClose" @onConfirm="commit">
     <template #content>
       <el-form :model="addModel" ref="addFormRef" label-width="80px" size="default">
         <el-row>
@@ -9,23 +9,23 @@
               <el-input v-model="addModel.saleContractNo"></el-input>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="12" :offset="0">
-            <el-form-item prop="roleId" label="角色">
-              <el-select v-model="addModel.roleId" class="m-2" placeholder="请选择角色" size="default">
-                <el-option v-for="item in roleData.list" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-          </el-col> -->
           <el-col :span="12" :offset="0">
             <el-form-item prop="saleCustomerId" label="销售公司">
-              <el-input v-model="addModel.saleCustomerId"></el-input>
+              <el-select v-model="addModel.saleCustomerId" class="m-2" placeholder="请选择销售公司" size="default">
+                <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
+                  :value="item.value" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="ownCompanyName" label="己方公司">
-              <el-input v-model="addModel.ownCompanyName"></el-input>
+              <el-select v-model="addModel.ownCompanyName" placeholder="请选择己方公司" size="default">
+                <el-option label="广西永湘物流有限公司" value="广西永湘物流有限公司"></el-option>
+                <el-option label="广西南宁锦泰行工贸有限公司" value="广西南宁锦泰行工贸有限公司"></el-option>
+                <el-option label="广西丰沣顺国际物流有限公司" value="广西丰沣顺国际物流有限公司"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
@@ -42,7 +42,10 @@
           </el-col>
           <el-col :span="12" :offset="0">
             <el-form-item prop="goodsUnit" label="货物单位">
-              <el-input v-model="addModel.goodsUnit"></el-input>
+              <el-select v-model="addModel.goodsUnit" placeholder="请选择货物单位" size="default">
+                <el-option label="吨" value="吨"></el-option>
+                <el-option label="斤" value="斤"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -61,12 +64,22 @@
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="paymentMethod" label="结款方式">
-              <el-input v-model="addModel.paymentMethod"></el-input>
+              <el-select v-model="addModel.paymentMethod" placeholder="请选择结款方式" size="default">
+                <el-option label="出厂净重结算" value="出厂净重结算"></el-option>
+                <el-option label="卸货净重结算" value="卸货净重结算"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
             <el-form-item prop="transportMethod" label="运输方式">
-              <el-input v-model="addModel.transportMethod"></el-input>
+              <el-select v-model="addModel.transportMethod" placeholder="请选择运输方式" size="default">
+                <el-option label="自提" value="自提"></el-option>
+                <el-option label="陆运" value="陆运"></el-option>
+                <el-option label="海运：港到港" value="海运：港到港"></el-option>
+                <el-option label="海运：门到港" value="海运：门到港"></el-option>
+                <el-option label="海运：门到门" value="海运：门到门"></el-option>
+                <el-option label="海运：港到门" value="海运：港到门"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -76,17 +89,23 @@
               <el-input v-model="addModel.squeezeSeason"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="squeezeSeason" label="榨季">
-              <el-input v-model="addModel.squeezeSeason"></el-input>
+            <el-form-item prop="saleContractTime" label="合同时间">
+              <el-date-picker v-model="addModel.saleContractTime" type="date" placeholder="请选择合同时间" size="default" />
             </el-form-item>
           </el-col>
         </el-row>
-
-
-
+        <el-row>
+          <el-form-item label="合同照片" prop="contractPhotoList">
+            <el-upload ref="uploadRef" v-model:file-list="addModel.contractPhotoList"
+              action="http://localhost:9000/api/saleContract/add" list-type="picture-card" :auto-upload="false"
+              :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+              <el-icon>
+                <Plus />
+              </el-icon>
+            </el-upload>
+          </el-form-item>
+        </el-row>
       </el-form>
 
     </template>
@@ -97,18 +116,59 @@
 import SysDialog from "@/components/SysDialog.vue";
 import useDialog from '@/hooks/useDialog';
 import { AddSaleModel } from "@/api/sale/SaleModel"
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import { SelectCustomer } from "@/api/customer/CustomerModel";
+import { getSelectApi, uploadImageApi } from "@/api/sale/index";
+import { FormInstance, UploadFile, UploadFiles, UploadInstance, UploadProps } from "element-plus";
 //弹框属性
 const { onClose, dialog, onConfirm, onShow } = useDialog()
 
+const addFormRef = ref<FormInstance>()
+
 //show方法 
-const show = () => {
+const show = async () => {
   dialog.title = "新增销售单"
-  dialog.height = 640
+  dialog.height = 600
   dialog.width = 800
+  let res = await getSelectApi()
+  customerData.list = res.data
   onShow()
+  addFormRef.value?.resetFields()
 }
 
+//定义客户列表数据  label存公司名称  vale存客户表id
+const customerData = reactive<SelectCustomer>({
+  list: []
+})
+
+//图片上传-----------------------------------------------------------------------------------------------------
+
+const uploadRef = ref<UploadInstance>()
+const submitUpload = () => {
+  uploadRef.value!.submit()
+}
+
+const dialogImageUrl = ref('')
+const previewImageFlag = ref(false)
+
+const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+  console.log(uploadFile, uploadFiles)
+}
+
+const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url!
+  previewImageFlag.value = true
+}
+
+
+
+
+
+//提交新增数据
+const commit = () => {
+  submitUpload()
+  console.log(uploadRef.value)
+}
 
 //表单绑定的对象
 const addModel = reactive<AddSaleModel>({
@@ -131,6 +191,7 @@ const addModel = reactive<AddSaleModel>({
   pigeonhole: '',
   squeezeSeason: '',
   createBy: '',
+  saleContractTime: '',
 })
 
 
@@ -138,6 +199,7 @@ const addModel = reactive<AddSaleModel>({
 defineExpose({
   show
 })
+
 </script>
 
 <style scoped>
