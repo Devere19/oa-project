@@ -11,6 +11,12 @@ spring:
   #应用名称
   application:
     name: oa-server
+  #静态资源配置
+  mvc:
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:static
 
 #mybatos-Plus配置
 mybatis-plus:

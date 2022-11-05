@@ -1,8 +1,0 @@
-
-Ljavascript:S1128×"*Remove this unused import of 'Transition'.(æ™Ìºøÿÿÿÿ
-ƒjavascript:S1172ı"aRemove the unused function parameter "index" or rename it to "_index" to make intention explicit.(ÛàÂƒşÿÿÿÿ
-;javascript:S125ˆ"Remove this commented out code.(ê”çÙ
-UWeb:AvoidCommentedOutCodeCheckR"Remove this commented out code.(ğÒ‰Şıÿÿÿÿ8ì ÉóÁ0
-JWeb:AvoidCommentedOutCodeCheck‘"Remove this commented out code.(³ŠÄ
-OWeb:AvoidCommentedOutCodeCheck´"Remove this commented out code.(ı•óİıÿÿÿÿ
-JWeb:AvoidCommentedOutCodeCheckÌ"Remove this commented out code.(³ŠÄ

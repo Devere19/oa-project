@@ -63,11 +63,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/purchase',
-    component:Layout,
+    component: Layout,
     redirect: '/purchaseContract',
     children: [{
       path: '/purchaseContract',
-      component:  ()=>import('@/views/purchase/PurchaseContract.vue'),
+      component: () => import('@/views/purchase/PurchaseContract.vue'),
       name: 'purchaseContract',
       meta: {
         title: '采购单',
@@ -130,11 +130,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/warehouse',
-    component:Layout,
+    component: Layout,
     redirect: '/warehouseManagement',
     children: [{
       path: '/warehouseManagement',
-      component:  ()=>import('@/views/warehouse/WarehouseManagement.vue'),
+      component: () => import('@/views/warehouse/WarehouseManagement.vue'),
       name: 'warehouseManagement',
       meta: {
         title: '仓库管理',
@@ -145,11 +145,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/sale',
-    component:Layout,
+    component: Layout,
     redirect: '/saleContract',
     children: [{
       path: '/saleContract',
-      component:  ()=>import('@/views/sale/SaleContract.vue'),
+      component: () => import('@/views/sale/SaleContract.vue'),
       name: 'saleContract',
       meta: {
         title: '销售单',
@@ -224,11 +224,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/purchasePayment',
-    component:Layout,
+    component: Layout,
     redirect: '/purchasePaymentContract',
     children: [{
       path: '/purchasePaymentContract',
-      component:  ()=>import('@/views/purchasePayment/PurchasePaymentContract.vue'),
+      component: () => import('@/views/purchasePayment/PurchasePaymentContract.vue'),
       name: 'purchasePaymentContract',
       meta: {
         title: '采购付款单',
@@ -239,11 +239,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/logisticsPayment',
-    component:Layout,
+    component: Layout,
     redirect: '/logisticsPaymentContract',
     children: [{
       path: '/logisticsPaymentContract',
-      component:  ()=>import('@/views/logisticsPayment/LogisticsPaymentContract.vue'),
+      component: () => import('@/views/logisticsPayment/LogisticsPaymentContract.vue'),
       name: 'logisticsPaymentContract',
       meta: {
         title: '物流付款单',

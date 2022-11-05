@@ -22,3 +22,13 @@ export const deleteByIdApi=(id:number)=>{
   return http.delete(`/api/saleContract/deleteById/${id}`)
 
 }
+
+//获取客户表列表
+export const getSelectApi = () => {
+  return http.get("/api/customer/getSelect")
+}
+
+//图片上传
+export const uploadImageApi = (parm:object)=>{
+  return http.post("/api/saleContract/add",parm)
+}

@@ -46,6 +46,8 @@ public class SaleContract {
     private BigDecimal goodsUnitPrice;
     //销售合同总价钱
     private BigDecimal goodsTotalPrice;
+    //销售合同时间
+    private Date saleContractTime;
     //结款方式
     private String paymentMethod;
     //运输方式
