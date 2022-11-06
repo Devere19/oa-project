@@ -1,7 +1,7 @@
 <template>
-<div>
-  <router-view></router-view>
-</div>
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 
 
@@ -10,4 +10,5 @@
 
 </script>
 <style scoped lang="scss">
+
 </style>

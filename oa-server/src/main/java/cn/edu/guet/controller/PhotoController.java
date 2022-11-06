@@ -75,6 +75,8 @@ public class PhotoController {
         if(photo.exists()){
             System.out.println("删除原文件结果"+photo.delete());
         }
-        return ResultUtils.success("删除成功");
+
+        return ResultUtils.success("移除成功");
+
     }
 }

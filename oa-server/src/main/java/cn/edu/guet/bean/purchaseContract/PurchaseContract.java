@@ -1,16 +1,15 @@
 package cn.edu.guet.bean.purchaseContract;
 
-import java.io.File;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Array;
-import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
@@ -22,12 +21,19 @@ public class PurchaseContract implements Serializable {
     /**
      * 
      */
+    @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
     /**
      * 采购合同编号
      */
     private String purchaseContractNo;
+
+    /**
+     * 公司名称
+     */
+    @TableField(exist = false)
+    private Integer customerEnterpriseName;
 
     /**
      * 供货商ID(客户表ID)
@@ -65,6 +71,12 @@ public class PurchaseContract implements Serializable {
     private String goodsUnit;
 
     /**
+     * 前端传入库数据所用*
+     */
+    @TableField(exist = false)
+    private List<InboundBean> inboundData;
+
+    /**
      * 采购货物单价
      */
     private BigDecimal goodsUnitPrice;
@@ -84,7 +96,7 @@ public class PurchaseContract implements Serializable {
      * 采购合同照片
      */
     @TableField(exist = false)
-    private MultipartFile[] contractPhotoArray;
+    private List<String> contractPhotoArray;
 
     /**
      * 归档 0表示隐藏，1表示显示*
@@ -127,6 +139,7 @@ public class PurchaseContract implements Serializable {
         PurchaseContract other = (PurchaseContract) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getPurchaseContractNo() == null ? other.getPurchaseContractNo() == null : this.getPurchaseContractNo().equals(other.getPurchaseContractNo()))
+            && (this.getCustomerEnterpriseName() == null ? other.getCustomerEnterpriseName() == null : this.getCustomerEnterpriseName().equals(other.getCustomerEnterpriseName()))
             && (this.getSupplierNo() == null ? other.getSupplierNo() == null : this.getSupplierNo().equals(other.getSupplierNo()))
             && (this.getOwnCompanyName() == null ? other.getOwnCompanyName() == null : this.getOwnCompanyName().equals(other.getOwnCompanyName()))
             && (this.getSqueezeSeason() == null ? other.getSqueezeSeason() == null : this.getSqueezeSeason().equals(other.getSqueezeSeason()))
@@ -134,6 +147,7 @@ public class PurchaseContract implements Serializable {
             && (this.getGoodsName() == null ? other.getGoodsName() == null : this.getGoodsName().equals(other.getGoodsName()))
             && (this.getGoodsCount() == null ? other.getGoodsCount() == null : this.getGoodsCount().equals(other.getGoodsCount()))
             && (this.getGoodsUnit() == null ? other.getGoodsUnit() == null : this.getGoodsUnit().equals(other.getGoodsUnit()))
+            && (this.getInboundData() == null ? other.getInboundData() == null : this.getInboundData().equals(other.getInboundData()))
             && (this.getGoodsUnitPrice() == null ? other.getGoodsUnitPrice() == null : this.getGoodsUnitPrice().equals(other.getGoodsUnitPrice()))
             && (this.getPaymentAmount() == null ? other.getPaymentAmount() == null : this.getPaymentAmount().equals(other.getPaymentAmount()))
             && (this.getContractPhoto() == null ? other.getContractPhoto() == null : this.getContractPhoto().equals(other.getContractPhoto()))
@@ -151,6 +165,7 @@ public class PurchaseContract implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getPurchaseContractNo() == null) ? 0 : getPurchaseContractNo().hashCode());
+        result = prime * result + ((getCustomerEnterpriseName() == null) ? 0 : getCustomerEnterpriseName().hashCode());
         result = prime * result + ((getSupplierNo() == null) ? 0 : getSupplierNo().hashCode());
         result = prime * result + ((getOwnCompanyName() == null) ? 0 : getOwnCompanyName().hashCode());
         result = prime * result + ((getSqueezeSeason() == null) ? 0 : getSqueezeSeason().hashCode());
@@ -158,6 +173,7 @@ public class PurchaseContract implements Serializable {
         result = prime * result + ((getGoodsName() == null) ? 0 : getGoodsName().hashCode());
         result = prime * result + ((getGoodsCount() == null) ? 0 : getGoodsCount().hashCode());
         result = prime * result + ((getGoodsUnit() == null) ? 0 : getGoodsUnit().hashCode());
+        result = prime * result + ((getInboundData() == null) ? 0 : getInboundData().hashCode());
         result = prime * result + ((getGoodsUnitPrice() == null) ? 0 : getGoodsUnitPrice().hashCode());
         result = prime * result + ((getPaymentAmount() == null) ? 0 : getPaymentAmount().hashCode());
         result = prime * result + ((getContractPhoto() == null) ? 0 : getContractPhoto().hashCode());
@@ -178,6 +194,7 @@ public class PurchaseContract implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", purchaseContractNo=").append(purchaseContractNo);
+        sb.append(", customerEnterpriseName=").append(customerEnterpriseName);
         sb.append(", supplierNo=").append(supplierNo);
         sb.append(", ownCompanyName=").append(ownCompanyName);
         sb.append(", squeezeSeason=").append(squeezeSeason);
@@ -185,6 +202,7 @@ public class PurchaseContract implements Serializable {
         sb.append(", goodsName=").append(goodsName);
         sb.append(", goodsCount=").append(goodsCount);
         sb.append(", goodsUnit=").append(goodsUnit);
+        sb.append(", inboundData=").append(inboundData);
         sb.append(", goodsUnitPrice=").append(goodsUnitPrice);
         sb.append(", paymentAmount=").append(paymentAmount);
         sb.append(", contractPhoto=").append(contractPhoto);

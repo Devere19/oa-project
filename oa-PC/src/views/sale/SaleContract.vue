@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="ownCompanyName" label="己方公司名"></el-table-column>
-      <el-table-column prop="saleContractTime" label="合同签订时间" :formatter="CTTOdate"></el-table-column>
+      <el-table-column prop="saleContractTime" label="合同签订时间" :formatter="conversionDateTime"></el-table-column>
       <el-table-column prop="goodsName" label="销售货物名称"></el-table-column>
       <el-table-column prop="goodsCount" label="销售货物总量"></el-table-column>
       <el-table-column prop="goodsUnit" label="销售货物单位"></el-table-column>
@@ -46,7 +46,7 @@
             :preview-src-list="scope.row.contractPhotoList" :initial-index="4" fit="cover" preview-teleported="true" />
         </template>
       </el-table-column>
-      <el-table-column prop="revenueTime" label="收款时间" :formatter="CTTOdate"></el-table-column>
+      <el-table-column prop="revenueTime" label="收款时间" :formatter="conversionDateTime"></el-table-column>
       <el-table-column prop="revenueAmount" label="收款金额"></el-table-column>
       <el-table-column prop="revenuePhoto" label="收款流水单截图">
         <template #default="scope">
@@ -93,6 +93,7 @@
 
 <script setup lang="ts">
 import { Plus, Edit, Delete, Search, Close } from "@element-plus/icons-vue";
+import { conversionDateTime } from "@/utils/timeFormat";
 import useTable from '@/composables/sale/useTable';
 import useSale from "@/composables/sale/useSale";
 import AddSaleContract from "@/views/sale/AddSaleContract.vue"
@@ -103,12 +104,7 @@ const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, 
 //销售单新增、编辑、删除
 const { changePigeonhole, deleteBtn, addBtn, addRef } = useSale(refresh)
 
-//时间格式化
-const CTTOdate = (row: { createTime: string | number | Date; }) => {
-  let dateee = new Date(row.createTime).toJSON();
-  return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-  // return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').substring(0, 10)
-}
+
 
 
 //-------------------------------------------------------------------------

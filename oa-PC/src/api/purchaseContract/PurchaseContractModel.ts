@@ -24,5 +24,5 @@ export type purchaseContractModel = {
 
 export type inboundDataModel = {
     factoryName: string
-    inOutGoodsCount: string
+    inboundGoodsCount: string
 }
