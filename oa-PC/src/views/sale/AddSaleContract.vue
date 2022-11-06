@@ -186,6 +186,8 @@ const commit = async () => {
     emits('refresh')
     onClose()
   }
+  addModel.contractPhotoList = []
+  PhotoData.value = []
 }
 
 //表单绑定的对象

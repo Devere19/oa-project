@@ -61,7 +61,7 @@
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
       <el-table-column fixed="right" label="操作" align="center" width="280">
         <template #default="scope">
-          <el-button type="primary" size="default" @click="">详情
+          <el-button type="primary" size="default" @click="detailBtn(scope.row)">详情
           </el-button>
           <el-button type="success" size="default" @click="changePigeonhole(scope.row.id)">{{ isPigeonhole ? "归档" :
               "取消归档"
@@ -86,7 +86,7 @@
     <AddSaleContract ref="addRef" @refresh="refresh"> </AddSaleContract>
 
     <!-- 详情界面 -->
-    <DetailSaleContract ref="editRef" > </DetailSaleContract>
+    <DetailSaleContract ref="detailRef"> </DetailSaleContract>
   </el-main>
 
 </template>
@@ -97,6 +97,7 @@ import useTable from '@/composables/sale/useTable';
 import useSale from "@/composables/sale/useSale";
 import AddSaleContract from "@/views/sale/AddSaleContract.vue"
 import DetailSaleContract from "./DetailSaleContract.vue";
+import useDetail from '@/composables/sale/useDetail'
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
 //销售单新增、编辑、删除
@@ -111,6 +112,8 @@ const CTTOdate = (row: { createTime: string | number | Date; }) => {
 
 
 //-------------------------------------------------------------------------
+// 销售单详情相关操作
+const { detailRef,detailBtn} = useDetail()
 
 </script>
 

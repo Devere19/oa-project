@@ -31,6 +31,15 @@ public class LogisticsContract implements Serializable {
      * 销售单合同编号
      */
     private String saleContractNo;
+    /**
+     * 销售单合同总重量
+     */
+    private BigDecimal totalWeight;
+
+    /**
+     * 货物单位
+     */
+    private String goodsUnit;
 
     /**
      * 运费
@@ -67,8 +76,6 @@ public class LogisticsContract implements Serializable {
      */
     private String lastUpdateBy;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
 
 }

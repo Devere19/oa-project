@@ -33,3 +33,14 @@ export const getSelectApi = () => {
 export const addSaleContractApi = (parm: AddSaleModel) => {
   return http.post("/api/saleContract/add", parm)
 }
+
+//根据销售单拿到所有的物流信息的已出货量
+export const getRemainingOutboundVolumeApi = (saleContractNo: string) => {
+  return http.get(`/api/saleContract/getRemainingOutboundVolume/${saleContractNo}`)
+}
+
+
+//根据销售合同编号查到所有的物流详情表
+export const getDetailSaleContract=(saleContractNo:string)=>{
+  return http.get(`/api/saleContract/getDetailSaleContract/${saleContractNo}`)
+}
