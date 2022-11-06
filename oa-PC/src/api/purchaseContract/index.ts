@@ -46,8 +46,17 @@ export const setPurchaseContractPigeonholeApi = (id: number, pigeonhole: number)
 }
 
 //新增采购单
-export const addNewPurchaseContractApi = (purchaseContract: purchaseContractModel, inboundData: inboundDataModel[]) => {
+export const addNewPurchaseContractApi = (purchaseContract: purchaseContractModel) => {
     return http.post("purchaseContract/addNewPurchaseContract",
         purchaseContract)
 }
 
+// 获取采购单详情
+export const getPurchaseDetail = (purchaseContractNo: string, goodsName: string) => {
+    console.log(goodsName);
+    return http.get("purchaseContract/getPurchaseDetail",
+        {
+            purchaseContractNo: purchaseContractNo,
+            goodsName: goodsName
+        })
+}

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -74,6 +76,13 @@ public class PurchaseContractView implements Serializable {
      * 采购合同照片
      */
     private String contractPhoto;
+
+    /**
+     * 前端数据传输*
+     * 采购合同照片
+     */
+    @TableField(exist = false)
+    private List<String> contractPhotoArray;
 
     /**
      * 归档 0表示隐藏，1表示显示*

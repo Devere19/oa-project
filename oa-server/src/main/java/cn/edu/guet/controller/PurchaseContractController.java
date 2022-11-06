@@ -5,6 +5,7 @@ import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.PurchaseContractService;
 import cn.edu.guet.service.PurchaseContractViewService;
+import cn.edu.guet.util.ImageUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +68,12 @@ public class PurchaseContractController {
 
     @RequestMapping("/addNewPurchaseContract")
     public HttpResult addNewPurchaseContract(@RequestBody PurchaseContract purchaseContract){
-//        purchaseContract.get("contractPhotoArray")[0];
-        System.out.println(purchaseContract);
-//        File[] multipartFiles= (File[]) purchaseContract.getContractPhotoArray();
-//        System.out.println(contractPhotoArray.length);
-        return ResultUtils.success("修改成功");
+        return ResultUtils.success("新增成功",purchaseContractService.addNewPurchaseContract(purchaseContract));
     }
 
+//    获取详情数据
+    @RequestMapping("/getPurchaseDetail")
+    public HttpResult getPurchaseDetail(String purchaseContractNo,String goodsName){
+        return ResultUtils.success("查询成功",purchaseContractService.getPurchaseDetail(purchaseContractNo,goodsName));
+    }
 }
