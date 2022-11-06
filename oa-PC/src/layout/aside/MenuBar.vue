@@ -252,6 +252,16 @@ const menus = reactive([
       // roles: ['sys:manage'],
     },
   },
+  {
+    path: '/clientGetList',
+    component: 'Layout',
+    name: 'clientGetList',
+    meta: {
+      title: '客户管理',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+  },
   // {
   //   path: '/system',
   //   component: 'Layout',

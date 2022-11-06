@@ -50,7 +50,8 @@
       <el-table-column prop="revenueAmount" label="收款金额"></el-table-column>
       <el-table-column prop="revenuePhoto" label="收款流水单截图">
         <template #default="scope">
-          <el-image style="width: 100px; height: 100px" :src="scope.row.revenuePhoto"
+          <el-image style="width: 100px; height: 100px"
+            :src="scope.row.revenuePhoto == '' ? null : scope.row.revenuePhoto"
             :preview-src-list="[scope.row.revenuePhoto]" :initial-index="4" fit="cover" preview-teleported="true" />
         </template>
       </el-table-column>
@@ -60,7 +61,7 @@
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
       <el-table-column fixed="right" label="操作" align="center" width="280">
         <template #default="scope">
-          <el-button type="primary" size="default" @click="">详情
+          <el-button type="primary" size="default" @click="detailBtn(scope.row)">详情
           </el-button>
           <el-button type="success" size="default" @click="changePigeonhole(scope.row.id)">{{ isPigeonhole ? "归档" :
               "取消归档"
@@ -82,9 +83,10 @@
     </el-pagination>
 
     <!-- 新增界面 -->
-    <AddSaleContract ref="addRef">
+    <AddSaleContract ref="addRef" @refresh="refresh"> </AddSaleContract>
 
-    </AddSaleContract>
+    <!-- 详情界面 -->
+    <DetailSaleContract ref="detailRef"> </DetailSaleContract>
   </el-main>
 
 </template>
@@ -95,10 +97,19 @@ import { conversionDateTime } from "@/utils/timeFormat";
 import useTable from '@/composables/sale/useTable';
 import useSale from "@/composables/sale/useSale";
 import AddSaleContract from "@/views/sale/AddSaleContract.vue"
+import DetailSaleContract from "./DetailSaleContract.vue";
+import useDetail from '@/composables/sale/useDetail'
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
 //销售单新增、编辑、删除
 const { changePigeonhole, deleteBtn, addBtn, addRef } = useSale(refresh)
+
+
+
+
+//-------------------------------------------------------------------------
+// 销售单详情相关操作
+const { detailRef,detailBtn} = useDetail()
 
 </script>
 

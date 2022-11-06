@@ -1,15 +1,0 @@
-
-u
-java:S1149O"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(Ü±÷ê
-Z
-java:S1124"EReorder the modifiers to comply with the Java Language Specification.(¹©´z
-[
-java:S1124"EReorder the modifiers to comply with the Java Language Specification.(¯”ƒ«
-[
-java:S1124"EReorder the modifiers to comply with the Java Language Specification.(ðÚ™©
-O
-java:S4719("9Replace charset name argument with StandardCharsets.UTF_8(Ñ¸»Â
-C	java:S108)")Either remove or fill this block of code.(±Ÿ—±ÿÿÿÿÿ
-V	java:S125d"<This block of commented-out lines of code should be removed.(»ž•ûÿÿÿÿ
-=
-java:S1068"'Remove this unused "SHA" private field.(ðÚ™©

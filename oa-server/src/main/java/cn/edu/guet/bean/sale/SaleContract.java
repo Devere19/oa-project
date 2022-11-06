@@ -81,6 +81,4 @@ public class SaleContract {
     @TableField(exist = false)
     private Customer customer;
 
-
-
 }

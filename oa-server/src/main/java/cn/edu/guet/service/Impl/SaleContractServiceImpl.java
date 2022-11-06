@@ -2,10 +2,15 @@ package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.SysUser;
 import cn.edu.guet.bean.customer.Customer;
+import cn.edu.guet.bean.logisticsContract.LogisticsContract;
+import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.bean.sale.SaleContract;
+import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.mapper.CustomerMapper;
 import cn.edu.guet.mapper.SaleContractMapper;
+import cn.edu.guet.service.LogisticsContractService;
+import cn.edu.guet.service.LogisticsDetailService;
 import cn.edu.guet.service.SaleContractService;
 import cn.edu.guet.util.ImageUtils;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
@@ -14,9 +19,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.security.web.PortResolverImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +41,11 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
 
     @Resource
     private CustomerMapper customerMapper;
+    @Resource
+    private LogisticsContractService logisticsContractService;
+
+    @Resource
+    private LogisticsDetailService logisticsDetailService;
 
     @Override
     public IPage<SaleContract> getList(ListParm listParm) {
@@ -60,7 +73,7 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
         //查看归档为1的数据
-        query.lambda().eq(SaleContract::getPigeonhole,1);
+        query.lambda().eq(SaleContract::getPigeonhole, 1);
 
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
@@ -89,10 +102,10 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         SaleContract saleContract = saleContractMapper.selectById(id);
         String pigeonhole = saleContract.getPigeonhole();
         //判断归档  如果是0 改为1  如果是1  改为0
-        if (pigeonhole.equals("0")){
+        if (pigeonhole.equals("0")) {
             saleContract.setPigeonhole("1");
             saleContractMapper.updateById(saleContract);
-        }else if (pigeonhole.equals("1")){
+        } else if (pigeonhole.equals("1")) {
             saleContract.setPigeonhole("0");
             saleContractMapper.updateById(saleContract);
         }
@@ -125,7 +138,7 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
         //查看归档为1的数据
-        query.lambda().eq(SaleContract::getPigeonhole,0);
+        query.lambda().eq(SaleContract::getPigeonhole, 0);
 
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
@@ -146,5 +159,62 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             }
         }
         return saleContractPage;
+    }
+
+    @Override
+    public boolean add(SaleContract saleContract) {
+        if (saleContract.equals(null)) {
+            return false;
+        }
+        String contractPhotoStr = "";
+        if (saleContract.getContractPhotoList().size() > 0) {
+            for (String time : saleContract.getContractPhotoList()) {
+                contractPhotoStr += time + ",";
+            }
+            //赋值contractPhoto
+            saleContract.setContractPhoto(contractPhotoStr.substring(0, contractPhotoStr.length() - 1));
+        } else {
+            saleContract.setContractPhoto(contractPhotoStr);
+        }
+        saleContract.setPigeonhole("1");
+        int insert = this.baseMapper.insert(saleContract);
+        if (insert > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public BigDecimal getRemainingOutboundVolume(String saleContractNo) {
+        //拿到所有物流单中销售单号是saleContract的
+        QueryWrapper<LogisticsContract> query = new QueryWrapper<>();
+        query.lambda().eq(LogisticsContract::getSaleContractNo, saleContractNo);
+        List<LogisticsContract> list = logisticsContractService.list(query);
+        BigDecimal result = BigDecimal.valueOf(0);
+        //拿到所有的物流单中的重量，得到总数， 如果没有的话返回0
+        for (LogisticsContract logisticsContract : list) {
+            result = result.add(logisticsContract.getTotalWeight());
+        }
+        return result;
+    }
+
+    @Override
+    public List<LogisticsDetail> getDetailSaleContract(String saleContractNo) {
+        //根据销售合同找到所有的物流单，再根据物流合同找到所有的物流详情表
+        QueryWrapper<LogisticsContract> query = new QueryWrapper<>();
+        query.lambda().eq(LogisticsContract::getSaleContractNo, saleContractNo);
+        List<LogisticsContract> list = logisticsContractService.list(query);
+        List<LogisticsDetail> logisticsDetailList = new ArrayList<>();
+        for (LogisticsContract logisticsContract : list) {
+            String logisticsContractNo = logisticsContract.getLogisticsContractNo();
+            QueryWrapper<LogisticsDetail> detailQueryWrapper = new QueryWrapper<>();
+            detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
+            List<LogisticsDetail> logisticsDetails = logisticsDetailService.list(detailQueryWrapper);
+            for (LogisticsDetail logisticsDetail : logisticsDetails) {
+                logisticsDetailList.add(logisticsDetail);
+            }
+        }
+        return logisticsDetailList;
     }
 }
