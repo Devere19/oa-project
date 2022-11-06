@@ -69,11 +69,12 @@ public class PhotoController {
     }
 
     @RequestMapping("/deletePhoto")
-    public void deletePhoto(String photoURL){
+    public HttpResult deletePhoto(String photoURL){
         System.out.println(photoURL);
         File photo= new File("static\\images\\" + photoURL.split("/static/images/")[1]);
         if(photo.exists()){
             System.out.println("删除原文件结果"+photo.delete());
         }
+        return ResultUtils.success("删除成功");
     }
 }

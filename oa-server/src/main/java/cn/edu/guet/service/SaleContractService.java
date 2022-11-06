@@ -1,9 +1,13 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.bean.sale.SaleContract;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Author Devere19
@@ -30,4 +34,24 @@ public interface SaleContractService extends IService<SaleContract> {
      * @return
      */
     IPage<SaleContract> searchPigeonholeZero(ListParm listParm);
+
+    /**
+     * 新增
+     * @param saleContract
+     */
+    boolean add(SaleContract saleContract);
+
+    /**
+     * 根据销售单拿到所有的物流信息的已出货量
+     * @param saleContractNo
+     * @return
+     */
+    BigDecimal getRemainingOutboundVolume(String saleContractNo);
+
+    /**
+     * 根据销售合同编号查到所有的物流详情表
+     * @param saleContractNo
+     * @return
+     */
+    List<LogisticsDetail> getDetailSaleContract(String saleContractNo);
 }

@@ -36,4 +36,15 @@ public class ImageUtils {
         String[] split = str.split(",");
         return split[0];
     }
+
+    /**
+     * 将图片url拼接成一个字符串，以逗号分隔,
+     */
+    public static String getDBString(List<String> contractPhotoArray){
+        String urlString=contractPhotoArray.get(0);
+        for(int i=1;i<contractPhotoArray.size();i++){
+            urlString=urlString+","+contractPhotoArray.get(i);
+        }
+        return urlString;
+    }
 }
