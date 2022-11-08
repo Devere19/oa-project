@@ -253,12 +253,12 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/client',
-    component:Layout,
+    path: '/clientGet',
+    component: Layout,
     redirect: '/clientGetList',
     children: [{
       path: '/clientGetList',
-      component:  ()=>import('@/views/client/clientGetList.vue'),
+      component: () => import('@/views/client/ClientGetList.vue'),
       name: 'clientGetList',
       meta: {
         title: '客户管理',

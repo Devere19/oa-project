@@ -88,7 +88,7 @@ CREATE TABLE `sale_contract` (
   `revenue_time` datetime DEFAULT NULL COMMENT '收款时间',
   `revenue_photo` varchar(255) DEFAULT NULL COMMENT '收款流水截图',
   `revenue_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '出纳操作人姓名',
-  `pigeonhole` varchar(2) DEFAULT NULL COMMENT '归档  0表示隐藏  1表示显示',
+  `pigeonhole` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '1' COMMENT '归档  0表示隐藏  1表示显示',
   `squeeze_season` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '榨季  ',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
@@ -96,7 +96,7 @@ CREATE TABLE `sale_contract` (
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sale_unique` (`sale_contract_no`) USING BTREE COMMENT '保证销售合同编号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 物流单（logistics_contract）
@@ -111,13 +111,15 @@ CREATE TABLE `logistics_contract` (
   `freight` decimal(18,2) DEFAULT NULL COMMENT '运费',
   `contract_photo` text COMMENT '物流合同照片',
   `logistic_contract_time` datetime DEFAULT NULL COMMENT '物流单合同签订时间',
+  `squeeze_season` varchar(255) DEFAULT NULL COMMENT '榨季',
+  `pigeonhole` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '1' COMMENT '归档  1显示  0隐藏',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `logistics_unique` (`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 物流详情单（logistics_detail）
@@ -156,7 +158,7 @@ CREATE TABLE `own_warehouse` (
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 外商仓库库存表（other_warehouse）
@@ -173,7 +175,7 @@ CREATE TABLE `other_warehouse` (
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 自家仓库出入库表（own_in_out）
@@ -181,7 +183,6 @@ CREATE TABLE `other_warehouse` (
 ```sql
 CREATE TABLE `own_in_out` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自家仓库出入库流水ID',
-  `own_warehouse_id` int DEFAULT NULL COMMENT '自家仓库ID',
   `in_out_type` int DEFAULT NULL COMMENT '出入库类型（出库0，入库1）',
   `in_out_contract_no` varchar(255) DEFAULT NULL COMMENT '采购合同编号/销售合同编号',
   `in_out_goods_name` varchar(255) DEFAULT NULL COMMENT '出入库货物名称',
@@ -192,7 +193,7 @@ CREATE TABLE `own_in_out` (
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 外商仓库出入库表（other_in_out）
@@ -211,27 +212,43 @@ CREATE TABLE `other_in_out` (
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 海运单（shipping_contract）
 
 ```sql
-CREATE TABLE `logistics_contract` (
+CREATE TABLE `shipping_contract` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `logistics_contract_no` varchar(255) NOT NULL COMMENT '物流单合同编号（运输合同编号）',
-  `sale_contract_no` int DEFAULT NULL COMMENT '销售单合同编号',
-  `packing_location` varchar(255) DEFAULT NULL COMMENT '装货地点',
-  `unpacking_location` varchar(255) DEFAULT NULL COMMENT '卸货地点',
-  `unit_price` decimal(18,2) DEFAULT NULL COMMENT '运输单价',
-  `freight` decimal(18,2) DEFAULT NULL COMMENT '运费',
-  `contract_photo` text COMMENT '物流合同照片',
+  `shipping_contract_no` varchar(255) NOT NULL COMMENT '海运单合同编号',
+  `logtistics_contract_no` varchar(255) DEFAULT NULL COMMENT '物流单合同编号',
+  `principal` varchar(255) DEFAULT NULL COMMENT '委托方',
+  `packing_time` datetime DEFAULT NULL COMMENT '装箱日期',
+  `packing_location` varchar(255) DEFAULT NULL COMMENT '装箱地点',
+  `unpacking_factory` varchar(255) DEFAULT NULL COMMENT '卸箱工厂',
+  `container_no` varchar(255) DEFAULT NULL COMMENT '集装箱号',
+  `seal_no` varchar(255) DEFAULT NULL COMMENT '铅封号',
+  `tally_clerk` varchar(255) DEFAULT NULL COMMENT '理货员',
+  `tally_clerk_price` decimal(18,2) DEFAULT NULL COMMENT '理货费用',
+  `departure_fleet` varchar(255) DEFAULT NULL COMMENT '起运承运车队',
+  `departure_price` decimal(18,2) DEFAULT NULL COMMENT '起运承运车队费用',
+  `carrier_company_name` varchar(255) DEFAULT NULL COMMENT '承运船公司',
+  `carrier_company_price` decimal(18,2) DEFAULT NULL COMMENT '承运船公司费用',
+  `destination_port_fleet` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '目的港承运车队',
+  `destination_port_price` decimal(18,2) DEFAULT NULL COMMENT '目的港承运车队费用',
+  `expenses` decimal(18,2) DEFAULT NULL COMMENT '总费用',
+  `contract_photo` text COMMENT '合同照片',
+  `finance_staff` varchar(255) DEFAULT NULL COMMENT '财务名称',
+  `finance_state` int DEFAULT NULL COMMENT '财务审核状态',
+  `payment_count` decimal(18,2) DEFAULT NULL COMMENT '付款金额',
+  `payment_time` datetime DEFAULT NULL COMMENT '付款时间',
+  `payment_photo` text COMMENT '付款流水截图',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `logistics_unique` (`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
+  UNIQUE KEY `shipping_unique` (`shipping_contract_no`) USING BTREE COMMENT '保证海运合同编号唯一'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 

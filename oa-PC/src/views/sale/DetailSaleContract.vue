@@ -2,13 +2,13 @@
   <SysDialog :title="dialog.title" :height="dialog.height" :width="dialog.width" :visible="dialog.visible"
     @onClose="onClose" @onConfirm="onConfirm">
     <template #content>
-      <span class="title">销售编号:</span>{{ detaliTableList.list.saleContractNo }}<br />
-      <span class="title">货物名称:</span>{{ detaliTableList.list.goodsName }}
-      <span class="title">销售方公司名:</span>{{ detaliTableList.list.customer.customerEnterpriseName }}
-      <span class="title">己方公司名:</span>{{ detaliTableList.list.customer.customerEnterpriseName }}
-      <span class="title">销售总量:</span>{{ detaliTableList.list.goodsCount }}{{ detaliTableList.list.goodsUnit }}<br />
-      <span class="title">剩余出库量:</span>{{ detaliTableList.list.goodsCount - remainingOutboundVolume }}{{
-          detaliTableList.list.goodsUnit
+      <span class="title">销售编号:</span>{{ detailTableList.saleContractNo }}<br />
+      <span class="title">货物名称:</span>{{ detailTableList.goodsName }}
+      <span class="title">销售方公司名:</span>{{ detailTableList.customer.customerEnterpriseName }}
+      <span class="title">己方公司名:</span>{{ detailTableList.ownCompanyName }}
+      <span class="title">销售总量:</span>{{ detailTableList.goodsCount }}{{ detailTableList.goodsUnit }}<br />
+      <span class="title">剩余出库量:</span>{{ detailTableList.goodsCount - remainingOutboundVolume }}{{
+          detailTableList.goodsUnit
       }}<br />
       <span class="title" style="line-height: 50px;">出库详情:</span><br />
 
@@ -43,25 +43,22 @@ const { global } = useInstance()
 const { onShow, dialog, onConfirm, onClose } = useDialog()
 
 //计算剩余出库量  totalWeight是已经运送的总重量
-const remainingOutboundVolume = ref<number>()
+const remainingOutboundVolume = ref<number>(0)
 
 
 
 const show = async (addModel: AddSaleModel) => {
   //获取剩余出库量
-  detaliTableList.list = addModel
-  let res = await getRemainingOutboundVolumeApi(detaliTableList.list.saleContractNo)
+  // detaliTableList.list = addModel
+  global.$objCopy(addModel, detailTableList)
+  let res = await getRemainingOutboundVolumeApi(detailTableList.saleContractNo)
   if (res && res.code == 200) {
     remainingOutboundVolume.value = res.data
   }
   //获取所有的运输合同
-  let response = await getDetailSaleContract(detaliTableList.list.saleContractNo)
+  let response = await getDetailSaleContract(detailTableList.saleContractNo)
   if (response && response.code == 200) {
-    if (response.data.length > 0) {
-      tableList.list = response.data
-    } else {
-      tableList.list = null
-    }
+    tableList.list = response.data
   }
   dialog.title = '销售单详情'
   dialog.height = 400
@@ -77,9 +74,42 @@ const CTTOdate = (row: { createTime: string | number | Date; }) => {
 }
 
 
+// //表单绑定的对象
+// const detaliTableList = reactive({
+//   list: []
+// })
 //表单绑定的对象
-const detaliTableList = reactive({
-  list: []
+const detailTableList = reactive({
+  id: '',
+  saleContractNo: '',
+  saleCustomerId: '',
+  ownCompanyName: '',
+  goodsName: '',
+  goodsCount: 0,
+  goodsUnit: '',
+  goodsUnitPrice: '',
+  goodsTotalPrice: '',
+  paymentMethod: '',
+  transportMethod: '',
+  contractPhoto: '',
+  contractPhotoList: [],
+  revenueAmount: '',
+  revenuePhoto: '',
+  revenueBy: '',
+  pigeonhole: '',
+  squeezeSeason: '',
+  createBy: '',
+  saleContractTime: '',
+  customer: reactive(
+    {
+      id: '',
+      customerAddress: '',
+      customerName: '',
+      customerPhone: '',
+      createTime: '',
+      customerEnterpriseName: ''
+    }
+  )
 })
 
 //出库详情表格数据
