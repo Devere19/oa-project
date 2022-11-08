@@ -1,7 +1,7 @@
 import http from "@/http";
-import { moreDeleteModel, purchaseContractModel, inboundDataModel } from "./PurchaseContractModel";
+import { moreDeleteModel, purchaseContractModel } from "./PurchaseContractModel";
 
-//分页获取采购单
+//分页获取未归档采购单
 export const getTPurchaseContractDataApi = (currentPage: number, pageSize: number) => {
     return http.get("purchaseContract/getTPurchaseContractData", {
         current: currentPage,
@@ -9,7 +9,7 @@ export const getTPurchaseContractDataApi = (currentPage: number, pageSize: numbe
     })
 }
 
-//分页获取采购单
+//分页获取已归档采购单
 export const getFPurchaseContractDataApi = (currentPage: number, pageSize: number) => {
     return http.get("purchaseContract/getFPurchaseContractData", {
         current: currentPage,

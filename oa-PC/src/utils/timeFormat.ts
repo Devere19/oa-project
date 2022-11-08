@@ -7,7 +7,9 @@
 // 日期带时分秒时间转换
 export const conversionDateTime = (row: any, column: any) => {
     let dateee = new Date(row[column.property]).toJSON();
-    return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    if (dateee != null) {
+        return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    }
 }
 
 /**
