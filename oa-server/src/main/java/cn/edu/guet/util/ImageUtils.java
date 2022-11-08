@@ -6,6 +6,7 @@ package cn.edu.guet.util;
  * @Version 1.0
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +51,15 @@ public class ImageUtils {
             urlString=urlString+","+contractPhotoArray.get(i);
         }
         return urlString;
+    }
+
+    public static void deleteImages(String str){
+        List<String> images=new ArrayList<>();
+        for (String s : str.split(",")) {
+            File photo= new File("static\\images\\" + s.split("/static/images/")[1]);
+            if(photo.exists()){
+                System.out.println("删除原文件结果"+photo.delete());
+            }
+        }
     }
 }

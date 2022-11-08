@@ -57,6 +57,20 @@ public class PurchaseContractViewServiceImpl extends ServiceImpl<PurchaseContrac
         qw.eq("pigeonhole",0).orderByDesc("create_time");
         Page<PurchaseContractView> page =new Page<>(currentPage,pageSize);
         page=purchaseContractViewMapper.selectPage(page,qw);
+        for (PurchaseContractView record : page.getRecords()) {
+            //处理图片，形成一个图片数组
+            String contractPhoto = record.getContractPhoto();
+            //有多个照片
+            if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(contractPhoto);
+                record.setContractPhotoArray(list);
+                //取第一个图片的url
+                record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
+            }else{
+                record.setContractPhotoArray(Arrays.asList(contractPhoto));
+            }
+        }
         return page;
     }
 
@@ -74,6 +88,20 @@ public class PurchaseContractViewServiceImpl extends ServiceImpl<PurchaseContrac
         }
         Page<PurchaseContractView> page =new Page<>(currentPage,pageSize);
         page=purchaseContractViewMapper.selectPage(page,qw);
+        for (PurchaseContractView record : page.getRecords()) {
+            //处理图片，形成一个图片数组
+            String contractPhoto = record.getContractPhoto();
+            //有多个照片
+            if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(contractPhoto);
+                record.setContractPhotoArray(list);
+                //取第一个图片的url
+                record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
+            }else{
+                record.setContractPhotoArray(Arrays.asList(contractPhoto));
+            }
+        }
         return page;
     }
 }

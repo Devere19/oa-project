@@ -83,6 +83,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                 ownInOutMapper.deleteById(ownInOuts.get(i).getId());
             }
         }
+        ImageUtils.deleteImages(purchaseContractMapper.selectById(id).getContractPhoto());
         return purchaseContractMapper.deleteById(id);
     }
 
