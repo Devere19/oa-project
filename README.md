@@ -11,25 +11,26 @@
 
 ```sql
 CREATE TABLE `purchase_contract` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `purchase_contract_no` varchar(255) NOT NULL COMMENT '采购合同编号',
-  `supplier` varchar(255) DEFAULT NULL COMMENT '供货商',
-  `own_company_name` varchar(255) DEFAULT NULL COMMENT '己方公司名',
-  `squeeze_season` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '榨季',
-  `inbound_time` datetime DEFAULT NULL COMMENT '入库时间（合同实际签订时间）',
-  `goods_name` varchar(255) DEFAULT NULL COMMENT '采购货物名称',
-  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '采购货物数量',
-  `goods_unit` varchar(255) DEFAULT NULL COMMENT '采购货物单位',
-  `goods_unit_price` decimal(18,2) DEFAULT NULL COMMENT '采购货物单价',
-  `payment_amount` decimal(18,2) DEFAULT NULL COMMENT '采购总金额',
-  `contract_photo` text COMMENT '采购合同照片',
-  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
-  `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
-  `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `purchase_unique` (`purchase_contract_no`) USING BTREE COMMENT '保证采购合同编号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    `id` int NOT NULL AUTO_INCREMENT,
+    `purchase_contract_no` varchar(255) NOT NULL COMMENT '采购合同编号',
+    `supplier_no` int DEFAULT NULL COMMENT '供货商ID（客户表ID）',
+    `own_company_name` varchar(255) DEFAULT NULL COMMENT '己方公司名',
+    `squeeze_season` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '榨季',
+    `inbound_time` date DEFAULT NULL COMMENT '入库时间（合同实际签订时间）',
+    `goods_name` varchar(255) DEFAULT NULL COMMENT '采购货物名称',
+    `goods_count` decimal(18,2) DEFAULT NULL COMMENT '采购货物数量',
+    `goods_unit` varchar(255) DEFAULT NULL COMMENT '采购货物单位',
+    `goods_unit_price` decimal(18,2) DEFAULT NULL COMMENT '采购货物单价',
+    `payment_amount` decimal(18,2) DEFAULT NULL COMMENT '采购总金额',
+    `contract_photo` text COMMENT '采购合同照片',
+    `pigeonhole` int DEFAULT '1' COMMENT '归档 0表示隐藏  1表示显示',
+    `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
+    `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
+    `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `purchase_unique` (`purchase_contract_no`) USING BTREE COMMENT '保证采购合同编号唯一'
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 采购付款单（purchase_payment_contract）
