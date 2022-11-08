@@ -40,7 +40,7 @@ public class ImageUtils {
 
     /**
 
-     * 将图片url拼接成一个字符串，以逗号分隔*
+     * 将图片url拼接成一个字符串，以逗号分隔,
      */
     public static String getDBString(List<String> contractPhotoArray){
         if(contractPhotoArray.size()==0){

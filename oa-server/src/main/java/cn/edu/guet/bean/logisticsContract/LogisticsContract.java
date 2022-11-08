@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -52,9 +54,25 @@ public class LogisticsContract implements Serializable {
     private String contractPhoto;
 
     /**
+     * 物流合同照片数组
+     */
+    @TableField(exist = false)
+    private List<String> contractPhotoList;
+
+    /**
      * 物流单合同签订时间
      */
     private Date logisticContractTime;
+
+    /**
+     * 榨季
+     */
+    private String squeezeSeason;
+
+    /**
+     * 归档  1显示  0隐藏
+     */
+    private String pigeonhole;
 
     /**
      * 创建时间
@@ -75,6 +93,13 @@ public class LogisticsContract implements Serializable {
      * 最新更新者名称
      */
     private String lastUpdateBy;
+
+
+    /**
+     * 物流详情表集合
+     */
+    @TableField(exist = false)
+    private List<LogisticsDetail> logisticsDetailList;
 
 
 

@@ -6,8 +6,10 @@
  */
 // 日期带时分秒时间转换
 export const conversionDateTime = (row: any, column: any) => {
+
     let dateee = new Date(row[column.property]).toJSON();
     if (dateee != null) {
+
         return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
     }
 }
@@ -29,7 +31,7 @@ export const conversionDate = (row: any, column: any) => {
          * */
         var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
         var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        // 拼接
+        // 拼接wwwwwwwwwwww5
         return year + "-" + month + "-" + day;
     }
 }

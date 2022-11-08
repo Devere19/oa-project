@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="ownCompanyName" label="己方公司名"></el-table-column>
-      <el-table-column prop="saleContractTime" label="合同签订时间" :formatter="conversionDateTime"></el-table-column>
+      <el-table-column prop="saleContractTime" label="合同签订时间" :formatter="conversionDate"></el-table-column>
       <el-table-column prop="goodsName" label="销售货物名称"></el-table-column>
       <el-table-column prop="goodsCount" label="销售货物总量"></el-table-column>
       <el-table-column prop="goodsUnit" label="销售货物单位"></el-table-column>
@@ -93,23 +93,19 @@
 
 <script setup lang="ts">
 import { Plus, Edit, Delete, Search, Close } from "@element-plus/icons-vue";
-import { conversionDateTime } from "@/utils/timeFormat";
 import useTable from '@/composables/sale/useTable';
 import useSale from "@/composables/sale/useSale";
 import AddSaleContract from "@/views/sale/AddSaleContract.vue"
 import DetailSaleContract from "./DetailSaleContract.vue";
 import useDetail from '@/composables/sale/useDetail'
+import {conversionDate,conversionDateTime} from '@/utils/timeFormat'
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
 //销售单新增、编辑、删除
 const { changePigeonhole, deleteBtn, addBtn, addRef } = useSale(refresh)
 
-
-
-
-//-------------------------------------------------------------------------
 // 销售单详情相关操作
-const { detailRef,detailBtn} = useDetail()
+const { detailRef, detailBtn } = useDetail()
 
 </script>
 

@@ -74,6 +74,7 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         }
         //查看归档为1的数据
         query.lambda().eq(SaleContract::getPigeonhole, 1);
+        query.orderByDesc("create_time");
 
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
@@ -139,6 +140,7 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         }
         //查看归档为1的数据
         query.lambda().eq(SaleContract::getPigeonhole, 0);
+        query.orderByDesc("create_time");
 
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer

@@ -10,6 +10,7 @@
             <result property="saleContractNo" column="sale_contract_no" jdbcType="VARCHAR"/>
             <result property="freight" column="freight" jdbcType="DECIMAL"/>
             <result property="contractPhoto" column="contract_photo" jdbcType="VARCHAR"/>
+            <result property="squeezeSeason" column="squeeze_season" jdbcType="VARCHAR"/>
             <result property="logisticContractTime" column="logistic_contract_time" jdbcType="TIMESTAMP"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="createBy" column="create_by" jdbcType="VARCHAR"/>

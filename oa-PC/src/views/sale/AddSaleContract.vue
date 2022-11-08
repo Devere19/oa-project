@@ -132,6 +132,9 @@ const show = async () => {
   dialog.title = "新增销售单"
   dialog.height = 600
   dialog.width = 800
+  //清空照片
+  addModel.contractPhotoList = []
+  PhotoData.value = []
   let res = await getSelectApi()
   customerData.list = res.data
   onShow()
@@ -149,7 +152,7 @@ const previewImageFlag = ref(false)
 
 const PhotoData = ref<UploadUserFile[]>([])
 // 照片移除后发送请求后台删除照片
-const handleRemove: UploadProps['onRemove'] = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+const handleRemove: UploadProps['onRemove'] = async (uploadFile: any, uploadFiles: any) => {
   console.log(uploadFile, uploadFiles);
   addModel.contractPhotoList.splice(addModel.contractPhotoList.indexOf(uploadFile.response.data), 1);
   console.log("移出照片数据组");
@@ -186,6 +189,7 @@ const commit = async () => {
     emits('refresh')
     onClose()
   }
+  //清空照片
   addModel.contractPhotoList = []
   PhotoData.value = []
 }
