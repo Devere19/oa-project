@@ -1,8 +1,8 @@
 package cn.edu.guet.service.Impl;
 
-import cn.edu.guet.bean.customer.Customer;
+
+import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
-import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.PurchaseContractViewMapper;
 import cn.edu.guet.service.PurchaseContractViewService;
 import cn.edu.guet.util.ImageUtils;
@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +104,14 @@ public class PurchaseContractViewServiceImpl extends ServiceImpl<PurchaseContrac
             }
         }
         return page;
+    }
+
+    @Override
+    public Boolean checkPurchaseContractNo(String purchaseContractNo) {
+        QueryWrapper<PurchaseContractView> qw= new QueryWrapper<>();
+        qw.eq("purchase_contract_no",purchaseContractNo).orderByDesc("create_time");
+        List<PurchaseContractView> purchaseContractViews= purchaseContractViewMapper.selectList(qw);
+        return !purchaseContractViews.isEmpty();
     }
 }
 

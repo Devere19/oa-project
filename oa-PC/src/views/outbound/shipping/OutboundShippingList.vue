@@ -44,10 +44,54 @@
                         :preview-src-list="scope.row.contractPhotoArray" fit="cover" preview-teleported="true" />
                 </template>
             </el-table-column>
-            <el-table-column property="financeStaff" align="center" label="财务名称" />
-            <el-table-column property="financeState" align="center" label="财务审核状态" />
-            <el-table-column property="cashier" align="center" label="出纳名称" />
-            <el-table-column property="paymentCount" align="center" label="付款金额" />
+            <!-- <el-table-column align="center" label="财务名称">
+                <template #default="scope">
+                    {{ scope.row.financeStaff == null ? "暂无" : scope.row.financeStaff }}
+                </template>
+            </el-table-column> -->
+            <el-table-column label="财务审核状态" align="center">
+                <template #default="scope">{{ scope.row.financeState == null ? "未处理" : "已通过✔" }}</template>
+            </el-table-column>
+            <!-- <el-table-column align="center" label="董事1名称">
+                <template #default="scope">
+                    {{ scope.row.shippingDirector[0].nickName }}
+                </template>
+            </el-table-column> -->
+            <el-table-column align="center" label="董事1审核状态">
+                <template #default="scope">
+                    {{ scope.row.shippingDirector[0].state == null ? "未处理" : "已通过✔" }}
+                </template>
+            </el-table-column>
+            <!-- <el-table-column align="center" label="董事2名称">
+                <template #default="scope">
+                    {{ scope.row.shippingDirector[1].nickName }}
+                </template>
+            </el-table-column> -->
+            <el-table-column align="center" label="董事2审核状态">
+                <template #default="scope">
+                    {{ scope.row.shippingDirector[1].state == null ? "未处理" : "已通过✔" }}
+                </template>
+            </el-table-column>
+            <!-- <el-table-column align="center" label="董事3名称">
+                <template #default="scope">
+                    {{ scope.row.shippingDirector[2].nickName }}
+                </template>
+            </el-table-column> -->
+            <el-table-column align="center" label="董事3审核状态">
+                <template #default="scope">
+                    {{ scope.row.shippingDirector[2].state == null ? "未处理" : "已通过✔" }}
+                </template>
+            </el-table-column>
+            <!-- <el-table-column align="center" label="出纳名称">
+                <template #default="scope">
+                    {{ scope.row.cashier == null ? "暂无" : scope.row.cashier }}
+                </template>
+            </el-table-column> -->
+            <el-table-column align="center" label="付款金额">
+                <template #default="scope">
+                    {{ scope.row.paymentCount == null ? "0" : scope.row.paymentCount }}
+                </template>
+            </el-table-column>
             <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间" />
             <el-table-column align="center" label="付款流水截图" width="130">
                 <template #default="scope">
@@ -228,8 +272,9 @@
         <el-dialog v-model="previewImageFlag">
             <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
         </el-dialog>
-        <el-dialog v-model="moreDetailDialogFlag" title="海运单详情" width="75%" draggable center
+        <el-dialog v-model="moreDetailDialogFlag" title="海运单详情" width="50%" draggable center
             :before-close="closeMoreDetailDialog">
+            <!-- <el-divider content-position="center">基本信息</el-divider> -->
             <div>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
@@ -238,8 +283,6 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{ ShippingContractDetail.shippingContractNo }}
                     </el-col>
-                </el-row>
-                <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
                         物流合同编号：
                     </el-col>
@@ -247,6 +290,14 @@
                         {{ ShippingContractDetail.logtisticsContractNo }}
                     </el-col>
                 </el-row>
+                <!-- <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        物流合同编号：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.logtisticsContractNo }}
+                    </el-col>
+                </el-row> -->
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
                         委托方：
@@ -354,11 +405,107 @@
                     </el-col>
                 </el-row>
             </div>
+            <!-- <el-divider content-position="center">审核情况</el-divider> -->
+            <el-divider />
             <div>
-                <!-- 审核部分 -->
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        财务名称：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.financeStaff == null ? "暂无" : ShippingContractDetail.financeStaff }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        财务审核状态：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.financeState == null ? "未处理" : "已通过✔" }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        董事1名称：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.shippingDirector[0].nickName }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        董事1审核状态：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.shippingDirector[0].state == null ? "未处理" : "已通过✔" }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        董事2名称：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.shippingDirector[1].nickName }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        董事2审核状态：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.shippingDirector[1].state == null ? "未处理" : "已通过✔" }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        董事3名称：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.shippingDirector[2].nickName }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        董事3审核状态：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.shippingDirector[2].state == null ? "未处理" : "已通过✔" }}
+                    </el-col>
+                </el-row>
             </div>
+            <el-divider />
             <div>
-                <!-- 出纳部分 -->
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        付款金额：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.paymentCount == null ? "0" : ShippingContractDetail.financeStaff }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        出纳名称：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.cashier == null ? "暂无" : ShippingContractDetail.financeStaff }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        付款时间：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.paymentTime == null ? "未知" : ShippingContractDetail.paymentTime }}
+                    </el-col>
+                </el-row>
+            </div>
+            <el-divider />
+            <div>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        创建者：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.createBy }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        创建时间：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.createTime }}
+                    </el-col>
+                </el-row>
             </div>
         </el-dialog>
     </div>
@@ -368,10 +515,10 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
 import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
-import { conversionDate, conversionDateTime } from "@/utils/timeFormat"
+import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
-import { shippingContractModel } from '@/api/shippingContract/ShippingContractModel'
+import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
 import { getShippingContractDataApi, searchShippingContractApi, checkContainerNoApi, addNewShippingContractApi, deleteOneShippingContractApi } from '@/api/shippingContract'
 
 
@@ -442,6 +589,7 @@ const ShippingContractDetail = reactive({
     contractPhotoArray: reactive<string[]>([]),
     financeStaff: '',
     financeState: '',
+    shippingDirector: reactive<shippingDirectorModel[]>([]),
     cashier: '',
     paymentCount: '',
     paymentTime: '',
@@ -560,34 +708,42 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
-            changeLoading();
-            console.log(NewShippingContractData);
-            addNewShippingContractApi(NewShippingContractData).then(res => {
-                if (res.data == 1) {
-                    getTableData();
-                    addDialogFlag.value = false;
-                    ReturnTop();
-                    firstFormRef.value?.resetFields();
-                    ElMessage({
-                        message: '新增海运单成功！',
-                        type: 'success',
-                    })
-                    PhotoData.value = [];
-                    NewShippingContractData.contractPhotoArray = [];
+            if (containerSameFlag.value == false) {
+                changeLoading();
+                console.log(NewShippingContractData);
+                addNewShippingContractApi(NewShippingContractData).then(res => {
                     changeLoading();
-                }
-                else {
-                    ElMessage({
-                        message: '新增海运单失败！',
-                        type: 'error',
-                        duration: 4000
-                    })
-                    changeLoading();
-                }
-            })
+                    if (res.data == 1) {
+                        getTableData();
+                        addDialogFlag.value = false;
+                        ReturnTop();
+                        firstFormRef.value?.resetFields();
+                        ElMessage({
+                            message: '新增海运单成功！',
+                            type: 'success',
+                        })
+                        PhotoData.value = [];
+                        NewShippingContractData.contractPhotoArray = [];
+                        changeLoading();
+                    }
+                    else {
+                        ElMessage({
+                            message: '新增海运单失败！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    }
+                })
+            } else {
+                ElMessage({
+                    message: '集装箱号在30天内已重复，请检查！',
+                    type: 'error',
+                    duration: 4000
+                })
+            }
         } else {
             ElMessage({
-                message: '表单验证未通过，请检测！',
+                message: '表单验证未通过，请检查！',
                 type: 'error',
                 duration: 4000
             })
@@ -600,7 +756,7 @@ const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.shippingContractNo = row.shippingContractNo
     ShippingContractDetail.logtisticsContractNo = row.logtisticsContractNo
     ShippingContractDetail.principal = row.principal
-    ShippingContractDetail.packingTime = timeConversion(row.packingTime)
+    ShippingContractDetail.packingTime = dateConversion(row.packingTime)
     ShippingContractDetail.packingLocation = row.packingLocation
     ShippingContractDetail.unpackingFactory = row.unpackingFactory
     ShippingContractDetail.containerNo = row.containerNo
@@ -617,31 +773,14 @@ const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.contractPhotoArray = row.contractPhotoArray
     ShippingContractDetail.financeStaff = row.financeStaff
     ShippingContractDetail.financeState = row.financeState
+    ShippingContractDetail.shippingDirector = row.shippingDirector
     ShippingContractDetail.cashier = row.cashier
     ShippingContractDetail.paymentCount = row.paymentCount
-    ShippingContractDetail.paymentTime = timeConversion(row.paymentTime)
+    ShippingContractDetail.paymentTime = dateConversion(row.paymentTime)
     ShippingContractDetail.paymentPhotoArray = row.paymentPhotoArray
-    ShippingContractDetail.createTime = row.createTime
+    ShippingContractDetail.createTime = timeConversion(row.createTime)
     ShippingContractDetail.createBy = row.createBy
     moreDetailDialogFlag.value = true
-}
-
-//详情，时间转换
-const timeConversion = (time: any) => {
-    const daterc = time
-    if (daterc != null) {
-        var date = new Date(daterc);
-        var year = date.getFullYear();
-        /* 在日期格式中，月份是从0开始，11结束，因此要加0
-         * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
-         * */
-        var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-        var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        // 拼接
-        return year + "-" + month + "-" + day;
-    } else {
-        return time;
-    }
 }
 
 const closeMoreDetailDialog = () => {

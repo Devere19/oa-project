@@ -1,9 +1,15 @@
 package cn.edu.guet.service.Impl;
 
+import cn.edu.guet.bean.Director;
 import cn.edu.guet.bean.ShippingContract;
+import cn.edu.guet.bean.ShippingDirectorState;
+import cn.edu.guet.bean.ShippingStateView;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
+import cn.edu.guet.mapper.DirectorMapper;
 import cn.edu.guet.mapper.ShippingContractMapper;
+import cn.edu.guet.mapper.ShippingDirectorStateMapper;
+import cn.edu.guet.mapper.ShippingStateInfoMapper;
 import cn.edu.guet.service.ShippingContractService;
 import cn.edu.guet.util.ImageUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +18,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +35,16 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Autowired
     private ShippingContractMapper shippingContractMapper;
 
+    @Autowired
+    private ShippingStateInfoMapper shippingStateInfoMapper;
+
+    @Autowired
+    private ShippingDirectorStateMapper shippingDirectorStateMapper;
+
+    @Autowired
+    private DirectorMapper directorMapper;
+
+
     @Override
     public Page<ShippingContract> getshippingContractData(int currentPage, int pageSize) {
         QueryWrapper<ShippingContract> qw= new QueryWrapper<>();
@@ -35,6 +52,11 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         Page<ShippingContract> page =new Page<>(currentPage,pageSize);
         page=shippingContractMapper.selectPage(page,qw);
         for (ShippingContract record : page.getRecords()) {
+//            获取董事长审核信息，并添加进对象中
+            QueryWrapper<ShippingStateView> stateQw= new QueryWrapper<>();
+            stateQw.eq("shipping_contract_no",record.getShippingContractNo()).orderByDesc("nick_name");
+            record.setShippingDirector(shippingStateInfoMapper.selectList(stateQw));
+
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             String paymentPhoto = record.getPaymentPhoto();
@@ -73,6 +95,11 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         Page<ShippingContract> page =new Page<>(currentPage,pageSize);
         page=shippingContractMapper.selectPage(page,qw);
         for (ShippingContract record : page.getRecords()) {
+            //            获取董事长审核信息，并加入数据库
+            QueryWrapper<ShippingStateView> stateQw= new QueryWrapper<>();
+            stateQw.eq("shipping_contract_no",record.getShippingContractNo()).orderByAsc("nick_name");
+            record.setShippingDirector(shippingStateInfoMapper.selectList(stateQw));
+
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             String paymentPhoto = record.getPaymentPhoto();
@@ -100,15 +127,37 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addNewShippingContract(ShippingContract shippingContract) {
-        shippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
+        if(ImageUtils.getDBString(shippingContract.getContractPhotoArray())!=""){
+            shippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
+        }
+//        查询出董事会的ID
+        QueryWrapper<Director> directorQw= new QueryWrapper<>();
+        directorQw.orderByAsc("nick_name").last("limit 3");
+        List<Director> directors=directorMapper.selectList(directorQw);
+
+//        循环添加海运董事审核记录
+        for (Director director:directors){
+            ShippingDirectorState shippingDirectorState=new ShippingDirectorState();
+            shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
+            shippingDirectorState.setUserId(Math.toIntExact(director.getId()));
+            shippingDirectorStateMapper.insert(shippingDirectorState);
+        }
+
         return shippingContractMapper.insert(shippingContract);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteOneShippingContract(int id) {
-        ImageUtils.deleteImages(shippingContractMapper.selectById(id).getContractPhoto());
+        ShippingContract shippingContract=shippingContractMapper.selectById(id);
+//        删除相关审核记录
+        QueryWrapper<ShippingDirectorState> directorStateQw= new QueryWrapper<>();
+        directorStateQw.eq("shipping_contract_no",shippingContract.getShippingContractNo());
+        shippingDirectorStateMapper.delete(directorStateQw);
+        ImageUtils.deleteImages(shippingContract.getContractPhoto());
         return shippingContractMapper.deleteById(id);
     }
 

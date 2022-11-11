@@ -10,6 +10,7 @@ import cn.edu.guet.bean.purchaseContract.OutboundDetailInfo;
 import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.UnitUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -60,33 +61,38 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
         QueryWrapper<OtherInOut> QwOtherInOut= new QueryWrapper<>();
         QwOtherInOut.eq("in_out_contract_no",purchaseContract.getPurchaseContractNo());
         List<OtherInOut> otherInOuts=otherInOutMapper.selectList(QwOtherInOut);
-        QueryWrapper<OwnInOut> QwOwnInOut= new QueryWrapper<>();
-        QwOwnInOut.eq("in_out_contract_no",purchaseContract.getPurchaseContractNo());
-        List<OwnInOut> ownInOuts=ownInOutMapper.selectList(QwOwnInOut);
+//        QueryWrapper<OwnInOut> QwOwnInOut= new QueryWrapper<>();
+//        QwOwnInOut.eq("in_out_contract_no",purchaseContract.getPurchaseContractNo());
+//        List<OwnInOut> ownInOuts=ownInOutMapper.selectList(QwOwnInOut);
         if(otherInOuts.size()!=0){
             for(int i=0;i<otherInOuts.size();i++){
                 QueryWrapper<OtherWarehouse> QwOtherWarehouse= new QueryWrapper<>();
-                QwOtherWarehouse.eq("id",otherInOuts.get(i).getOtherWarehouseId()).eq("goods_name",otherInOuts.get(i).getInOutGoodsName()).eq("goods_unit",otherInOuts.get(i).getInOutGoodsUnit());
+                QwOtherWarehouse.eq("id",otherInOuts.get(i).getOtherWarehouseId()).eq("goods_name",otherInOuts.get(i).getInOutGoodsName());
                 OtherWarehouse otherWarehouse=otherWarehouseMapper.selectOne(QwOtherWarehouse);
-                otherWarehouse.setGoodsCount(otherWarehouse.getGoodsCount().subtract(otherInOuts.get(i).getInOutGoodsCount()));
+                if(purchaseContract.getGoodsUnit().equals("吨")){
+                    otherWarehouse.setGoodsCount(otherWarehouse.getGoodsCount().subtract(UnitUtils.TtoG(otherInOuts.get(i).getInOutGoodsCount())));
+                }else{
+                    otherWarehouse.setGoodsCount(otherWarehouse.getGoodsCount().subtract(otherInOuts.get(i).getInOutGoodsCount()));
+                }
                 otherWarehouseMapper.updateById(otherWarehouse);
                 otherInOutMapper.deleteById(otherInOuts.get(i).getId());
             }
         }
-        if(ownInOuts.size()!=0){
-            for(int i=0;i<ownInOuts.size();i++){
-                QueryWrapper<OwnWarehouse> QwOwnWarehouse= new QueryWrapper<>();
-                QwOwnWarehouse.eq("goods_name",ownInOuts.get(i).getInOutGoodsName()).eq("goods_unit",ownInOuts.get(i).getInOutGoodsUnit());
-                OwnWarehouse ownWarehouse=ownWarehouseMapper.selectOne(QwOwnWarehouse);
-                ownWarehouse.setGoodsCount(ownWarehouse.getGoodsCount().subtract(ownInOuts.get(i).getInOutGoodsCount()));
-                ownWarehouseMapper.updateById(ownWarehouse);
-                ownInOutMapper.deleteById(ownInOuts.get(i).getId());
-            }
-        }
+//        if(ownInOuts.size()!=0){
+//            for(int i=0;i<ownInOuts.size();i++){
+//                QueryWrapper<OwnWarehouse> QwOwnWarehouse= new QueryWrapper<>();
+//                QwOwnWarehouse.eq("goods_name",ownInOuts.get(i).getInOutGoodsName());
+//                OwnWarehouse ownWarehouse=ownWarehouseMapper.selectOne(QwOwnWarehouse);
+//                ownWarehouse.setGoodsCount(ownWarehouse.getGoodsCount().subtract(ownInOuts.get(i).getInOutGoodsCount()));
+//                ownWarehouseMapper.updateById(ownWarehouse);
+//                ownInOutMapper.deleteById(ownInOuts.get(i).getId());
+//            }
+//        }
         ImageUtils.deleteImages(purchaseContractMapper.selectById(id).getContractPhoto());
         return purchaseContractMapper.deleteById(id);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteMorePurchaseContract(JSONArray ids) {
         LambdaQueryWrapper<PurchaseContract> lambdaQueryWrapper=new LambdaQueryWrapper<>();
@@ -95,6 +101,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int setPurchaseContractPigeonhole(int id, int pigeonhole) {
         PurchaseContract purchaseContract=purchaseContractMapper.selectById(id);
@@ -111,21 +118,34 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     @Override
     public int addNewPurchaseContract(PurchaseContract purchaseContract) {
         purchaseContract.setSupplierNo(String.valueOf(purchaseContract.getCustomerEnterpriseName()));
-        purchaseContract.setContractPhoto(ImageUtils.getDBString(purchaseContract.getContractPhotoArray()));
+        purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount());
+        if(ImageUtils.getDBString(purchaseContract.getContractPhotoArray())!=""){
+            purchaseContract.setContractPhoto(ImageUtils.getDBString(purchaseContract.getContractPhotoArray()));
+        }
+        if(purchaseContract.getGoodsUnit().equals("吨")){
+            purchaseContract.setGoodsUnitPrice(UnitUtils.GtoT(purchaseContract.getGoodsUnitPrice()));
+        }else{
+            purchaseContract.setGoodsUnitPrice(purchaseContract.getGoodsUnitPrice());
+        }
         for(int i=0;i<purchaseContract.getInboundData().size();i++){
 //            当不是自家仓库时，即外商仓库
+//            修改，不存在自家仓库的情况，只能从外商入
             if(purchaseContract.getInboundData().get(i).getFactoryName().equals("自家仓库")!=true){
-//                查询是否存在对应外商仓库，且存储着对应物品，单位是否相同
+//                查询是否存在对应外商仓库，且存储着对应物品
                 QueryWrapper<OtherWarehouse> qw= new QueryWrapper<>();
-                qw.eq("factory_name",purchaseContract.getInboundData().get(i).getFactoryName()).eq("goods_name",purchaseContract.getGoodsName()).eq("goods_unit",purchaseContract.getGoodsUnit());
+                qw.eq("factory_name",purchaseContract.getInboundData().get(i).getFactoryName()).eq("goods_name",purchaseContract.getGoodsName());
                 OtherWarehouse tempOtherWarehouse=otherWarehouseMapper.selectOne(qw);
                 if(tempOtherWarehouse==null){
 //                    如果不存在对应库存信息，组建信息存储入数据库
                     OtherWarehouse otherWarehouse=new OtherWarehouse();
                     otherWarehouse.setFactoryName(purchaseContract.getInboundData().get(i).getFactoryName());
                     otherWarehouse.setGoodsName(purchaseContract.getGoodsName());
-                    otherWarehouse.setGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
-                    otherWarehouse.setGoodsUnit(purchaseContract.getGoodsUnit());
+//                    判断单位是否是斤
+                    if(purchaseContract.getGoodsUnit().equals("吨")){
+                        otherWarehouse.setGoodsCount(UnitUtils.TtoG(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
+                    }else{
+                        otherWarehouse.setGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
+                    }
                     int otherWarehouseId=addOtherWarehouse(otherWarehouse);
 //                    获取到相应外商仓库的仓库ID，存储入库流水单
                     if(otherWarehouseId!=0){
@@ -139,8 +159,12 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                         otherInOutMapper.insert(otherInOut);
                     }
                 }else {
-//                    如果存在对应库存信息，则更新库存量，并存储入库流水单
-                    tempOtherWarehouse.setGoodsCount(tempOtherWarehouse.getGoodsCount().add(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
+//                    如果存在对应库存信息，则判断单位后，更新库存量，并存储入库流水单
+                    if(purchaseContract.getGoodsUnit().equals("吨")){
+                        tempOtherWarehouse.setGoodsCount(tempOtherWarehouse.getGoodsCount().add(UnitUtils.TtoG(purchaseContract.getInboundData().get(i).getInboundGoodsCount())));
+                    }else{
+                        tempOtherWarehouse.setGoodsCount(tempOtherWarehouse.getGoodsCount().add(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
+                    }
                     otherWarehouseMapper.updateById(tempOtherWarehouse);
                     OtherInOut otherInOut=new OtherInOut();
                     otherInOut.setOtherWarehouseId(tempOtherWarehouse.getId());
@@ -152,40 +176,40 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     otherInOutMapper.insert(otherInOut);
                 }
             }else{
-//                是自家仓库，则查询是否存在对应的库存信息
-                QueryWrapper<OwnWarehouse> qw= new QueryWrapper<>();
-                qw.eq("goods_name",purchaseContract.getGoodsName()).eq("goods_unit",purchaseContract.getGoodsUnit());
-                OwnWarehouse tempOwnWarehouse=ownWarehouseMapper.selectOne(qw);
-                if(tempOwnWarehouse==null){
-//                    若不存在对应的库存信息，则组建库存信息，存入数据库
-                    OwnWarehouse ownWarehouse=new OwnWarehouse();
-                    ownWarehouse.setFactoryName("自家仓库");
-                    ownWarehouse.setGoodsName(purchaseContract.getGoodsName());
-                    ownWarehouse.setGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
-                    ownWarehouse.setGoodsUnit(purchaseContract.getGoodsUnit());
-                    int ownWarehouseId=addOwnWarehouse(ownWarehouse);
-                    if(ownWarehouseId!=0){
-//                        存储入库流水单
-                        OwnInOut ownInOut=new OwnInOut();
-                        ownInOut.setInOutType(1);
-                        ownInOut.setInOutContractNo(purchaseContract.getPurchaseContractNo());
-                        ownInOut.setInOutGoodsName(purchaseContract.getGoodsName());
-                        ownInOut.setInOutGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
-                        ownInOut.setInOutGoodsUnit(purchaseContract.getGoodsUnit());
-                        ownInOutMapper.insert(ownInOut);
-                    }
-                }else {
-//                    如果存在对应库存信息，则更新库存量，并存储入库流水单
-                    tempOwnWarehouse.setGoodsCount(tempOwnWarehouse.getGoodsCount().add(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
-                    ownWarehouseMapper.updateById(tempOwnWarehouse);
-                    OwnInOut ownInOut=new OwnInOut();
-                    ownInOut.setInOutType(1);
-                    ownInOut.setInOutContractNo(purchaseContract.getPurchaseContractNo());
-                    ownInOut.setInOutGoodsName(purchaseContract.getGoodsName());
-                    ownInOut.setInOutGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
-                    ownInOut.setInOutGoodsUnit(purchaseContract.getGoodsUnit());
-                    ownInOutMapper.insert(ownInOut);
-                }
+////                是自家仓库，则查询是否存在对应的库存信息
+//                QueryWrapper<OwnWarehouse> qw= new QueryWrapper<>();
+//                qw.eq("goods_name",purchaseContract.getGoodsName()).eq("goods_unit",purchaseContract.getGoodsUnit());
+//                OwnWarehouse tempOwnWarehouse=ownWarehouseMapper.selectOne(qw);
+//                if(tempOwnWarehouse==null){
+////                    若不存在对应的库存信息，则组建库存信息，存入数据库
+//                    OwnWarehouse ownWarehouse=new OwnWarehouse();
+//                    ownWarehouse.setFactoryName("自家仓库");
+//                    ownWarehouse.setGoodsName(purchaseContract.getGoodsName());
+//                    ownWarehouse.setGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
+//                    ownWarehouse.setGoodsUnit(purchaseContract.getGoodsUnit());
+//                    int ownWarehouseId=addOwnWarehouse(ownWarehouse);
+//                    if(ownWarehouseId!=0){
+////                        存储入库流水单
+//                        OwnInOut ownInOut=new OwnInOut();
+//                        ownInOut.setInOutType(1);
+//                        ownInOut.setInOutContractNo(purchaseContract.getPurchaseContractNo());
+//                        ownInOut.setInOutGoodsName(purchaseContract.getGoodsName());
+//                        ownInOut.setInOutGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
+//                        ownInOut.setInOutGoodsUnit(purchaseContract.getGoodsUnit());
+//                        ownInOutMapper.insert(ownInOut);
+//                    }
+//                }else {
+////                    如果存在对应库存信息，则更新库存量，并存储入库流水单
+//                    tempOwnWarehouse.setGoodsCount(tempOwnWarehouse.getGoodsCount().add(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
+//                    ownWarehouseMapper.updateById(tempOwnWarehouse);
+//                    OwnInOut ownInOut=new OwnInOut();
+//                    ownInOut.setInOutType(1);
+//                    ownInOut.setInOutContractNo(purchaseContract.getPurchaseContractNo());
+//                    ownInOut.setInOutGoodsName(purchaseContract.getGoodsName());
+//                    ownInOut.setInOutGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
+//                    ownInOut.setInOutGoodsUnit(purchaseContract.getGoodsUnit());
+//                    ownInOutMapper.insert(ownInOut);
+//                }
             }
         }
         return purchaseContractMapper.insert(purchaseContract);
