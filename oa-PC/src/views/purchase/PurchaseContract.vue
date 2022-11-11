@@ -35,8 +35,9 @@
       <el-table-column property="goodsName" align="center" label="采购货物名称" />
       <el-table-column property="goodsCount" align="center" label="采购货物数量" />
       <el-table-column property="goodsUnit" align="center" label="采购货物单位" />
-      <el-table-column property="goodsUnitPrice" align="center" label="采购货物单价" />
+      <el-table-column property="goodsUnitPrice" align="center" label="采购货物单价(斤)" />
       <el-table-column property="paymentAmount" align="center" label="采购总价" />
+      <el-table-column property="unpaidAmount" align="center" label="未结清金额" />
       <el-table-column align="center" label="合同照片" width="130">
         <template #default="scope">
           <el-image style="width: 100px; height: 100px"
@@ -114,7 +115,7 @@
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.factoryName'" label="厂名" :rules="[
             { required: true, trigger: ['change'] }]">
-              <el-input v-model="item.factoryName" size="large" />
+              <el-input v-model="item.factoryName" size="large" @change="changeOwnFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
             { required: true, trigger: ['change'] }]">
@@ -126,7 +127,7 @@
             <el-button type="warning" icon="Plus" @click="addInboundItem">添加入库单</el-button>
           </el-form-item>
           <el-form-item label="采购货物单价" prop="goodsUnitPrice">
-            <el-input v-model="NewPurchaseContractData.goodsUnitPrice" size="large" />
+            <el-input v-model="NewPurchaseContractData.goodsUnitPrice" placeholder="仅需填写所选重量单位的采购单价" size="large" />
           </el-form-item>
           <el-form-item label="采购总价" prop="paymentAmount">
             <el-input v-model="NewPurchaseContractData.paymentAmount" size="large" />
@@ -225,7 +226,7 @@
             {{ PurchaseContractDetail.goodsUnit }}
           </el-col>
           <el-col :span="4" class="moreDetailTitle">
-            采购货物单价：
+            采购货物单价(斤)：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.goodsUnitPrice }}
@@ -239,16 +240,36 @@
             {{ PurchaseContractDetail.paymentAmount }}
           </el-col>
           <el-col :span="4" class="moreDetailTitle">
+            未结清金额：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.unpaidAmount }}
+          </el-col>
+          <el-col :span="4" class="moreDetailTitle">
             榨季：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.squeezeSeason }}
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="4" class="moreDetailTitle">
             入库时间：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.inboundTime }}
+          </el-col>
+          <el-col :span="4" class="moreDetailTitle">
+            创建者：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.createBy }}
+          </el-col>
+          <el-col :span="4" class="moreDetailTitle">
+            创建时间：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.createTime }}
           </el-col>
         </el-row>
       </div>
@@ -292,7 +313,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
 import { Delete, Search, MoreFilled, Hide, View } from "@element-plus/icons-vue";
-import { conversionDate, conversionDateTime } from "@/utils/timeFormat"
+import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
 import { SelectCustomer } from "@/api/customer/CustomerModel"
@@ -310,8 +331,8 @@ const currentPage = ref(1)
 const pageSize = ref(5)
 const background = ref(true)
 const firstTableData = ref<purchaseContractModel[]>([])
-const secondTableData = ref<purchaseContractModel[]>([])
-const thirdTableData = ref<purchaseContractModel[]>([])
+const secondTableData = ref([])
+const thirdTableData = ref([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
 const oneDeleteDialogFlag = ref(false)
@@ -325,6 +346,7 @@ const PhotoData = ref<UploadUserFile[]>([])
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
+const ownFlag = ref(false)
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 const secondTableRef = ref<InstanceType<typeof ElTable>>()
@@ -368,12 +390,15 @@ const PurchaseContractDetail = reactive({
   goodsUnit: '',
   goodsUnitPrice: '',
   paymentAmount: '',
+  unpaidAmount: '',
+  createTime: '',
+  createBy: ''
 })
 
-NewPurchaseContractData.paymentAmount = computed(() => {
-  const temp = String(Number(NewPurchaseContractData.goodsCount) * Number(NewPurchaseContractData.goodsUnitPrice))
-  return temp
-});
+// NewPurchaseContractData.paymentAmount = computed(() => {
+//   const temp = String(Number(NewPurchaseContractData.goodsCount) * Number(NewPurchaseContractData.goodsUnitPrice))
+//   return temp
+// });
 
 //表单校验规则1
 const firstRules = reactive<FormRules>({
@@ -504,46 +529,58 @@ const sendNewPurchaseContract = async (formEl1: FormInstance | undefined) => {
       NewPurchaseContractData.inboundData.map(item => {
         total = total + Number(item.inboundGoodsCount)
       })
-      if (total == Number(NewPurchaseContractData.goodsCount)) {
-        changeLoading();
-        console.log(NewPurchaseContractData);
-        addNewPurchaseContractApi(NewPurchaseContractData).then(res => {
-          if (res.data == 1) {
-            if (showPigeonhole.value == false) {
-              getTTableData();
-            } else {
-              getFTableData();
+      if (ownFlag.value != true) {
+        if (total == Number(NewPurchaseContractData.goodsCount)) {
+          changeLoading();
+          console.log(NewPurchaseContractData);
+          addNewPurchaseContractApi(NewPurchaseContractData).then(res => {
+            if (res.data == 1) {
+              changeLoading();
+              if (showPigeonhole.value == false) {
+                getTTableData();
+              } else {
+                getFTableData();
+              }
+              addDialogFlag.value = false;
+              ReturnTop();
+              firstFormRef.value?.resetFields();
+              ElMessage({
+                message: '新增采购单成功！',
+                type: 'success',
+              })
+              PhotoData.value = [];
+              NewPurchaseContractData.contractPhotoArray = [];
+              NewPurchaseContractData.inboundData = [{
+                factoryName: '',
+                inboundGoodsCount: ''
+              }]
             }
-            addDialogFlag.value = false;
-            ReturnTop();
-            firstFormRef.value?.resetFields();
-            ElMessage({
-              message: '新增采购单成功！',
-              type: 'success',
-            })
-            PhotoData.value = [];
-            NewPurchaseContractData.contractPhotoArray = [];
-            changeLoading();
-          }
-          else {
-            ElMessage({
-              message: '新增采购单失败！',
-              type: 'error',
-              duration: 4000
-            })
-            changeLoading();
-          }
-        })
+            else {
+              ElMessage({
+                message: '新增采购单失败！',
+                type: 'error',
+                duration: 4000
+              })
+              changeLoading();
+            }
+          })
+        } else {
+          ElMessage({
+            message: '入库货物总量与所填采购货物数量不符！',
+            type: 'error',
+            duration: 4000
+          })
+        }
       } else {
         ElMessage({
-          message: '入库货物总量与所填采购货物数量不符！',
+          message: '入库厂名不能为自家仓库！',
           type: 'error',
           duration: 4000
         })
       }
     } else {
       ElMessage({
-        message: '表单验证未通过，请检测！',
+        message: '表单验证未通过，请检查！',
         type: 'error',
         duration: 4000
       })
@@ -584,33 +621,18 @@ const openMordDetailDialog = async (row: any) => {
   PurchaseContractDetail.customerEnterpriseName = row.customerEnterpriseName
   PurchaseContractDetail.ownCompanyName = row.ownCompanyName
   PurchaseContractDetail.squeezeSeason = row.squeezeSeason
-  PurchaseContractDetail.inboundTime = timeConversion(row.inboundTime)
+  PurchaseContractDetail.inboundTime = dateConversion(row.inboundTime)
   PurchaseContractDetail.goodsName = row.goodsName
   PurchaseContractDetail.goodsCount = row.goodsCount
   PurchaseContractDetail.goodsUnit = row.goodsUnit
   PurchaseContractDetail.goodsUnitPrice = row.goodsUnitPrice
   PurchaseContractDetail.paymentAmount = row.paymentAmount
+  PurchaseContractDetail.unpaidAmount = row.unpaidAmount
+  PurchaseContractDetail.createTime = timeConversion(row.createTime)
+  PurchaseContractDetail.createBy = row.createBy
   await getPurchaseDetail(row.purchaseContractNo, row.goodsName).then(res => {
     secondTableData.value = res.data;
   })
-}
-
-//详情，时间转换
-const timeConversion = (time: any) => {
-  const daterc = time
-  if (daterc != null) {
-    var date = new Date(daterc);
-    var year = date.getFullYear();
-    /* 在日期格式中，月份是从0开始，11结束，因此要加0
-     * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
-     * */
-    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-    var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    // 拼接
-    return year + "-" + month + "-" + day;
-  } else {
-    return time;
-  }
 }
 
 const moreOutboundDetail = (row: any) => {
@@ -762,6 +784,17 @@ const changeLoading = () => {
   loading.value = !loading.value;
 }
 
+
+const changeOwnFlag = () => {
+  for (let i = 0; i < NewPurchaseContractData.inboundData.length; i++) {
+    if (NewPurchaseContractData.inboundData[i].factoryName == "自家仓库") {
+      ownFlag.value = true;
+      break;
+    } else {
+      ownFlag.value = false;
+    }
+  }
+}
 
 </script>
 

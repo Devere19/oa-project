@@ -1,3 +1,4 @@
+import exp from "constants"
 
 export type shippingContractModel = {
     id: any,
@@ -21,10 +22,19 @@ export type shippingContractModel = {
     contractPhotoArray: any,
     financeStaff: string,
     financeState: any,
+    shippingDirector: any,
     cashier: string,
     paymentCount: any,
     paymentTime: any,
     paymentPhotoArray: any,
     createTime: string,
     createBy: string,
+}
+
+export type shippingDirectorModel = {
+    id: any,
+    shippingContractNo: string,
+    userId: any,
+    nickName: string,
+    state: any
 }
