@@ -111,7 +111,7 @@ CREATE TABLE `logistics_contract` (
   `goods_unit` varchar(255) DEFAULT NULL COMMENT '货物单位',
   `freight` decimal(18,2) DEFAULT NULL COMMENT '运费',
   `contract_photo` text COMMENT '物流合同照片',
-  `logistic_contract_time` datetime DEFAULT NULL COMMENT '物流单合同签订时间',
+  `logistics_contract_time` datetime DEFAULT NULL COMMENT '物流单合同签订时间',
   `squeeze_season` varchar(255) DEFAULT NULL COMMENT '榨季',
   `pigeonhole` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '1' COMMENT '归档  1显示  0隐藏',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -120,7 +120,7 @@ CREATE TABLE `logistics_contract` (
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`),
   UNIQUE KEY `logistics_unique` (`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 物流详情单（logistics_detail）
@@ -150,16 +150,16 @@ CREATE TABLE `logistics_detail` (
 ```sql
 CREATE TABLE `own_warehouse` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自家仓库ID',
-  `factory_name` varchar(255) DEFAULT NULL COMMENT '厂名',
+  `factory_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '自家仓库' COMMENT '厂名',
   `goods_name` varchar(255) DEFAULT NULL COMMENT '存储货物名称',
-  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '存储货物库存量',
-  `goods_unit` varchar(255) DEFAULT NULL COMMENT '存储货物单位',
+  `goods_count` decimal(24,6) DEFAULT NULL COMMENT '存储货物库存量',
+  `goods_unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '斤' COMMENT '存储货物单位   斤',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
   `last_update_by` varchar(255) DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
 #### 外商仓库库存表（other_warehouse）
@@ -169,8 +169,8 @@ CREATE TABLE `other_warehouse` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '外商仓库ID',
   `factory_name` varchar(255) DEFAULT NULL COMMENT '厂名',
   `goods_name` varchar(255) DEFAULT NULL COMMENT '存储货物名称',
-  `goods_count` decimal(18,2) DEFAULT NULL COMMENT '存储货物库存量',
-  `goods_unit` varchar(255) DEFAULT NULL COMMENT '存储货物单位',
+  `goods_count` decimal(18,6) DEFAULT NULL COMMENT '存储货物库存量',
+  `goods_unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '斤' COMMENT '存储货物单位  斤',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_by` varchar(255) DEFAULT NULL COMMENT '创建者名称',
   `last_update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最新更新时间',
