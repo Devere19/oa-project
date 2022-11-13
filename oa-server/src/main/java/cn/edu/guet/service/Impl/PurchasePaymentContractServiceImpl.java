@@ -103,7 +103,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     public int addNewPurchasePaymentContract(PurchasePaymentContract purchasePaymentContract) {
         int result=purchasePaymentContractMapper.insert(purchasePaymentContract);
 
-        if(result!=1) {
+        if(result==1) {
 //        查询出董事会的ID
             QueryWrapper<Director> directorQw = new QueryWrapper<>();
             directorQw.orderByAsc("nick_name").last("limit 3");
@@ -169,7 +169,8 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Override
     public Page<PurchasePaymentContractView> searchCashierPurchasePayment(int currentPage, int pageSize, String searchWord) {
         QueryWrapper<PurchasePaymentContractView> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("purchase_contract_no",searchWord).or().like("customer_enterprise_name",searchWord).or()
+        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("purchase_contract_no",searchWord)
+                .or().like("customer_enterprise_name",searchWord).or()
                 .like("own_company_name",searchWord).or().like("squeeze_season",searchWord).or()
                 .like("goods_name",searchWord).or().like("finance_staff",searchWord).or().like("cashier",searchWord)
                 .or().like("create_by",searchWord)).orderByDesc("create_time");

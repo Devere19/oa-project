@@ -132,6 +132,88 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 
         return logisticsPaymentContractMapper.deleteById(id);
     }
+
+    @Override
+    public Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize) {
+        QueryWrapper<LogisticsPaymentContractView> qw= new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        Page<LogisticsPaymentContractView> page =new Page<>(currentPage,pageSize);
+        page=logisticsPaymentContractInfoMapper.selectPage(page,qw);
+        for (LogisticsPaymentContractView record : page.getRecords()) {
+//            获取董事长审核信息，并加入对象中
+            QueryWrapper<LogisticsPaymentStateView> stateQw= new QueryWrapper<>();
+            stateQw.eq("logistics_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
+            List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
+
+            if(logisticsPaymentStateViews.size()==0){
+                page.getRecords().remove(record);
+            }else{
+                record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
+
+                //处理图片，形成一个图片数组
+                String paymentPhoto = record.getPaymentPhoto();
+//            付款照片
+                if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
+                    //分割图片字符串，形成一个数组
+                    List<String> list = ImageUtils.imageSplit(paymentPhoto);
+                    record.setPaymentPhotoArray(list);
+                    //取第一个图片的url
+                    record.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
+                }else{
+                    record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
+                }
+            }
+        }
+        return page;
+    }
+
+    @Override
+    public Page<LogisticsPaymentContractView> searchCashierLogisticsPayment(int currentPage, int pageSize, String searchWord) {
+        QueryWrapper<LogisticsPaymentContractView> qw= new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("sale_contract_no",searchWord)
+                .or().like("squeeze_season",searchWord).or().like("goods_name",searchWord)
+                .or().like("finance_staff",searchWord).or().like("cashier",searchWord)
+                .or().like("create_by",searchWord)).orderByDesc("create_time");
+        Page<LogisticsPaymentContractView> page =new Page<>(currentPage,pageSize);
+        page=logisticsPaymentContractInfoMapper.selectPage(page,qw);
+        for (LogisticsPaymentContractView record : page.getRecords()) {
+//            获取董事长审核信息，并加入对象中
+            QueryWrapper<LogisticsPaymentStateView> stateQw= new QueryWrapper<>();
+            stateQw.eq("logistics_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
+            List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
+
+            if(logisticsPaymentStateViews.size()==0){
+                page.getRecords().remove(record);
+            }else{
+                record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
+
+                //处理图片，形成一个图片数组
+                String paymentPhoto = record.getPaymentPhoto();
+//            付款照片
+                if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
+                    //分割图片字符串，形成一个数组
+                    List<String> list = ImageUtils.imageSplit(paymentPhoto);
+                    record.setPaymentPhotoArray(list);
+                    //取第一个图片的url
+                    record.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
+                }else{
+                    record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
+                }
+            }
+        }
+        return page;
+    }
+
+    @Override
+    public int uploadCashierLogisticsPayment(LogisticsPaymentContract logisticsPaymentContract) {
+        LogisticsPaymentContract oldLogisticsPaymentContract= logisticsPaymentContractMapper.selectById(logisticsPaymentContract.getId());
+        String paymentPhotos=ImageUtils.getDBString(logisticsPaymentContract.getPaymentPhotoArray());
+        if(paymentPhotos!=""){
+            oldLogisticsPaymentContract.setPaymentPhoto(paymentPhotos);
+        }
+        oldLogisticsPaymentContract.setPaymentTime(logisticsPaymentContract.getPaymentTime());
+        return logisticsPaymentContractMapper.updateById(oldLogisticsPaymentContract);
+    }
 }
 
 

@@ -383,6 +383,7 @@ const getTableData = () => {
     getPurchasePaymentContractDataApi(currentPage.value, pageSize.value).then(res => {
         total.value = res.data.total;//总记录
         firstTableData.value = res.data.records;
+        console.log(res.data.records);
         changeLoadingFalse();
     });
 }
