@@ -1,5 +1,5 @@
 import http from "@/http";
-import { purchasePaymentModel, logisticsPaymentModel } from "./CashierModel";
+import { purchasePaymentModel, logisticsPaymentModel, shippingPaymentModel } from "./CashierModel";
 
 //分页获取采购付款单
 export const getCashierPurchasePaymentApi = (currentPage: number, pageSize: number) => {
@@ -45,4 +45,27 @@ export const searchCashierLogisticsPaymentApi = (currentPage: number, pageSize: 
 export const uploadCashierLogisticsPaymentApi = (logisticsPaymentContract: logisticsPaymentModel) => {
     return http.post("cashier/uploadCashierLogisticsPayment",
         logisticsPaymentContract)
+}
+
+//分页获取海运单
+export const getCashierShippingApi = (currentPage: number, pageSize: number) => {
+    return http.get("cashier/getCashierShipping", {
+        current: currentPage,
+        page: pageSize,
+    })
+}
+
+// 分页查询海运单
+export const searchCashierShippingApi = (currentPage: number, pageSize: number, searchWord: string) => {
+    return http.get("cashier/searchCashierShipping", {
+        current: currentPage,
+        page: pageSize,
+        searchWord: searchWord,
+    })
+}
+
+//上传海运单的付款数据
+export const uploadCashierShippingApi = (shippingContract: shippingPaymentModel) => {
+    return http.post("cashier/uploadCashierShipping",
+        shippingContract)
 }

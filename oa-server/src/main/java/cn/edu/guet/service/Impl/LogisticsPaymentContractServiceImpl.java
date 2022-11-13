@@ -204,6 +204,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int uploadCashierLogisticsPayment(LogisticsPaymentContract logisticsPaymentContract) {
         LogisticsPaymentContract oldLogisticsPaymentContract= logisticsPaymentContractMapper.selectById(logisticsPaymentContract.getId());

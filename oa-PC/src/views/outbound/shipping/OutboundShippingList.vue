@@ -20,7 +20,7 @@
             <el-table-column label="海运合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.shippingContractNo }}</template>
             </el-table-column>
-            <el-table-column property="logtisticsContractNo" align="center" label="物流合同编号" width="120" />
+            <el-table-column property="logisticsContractNo" align="center" label="物流合同编号" width="120" />
             <el-table-column property="principal" align="center" label="委托方" />
             <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期"
                 width="105" />
@@ -134,8 +134,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="物流合同编号" prop="logtisticsContractNo">
-                                <el-input v-model="NewShippingContractData.logtisticsContractNo" size="large" />
+                            <el-form-item label="物流合同编号" prop="logisticsContractNo">
+                                <el-input v-model="NewShippingContractData.logisticsContractNo" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -288,7 +288,7 @@
                         物流合同编号：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.logtisticsContractNo }}
+                        {{ ShippingContractDetail.logisticsContractNo }}
                     </el-col>
                 </el-row>
                 <!-- <el-row justify="center">
@@ -296,7 +296,7 @@
                         物流合同编号：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.logtisticsContractNo }}
+                        {{ ShippingContractDetail.logisticsContractNo }}
                     </el-col>
                 </el-row> -->
                 <el-row justify="center">
@@ -548,7 +548,7 @@ const firstTableRef = ref<InstanceType<typeof ElTable>>()
 const NewShippingContractData = reactive({
     id: '',
     shippingContractNo: '',
-    logtisticsContractNo: '',
+    logisticsContractNo: '',
     principal: '',
     packingTime: '',
     packingLocation: '',
@@ -571,7 +571,7 @@ const NewShippingContractData = reactive({
 const ShippingContractDetail = reactive({
     id: '',
     shippingContractNo: '',
-    logtisticsContractNo: '',
+    logisticsContractNo: '',
     principal: '',
     packingTime: '',
     packingLocation: '',
@@ -611,7 +611,7 @@ const firstRules = reactive<FormRules>({
     shippingContractNo: [
         { required: true, trigger: ['change'] }
     ],
-    logtisticsContractNo: [
+    logisticsContractNo: [
         { required: true, trigger: ['change'] }
     ],
     principal: [
@@ -771,7 +771,7 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
 // 打开海运单详情窗口
 const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.shippingContractNo = row.shippingContractNo
-    ShippingContractDetail.logtisticsContractNo = row.logtisticsContractNo
+    ShippingContractDetail.logisticsContractNo = row.logisticsContractNo
     ShippingContractDetail.principal = row.principal
     ShippingContractDetail.packingTime = dateConversion(row.packingTime)
     ShippingContractDetail.packingLocation = row.packingLocation

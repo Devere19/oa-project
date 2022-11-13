@@ -1,5 +1,7 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.PurchasePaymentContract;
+import cn.edu.guet.bean.PurchasePaymentContractView;
 import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
@@ -17,4 +19,9 @@ public interface ShippingContractService extends IService<ShippingContract> {
     int addNewShippingContract(ShippingContract shippingContract);
     int deleteOneShippingContract(int id);
     Boolean checkContainerNo(String containerNo);
+
+    //    出纳
+    Page<ShippingContract> getCashierShipping(int currentPage, int pageSize);
+    Page<ShippingContract> searchCashierShipping(int currentPage, int pageSize,String searchWord);
+    int uploadCashierShipping(ShippingContract shippingContract);
 }
