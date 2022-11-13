@@ -91,6 +91,7 @@ public class LogisticsContractController {
 
     /**
      * 新增物流单和对应的物流详情
+     *
      */
     @PostMapping("/add")
     public HttpResult add(@RequestBody LogisticsContract logisticsContract){
