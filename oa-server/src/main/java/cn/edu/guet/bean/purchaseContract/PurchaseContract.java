@@ -87,6 +87,11 @@ public class PurchaseContract implements Serializable {
     private BigDecimal paymentAmount;
 
     /**
+     * 未结清金额
+     */
+    private BigDecimal unpaidAmount;
+
+    /**
      * 采购合同照片
      */
     private String contractPhoto;
@@ -150,6 +155,7 @@ public class PurchaseContract implements Serializable {
             && (this.getInboundData() == null ? other.getInboundData() == null : this.getInboundData().equals(other.getInboundData()))
             && (this.getGoodsUnitPrice() == null ? other.getGoodsUnitPrice() == null : this.getGoodsUnitPrice().equals(other.getGoodsUnitPrice()))
             && (this.getPaymentAmount() == null ? other.getPaymentAmount() == null : this.getPaymentAmount().equals(other.getPaymentAmount()))
+            && (this.getUnpaidAmount() == null ? other.getUnpaidAmount() == null : this.getUnpaidAmount().equals(other.getUnpaidAmount()))
             && (this.getContractPhoto() == null ? other.getContractPhoto() == null : this.getContractPhoto().equals(other.getContractPhoto()))
             && (this.getContractPhotoArray() == null ? other.getContractPhotoArray() == null : this.getContractPhotoArray().equals(other.getContractPhotoArray()))
             && (this.getPigeonhole() == null ? other.getPigeonhole() == null : this.getPigeonhole().equals(other.getPigeonhole()))
@@ -176,6 +182,7 @@ public class PurchaseContract implements Serializable {
         result = prime * result + ((getInboundData() == null) ? 0 : getInboundData().hashCode());
         result = prime * result + ((getGoodsUnitPrice() == null) ? 0 : getGoodsUnitPrice().hashCode());
         result = prime * result + ((getPaymentAmount() == null) ? 0 : getPaymentAmount().hashCode());
+        result = prime * result + ((getUnpaidAmount() == null) ? 0 : getUnpaidAmount().hashCode());
         result = prime * result + ((getContractPhoto() == null) ? 0 : getContractPhoto().hashCode());
         result = prime * result + ((getContractPhotoArray() == null) ? 0 : getContractPhotoArray().hashCode());
         result = prime * result + ((getPigeonhole() == null) ? 0 : getPigeonhole().hashCode());
@@ -205,6 +212,7 @@ public class PurchaseContract implements Serializable {
         sb.append(", inboundData=").append(inboundData);
         sb.append(", goodsUnitPrice=").append(goodsUnitPrice);
         sb.append(", paymentAmount=").append(paymentAmount);
+        sb.append(", unpaidAmount=").append(unpaidAmount);
         sb.append(", contractPhoto=").append(contractPhoto);
         sb.append(", contractPhotoArray=").append(contractPhotoArray);
         sb.append(", pigeonhole=").append(pigeonhole);

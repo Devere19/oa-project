@@ -132,6 +132,12 @@ public class ShippingContract implements Serializable {
     private Integer financeState;
 
     /**
+     * 董事审核数据*
+     */
+    @TableField(exist = false)
+    private List<ShippingStateView> shippingDirector;
+
+    /**
      * 出纳名称
      */
     private String cashier;
@@ -215,6 +221,7 @@ public class ShippingContract implements Serializable {
             && (this.getContractPhotoArray() == null ? other.getContractPhotoArray() == null : this.getContractPhotoArray().equals(other.getContractPhotoArray()))
             && (this.getFinanceStaff() == null ? other.getFinanceStaff() == null : this.getFinanceStaff().equals(other.getFinanceStaff()))
             && (this.getFinanceState() == null ? other.getFinanceState() == null : this.getFinanceState().equals(other.getFinanceState()))
+            && (this.getShippingDirector() == null ? other.getShippingDirector() == null : this.getShippingDirector().equals(other.getShippingDirector()))
             && (this.getCashier() == null ? other.getCashier() == null : this.getCashier().equals(other.getCashier()))
             && (this.getPaymentCount() == null ? other.getPaymentCount() == null : this.getPaymentCount().equals(other.getPaymentCount()))
             && (this.getPaymentTime() == null ? other.getPaymentTime() == null : this.getPaymentTime().equals(other.getPaymentTime()))
@@ -252,6 +259,7 @@ public class ShippingContract implements Serializable {
         result = prime * result + ((getContractPhotoArray() == null) ? 0 : getContractPhotoArray().hashCode());
         result = prime * result + ((getFinanceStaff() == null) ? 0 : getFinanceStaff().hashCode());
         result = prime * result + ((getFinanceState() == null) ? 0 : getFinanceState().hashCode());
+        result = prime * result + ((getShippingDirector() == null) ? 0 : getShippingDirector().hashCode());
         result = prime * result + ((getCashier() == null) ? 0 : getCashier().hashCode());
         result = prime * result + ((getPaymentCount() == null) ? 0 : getPaymentCount().hashCode());
         result = prime * result + ((getPaymentTime() == null) ? 0 : getPaymentTime().hashCode());
@@ -292,6 +300,7 @@ public class ShippingContract implements Serializable {
         sb.append(", contractPhotoArray=").append(contractPhotoArray);
         sb.append(", financeStaff=").append(financeStaff);
         sb.append(", financeState=").append(financeState);
+        sb.append(", shippingDirector=").append(shippingDirector);
         sb.append(", cashier=").append(cashier);
         sb.append(", paymentCount=").append(paymentCount);
         sb.append(", paymentTime=").append(paymentTime);

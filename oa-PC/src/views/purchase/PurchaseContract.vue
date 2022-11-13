@@ -35,8 +35,9 @@
       <el-table-column property="goodsName" align="center" label="采购货物名称" />
       <el-table-column property="goodsCount" align="center" label="采购货物数量" />
       <el-table-column property="goodsUnit" align="center" label="采购货物单位" />
-      <el-table-column property="goodsUnitPrice" align="center" label="采购货物单价" />
+      <el-table-column property="goodsUnitPrice" align="center" label="采购货物单价(斤)" />
       <el-table-column property="paymentAmount" align="center" label="采购总价" />
+      <el-table-column property="unpaidAmount" align="center" label="未结清金额" />
       <el-table-column align="center" label="合同照片" width="130">
         <template #default="scope">
           <el-image style="width: 100px; height: 100px"
@@ -47,9 +48,12 @@
       <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
         width="105" />
       <el-table-column property="createBy" align="center" label="创建者" />
-      <el-table-column align="center" label="操作" width="290" fixed="right">
+      <el-table-column align="center" label="操作" width="400" fixed="right">
         <template #default="scope">
           <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
+          </el-button>
+          <el-button :icon="Money" size="default" type="success" :disabled="scope.row.unpaidAmount <= 0"
+            @click="openAddPaymentDialog(scope.row)">付款
           </el-button>
           <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
             :type="scope.row.pigeonhole == 1 ? 'info' : 'success'" @click="changePigeonhole(scope.row)">{{
@@ -65,8 +69,9 @@
     <div class="paginationGroup">
       <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
         :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
-        :total="total" @size-change="showPigeonhole == false ? getTTableData() : getFTableData()"
-        @current-change="showPigeonhole == false ? getTTableData() : getFTableData()" />
+        :total="total"
+        @size-change="showPigeonhole == false ? (searchData == null || searchData == '' ? getTTableData() : searchTableData()) : (searchData == null || searchData == '' ? getFTableData() : searchTableData())"
+        @current-change="showPigeonhole == false ? (searchData == null || searchData == '' ? getTTableData() : searchTableData()) : (searchData == null || searchData == '' ? getFTableData() : searchTableData())" />
     </div>
     <el-dialog v-model="addDialogFlag" title="新增采购单" width="50%" draggable center :before-close="closeAddDialog">
       <ul ref="addDialogTop" style="overflow: auto;height:600px">
@@ -114,7 +119,7 @@
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.factoryName'" label="厂名" :rules="[
             { required: true, trigger: ['change'] }]">
-              <el-input v-model="item.factoryName" size="large" />
+              <el-input v-model="item.factoryName" size="large" @change="changeOwnFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
             { required: true, trigger: ['change'] }]">
@@ -126,7 +131,7 @@
             <el-button type="warning" icon="Plus" @click="addInboundItem">添加入库单</el-button>
           </el-form-item>
           <el-form-item label="采购货物单价" prop="goodsUnitPrice">
-            <el-input v-model="NewPurchaseContractData.goodsUnitPrice" size="large" />
+            <el-input v-model="NewPurchaseContractData.goodsUnitPrice" placeholder="仅需填写所选重量单位的采购单价" size="large" />
           </el-form-item>
           <el-form-item label="采购总价" prop="paymentAmount">
             <el-input v-model="NewPurchaseContractData.paymentAmount" size="large" />
@@ -225,7 +230,7 @@
             {{ PurchaseContractDetail.goodsUnit }}
           </el-col>
           <el-col :span="4" class="moreDetailTitle">
-            采购货物单价：
+            采购货物单价(斤)：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.goodsUnitPrice }}
@@ -239,16 +244,36 @@
             {{ PurchaseContractDetail.paymentAmount }}
           </el-col>
           <el-col :span="4" class="moreDetailTitle">
+            未结清金额：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.unpaidAmount }}
+          </el-col>
+          <el-col :span="4" class="moreDetailTitle">
             榨季：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.squeezeSeason }}
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="4" class="moreDetailTitle">
             入库时间：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.inboundTime }}
+          </el-col>
+          <el-col :span="4" class="moreDetailTitle">
+            创建者：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.createBy }}
+          </el-col>
+          <el-col :span="4" class="moreDetailTitle">
+            创建时间：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.createTime }}
           </el-col>
         </el-row>
       </div>
@@ -285,14 +310,44 @@
         </el-row>
       </div>
     </el-dialog>
+    <el-dialog v-model="addPaymentDialogFlag" title="新增采购付款单" width="40%" draggable center
+      :before-close="closeAddPaymentDialog">
+      <ul ref="addPaymentDialogTop" style="overflow: auto;height:120px;padding: 0;">
+        <el-form ref="secondFormRef" :rules="secondRules" label-position="right" label-width="120px"
+          :model="NewPurchasePaymentContractData" style="max-width: 98%">
+          <el-row justify="center">
+            <el-col :span="16">
+              <el-form-item label="采购合同编号" prop="purchaseContractNo">
+                <el-input v-model="NewPurchasePaymentContractData.purchaseContractNo" size="large" disabled />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row justify="center">
+            <el-col :span="16">
+              <el-form-item label="本次付款金额" prop="paymentCount">
+                <el-input v-model="NewPurchasePaymentContractData.paymentCount" size="large" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </ul>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="sendNewPurchasePaymentContract(secondFormRef)">
+            确定
+          </el-button>
+          <el-button @click="closeAddPaymentDialog">取消</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Delete, Search, MoreFilled, Hide, View } from "@element-plus/icons-vue";
-import { conversionDate, conversionDateTime } from "@/utils/timeFormat"
+import { Delete, Search, MoreFilled, Hide, View, Money } from "@element-plus/icons-vue";
+import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
 import { SelectCustomer } from "@/api/customer/CustomerModel"
@@ -302,6 +357,7 @@ import {
   deleteOnePurchaseContractApi, deleteMorePurchaseContractApi, setPurchaseContractPigeonholeApi,
   addNewPurchaseContractApi, getPurchaseDetail
 } from '@/api/purchaseContract'
+import { addNewPurchasePaymentContractApi } from '@/api/purchasePaymentContract'
 
 
 const searchData = ref("")
@@ -310,10 +366,11 @@ const currentPage = ref(1)
 const pageSize = ref(5)
 const background = ref(true)
 const firstTableData = ref<purchaseContractModel[]>([])
-const secondTableData = ref<purchaseContractModel[]>([])
-const thirdTableData = ref<purchaseContractModel[]>([])
+const secondTableData = ref([])
+const thirdTableData = ref([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
+const addPaymentDialogFlag = ref(false)
 const oneDeleteDialogFlag = ref(false)
 const moreDeleteDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
@@ -324,14 +381,17 @@ const previewImageFlag = ref(false)
 const PhotoData = ref<UploadUserFile[]>([])
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
+const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
+const addPaymentDialogTop = ref<any>()
+const ownFlag = ref(false)
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 const secondTableRef = ref<InstanceType<typeof ElTable>>()
 const thirdTableRef = ref<InstanceType<typeof ElTable>>()
 const firstSelection = ref<purchaseContractModel[]>([])
 
-// 新增
+// 新增采购单
 const NewPurchaseContractData = reactive({
   id: '',
   purchaseContractNo: '',
@@ -368,12 +428,22 @@ const PurchaseContractDetail = reactive({
   goodsUnit: '',
   goodsUnitPrice: '',
   paymentAmount: '',
+  unpaidAmount: '',
+  createTime: '',
+  createBy: ''
 })
 
-NewPurchaseContractData.paymentAmount = computed(() => {
-  const temp = String(Number(NewPurchaseContractData.goodsCount) * Number(NewPurchaseContractData.goodsUnitPrice))
-  return temp
-});
+// 新增采购付款单
+const NewPurchasePaymentContractData = reactive({
+  id: '',
+  purchaseContractNo: '',
+  paymentCount: '',
+})
+
+// NewPurchaseContractData.paymentAmount = computed(() => {
+//   const temp = String(Number(NewPurchaseContractData.goodsCount) * Number(NewPurchaseContractData.goodsUnitPrice))
+//   return temp
+// });
 
 //表单校验规则1
 const firstRules = reactive<FormRules>({
@@ -411,11 +481,11 @@ const firstRules = reactive<FormRules>({
 
 //表单校验规则2
 const secondRules = reactive<FormRules>({
-  factoryName: [
-    { required: true, trigger: ['blur'] }
+  purchaseContractNo: [
+    { required: true, trigger: ['change'] }
   ],
-  inboundGoodsCount: [
-    { required: true, trigger: ['blur'] }
+  paymentCount: [
+    { required: true, trigger: ['change'] }
   ],
 })
 
@@ -435,21 +505,21 @@ onMounted(() => {
 
 // 获取显示数据
 const getTTableData = () => {
-  changeLoading();
+  changeLoadingTrue();
   getTPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
     total.value = res.data.total;//总记录
     firstTableData.value = res.data.records;
-    changeLoading();
+    changeLoadingFalse();
   });
 }
 
 // 获取隐藏数据
 const getFTableData = () => {
-  changeLoading();
+  changeLoadingTrue();
   getFPurchaseContractDataApi(currentPage.value, pageSize.value).then(res => {
     total.value = res.data.total;//总记录
     firstTableData.value = res.data.records;
-    changeLoading();
+    changeLoadingFalse();
   });
 }
 
@@ -466,13 +536,21 @@ const changePigeonholeData = (flag: boolean) => {
 
 // 搜索数据
 const searchTableData = () => {
-  changeLoading();
-  searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value, showPigeonhole.value).then(res => {
-    total.value = res.data.total;//总记录
-    firstTableData.value = res.data.records;
-    returnAll.value = true;
-    changeLoading();
-  })
+  if (searchData.value == null || searchData.value == '') {
+    ElMessage({
+      message: '请输入关键词再进行搜索！',
+      type: 'warning',
+      duration: 4000
+    })
+  } else {
+    changeLoadingTrue();
+    searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value, showPigeonhole.value).then(res => {
+      total.value = res.data.total;//总记录
+      firstTableData.value = res.data.records;
+      returnAll.value = true;
+      changeLoadingFalse();
+    })
+  }
 }
 
 // 搜索后，回到全部数据
@@ -482,6 +560,7 @@ const returnAllData = () => {
   } else {
     getFTableData();
   }
+  searchData.value = ""
   returnAll.value = false
 }
 
@@ -495,6 +574,12 @@ const openAddDialog = () => {
   addDialogFlag.value = true
 }
 
+// 打开新增采购付款单窗口
+const openAddPaymentDialog = (row: any) => {
+  NewPurchasePaymentContractData.purchaseContractNo = row.purchaseContractNo
+  addPaymentDialogFlag.value = true
+}
+
 // 发送新增采购单请求
 const sendNewPurchaseContract = async (formEl1: FormInstance | undefined) => {
   if (!formEl1) return
@@ -504,46 +589,57 @@ const sendNewPurchaseContract = async (formEl1: FormInstance | undefined) => {
       NewPurchaseContractData.inboundData.map(item => {
         total = total + Number(item.inboundGoodsCount)
       })
-      if (total == Number(NewPurchaseContractData.goodsCount)) {
-        changeLoading();
-        console.log(NewPurchaseContractData);
-        addNewPurchaseContractApi(NewPurchaseContractData).then(res => {
-          if (res.data == 1) {
-            if (showPigeonhole.value == false) {
-              getTTableData();
-            } else {
-              getFTableData();
+      if (ownFlag.value != true) {
+        if (total == Number(NewPurchaseContractData.goodsCount)) {
+          changeLoadingTrue();
+          console.log(NewPurchaseContractData);
+          addNewPurchaseContractApi(NewPurchaseContractData).then(res => {
+            changeLoadingFalse();
+            if (res.data == 1) {
+              ElMessage({
+                message: '新增采购单成功！',
+                type: 'success',
+              })
+              if (showPigeonhole.value == false) {
+                getTTableData();
+              } else {
+                getFTableData();
+              }
+              addDialogFlag.value = false;
+              ReturnTop();
+              firstFormRef.value?.resetFields();
+              PhotoData.value = [];
+              NewPurchaseContractData.contractPhotoArray = [];
+              NewPurchaseContractData.inboundData = [{
+                factoryName: '',
+                inboundGoodsCount: ''
+              }]
             }
-            addDialogFlag.value = false;
-            ReturnTop();
-            firstFormRef.value?.resetFields();
-            ElMessage({
-              message: '新增采购单成功！',
-              type: 'success',
-            })
-            PhotoData.value = [];
-            NewPurchaseContractData.contractPhotoArray = [];
-            changeLoading();
-          }
-          else {
-            ElMessage({
-              message: '新增采购单失败！',
-              type: 'error',
-              duration: 4000
-            })
-            changeLoading();
-          }
-        })
+            else {
+              ElMessage({
+                message: '新增采购单失败！',
+                type: 'error',
+                duration: 4000
+              })
+            }
+          })
+        } else {
+          ElMessage({
+            message: '入库货物总量与所填采购货物数量不符！',
+            type: 'error',
+            duration: 4000
+          })
+        }
       } else {
         ElMessage({
-          message: '入库货物总量与所填采购货物数量不符！',
+          message: '入库厂名不能为自家仓库！',
           type: 'error',
           duration: 4000
         })
       }
     } else {
       ElMessage({
-        message: '表单验证未通过，请检测！',
+        message: '表单验证未通过，请检查！',
         type: 'error',
         duration: 4000
       })
@@ -552,7 +648,49 @@ const sendNewPurchaseContract = async (formEl1: FormInstance | undefined) => {
 }
 
 
-// 关闭新增窗口
+// 发送新增采购付款单请求
+const sendNewPurchasePaymentContract = async (formEl1: FormInstance | undefined) => {
+  if (!formEl1) return
+  await formEl1.validate((valid, fields) => {
+    if (valid) {
+      changeLoadingTrue();
+      console.log(NewPurchasePaymentContractData);
+      addNewPurchasePaymentContractApi(NewPurchasePaymentContractData).then(res => {
+        changeLoadingFalse();
+        if (res.data == 1) {
+          ElMessage({
+            message: '新增采购付款单成功！',
+            type: 'success',
+          })
+          if (showPigeonhole.value == false) {
+            getTTableData();
+          } else {
+            getFTableData();
+          }
+          addPaymentDialogFlag.value = false;
+          ReturnPaymentTop();
+          secondFormRef.value?.resetFields();
+        }
+        else {
+          ElMessage({
+            message: '新增采购付款单失败！',
+            type: 'error',
+            duration: 4000
+          })
+        }
+      })
+    } else {
+      ElMessage({
+        message: '表单验证未通过，请检查！',
+        type: 'error',
+        duration: 4000
+      })
+    }
+  })
+}
+
+
+// 关闭新增采购单窗口
 const closeAddDialog = () => {
   addDialogFlag.value = false;
   ReturnTop();
@@ -572,9 +710,21 @@ const closeAddDialog = () => {
   }
 }
 
-// 新增窗口滑动回最顶端
+// 关闭新增采购付款单窗口
+const closeAddPaymentDialog = () => {
+  addPaymentDialogFlag.value = false;
+  ReturnPaymentTop();
+  secondFormRef.value?.resetFields();
+}
+
+// 新增采购单窗口滑动回最顶端
 const ReturnTop = () => {
   addDialogTop.value.scrollTop = 0;
+}
+
+// 新增采购付款窗口滑动回最顶端
+const ReturnPaymentTop = () => {
+  addPaymentDialogTop.value.scrollTop = 0;
 }
 
 // 打开采购单详情窗口
@@ -584,33 +734,18 @@ const openMordDetailDialog = async (row: any) => {
   PurchaseContractDetail.customerEnterpriseName = row.customerEnterpriseName
   PurchaseContractDetail.ownCompanyName = row.ownCompanyName
   PurchaseContractDetail.squeezeSeason = row.squeezeSeason
-  PurchaseContractDetail.inboundTime = timeConversion(row.inboundTime)
+  PurchaseContractDetail.inboundTime = dateConversion(row.inboundTime)
   PurchaseContractDetail.goodsName = row.goodsName
   PurchaseContractDetail.goodsCount = row.goodsCount
   PurchaseContractDetail.goodsUnit = row.goodsUnit
   PurchaseContractDetail.goodsUnitPrice = row.goodsUnitPrice
   PurchaseContractDetail.paymentAmount = row.paymentAmount
+  PurchaseContractDetail.unpaidAmount = row.unpaidAmount
+  PurchaseContractDetail.createTime = timeConversion(row.createTime)
+  PurchaseContractDetail.createBy = row.createBy
   await getPurchaseDetail(row.purchaseContractNo, row.goodsName).then(res => {
     secondTableData.value = res.data;
   })
-}
-
-//详情，时间转换
-const timeConversion = (time: any) => {
-  const daterc = time
-  if (daterc != null) {
-    var date = new Date(daterc);
-    var year = date.getFullYear();
-    /* 在日期格式中，月份是从0开始，11结束，因此要加0
-     * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
-     * */
-    var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-    var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-    // 拼接
-    return year + "-" + month + "-" + day;
-  } else {
-    return time;
-  }
 }
 
 const moreOutboundDetail = (row: any) => {
@@ -631,20 +766,20 @@ const openOneDeleteDialog = (index: number, row: purchaseContractModel) => {
 
 // 发送单个删除请求
 const oneDeletePurchaseContract = () => {
-  changeLoading();
+  changeLoadingTrue();
   deleteOnePurchaseContractApi(choosePurchaseContractNo.value).then(res => {
-    changeLoading();
+    changeLoadingFalse();
     if (res.data == 1) {
+      ElMessage({
+        message: '删除采购单成功！',
+        type: 'success',
+      })
       if (showPigeonhole.value == false) {
         getTTableData();
       } else {
         getFTableData();
       }
       oneDeleteDialogFlag.value = false
-      ElMessage({
-        message: '删除采购单成功！',
-        type: 'success',
-      })
     }
     else {
       ElMessage({
@@ -669,13 +804,13 @@ const moreDeletePurchaseContract = () => {
   });
   deleteMorePurchaseContractApi({ ids: JSON.stringify(purchaseContractIds) }).then(res => {
     if (res.data != 0) {
-      getTTableData()
-      moreDeleteDialogFlag.value = false
-      returnAll.value = true
       ElMessage({
         message: '批量删除采购单成功！',
         type: 'success',
       })
+      getTTableData()
+      moreDeleteDialogFlag.value = false
+      returnAll.value = true
     }
     else {
       ElMessage({
@@ -689,10 +824,14 @@ const moreDeletePurchaseContract = () => {
 
 // 修改数据的是否归档状态
 const changePigeonhole = (row: any) => {
-  changeLoading();
+  changeLoadingTrue();
   setPurchaseContractPigeonholeApi(row.id, row.pigeonhole).then(res => {
-    changeLoading();
     if (res.data == 1) {
+      changeLoadingFalse();
+      ElMessage({
+        message: '修改状态成功！',
+        type: 'success',
+      })
       if (showPigeonhole.value == false) {
         getTTableData()
       } else {
@@ -702,12 +841,9 @@ const changePigeonhole = (row: any) => {
         });
       }
       returnAll.value = false;
-      ElMessage({
-        message: '修改状态成功！',
-        type: 'success',
-      })
     }
     else {
+      changeLoadingFalse();
       ElMessage({
         message: '修改状态失败！',
         type: 'error',
@@ -758,10 +894,26 @@ const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
 }
 
 // 转变loading状态
-const changeLoading = () => {
-  loading.value = !loading.value;
+const changeLoadingTrue = () => {
+  loading.value = true;
 }
 
+// 转变loading状态
+const changeLoadingFalse = () => {
+  loading.value = false;
+}
+
+
+const changeOwnFlag = () => {
+  for (let i = 0; i < NewPurchaseContractData.inboundData.length; i++) {
+    if (NewPurchaseContractData.inboundData[i].factoryName == "自家仓库") {
+      ownFlag.value = true;
+      break;
+    } else {
+      ownFlag.value = false;
+    }
+  }
+}
 
 </script>
 

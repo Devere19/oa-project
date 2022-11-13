@@ -267,6 +267,14 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         }
 
     }
+
+    @Override
+    public Boolean checkLogisticsContractNo(String logisticsContractNo) {
+        QueryWrapper<LogisticsContract> qw= new QueryWrapper<>();
+        qw.eq("logistics_contract_no",logisticsContractNo).orderByDesc("create_time");
+        List<LogisticsContract> logisticsContracts= logisticsContractMapper.selectList(qw);
+        return !logisticsContracts.isEmpty();
+    }
 }
 
 

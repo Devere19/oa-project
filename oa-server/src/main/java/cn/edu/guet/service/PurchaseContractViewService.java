@@ -13,4 +13,5 @@ public interface PurchaseContractViewService extends IService<PurchaseContractVi
     Page<PurchaseContractView> getTPurchaseContractData(int currentPage, int pageSize);
     Page<PurchaseContractView> getFPurchaseContractData(int currentPage, int pageSize);
     Page<PurchaseContractView> searchPurchaseContract(int currentPage, int pageSize,String searchWord,boolean showPigeonhole);
+    Boolean checkPurchaseContractNo(String purchaseContractNo);
 }

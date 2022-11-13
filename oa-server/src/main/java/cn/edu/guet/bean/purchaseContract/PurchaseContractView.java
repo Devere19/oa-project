@@ -73,6 +73,11 @@ public class PurchaseContractView implements Serializable {
     private BigDecimal paymentAmount;
 
     /**
+     * 未结清金额
+     */
+    private BigDecimal unpaidAmount;
+
+    /**
      * 采购合同照片
      */
     private String contractPhoto;
@@ -136,6 +141,7 @@ public class PurchaseContractView implements Serializable {
             && (this.getGoodsUnit() == null ? other.getGoodsUnit() == null : this.getGoodsUnit().equals(other.getGoodsUnit()))
             && (this.getGoodsUnitPrice() == null ? other.getGoodsUnitPrice() == null : this.getGoodsUnitPrice().equals(other.getGoodsUnitPrice()))
             && (this.getPaymentAmount() == null ? other.getPaymentAmount() == null : this.getPaymentAmount().equals(other.getPaymentAmount()))
+            && (this.getUnpaidAmount() == null ? other.getUnpaidAmount() == null : this.getUnpaidAmount().equals(other.getUnpaidAmount()))
             && (this.getContractPhoto() == null ? other.getContractPhoto() == null : this.getContractPhoto().equals(other.getContractPhoto()))
             && (this.getPigeonhole() == null ? other.getPigeonhole() == null : this.getPigeonhole().equals(other.getPigeonhole()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
@@ -159,6 +165,7 @@ public class PurchaseContractView implements Serializable {
         result = prime * result + ((getGoodsUnit() == null) ? 0 : getGoodsUnit().hashCode());
         result = prime * result + ((getGoodsUnitPrice() == null) ? 0 : getGoodsUnitPrice().hashCode());
         result = prime * result + ((getPaymentAmount() == null) ? 0 : getPaymentAmount().hashCode());
+        result = prime * result + ((getUnpaidAmount() == null) ? 0 : getUnpaidAmount().hashCode());
         result = prime * result + ((getContractPhoto() == null) ? 0 : getContractPhoto().hashCode());
         result = prime * result + ((getPigeonhole() == null) ? 0 : getPigeonhole().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
@@ -185,6 +192,7 @@ public class PurchaseContractView implements Serializable {
         sb.append(", goodsUnit=").append(goodsUnit);
         sb.append(", goodsUnitPrice=").append(goodsUnitPrice);
         sb.append(", paymentAmount=").append(paymentAmount);
+        sb.append(", unpaidAmount=").append(unpaidAmount);
         sb.append(", contractPhoto=").append(contractPhoto);
         sb.append(", pigeonhole=").append(pigeonhole);
         sb.append(", createTime=").append(createTime);
