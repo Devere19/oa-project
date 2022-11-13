@@ -3,7 +3,7 @@ import exp from "constants"
 export type shippingContractModel = {
     id: any,
     shippingContractNo: string,
-    logtisticsContractNo: string,
+    logisticsContractNo: string,
     principal: string,
     packingTime: string,
     packingLocation: string,
