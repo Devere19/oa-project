@@ -38,7 +38,7 @@ export type AddLogisticsModel = {
   freight: string,
   contractPhoto: string,
   contractPhotoList: any,
-  logisticContractTime: string,
+  logisticsContractTime: string,
   squeezeSeason: string,
   createBy: string,
   logisticsDetailList: LogisticsDetailList[]

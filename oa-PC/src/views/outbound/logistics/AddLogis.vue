@@ -17,7 +17,7 @@
         </el-row>
         <el-row>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="totalWeight" label="销售单合同总重量" label-width='150px' label-position="right">
+            <el-form-item prop="totalWeight" label="物流合同总重量" label-width='150px' label-position="right">
               <el-input v-model="addModel.totalWeight"></el-input>
             </el-form-item>
           </el-col>
@@ -37,8 +37,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="logisticContractTime" label="物流单合同签订时间" label-width='150px' label-position="right">
-              <el-date-picker v-model="addModel.logisticContractTime" type="date" placeholder="请选择合同时间"
+            <el-form-item prop="logisticsContractTime" label="物流单合同签订时间" label-width='150px' label-position="right">
+              <el-date-picker v-model="addModel.logisticsContractTime" type="date" placeholder="请选择合同时间"
                 size="default" />
             </el-form-item>
           </el-col>
@@ -70,7 +70,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.logisticsContractNo'" label="物流单合同编号"
                 label-width='150px' label-position="right">
-                <el-input v-model="addModel.logisticsContractNo" disabled></el-input>
+                <el-input v-model="getLogisticsDetailList" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
@@ -84,7 +84,8 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
                 label-position="right">
-                <el-input :v-model="getGoodsFactory(item)" placeholder="自家仓库出货请填写'自家仓库'"></el-input>
+                <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'">
+                </el-input>
               </el-form-item>
             </el-col>
 
@@ -119,7 +120,6 @@
                   <el-option label="吨" value="吨"></el-option>
                   <el-option label="斤" value="斤"></el-option>
                 </el-select>
-
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
@@ -164,6 +164,10 @@ const { dialog, onShow, onClose, onConfirm } = useDialog()
 
 const addFormRef = ref<FormInstance>()
 
+const getLogisticsDetailList = computed(() => {
+  return addModel.logisticsContractNo
+})
+
 //新增物流单数据类型
 const addModel = reactive<AddLogisticsModel>({
   id: '',
@@ -174,7 +178,7 @@ const addModel = reactive<AddLogisticsModel>({
   freight: '',
   contractPhoto: '',
   contractPhotoList: [],
-  logisticContractTime: '',
+  logisticsContractTime: '',
   squeezeSeason: '',
   createBy: '',
   logisticsDetailList: reactive<LogisticsDetailList[]>([
@@ -198,7 +202,7 @@ const show = () => {
   dialog.height = 650
   dialog.width = 800
   addFormRef.value?.resetFields()
-  addModel.logisticsDetailList = [
+  addModel.logisticsDetailList = reactive([
     {
       id: '',
       logisticsContractNo: '',
@@ -210,9 +214,9 @@ const show = () => {
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
     }
-  ];
+  ])
   PhotoData.value = [];
   if (addModel.contractPhotoList.length != 0) {
     addModel.contractPhotoList.map((item: string) => {
@@ -223,13 +227,9 @@ const show = () => {
   onShow()
 }
 
-const getGoodsFactory = computed(() => (item: LogisticsDetailList) => {
-  if (item.purchaseContractNo == '000') {
-    item.goodsFactory = '自家仓库'
-    console.log(item)
-  }
-  return item.goodsFactory = '自家仓库'
-})
+const isOwn = () => {
+
+}
 
 //提交
 const commit = async () => {
