@@ -252,8 +252,7 @@
             </div>
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button type="primary"
-                        :disabled="purchasePaymentContractDetail.cashier != null || purchasePaymentContractDetail.cashier != ''"
+                    <el-button type="primary" :disabled="purchasePaymentContractDetail.cashier != null"
                         @click="openUploadDialog">上传</el-button>
                 </span>
             </template>
@@ -267,8 +266,8 @@
                         <el-input v-model="uploadPaymentData.purchaseContractNo" disabled size="large" />
                     </el-form-item>
                     <el-form-item label="付款时间" prop="paymentTime">
-                        <el-date-picker type="date" placeholder="即合同实际签订日期" v-model="uploadPaymentData.paymentTime"
-                            style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
+                        <el-date-picker type="date" v-model="uploadPaymentData.paymentTime" style="width: 100%;"
+                            value-format="YYYY-MM-DD" size="large"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="付款流水截图">
                         <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
@@ -313,7 +312,6 @@ const firstTableData = ref<purchasePaymentContractModel[]>([])
 const returnAll = ref(false)
 const uploadDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
-const choosePurchasePaymentContractNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 const PhotoData = ref<UploadUserFile[]>([])
@@ -446,6 +444,7 @@ const openUploadDialog = (row: any) => {
     uploadDialogFlag.value = true;
 }
 
+// 发送付款数据
 const sendPaymentData = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {

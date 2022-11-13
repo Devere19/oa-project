@@ -6,3 +6,10 @@ export type purchasePaymentModel = {
     paymentTime: string
     paymentPhotoArray: any
 }
+
+export type logisticsPaymentModel = {
+    id: any
+    logisticsContractNo: string
+    paymentTime: string
+    paymentPhotoArray: any
+}

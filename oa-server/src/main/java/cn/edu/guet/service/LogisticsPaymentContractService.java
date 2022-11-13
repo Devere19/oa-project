@@ -14,7 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface LogisticsPaymentContractService extends IService<LogisticsPaymentContract> {
     Page<LogisticsPaymentContractView> getLogisticsPaymentContractData(int currentPage, int pageSize);
     Page<LogisticsPaymentContractView> searchLogisticsPaymentContract(int currentPage, int pageSize,String searchWord);
-    int addNewLogisticsPaymentContract(LogisticsPaymentContract purchasePaymentContract);
+    int addNewLogisticsPaymentContract(LogisticsPaymentContract logisticsPaymentContract);
     int deleteOneLogisticsPaymentContract(int id);
 
+    //    出纳
+    Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize);
+    Page<LogisticsPaymentContractView> searchCashierLogisticsPayment(int currentPage, int pageSize,String searchWord);
+    int uploadCashierLogisticsPayment(LogisticsPaymentContract logisticsPaymentContract);
 }
