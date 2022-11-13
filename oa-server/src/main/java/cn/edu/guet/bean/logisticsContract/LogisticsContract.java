@@ -62,7 +62,7 @@ public class LogisticsContract implements Serializable {
     /**
      * 物流单合同签订时间
      */
-    private Date logisticContractTime;
+    private Date logisticsContractTime;
 
     /**
      * 榨季

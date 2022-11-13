@@ -117,8 +117,9 @@
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
                 :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="getTableData"
-                @current-change="getTableData" />
+                layout="total, sizes, prev, pager, next, jumper" :total="total"
+                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" title="新增海运单" width="50%" draggable center :before-close="closeAddDialog">
             <ul ref="addDialogTop" style="overflow: auto;height:600px">
@@ -666,29 +667,38 @@ onMounted(() => {
 
 // 获取海运单数据
 const getTableData = () => {
-    changeLoading();
+    changeLoadingTrue();
     getShippingContractDataApi(currentPage.value, pageSize.value).then(res => {
         total.value = res.data.total;//总记录
         firstTableData.value = res.data.records;
-        changeLoading();
+        changeLoadingFalse();
     });
 }
 
 
 // 搜索海运单数据
 const searchTableData = () => {
-    changeLoading();
-    searchShippingContractApi(currentPage.value, pageSize.value, searchData.value).then(res => {
-        total.value = res.data.total;//总记录
-        firstTableData.value = res.data.records;
-        returnAll.value = true;
-        changeLoading();
-    })
+    if (searchData.value == null || searchData.value == '') {
+        ElMessage({
+            message: '请输入关键词再进行搜索！',
+            type: 'warning',
+            duration: 4000
+        })
+    } else {
+        changeLoadingTrue();
+        searchShippingContractApi(currentPage.value, pageSize.value, searchData.value).then(res => {
+            total.value = res.data.total;//总记录
+            firstTableData.value = res.data.records;
+            returnAll.value = true;
+            changeLoadingFalse();
+        })
+    }
 }
 
 // 搜索后，回到全部数据
 const returnAllData = () => {
     getTableData();
+    searchData.value = ""
     returnAll.value = false
 }
 
@@ -700,6 +710,12 @@ const openAddDialog = () => {
 const checkContainerNo = (e: any) => {
     checkContainerNoApi(e).then(res => {
         containerSameFlag.value = res.data
+        if (res.data == true) {
+            ElMessage({
+                message: '集装箱号在30天内已重复，请检查！',
+                type: 'error',
+            })
+        }
     })
 }
 
@@ -709,24 +725,25 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
     await formEl1.validate((valid, fields) => {
         if (valid) {
             if (containerSameFlag.value == false) {
-                changeLoading();
+                changeLoadingTrue();
                 console.log(NewShippingContractData);
                 addNewShippingContractApi(NewShippingContractData).then(res => {
-                    changeLoading();
                     if (res.data == 1) {
-                        getTableData();
-                        addDialogFlag.value = false;
-                        ReturnTop();
-                        firstFormRef.value?.resetFields();
+                        changeLoadingFalse();
                         ElMessage({
                             message: '新增海运单成功！',
                             type: 'success',
                         })
+                        getTableData();
+                        addDialogFlag.value = false;
+                        containerSameFlag.value = true;
+                        ReturnTop();
+                        firstFormRef.value?.resetFields();
                         PhotoData.value = [];
                         NewShippingContractData.contractPhotoArray = [];
-                        changeLoading();
                     }
                     else {
+                        changeLoadingFalse();
                         ElMessage({
                             message: '新增海运单失败！',
                             type: 'error',
@@ -795,16 +812,16 @@ const openOneDeleteDialog = (index: number, row: shippingContractModel) => {
 
 // 发送单个删除请求
 const oneDeletePurchaseContract = () => {
-    changeLoading();
+    changeLoadingTrue();
     deleteOneShippingContractApi(choosePurchaseContractNo.value).then(res => {
-        changeLoading();
+        changeLoadingFalse();
         if (res.data == 1) {
-            getTableData();
-            oneDeleteDialogFlag.value = false
             ElMessage({
                 message: '删除海运单成功！',
                 type: 'success',
             })
+            getTableData();
+            oneDeleteDialogFlag.value = false
         }
         else {
             ElMessage({
@@ -843,8 +860,13 @@ const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
 }
 
 // 转变loading状态
-const changeLoading = () => {
-    loading.value = !loading.value;
+const changeLoadingTrue = () => {
+    loading.value = true;
+}
+
+// 转变loading状态
+const changeLoadingFalse = () => {
+    loading.value = false;
 }
 
 // 关闭新增窗口

@@ -119,8 +119,9 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     public int addNewPurchaseContract(PurchaseContract purchaseContract) {
         purchaseContract.setSupplierNo(String.valueOf(purchaseContract.getCustomerEnterpriseName()));
         purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount());
-        if(ImageUtils.getDBString(purchaseContract.getContractPhotoArray())!=""){
-            purchaseContract.setContractPhoto(ImageUtils.getDBString(purchaseContract.getContractPhotoArray()));
+        String contractPhotos=ImageUtils.getDBString(purchaseContract.getContractPhotoArray());
+        if(contractPhotos!=""){
+            purchaseContract.setContractPhoto(contractPhotos);
         }
         if(purchaseContract.getGoodsUnit().equals("吨")){
             purchaseContract.setGoodsUnitPrice(UnitUtils.GtoT(purchaseContract.getGoodsUnitPrice()));
