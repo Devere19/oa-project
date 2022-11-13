@@ -4,6 +4,7 @@ package cn.edu.guet.service.Impl;
 import cn.edu.guet.bean.logisticsContract.ListParm;
 import cn.edu.guet.bean.logisticsContract.LogisticsContract;
 import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
+import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.LogisticsContractMapper;
 import cn.edu.guet.mapper.LogisticsDetailMapper;
@@ -163,6 +164,14 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             }
         }
 
+    }
+
+    @Override
+    public Boolean checkLogisticsContractNo(String logisticsContractNo) {
+        QueryWrapper<LogisticsContract> qw= new QueryWrapper<>();
+        qw.eq("logistics_contract_no",logisticsContractNo).orderByDesc("create_time");
+        List<LogisticsContract> logisticsContracts= logisticsContractMapper.selectList(qw);
+        return !logisticsContracts.isEmpty();
     }
 }
 

@@ -1,9 +1,6 @@
 <template>
     <div class="purchasePaymentContract" v-loading="loading">
         <div class="headerGroup">
-            <el-button class="showPigeonholeButton" type="primary" @click="openAddDialog">
-                新增
-            </el-button>
             <el-input v-model="searchData" size="large" class="searchInput" placeholder="请输入所要查询的采购付款单信息"
                 @keyup.enter="searchTableData">
                 <template #append>
@@ -64,9 +61,9 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :icon="Delete" size="default" type="danger"
-                        @click="openOneDeleteDialog(scope.$index, scope.row)">
-                        删除</el-button>
+                    <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
+                        @click="openUploadDialog(scope.row)">
+                        上传</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -77,55 +74,10 @@
                 @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
-        <el-dialog v-model="addDialogFlag" title="新增采购付款单" width="40%" draggable center :before-close="closeAddDialog">
-            <ul ref="addDialogTop" style="overflow: auto;height:120px;padding: 0;">
-                <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="120px"
-                    :model="NewPurchasePaymentContractData" style="max-width: 98%">
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <!-- 验证采购合同号是否存在 -->
-                            <el-form-item label="采购合同编号" prop="purchaseContractNo">
-                                <el-input v-model="NewPurchasePaymentContractData.purchaseContractNo" size="large"
-                                    :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
-                                    @change="checkPurchaseContractNo" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <el-form-item label="本次付款金额" prop="paymentCount">
-                                <el-input v-model="NewPurchasePaymentContractData.paymentCount" size="large" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </ul>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="sendNewPurchasePaymentContract(firstFormRef)">
-                        确定
-                    </el-button>
-                    <el-button @click="closeAddDialog">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <el-dialog v-model="oneDeleteDialogFlag" title="提示" width="30%" draggable center>
-            <span>
-                您确定要删除该笔采购付款单吗
-            </span>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="oneDeletePurchaseContract">
-                        确定
-                    </el-button>
-                    <el-button @click="oneDeleteDialogFlag = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
         <el-dialog v-model="previewImageFlag">
             <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
         </el-dialog>
-        <el-dialog v-model="moreDetailDialogFlag" title="采购付款单详情" width="55%" draggable center
+        <el-dialog v-model="moreDetailDialogFlag" title="采购付款单详情" width="50%" draggable center
             :before-close="closeMoreDetailDialog">
             <div>
                 <el-row justify="center">
@@ -268,7 +220,7 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ purchasePaymentContractDetail.cashier == null ? "暂无" :
-                                purchasePaymentContractDetail.financeStaff
+                                purchasePaymentContractDetail.cashier
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -298,6 +250,45 @@
                     </el-col>
                 </el-row>
             </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary"
+                        :disabled="purchasePaymentContractDetail.cashier != null || purchasePaymentContractDetail.cashier != ''"
+                        @click="openUploadDialog">上传</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center
+            :before-close="closeUploadDialog">
+            <ul ref="uploadDialogTop" style="overflow: auto;height:300px">
+                <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="150px"
+                    :model="uploadPaymentData" style="max-width: 80%">
+                    <el-form-item label="采购合同编号" prop="purchaseContractNo">
+                        <el-input v-model="uploadPaymentData.purchaseContractNo" disabled size="large" />
+                    </el-form-item>
+                    <el-form-item label="付款时间" prop="paymentTime">
+                        <el-date-picker type="date" placeholder="即合同实际签订日期" v-model="uploadPaymentData.paymentTime"
+                            style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="付款流水截图">
+                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+                            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
+                            :on-success="handlePhotoSuccess">
+                            <el-icon>
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                    </el-form-item>
+                </el-form>
+            </ul>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="sendPaymentData(firstFormRef)">
+                        确定
+                    </el-button>
+                    <el-button @click="closeUploadDialog">取消</el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -305,11 +296,12 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
+import { Upload, Search, MoreFilled } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
-import { purchasePaymentContractModel, purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/PurchasePaymentContractModel'
-import { getPurchasePaymentContractDataApi, searchPurchasePaymentContractApi, checkPurchaseContractNoApi, addNewPurchasePaymentContractApi, deleteOnePurchasePaymentContractApi } from '@/api/purchasePaymentContract'
+import { deletePhotoApi } from '@/api/handlePhoto'
+import { purchasePaymentContractModel, purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/purchasePaymentContractModel'
+import { getCashierPurchasePaymentApi, searchCashierPurchasePaymentApi, uploadCashierPurchasePaymentApi } from '@/api/cashier'
 
 
 const searchData = ref("")
@@ -319,25 +311,17 @@ const pageSize = ref(5)
 const background = ref(true)
 const firstTableData = ref<purchasePaymentContractModel[]>([])
 const returnAll = ref(false)
-const addDialogFlag = ref(false)
-const oneDeleteDialogFlag = ref(false)
+const uploadDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
 const choosePurchasePaymentContractNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
+const PhotoData = ref<UploadUserFile[]>([])
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
-const addDialogTop = ref<any>()
-const contractExistFlag = ref(false)
+const uploadDialogTop = ref<any>()
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
-
-// 新增采购付款单
-const NewPurchasePaymentContractData = reactive({
-    id: '',
-    purchaseContractNo: '',
-    paymentCount: '',
-})
 
 // 详情
 const purchasePaymentContractDetail = reactive({
@@ -362,13 +346,20 @@ const purchasePaymentContractDetail = reactive({
     createBy: '',
 })
 
+// 上传付款信息
+const uploadPaymentData = reactive({
+    id: '',
+    purchaseContractNo: '',
+    paymentTime: '',
+    paymentPhotoArray: reactive<string[]>([]),
+})
 
 //表单校验规则
 const firstRules = reactive<FormRules>({
     purchaseContractNo: [
         { required: true, trigger: ['change'] }
     ],
-    paymentCount: [
+    paymentTime: [
         { required: true, trigger: ['change'] }
     ],
 })
@@ -380,13 +371,13 @@ onMounted(() => {
 // 获取采购付款单数据
 const getTableData = () => {
     changeLoadingTrue();
-    getPurchasePaymentContractDataApi(currentPage.value, pageSize.value).then(res => {
+    getCashierPurchasePaymentApi(currentPage.value, pageSize.value).then(res => {
         total.value = res.data.total;//总记录
         firstTableData.value = res.data.records;
+        console.log(res.data.records);
         changeLoadingFalse();
     });
 }
-
 
 // 搜索采购付款单数据
 const searchTableData = () => {
@@ -398,7 +389,7 @@ const searchTableData = () => {
         })
     } else {
         changeLoadingTrue();
-        searchPurchasePaymentContractApi(currentPage.value, pageSize.value, searchData.value).then(res => {
+        searchCashierPurchasePaymentApi(currentPage.value, pageSize.value, searchData.value).then(res => {
             total.value = res.data.total;//总记录
             firstTableData.value = res.data.records;
             returnAll.value = true;
@@ -412,70 +403,6 @@ const returnAllData = () => {
     getTableData();
     searchData.value = ""
     returnAll.value = false
-}
-
-// 打开新增采购付款单窗口
-const openAddDialog = () => {
-    addDialogFlag.value = true
-}
-
-// 验证采购合同是否存在
-const checkPurchaseContractNo = (e: any) => {
-    checkPurchaseContractNoApi(e).then(res => {
-        contractExistFlag.value = res.data
-        if (res.data == false) {
-            ElMessage({
-                message: '所填采购合同编号不存在，请检查！',
-                type: 'error',
-            })
-        }
-    })
-}
-
-// 发送新增采购付款单请求
-const sendNewPurchasePaymentContract = async (formEl1: FormInstance | undefined) => {
-    if (!formEl1) return
-    await formEl1.validate((valid, fields) => {
-        if (valid) {
-            if (contractExistFlag.value == true) {
-                changeLoadingTrue();
-                console.log(NewPurchasePaymentContractData);
-                addNewPurchasePaymentContractApi(NewPurchasePaymentContractData).then(res => {
-                    changeLoadingFalse();
-                    if (res.data == 1) {
-                        ElMessage({
-                            message: '新增采购付款单成功！',
-                            type: 'success',
-                        })
-                        getTableData();
-                        addDialogFlag.value = false;
-                        contractExistFlag.value = false;
-                        ReturnTop();
-                        firstFormRef.value?.resetFields();
-                    }
-                    else {
-                        ElMessage({
-                            message: '新增采购付款单失败！',
-                            type: 'error',
-                            duration: 4000
-                        })
-                    }
-                })
-            } else {
-                ElMessage({
-                    message: '不存在相应采购合同，请检查！',
-                    type: 'error',
-                    duration: 4000
-                })
-            }
-        } else {
-            ElMessage({
-                message: '表单验证未通过，请检查！',
-                type: 'error',
-                duration: 4000
-            })
-        }
-    })
 }
 
 // 打开采购付款单详情窗口
@@ -498,40 +425,101 @@ const openMordDetailDialog = async (row: any) => {
     purchasePaymentContractDetail.paymentPhotoArray = row.paymentPhotoArray
     purchasePaymentContractDetail.createTime = timeConversion(row.createTime)
     purchasePaymentContractDetail.createBy = row.createBy
+    uploadPaymentData.id = row.id
+    uploadPaymentData.purchaseContractNo = row.purchaseContractNo
     moreDetailDialogFlag.value = true
 }
 
+// 关闭详情窗口
 const closeMoreDetailDialog = () => {
     moreDetailDialogFlag.value = false;
 }
 
-// 打开单个删除提示窗口
-const openOneDeleteDialog = (index: number, row: purchasePaymentContractModel) => {
-    choosePurchasePaymentContractNo.value = row.id;
-    oneDeleteDialogFlag.value = true
+// 打开上传窗口
+const openUploadDialog = (row: any) => {
+    console.log(row);
+    console.log(row.purchaseContractNo != undefined);
+    if (row.purchaseContractNo != undefined) {
+        uploadPaymentData.id = row.id;
+        uploadPaymentData.purchaseContractNo = row.purchaseContractNo;
+    }
+    uploadDialogFlag.value = true;
 }
 
-// 发送单个删除请求
-const oneDeletePurchaseContract = () => {
-    changeLoadingTrue();
-    deleteOnePurchasePaymentContractApi(choosePurchasePaymentContractNo.value).then(res => {
-        changeLoadingFalse();
-        if (res.data == 1) {
-            ElMessage({
-                message: '删除采购付款单成功！',
-                type: 'success',
+const sendPaymentData = async (formEl1: FormInstance | undefined) => {
+    if (!formEl1) return
+    await formEl1.validate((valid, fields) => {
+        if (valid) {
+            console.log(uploadPaymentData);
+            changeLoadingTrue();
+            uploadCashierPurchasePaymentApi(uploadPaymentData).then(res => {
+                changeLoadingFalse();
+                if (res.data == 1) {
+                    ElMessage({
+                        message: '上传数据成功！',
+                        type: 'success',
+                    })
+                    getTableData();
+                    uploadDialogFlag.value = false;
+                    ReturnTop();
+                    firstFormRef.value?.resetFields();
+                    PhotoData.value = [];
+                    uploadPaymentData.paymentPhotoArray = [];
+                }
+                else {
+                    ElMessage({
+                        message: '上传数据失败！',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
             })
-            getTableData();
-            oneDeleteDialogFlag.value = false
-        }
-        else {
+        } else {
             ElMessage({
-                message: '删除采购付款单失败！',
+                message: '表单验证未通过，请检查！',
                 type: 'error',
                 duration: 4000
             })
         }
     })
+}
+
+// 关闭上传窗口
+const closeUploadDialog = () => {
+    uploadDialogFlag.value = false;
+    ReturnTop();
+    firstFormRef.value?.resetFields();
+    PhotoData.value = [];
+    if (uploadPaymentData.paymentPhotoArray.length != 0) {
+        uploadPaymentData.paymentPhotoArray.map((item) => {
+            deletePhotoApi(item);
+        });
+        uploadPaymentData.paymentPhotoArray = [];
+    }
+}
+
+// 照片移除后发送请求后台删除照片
+const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles);
+    uploadPaymentData.paymentPhotoArray.splice(uploadPaymentData.paymentPhotoArray.indexOf(uploadFile.response.data), 1);
+    console.log("移出照片数据组");
+    deletePhotoApi(uploadFile.response.data);
+}
+
+// 处理照片预览
+const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+    dialogImageUrl.value = uploadFile.url!
+    previewImageFlag.value = true
+
+}
+
+// 上传照片成功后加入数组
+const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    if (response.code == 200) {
+        uploadPaymentData.paymentPhotoArray.push(response.data);
+        console.log(uploadPaymentData.paymentPhotoArray);
+        console.log("加入照片数据组");
+    }
 }
 
 // 转变loading状态
@@ -544,17 +532,9 @@ const changeLoadingFalse = () => {
     loading.value = false;
 }
 
-// 关闭新增窗口
-const closeAddDialog = () => {
-    addDialogFlag.value = false;
-    ReturnTop();
-    firstFormRef.value?.resetFields();
-    contractExistFlag.value = false;
-}
-
 // 新增窗口滑动回最顶端
 const ReturnTop = () => {
-    addDialogTop.value.scrollTop = 0;
+    uploadDialogTop.value.scrollTop = 0;
 }
 
 </script>

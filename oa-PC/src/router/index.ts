@@ -87,9 +87,9 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/cashier/cashierPurchaseList',
-        name: 'cashierPurchaseList',
-        component: () => import('@/views/cashier/purchase/CashierPurchaseList.vue'),
+        path: '/cashier/cashierPurchasePayment',
+        name: 'cashierPurchasePayment',
+        component: () => import('@/views/cashier/purchasePayment/CashierPurchasePayment.vue'),
         meta: {
           name: '出纳采购单',
           icon: 'User',
@@ -97,9 +97,9 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/cashier/cashierSaleList',
-        name: 'cashierSaleList',
-        component: () => import('@/views/cashier/sale/CashierSaleList.vue'),
+        path: '/cashier/cashierSale',
+        name: 'cashierSale',
+        component: () => import('@/views/cashier/sale/CashierSale.vue'),
         meta: {
           name: '出纳销售单',
           icon: 'Avatar',
@@ -107,9 +107,9 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/cashier/cashierLogisticsList',
-        name: 'cashierLogisticsList',
-        component: () => import('@/views/cashier/logistics/CashierLogisticsList.vue'),
+        path: '/cashier/cashierLogisticsPayment',
+        name: 'cashierLogisticsPayment',
+        component: () => import('@/views/cashier/logisticsPayment/CashierLogisticsPayment.vue'),
         meta: {
           name: '出纳物流单',
           icon: 'Menu',
@@ -117,9 +117,9 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/cashier/cashierShippingList',
-        name: 'cashierShippingList',
-        component: () => import('@/views/cashier/shipping/CashierShippingList.vue'),
+        path: '/cashier/cashierShipping',
+        name: 'cashierShipping',
+        component: () => import('@/views/cashier/shipping/CashierShipping.vue'),
         meta: {
           name: '出纳海运单',
           icon: 'Menu',

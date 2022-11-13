@@ -96,58 +96,58 @@ const menus = reactive([
       // roles: ['sys:manage'],
     },
   },
-  // {
-  //   path: '/cashier',
-  //   component: 'Layout',
-  //   name: 'cashier',
-  //   meta: {
-  //     title: '出纳',
-  //     icon: 'Setting',
-  //     // roles: ['sys:manage'],
-  //   },
-  //   children: [
-  //     {
-  //       path: '/cashier/cashierPurchaseList',
-  //       component: '/cashier/purchase/CashierPurchaseList',
-  //       name: 'cashierPurchaseList',
-  //       meta: {
-  //         title: '出纳采购单',
-  //         icon: 'UserFilled',
-  //         // roles: ['sys:user'],
-  //       },
-  //     },
-  //     {
-  //       path: '/cashier/cashierSaleList',
-  //       component: '/cashier/sale/CashierSaleList',
-  //       name: 'cashierSaleList',
-  //       meta: {
-  //         title: '出纳销售单',
-  //         icon: 'Wallet',
-  //         // roles: ['sys:role'],
-  //       },
-  //     },
-  //     {
-  //       path: '/cashier/cashierLogisticsList',
-  //       component: '/cashier/logistics/CashierLogisticsList',
-  //       name: 'cashierLogisticsList',
-  //       meta: {
-  //         title: '出纳物流单',
-  //         icon: 'Menu',
-  //         // roles: ['sys:menu'],
-  //       },
-  //     },
-  //     {
-  //       path: '/cashier/cashierShippingList',
-  //       component: '/cashier/shipping/CashierShippingList',
-  //       name: 'cashierShippingList',
-  //       meta: {
-  //         title: '出纳海运单',
-  //         icon: 'Menu',
-  //         // roles: ['sys:menu'],
-  //       },
-  //     },
-  //   ],
-  // },
+  {
+    path: '/cashier',
+    component: 'Layout',
+    name: 'cashier',
+    meta: {
+      title: '出纳',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+    children: [
+      {
+        path: '/cashier/cashierPurchasePayment',
+        component: '/cashier/purchasePayment/CashierPurchasePayment',
+        name: 'cashierPurchasePayment',
+        meta: {
+          title: '采购付款单',
+          icon: 'UserFilled',
+          // roles: ['sys:user'],
+        },
+      },
+      {
+        path: '/cashier/cashierSale',
+        component: '/cashier/sale/CashierSale',
+        name: 'cashierSale',
+        meta: {
+          title: '销售单',
+          icon: 'Wallet',
+          // roles: ['sys:role'],
+        },
+      },
+      {
+        path: '/cashier/cashierLogisticsPayment',
+        component: '/cashier/logisticsPayment/CashierLogisticsPayment',
+        name: 'cashierLogisticsPayment',
+        meta: {
+          title: '物流付款单',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+      {
+        path: '/cashier/cashierShipping',
+        component: '/cashier/shipping/CashierShipping',
+        name: 'cashierShipping',
+        meta: {
+          title: '海运单',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+    ],
+  },
   {
     path: '/warehouseManagement',
     component: 'Layout',

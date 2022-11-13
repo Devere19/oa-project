@@ -48,4 +48,6 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @param logisticsContract
      */
     void add(LogisticsContract logisticsContract);
+
+    Boolean checkLogisticsContractNo(String logisticsContractNo);
 }

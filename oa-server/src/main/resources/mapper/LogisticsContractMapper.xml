@@ -11,7 +11,7 @@
             <result property="freight" column="freight" jdbcType="DECIMAL"/>
             <result property="contractPhoto" column="contract_photo" jdbcType="VARCHAR"/>
             <result property="squeezeSeason" column="squeeze_season" jdbcType="VARCHAR"/>
-            <result property="logisticContractTime" column="logistic_contract_time" jdbcType="TIMESTAMP"/>
+            <result property="logisticsContractTime" column="logistics_contract_time" jdbcType="TIMESTAMP"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
             <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
@@ -20,7 +20,7 @@
 
     <sql id="Base_Column_List">
         id,logistics_contract_no,sale_contract_no,
-        freight,contract_photo,logistic_contract_time,
+        freight,contract_photo,logistics_contract_time,
         create_time,create_by,last_update_time,
         last_update_by
     </sql>
