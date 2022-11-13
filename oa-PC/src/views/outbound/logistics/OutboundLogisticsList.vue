@@ -34,7 +34,7 @@
             :preview-src-list="scope.row.contractPhotoList" :initial-index="4" fit="cover" preview-teleported="true" />
         </template>
       </el-table-column>
-      <el-table-column prop="logisticContractTime" label="物流单合同签订时间" :formatter="conversionDate"></el-table-column>
+      <el-table-column prop="logisticsContractTime" label="物流单合同签订时间" :formatter="conversionDate"></el-table-column>
       <el-table-column prop="squeezeSeason" label="榨季"></el-table-column>
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
       <el-table-column fixed="right" label="操作" align="center" width="280">
@@ -74,7 +74,7 @@ import AddLogis from './AddLogis.vue';
 const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero } = useTable()
 
 //物流单相关属性
-const { changePigeonhole, deleteBtn,addRef,addBtn } = useLogistics(refresh)
+const { changePigeonhole, deleteBtn, addRef, addBtn } = useLogistics(refresh)
 
 //详情相关属性
 const { detailBtn, detailRef } = useDetail()
