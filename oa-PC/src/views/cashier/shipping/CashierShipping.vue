@@ -34,13 +34,13 @@
             <el-table-column property="destinationPortFleet" align="center" label="目的港承运车队" />
             <el-table-column property="destinationPortPrice" align="center" label="目的港车队费用" />
             <el-table-column property="expenses" align="center" label="总费用" />
-            <el-table-column align="center" label="合同照片" width="130">
+            <!-- <el-table-column align="center" label="合同照片" width="130">
                 <template #default="scope">
                     <el-image style="width: 100px; height: 100px"
                         :src="scope.row.contractPhoto == '' ? null : scope.row.contractPhoto"
                         :preview-src-list="scope.row.contractPhotoArray" fit="cover" preview-teleported="true" />
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="财务审核状态" align="center">
                 <template #default="scope">{{ scope.row.financeState == null ? "未处理" : "已通过✔" }}</template>
             </el-table-column>

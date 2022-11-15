@@ -220,6 +220,16 @@ const routes: Array<RouteRecordRaw> = [
           // roles: ["sys:role"]
         }
       },
+      {
+        path: '/finance/priceTrend',
+        name: 'officeExpense',
+        component: () => import('@/views/finance/priceTrend/priceTrend.vue'),
+        meta: {
+          name: '办公经费',
+          icon: 'Avatar',
+          // roles: ["sys:role"]
+        }
+      },
     ]
   },
   {

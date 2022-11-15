@@ -200,38 +200,48 @@ const menus = reactive([
       },
     ],
   },
-  // {
-  //   path: '/finance',
-  //   component: 'Layout',
-  //   name: 'finance',
-  //   meta: {
-  //     title: '财务管理',
-  //     icon: 'Setting',
-  //     // roles: ['sys:manage'],
-  //   },
-  //   children: [
-  //     {
-  //       path: '/finance/reportAnalysis',
-  //       component: '/finance/reportAnalysis/ReportAnalysis',
-  //       name: 'reportAnalysis',
-  //       meta: {
-  //         title: '报表分析',
-  //         icon: 'Menu',
-  //         // roles: ['sys:menu'],
-  //       },
-  //     },
-  //     {
-  //       path: '/finance/officeExpense',
-  //       component: '/finance/officeExpense/OfficeExpense',
-  //       name: 'officeExpense',
-  //       meta: {
-  //         title: '办公经费',
-  //         icon: 'Menu',
-  //         // roles: ['sys:menu'],
-  //       },
-  //     },
-  //   ],
-  // },
+  {
+    path: '/finance',
+    component: 'Layout',
+    name: 'finance',
+    meta: {
+      title: '财务管理',
+      icon: 'Setting',
+      // roles: ['sys:manage'],
+    },
+    children: [
+      {
+        path: '/finance/reportAnalysis',
+        component: '/finance/reportAnalysis/ReportAnalysis',
+        name: 'reportAnalysis',
+        meta: {
+          title: '报表分析',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+      {
+        path: '/finance/officeExpense',
+        component: '/finance/officeExpense/OfficeExpense',
+        name: 'officeExpense',
+        meta: {
+          title: '办公经费',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+      {
+        path: '/finance/priceTrend',
+        component: '/finance/priceTrend/priceTrend',
+        name: 'priceTrend',
+        meta: {
+          title: '单价走势',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
+    ],
+  },
   {
     path: '/purchasePaymentContract',
     component: 'Layout',
