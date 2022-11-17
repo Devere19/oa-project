@@ -222,10 +222,10 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/finance/priceTrend',
-        name: 'officeExpense',
-        component: () => import('@/views/finance/priceTrend/priceTrend.vue'),
+        name: 'priceTrend',
+        component: () => import('@/views/finance/priceTrend/PriceTrend.vue'),
         meta: {
-          name: '办公经费',
+          name: '单价走势',
           icon: 'Avatar',
           // roles: ["sys:role"]
         }

@@ -128,20 +128,25 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         if(ImageUtils.getDBString(shippingContract.getContractPhotoArray())!=""){
             shippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
         }
-//        查询出董事会的ID
-        QueryWrapper<Director> directorQw= new QueryWrapper<>();
-        directorQw.orderByAsc("nick_name").last("limit 3");
-        List<Director> directors=directorMapper.selectList(directorQw);
+
+        int result=shippingContractMapper.insert(shippingContract);
+
+        if(result==1){
+            //        查询出董事会的ID
+            QueryWrapper<Director> directorQw= new QueryWrapper<>();
+            directorQw.orderByAsc("nick_name").last("limit 3");
+            List<Director> directors=directorMapper.selectList(directorQw);
 
 //        循环添加海运董事审核记录
-        for (Director director:directors){
-            ShippingDirectorState shippingDirectorState=new ShippingDirectorState();
-            shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
-            shippingDirectorState.setUserId(Math.toIntExact(director.getId()));
-            shippingDirectorStateMapper.insert(shippingDirectorState);
+            for (Director director:directors){
+                ShippingDirectorState shippingDirectorState=new ShippingDirectorState();
+                shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
+                shippingDirectorState.setUserId(Math.toIntExact(director.getId()));
+                shippingDirectorStateMapper.insert(shippingDirectorState);
+            }
         }
 
-        return shippingContractMapper.insert(shippingContract);
+        return result;
     }
 
     @Transactional(rollbackFor = Exception.class)

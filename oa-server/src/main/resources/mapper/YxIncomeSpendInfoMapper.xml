@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.YxIncomeSpendInfoMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.guet.bean.YxIncomeSpendView">
+            <result property="iDate" column="i_date" jdbcType="DATE"/>
+            <result property="income" column="income" jdbcType="DECIMAL"/>
+            <result property="spend" column="spend" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        date,income,spend
+    </sql>
+
+    <select id="getYxIncomeSpendData" resultType="cn.edu.guet.bean.YxIncomeSpendView">
+        SELECT i_date, income, spend
+        FROM yx_income_spend_info
+        WHERE i_date between  #{startDate}  and #{endDate}
+        ORDER BY i_date
+    </select>
+</mapper>

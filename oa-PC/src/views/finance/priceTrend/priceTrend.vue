@@ -197,16 +197,13 @@ const disabledDate = (time: Date) => {
     return time.getTime() > Date.now()
 }
 
-const changeGoods = (e: any) => {
-    choosedGoods.value = e;
+const changeGoods = () => {
     if (choosedDate.value[0] != null && choosedDate.value[1] != null) {
         getPriceData();
     }
 }
 
-const changeDate = (e: any) => {
-    choosedDate.value.push = e[0];
-    choosedDate.value.push = e[1];
+const changeDate = () => {
     if (choosedGoods.value != '' || choosedGoods.value != null) {
         getPriceData();
     }
@@ -214,6 +211,10 @@ const changeDate = (e: any) => {
 
 const getPriceData = () => {
     getPriceTrendDataApi(choosedGoods.value, choosedDate.value[0], choosedDate.value[1]).then((res) => {
+        purchaseOption.xAxis.data = [''];
+        purchaseOption.series[0].data = [''];
+        saleOption.xAxis.data = [''];
+        saleOption.series[0].data = [''];
         res.data.purchasePriceTrends.map((item: any, index: number) => {
             if (index == 0) {
                 purchaseOption.xAxis.data.pop();
@@ -225,13 +226,13 @@ const getPriceData = () => {
         res.data.salePriceTrends.map((item: any, index: number) => {
             if (index == 0) {
                 saleOption.xAxis.data.pop();
-                saleOption.series[1].data.pop();
+                saleOption.series[0].data.pop();
             }
             saleOption.xAxis.data.push(item.saleContractTime);
-            saleOption.series[1].data.push(item.avgPrice);
+            saleOption.series[0].data.push(item.avgPrice);
         })
-        purchaseOption.title.text = choosedGoods.value + "采购单价走势图";
-        saleOption.title.text = choosedGoods.value + "销售单价走势图";
+        purchaseOption.title.text = choosedGoods.value + "采购单价走势";
+        saleOption.title.text = choosedGoods.value + "销售单价走势";
         firstChartObject.value.setOption(purchaseOption);
         secondChartObject.value.setOption(saleOption);
     })

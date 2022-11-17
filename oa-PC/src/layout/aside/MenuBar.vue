@@ -232,7 +232,7 @@ const menus = reactive([
       },
       {
         path: '/finance/priceTrend',
-        component: '/finance/priceTrend/priceTrend',
+        component: '/finance/priceTrend/PriceTrend',
         name: 'priceTrend',
         meta: {
           title: '单价走势',

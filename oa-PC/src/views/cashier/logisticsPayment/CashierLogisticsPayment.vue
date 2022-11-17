@@ -1,9 +1,6 @@
 <template>
     <div class="logisticsPaymentContract" v-loading="loading">
         <div class="headerGroup">
-            <el-button class="showPigeonholeButton" type="primary" @click="openUploadDialog">
-                新增
-            </el-button>
             <el-input v-model="searchData" size="large" class="searchInput" placeholder="请输入所要查询的物流付款单信息"
                 @keyup.enter="searchTableData">
                 <template #append>
