@@ -20,3 +20,12 @@ export type shippingPaymentModel = {
     paymentTime: string
     paymentPhotoArray: any
 }
+
+export type SaleModel = {
+    id: string
+    revenueTime: string
+    revenueAmount: string
+    revenuePhoto: string
+    revenuePhotoList: any,
+    revenueBy:string
+}

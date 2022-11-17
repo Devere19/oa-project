@@ -30,6 +30,7 @@ export type AddSaleModel = {
   contractPhotoList: any,
   revenueAmount: string,
   revenuePhoto: string,
+  revenuePhotoList:any,
   revenueBy: string,
   pigeonhole: string,
   squeezeSeason: string,

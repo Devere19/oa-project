@@ -71,9 +71,12 @@ public class LogisticsContractController {
      */
     @DeleteMapping("/deleteById/{id}")
     public HttpResult deleteById(@PathVariable("id") Integer id){
-        if (logisticsContractService.removeById(id)) {
+        int result = logisticsContractService.delete(id);
+        if (result==1) {
             return ResultUtils.success("删除成功");
-        } else {
+        }else if (result==0){
+            return ResultUtils.error("已经有该物流的付款信息，无法删除");
+        }else {
             return ResultUtils.error("删除失败");
         }
     }

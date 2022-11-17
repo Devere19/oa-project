@@ -1,5 +1,6 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.cashier.sale.SaleModel;
 import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.bean.sale.SaleContract;
@@ -54,4 +55,8 @@ public interface SaleContractService extends IService<SaleContract> {
      * @return
      */
     List<LogisticsDetail> getDetailSaleContract(String saleContractNo);
+
+    IPage<SaleContract> getCashierSaleContract(ListParm listParm);
+
+    int editCashierSale(SaleModel saleModel);
 }

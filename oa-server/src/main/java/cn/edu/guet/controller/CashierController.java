@@ -3,15 +3,18 @@ package cn.edu.guet.controller;
 import cn.edu.guet.bean.LogisticsPaymentContract;
 import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.bean.ShippingContract;
+import cn.edu.guet.bean.cashier.sale.SaleModel;
+import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.LogisticsPaymentContractService;
 import cn.edu.guet.service.PurchasePaymentContractService;
+import cn.edu.guet.service.SaleContractService;
 import cn.edu.guet.service.ShippingContractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author 陶祎祎
@@ -28,6 +31,8 @@ public class CashierController {
 
     @Autowired
     private ShippingContractService shippingContractService;
+    @Autowired
+    private SaleContractService saleContractService;
 
     //    获取出纳的采购付款单数据
     @RequestMapping("/getCashierPurchasePayment")
@@ -81,6 +86,21 @@ public class CashierController {
     @RequestMapping("/uploadCashierShipping")
     public HttpResult uploadCashierShipping(@RequestBody ShippingContract shippingContract){
         return ResultUtils.success("上传成功",shippingContractService.uploadCashierShipping(shippingContract));
+    }
+    //出纳查询销售单数据
+    @RequestMapping("/getCashierSaleContract")
+    public HttpResult getCashierSaleContract(ListParm listParm){
+        return ResultUtils.success("查询成功",saleContractService.getCashierSaleContract(listParm));
+    }
+
+    //上传销售单的首款数据
+    @PutMapping("/editCashierSale")
+    public HttpResult editCashierSale(@RequestBody SaleModel saleModel){
+        if (saleContractService.editCashierSale(saleModel)>0){
+            return ResultUtils.success("上传成功");
+        }else {
+            return ResultUtils.error("上传失败");
+        }
     }
 
 }
