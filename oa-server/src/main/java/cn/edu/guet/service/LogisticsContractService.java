@@ -50,4 +50,11 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
     void add(LogisticsContract logisticsContract);
 
     Boolean checkLogisticsContractNo(String logisticsContractNo);
+
+    /**
+     * 删除，同时删除对应的物流详情和对应的自家舱和和外商仓库的出入库记录和库存
+     * @param id
+     * @return  0 已经有付款单了  1 正常删除   -1 删除失败
+     */
+    int delete(Integer id);
 }

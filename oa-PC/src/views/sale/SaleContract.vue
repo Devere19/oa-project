@@ -46,13 +46,13 @@
             :preview-src-list="scope.row.contractPhotoList" :initial-index="4" fit="cover" preview-teleported="true" />
         </template>
       </el-table-column>
-      <el-table-column prop="revenueTime" label="收款时间" :formatter="conversionDateTime"></el-table-column>
+      <el-table-column prop="revenueTime" label="收款时间" :formatter="conversionDate"></el-table-column>
       <el-table-column prop="revenueAmount" label="收款金额"></el-table-column>
       <el-table-column prop="revenuePhoto" label="收款流水单截图">
         <template #default="scope">
           <el-image style="width: 100px; height: 100px"
             :src="scope.row.revenuePhoto == '' ? null : scope.row.revenuePhoto"
-            :preview-src-list="[scope.row.revenuePhoto]" :initial-index="4" fit="cover" preview-teleported="true" />
+            :preview-src-list="scope.row.revenuePhotoList" :initial-index="4" fit="cover" preview-teleported="true" />
         </template>
       </el-table-column>
       <el-table-column prop="revenueBy" label="出纳操作人姓名"></el-table-column>
@@ -98,9 +98,10 @@ import useSale from "@/composables/sale/useSale";
 import AddSaleContract from "@/views/sale/AddSaleContract.vue"
 import DetailSaleContract from "./DetailSaleContract.vue";
 import useDetail from '@/composables/sale/useDetail'
-import {conversionDate,conversionDateTime} from '@/utils/timeFormat'
+import { conversionDate, conversionDateTime } from '@/utils/timeFormat'
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
+
 //销售单新增、编辑、删除
 const { changePigeonhole, deleteBtn, addBtn, addRef } = useSale(refresh)
 

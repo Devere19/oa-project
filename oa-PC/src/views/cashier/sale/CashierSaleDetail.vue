@@ -95,7 +95,6 @@ const detailTableList = reactive({
   contractPhotoList: [],
   revenueAmount: '',
   revenuePhoto: '',
-  revenuePhotoList:[],
   revenueBy: '',
   pigeonhole: '',
   squeezeSeason: '',

@@ -63,6 +63,9 @@ public class SaleContract {
     private Date revenueTime;
     //收款流水截图
     private String revenuePhoto;
+    //收款流水截图集合
+    @TableField(exist = false)
+    private List<String> revenuePhotoList;
     //出纳操作人姓名
     private String revenueBy;
     //归档  0表示隐藏  1表示显示

@@ -21,7 +21,7 @@ export default function useTable() {
 
   //列表
   const getList = async () => {
-    let res = await getListApi(ListParm)
+    let res = await getListApi(ListParm)a
     if (res && res.code == 200) {
       // console.log(res)
       //设置表格数据

@@ -211,6 +211,7 @@ const addModel = reactive<AddSaleModel>({
   contractPhotoList: [],
   revenueAmount: '',
   revenuePhoto: '',
+  revenuePhotoList:[],
   revenueBy: '',
   pigeonhole: '',
   squeezeSeason: '',
