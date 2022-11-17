@@ -99,7 +99,8 @@
           </el-form-item>
           <el-form-item label="入库时间" prop="inboundTime">
             <el-date-picker type="date" placeholder="即合同实际签订日期" v-model="NewPurchaseContractData.inboundTime"
-              style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
+              :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM-DD" size="large">
+            </el-date-picker>
           </el-form-item>
           <el-form-item label="采购货物名称" prop="goodsName">
             <el-input v-model="NewPurchaseContractData.goodsName" size="large" />
@@ -915,6 +916,10 @@ const changeOwnFlag = () => {
   }
 }
 
+
+const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now()
+}
 </script>
 
 <style scoped>
