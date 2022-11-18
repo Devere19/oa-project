@@ -4,20 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.guet.mapper.YxIncomeSpendInfoMapper">
 
-    <resultMap id="BaseResultMap" type="cn.edu.guet.bean.YxIncomeSpendView">
-            <result property="iDate" column="i_date" jdbcType="DATE"/>
-            <result property="income" column="income" jdbcType="DECIMAL"/>
-            <result property="spend" column="spend" jdbcType="DECIMAL"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        date,income,spend
-    </sql>
-
-    <select id="getYxIncomeSpendData" resultType="cn.edu.guet.bean.YxIncomeSpendView">
-        SELECT i_date, income, spend
+    <select id="getYxDayIncomeSpendData" resultType="cn.edu.guet.bean.YxIncomeSpendView">
+        SELECT i_date legend, income, spend
         FROM yx_income_spend_info
         WHERE i_date between  #{startDate}  and #{endDate}
         ORDER BY i_date
+    </select>
+
+    <select id="getYxMonthIncomeSpendData" resultType="cn.edu.guet.bean.YxIncomeSpendView">
+        SELECT date_format(i_date, '%Y-%m') legend, SUM(income) income,SUM(spend) spend
+        FROM yx_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getYxSeasonIncomeSpendData" resultType="cn.edu.guet.bean.YxIncomeSpendView">
+        SELECT CONCAT(YEAR(i_date),CONCAT('-',QUARTER(i_date))) legend,
+               SUM(income) income, SUM(spend) spend
+        FROM yx_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getYxYearIncomeSpendData" resultType="cn.edu.guet.bean.YxIncomeSpendView">
+        SELECT date_format(i_date, '%Y') legend, SUM(income) income,SUM(spend) spend
+        FROM yx_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
     </select>
 </mapper>

@@ -238,6 +238,14 @@ const getPriceData = () => {
     })
 }
 
+window.addEventListener("resize", function () {
+    if (firstChartObject.value != null) {
+        firstChartObject.value.resize();
+    }
+    if (secondChartObject.value != null) {
+        secondChartObject.value.resize();
+    }
+});
 </script>
 
 <style scoped>

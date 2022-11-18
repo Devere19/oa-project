@@ -33,8 +33,13 @@ public class AnalysisDataController {
        return ResultUtils.success("获取成功",analysisDataService.getPriceTrendData(goodsName,startDate,endDate));
     }
 
-    @RequestMapping("/getIncomeSpendData")
-    public HttpResult getIncomeSpendData(String dataType, String dataCompany, Date startDate, Date endDate){
-       return ResultUtils.success("获取成功",incomeSpendInfoService.getIncomeSpendData(dataType,dataCompany,startDate,endDate));
+    @RequestMapping("/getChartIncomeSpendData")
+    public HttpResult getChartIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate){
+       return ResultUtils.success("获取成功",incomeSpendInfoService.getChartIncomeSpendData(dataType,dataCompany,timeType,startDate,endDate));
+    }
+
+    @RequestMapping("/getNumberIncomeSpendData")
+    public HttpResult getNumberIncomeSpendData(String dataType, String dataCompany){
+        return ResultUtils.success("获取成功",incomeSpendInfoService.getNumberIncomeSpendData(dataType,dataCompany));
     }
 }

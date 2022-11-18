@@ -1,6 +1,7 @@
 package cn.edu.guet.mapper;
 
 import cn.edu.guet.bean.FfsIncomeSpendView;
+import cn.edu.guet.bean.JtIncomeSpendView;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,7 +17,10 @@ import java.util.List;
 */
 @Mapper
 public interface FfsIncomeSpendInfoMapper extends BaseMapper<FfsIncomeSpendView> {
-    List<FfsIncomeSpendView> getFfsIncomeSpendData(@Param("startDate")Date startDate, @Param("endDate")Date endDate);
+    List<FfsIncomeSpendView> getFfsDayIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<FfsIncomeSpendView> getFfsMonthIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<FfsIncomeSpendView> getFfsSeasonIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<FfsIncomeSpendView> getFfsYearIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 }
 
 

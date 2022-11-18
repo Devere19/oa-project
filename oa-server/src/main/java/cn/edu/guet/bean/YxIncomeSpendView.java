@@ -18,7 +18,7 @@ public class YxIncomeSpendView implements Serializable {
     /**
      * 
      */
-    private Date iDate;
+    private String legend;
 
     /**
      * 
@@ -45,7 +45,7 @@ public class YxIncomeSpendView implements Serializable {
             return false;
         }
         YxIncomeSpendView other = (YxIncomeSpendView) that;
-        return (this.getIDate() == null ? other.getIDate() == null : this.getIDate().equals(other.getIDate()))
+        return (this.getLegend() == null ? other.getLegend() == null : this.getLegend().equals(other.getLegend()))
             && (this.getIncome() == null ? other.getIncome() == null : this.getIncome().equals(other.getIncome()))
             && (this.getSpend() == null ? other.getSpend() == null : this.getSpend().equals(other.getSpend()));
     }
@@ -54,7 +54,7 @@ public class YxIncomeSpendView implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getIDate() == null) ? 0 : getIDate().hashCode());
+        result = prime * result + ((getLegend() == null) ? 0 : getLegend().hashCode());
         result = prime * result + ((getIncome() == null) ? 0 : getIncome().hashCode());
         result = prime * result + ((getSpend() == null) ? 0 : getSpend().hashCode());
         return result;
@@ -66,7 +66,7 @@ public class YxIncomeSpendView implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", iDate=").append(iDate);
+        sb.append(", legend=").append(legend);
         sb.append(", income=").append(income);
         sb.append(", spend=").append(spend);
         sb.append(", serialVersionUID=").append(serialVersionUID);

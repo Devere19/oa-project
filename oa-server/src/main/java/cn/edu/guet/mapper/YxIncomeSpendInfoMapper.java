@@ -1,5 +1,6 @@
 package cn.edu.guet.mapper;
 
+import cn.edu.guet.bean.TotalIncomeSpendView;
 import cn.edu.guet.bean.YxIncomeSpendView;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +17,10 @@ import java.util.List;
 */
 @Mapper
 public interface YxIncomeSpendInfoMapper extends BaseMapper<YxIncomeSpendView> {
-    List<YxIncomeSpendView> getYxIncomeSpendData(@Param("startDate")Date startDate, @Param("endDate")Date endDate);
+    List<YxIncomeSpendView> getYxDayIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<YxIncomeSpendView> getYxMonthIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<YxIncomeSpendView> getYxSeasonIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<YxIncomeSpendView> getYxYearIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 }
 
 
