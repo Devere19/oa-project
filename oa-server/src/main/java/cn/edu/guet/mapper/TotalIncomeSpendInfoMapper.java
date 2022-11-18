@@ -17,7 +17,10 @@ import java.util.List;
 */
 @Mapper
 public interface TotalIncomeSpendInfoMapper extends BaseMapper<TotalIncomeSpendView> {
-    List<TotalIncomeSpendView> getTotalIncomeSpendData(@Param("startDate")Date startDate, @Param("endDate")Date endDate);
+    List<TotalIncomeSpendView> getTotalDayIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<TotalIncomeSpendView> getTotalMonthIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<TotalIncomeSpendView> getTotalSeasonIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<TotalIncomeSpendView> getTotalYearIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 }
 
 

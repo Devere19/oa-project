@@ -21,7 +21,7 @@ export default function useTable() {
 
   //列表
   const getList = async () => {
-    let res = await getListApi(ListParm)a
+    let res = await getListApi(ListParm)
     if (res && res.code == 200) {
       // console.log(res)
       //设置表格数据
@@ -32,7 +32,7 @@ export default function useTable() {
   }
 
   //刷新列表
-  const refresh=()=>{
+  const refresh = () => {
     getList()
   }
 
@@ -43,7 +43,7 @@ export default function useTable() {
 
   //重置
   const resetBtn = () => {
-    ListParm.roleName=''
+    ListParm.roleName = ''
     getList()
   }
 

@@ -12,5 +12,6 @@ import java.util.List;
 * @createDate 2022-11-17 10:57:58
 */
 public interface IncomeSpendInfoService extends IService<TotalIncomeSpendView> {
-    List getIncomeSpendData(String dataType, String dataCompany, Date startDate, Date endDate);
+    List getChartIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate);
+    List getNumberIncomeSpendData(String dataType, String dataCompany);
 }
