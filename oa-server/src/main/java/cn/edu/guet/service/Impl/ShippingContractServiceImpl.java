@@ -182,8 +182,9 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).isNotNull("state").orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews =shippingStateInfoMapper.selectList(stateQw);
 
-            if(shippingStateViews.size()==0){
+            if(shippingStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setShippingDirector(shippingStateViews);
 
@@ -236,8 +237,9 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).isNotNull("state").orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews =shippingStateInfoMapper.selectList(stateQw);
 
-            if(shippingStateViews.size()==0){
+            if(shippingStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setShippingDirector(shippingStateViews);
 

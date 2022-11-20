@@ -21,6 +21,11 @@ public interface TotalIncomeSpendInfoMapper extends BaseMapper<TotalIncomeSpendV
     List<TotalIncomeSpendView> getTotalMonthIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
     List<TotalIncomeSpendView> getTotalSeasonIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
     List<TotalIncomeSpendView> getTotalYearIncomeSpendData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+//    办公经费
+    List<TotalIncomeSpendView> getTotalDayOfficeExpenseData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<TotalIncomeSpendView> getTotalMonthOfficeExpenseData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<TotalIncomeSpendView> getTotalSeasonOfficeExpenseData(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<TotalIncomeSpendView> getTotalYearOfficeExpenseData(@Param("startDate")String startDate, @Param("endDate")String endDate);
 }
 
 

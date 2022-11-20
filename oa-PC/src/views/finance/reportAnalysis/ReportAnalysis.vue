@@ -7,7 +7,8 @@
                         <el-form-item label="类型:">
                             <el-select v-model="dataType" placeholder="下拉选择" size="large" @change="changeType">
                                 <el-option label="整体业务" value="0"></el-option>
-                                <el-option label="办公经费" value="1"></el-option>
+                                <el-option v-show="dataCompany != '1' && dataCompany != '2' && dataCompany != '3'"
+                                    label="办公经费" value="1"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -15,9 +16,9 @@
                         <el-form-item label="公司:">
                             <el-select v-model="dataCompany" placeholder="下拉选择" size="large" @change="changeCompany">
                                 <el-option label="总体" value="0"></el-option>
-                                <el-option label="广西永湘物流有限公司" value="1"></el-option>
-                                <el-option label="广西南宁锦泰行工贸有限公司" value="2"></el-option>
-                                <el-option label="广西丰沣顺国际物流有限公司" value="3"></el-option>
+                                <el-option v-show="dataType != '1'" label="广西永湘物流有限公司" value="1"></el-option>
+                                <el-option v-show="dataType != '1'" label="广西南宁锦泰行工贸有限公司" value="2"></el-option>
+                                <el-option v-show="dataType != '1'" label="广西丰沣顺国际物流有限公司" value="3"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -264,7 +265,11 @@ const firstOption = {
         }
     },
     legend: {
-        data: ['收入', '支出']
+        data: ['收入', '支出'],
+        selected: {
+            '收入': true,
+            '支出': true
+        }
     },
     grid: {
         left: '3%',
@@ -323,7 +328,11 @@ const secondOption = {
         }
     },
     legend: {
-        data: ['收入', '支出']
+        data: ['收入', '支出'],
+        selected: {
+            '收入': true,
+            '支出': true
+        }
     },
     grid: {
         left: '3%',
@@ -382,7 +391,11 @@ const thirdOption = {
         }
     },
     legend: {
-        data: ['收入', '支出']
+        data: ['收入', '支出'],
+        selected: {
+            '收入': true,
+            '支出': true
+        }
     },
     grid: {
         left: '3%',
@@ -441,7 +454,11 @@ const fourthOption = {
         }
     },
     legend: {
-        data: ['收入', '支出']
+        data: ['收入', '支出'],
+        selected: {
+            '收入': true,
+            '支出': true
+        }
     },
     grid: {
         left: '3%',
@@ -501,12 +518,26 @@ onMounted(() => {
 // 响应类型的修改
 const changeType = () => {
     console.log(dataType.value);
+    // 修改显示线条
+    if (dataType.value == '1') {
+        firstOption.legend.selected.收入 = false;
+        secondOption.legend.selected.收入 = false;
+        thirdOption.legend.selected.收入 = false;
+        fourthOption.legend.selected.收入 = false;
+    } else {
+        firstOption.legend.selected.收入 = true;
+        secondOption.legend.selected.收入 = true;
+        thirdOption.legend.selected.收入 = true;
+        fourthOption.legend.selected.收入 = true;
+    }
+    // 获取数值数据
     if (dataCompany.value != undefined) {
         getNumberData()
     }
-    if (dataCompany.value != undefined && activeTab.value == '0') {
+    // 获取图表数据
+    if (dataCompany.value != undefined && activeTab.value == '0' && choosedDay.value.length != 0) {
         getDayData();
-    } else if (dataCompany.value != undefined && activeTab.value == '1') {
+    } else if (dataCompany.value != undefined && activeTab.value == '1' && choosedMonth.value.length != 0) {
         getMonthData();
     } else if (dataCompany.value != undefined && SYearFlag.value == false && SSeasonFlag.value == false
         && choosedSStartYear.value != undefined && choosedSEndYear.value != undefined
@@ -526,9 +557,10 @@ const changeCompany = () => {
     if (dataType.value != undefined) {
         getNumberData()
     }
-    if (dataType.value != undefined && activeTab.value == '0') {
+    if (dataType.value != undefined && activeTab.value == '0' && choosedDay.value.length != 0) {
+        console.log(choosedDay.value);
         getDayData();
-    } else if (dataType.value != undefined && activeTab.value == '1') {
+    } else if (dataType.value != undefined && activeTab.value == '1' && choosedMonth.value.length != 0) {
         getMonthData();
     } else if (dataType.value != undefined && SYearFlag.value == false && SSeasonFlag.value == false
         && choosedSStartYear.value != undefined && choosedSEndYear.value != undefined
@@ -937,6 +969,14 @@ const changeLoadingTrue = () => {
 // 转变loading状态
 const changeLoadingFalse = () => {
     loading.value = false;
+}
+
+const showOfficeExpenseTips = () => {
+    ElMessage({
+        message: '办公经费仅在选择总体时可查看！',
+        type: 'warning',
+        duration: 4000
+    })
 }
 
 window.addEventListener("resize", function () {

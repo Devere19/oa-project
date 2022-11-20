@@ -148,8 +148,9 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
             stateQw.eq("logistics_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
 
-            if(logisticsPaymentStateViews.size()==0){
+            if(logisticsPaymentStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
 
@@ -187,8 +188,9 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
             stateQw.eq("logistics_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
 
-            if(logisticsPaymentStateViews.size()==0){
+            if(logisticsPaymentStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
 
