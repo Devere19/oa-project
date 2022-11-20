@@ -259,8 +259,8 @@
                         <el-input v-model="uploadPaymentData.logisticsContractNo" disabled size="large" />
                     </el-form-item>
                     <el-form-item label="付款时间" prop="paymentTime">
-                        <el-date-picker type="date" v-model="uploadPaymentData.paymentTime" style="width: 100%;"
-                            value-format="YYYY-MM-DD" size="large"></el-date-picker>
+                        <el-date-picker type="date" v-model="uploadPaymentData.paymentTime" :disabledDate="disabledDate"
+                            style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="付款流水截图">
                         <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
@@ -312,6 +312,8 @@ const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
 const uploadDialogTop = ref<any>()
 
+const loginUserName = ref("")
+
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
 // 详情
@@ -342,6 +344,7 @@ const uploadPaymentData = reactive({
     logisticsContractNo: '',
     paymentTime: '',
     paymentPhotoArray: reactive<string[]>([]),
+    cashier: '',
 })
 
 //表单校验规则
@@ -353,6 +356,10 @@ const firstRules = reactive<FormRules>({
         { required: true, trigger: ['change'] }
     ],
 })
+
+const disabledDate = (time: Date) => {
+    return time.getTime() > Date.now()
+}
 
 onMounted(() => {
     getTableData();
@@ -428,7 +435,6 @@ const closeMoreDetailDialog = () => {
 // 打开上传窗口
 const openUploadDialog = (row: any) => {
     console.log(row);
-    console.log(row.logisticsContractNo != undefined);
     if (row.logisticsContractNo != undefined) {
         uploadPaymentData.id = row.id;
         uploadPaymentData.logisticsContractNo = row.logisticsContractNo;
@@ -441,8 +447,9 @@ const sendPaymentData = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
-            console.log(uploadPaymentData);
             changeLoadingTrue();
+            uploadPaymentData.cashier = loginUserName.value;
+            console.log(uploadPaymentData);
             uploadCashierLogisticsPaymentApi(uploadPaymentData).then(res => {
                 changeLoadingFalse();
                 if (res.data == 1) {

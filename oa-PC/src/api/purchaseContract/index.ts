@@ -52,7 +52,7 @@ export const addNewPurchaseContractApi = (purchaseContract: purchaseContractMode
 }
 
 // 获取采购单详情
-export const getPurchaseDetail = (purchaseContractNo: string, goodsName: string) => {
+export const getPurchaseDetailApi = (purchaseContractNo: string, goodsName: string) => {
     console.log(goodsName);
     return http.get("purchaseContract/getPurchaseDetail",
         {

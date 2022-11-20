@@ -148,8 +148,8 @@
                         <el-col :span="12">
                             <el-form-item label="装箱日期" prop="packingTime">
                                 <el-date-picker type="date" placeholder="请选择装箱日期"
-                                    v-model="NewShippingContractData.packingTime" style="width: 100%;"
-                                    value-format="YYYY-MM-DD" size="large"></el-date-picker>
+                                    v-model="NewShippingContractData.packingTime" :disabledDate="disabledDate"
+                                    style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -542,6 +542,8 @@ const firstFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const containerSameFlag = ref(true)
 
+const loginUserName = ref("")
+
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
 // 新增
@@ -565,6 +567,7 @@ const NewShippingContractData = reactive({
     destinationPortPrice: '',
     expenses: 0,
     contractPhotoArray: reactive<string[]>([]),
+    createBy: '',
 })
 
 // 详情
@@ -661,6 +664,10 @@ const firstRules = reactive<FormRules>({
     ],
 })
 
+const disabledDate = (time: Date) => {
+    return time.getTime() > Date.now()
+}
+
 onMounted(() => {
     getTableData();
 })
@@ -726,6 +733,7 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
         if (valid) {
             if (containerSameFlag.value == false) {
                 changeLoadingTrue();
+                NewShippingContractData.createBy = loginUserName.value;
                 console.log(NewShippingContractData);
                 addNewShippingContractApi(NewShippingContractData).then(res => {
                     if (res.data == 1) {

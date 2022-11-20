@@ -5,6 +5,7 @@ export type purchasePaymentModel = {
     purchaseContractNo: string
     paymentTime: string
     paymentPhotoArray: any
+    cashier: string
 }
 
 export type logisticsPaymentModel = {
@@ -12,6 +13,7 @@ export type logisticsPaymentModel = {
     logisticsContractNo: string
     paymentTime: string
     paymentPhotoArray: any
+    cashier: string
 }
 
 export type shippingPaymentModel = {
@@ -19,6 +21,7 @@ export type shippingPaymentModel = {
     shippingContractNo: string
     paymentTime: string
     paymentPhotoArray: any
+    cashier: string
 }
 
 export type SaleModel = {
@@ -27,5 +30,12 @@ export type SaleModel = {
     revenueAmount: string
     revenuePhoto: string
     revenuePhotoList: any,
-    revenueBy:string
+    revenueBy: string
+}
+
+export type officeExpenseModel = {
+    id: any
+    paymentTime: string
+    paymentPhotoArray: any
+    cashier: string
 }

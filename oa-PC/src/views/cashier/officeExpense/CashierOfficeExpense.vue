@@ -1,9 +1,6 @@
 <template>
     <div class="officeExpense" v-loading="loading">
         <div class="headerGroup">
-            <el-button class="showPigeonholeButton" type="primary" @click="openAddDialog">
-                新增
-            </el-button>
             <el-input v-model="searchData" size="large" class="searchInput" placeholder="请输入所要查询的办公经费单信息"
                 @keyup.enter="searchTableData">
                 <template #append>
@@ -54,9 +51,9 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :icon="Delete" size="default" type="danger"
-                        @click="openOneDeleteDialog(scope.$index, scope.row)">
-                        删除</el-button>
+                    <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
+                        @click="openUploadDialog(scope.row)">
+                        上传</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -67,59 +64,6 @@
                 @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
-        <el-dialog v-model="addDialogFlag" title="新增办公经费单" width="40%" draggable center :before-close="closeAddDialog">
-            <ul ref="addDialogTop" style="overflow: auto;height:170px;padding: 0;">
-                <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="120px"
-                    :model="NewOfficeExpenseData" style="max-width: 98%">
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <el-form-item label="日期" prop="time">
-                                <el-date-picker type="date" placeholder="下拉选择" v-model="NewOfficeExpenseData.time"
-                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM-DD"
-                                    size="large">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <el-form-item label="支出项目清单" prop="itemsList">
-                                <el-input v-model="NewOfficeExpenseData.itemsList" type="textarea" autosize
-                                    size="large" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row justify="center">
-                        <el-col :span="16">
-                            <el-form-item label="支出金额总计" prop="expenses">
-                                <el-input v-model="NewOfficeExpenseData.expenses" size="large" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </ul>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="sendNewOfficeExpense(firstFormRef)">
-                        确定
-                    </el-button>
-                    <el-button @click="closeAddDialog">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <el-dialog v-model="oneDeleteDialogFlag" title="提示" width="30%" draggable center>
-            <span>
-                您确定要删除该笔办公经费单吗
-            </span>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="oneDeleteOfficeExpense">
-                        确定
-                    </el-button>
-                    <el-button @click="oneDeleteDialogFlag = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
         <el-dialog v-model="previewImageFlag">
             <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
         </el-dialog>
@@ -216,6 +160,14 @@
             <div>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
+                        付款金额：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ officeExpenseDetail.paymentCount == null ? "0" : officeExpenseDetail.paymentCount }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
                         出纳名称：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
@@ -250,18 +202,54 @@
                     </el-col>
                 </el-row>
             </div>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" :disabled="officeExpenseDetail.cashier != null" @click="openUploadDialog">
+                        上传</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center
+            :before-close="closeUploadDialog">
+            <ul ref="uploadDialogTop" style="overflow: auto;height:300px">
+                <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="150px"
+                    :model="uploadPaymentData" style="max-width: 80%">
+                    <el-form-item label="付款时间" prop="paymentTime">
+                        <el-date-picker type="date" v-model="uploadPaymentData.paymentTime" :disabledDate="disabledDate"
+                            style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="付款流水截图">
+                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+                            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
+                            :on-success="handlePhotoSuccess">
+                            <el-icon>
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                    </el-form-item>
+                </el-form>
+            </ul>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="sendPaymentData(firstFormRef)">
+                        确定
+                    </el-button>
+                    <el-button @click="closeUploadDialog">取消</el-button>
+                </span>
+            </template>
         </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-import { ElTable, ElMessage, FormInstance, FormRules } from 'element-plus'
-import { Delete, Search, MoreFilled } from "@element-plus/icons-vue";
+import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
+import { Upload, Search, MoreFilled } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
+import { deletePhotoApi } from '@/api/handlePhoto'
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
-import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, deleteOneOfficeExpenseApi } from '@/api/officeExpense'
+import { getCashierOfficeExpenseApi, searchCashierOfficeExpenseApi, uploadCashierOfficeExpenseApi } from '@/api/cashier'
 
 
 const searchData = ref("")
@@ -271,12 +259,11 @@ const pageSize = ref(5)
 const background = ref(true)
 const firstTableData = ref<officeExpenseModel[]>([])
 const returnAll = ref(false)
-const addDialogFlag = ref(false)
-const oneDeleteDialogFlag = ref(false)
+const uploadDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
-const chooseOfficeExpenseNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
+const PhotoData = ref<UploadUserFile[]>([])
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
@@ -285,13 +272,12 @@ const loginUserName = ref("")
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
-// 新增办公经费单
-const NewOfficeExpenseData = reactive({
+// 上传付款信息
+const uploadPaymentData = reactive({
     id: '',
-    itemsList: '',
-    expenses: '',
-    time: '',
-    createBy: '',
+    paymentTime: '',
+    paymentPhotoArray: reactive<string[]>([]),
+    cashier: '',
 })
 
 // 详情
@@ -304,6 +290,7 @@ const officeExpenseDetail = reactive({
     financeState: '',
     officeDirector: reactive<officeExpenseDirectorModel[]>([]),
     cashier: '',
+    paymentCount: '',
     paymentTime: '',
     paymentPhotoArray: reactive<string[]>([]),
     createTime: '',
@@ -313,13 +300,7 @@ const officeExpenseDetail = reactive({
 
 //表单校验规则
 const firstRules = reactive<FormRules>({
-    itemsList: [
-        { required: true, trigger: ['change'] }
-    ],
-    expenses: [
-        { required: true, trigger: ['change'] }
-    ],
-    time: [
+    paymentTime: [
         { required: true, trigger: ['change'] }
     ],
 })
@@ -335,7 +316,7 @@ onMounted(() => {
 // 获取办公经费单数据
 const getTableData = () => {
     changeLoadingTrue();
-    getOfficeExpenseDataApi(currentPage.value, pageSize.value).then(res => {
+    getCashierOfficeExpenseApi(currentPage.value, pageSize.value).then(res => {
         total.value = res.data.total;//总记录
         firstTableData.value = res.data.records;
         console.log(res.data.records);
@@ -354,7 +335,7 @@ const searchTableData = () => {
         })
     } else {
         changeLoadingTrue();
-        searchOfficeExpenseApi(currentPage.value, pageSize.value, searchData.value).then(res => {
+        searchCashierOfficeExpenseApi(currentPage.value, pageSize.value, searchData.value).then(res => {
             total.value = res.data.total;//总记录
             firstTableData.value = res.data.records;
             returnAll.value = true;
@@ -370,35 +351,41 @@ const returnAllData = () => {
     returnAll.value = false
 }
 
-// 打开新增办公经费单窗口
-const openAddDialog = () => {
-    addDialogFlag.value = true
+// 打开上传窗口
+const openUploadDialog = (row: any) => {
+    console.log(row);
+    console.log(row.id);
+    if (row.id != undefined) {
+        uploadPaymentData.id = row.id;
+    }
+    uploadDialogFlag.value = true;
 }
 
-
-// 发送新增办公经费单请求
-const sendNewOfficeExpense = async (formEl1: FormInstance | undefined) => {
+// 发送付款数据
+const sendPaymentData = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
             changeLoadingTrue();
-            NewOfficeExpenseData.createBy = loginUserName.value;
-            console.log(NewOfficeExpenseData);
-            addNewOfficeExpenseApi(NewOfficeExpenseData).then(res => {
+            uploadPaymentData.cashier = loginUserName.value;
+            console.log(uploadPaymentData);
+            uploadCashierOfficeExpenseApi(uploadPaymentData).then(res => {
                 changeLoadingFalse();
                 if (res.data == 1) {
                     ElMessage({
-                        message: '新增办公经费单成功！',
+                        message: '上传数据成功！',
                         type: 'success',
                     })
                     getTableData();
-                    addDialogFlag.value = false;
+                    uploadDialogFlag.value = false;
                     ReturnTop();
                     firstFormRef.value?.resetFields();
+                    PhotoData.value = [];
+                    uploadPaymentData.paymentPhotoArray = [];
                 }
                 else {
                     ElMessage({
-                        message: '新增办公经费单失败！',
+                        message: '上传数据失败！',
                         type: 'error',
                         duration: 4000
                     })
@@ -414,6 +401,44 @@ const sendNewOfficeExpense = async (formEl1: FormInstance | undefined) => {
     })
 }
 
+// 关闭上传窗口
+const closeUploadDialog = () => {
+    uploadDialogFlag.value = false;
+    ReturnTop();
+    firstFormRef.value?.resetFields();
+    PhotoData.value = [];
+    if (uploadPaymentData.paymentPhotoArray.length != 0) {
+        uploadPaymentData.paymentPhotoArray.map((item) => {
+            deletePhotoApi(item);
+        });
+        uploadPaymentData.paymentPhotoArray = [];
+    }
+}
+
+// 照片移除后发送请求后台删除照片
+const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles);
+    uploadPaymentData.paymentPhotoArray.splice(uploadPaymentData.paymentPhotoArray.indexOf(uploadFile.response.data), 1);
+    console.log("移出照片数据组");
+    deletePhotoApi(uploadFile.response.data);
+}
+
+// 处理照片预览
+const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+    dialogImageUrl.value = uploadFile.url!
+    previewImageFlag.value = true
+
+}
+
+// 上传照片成功后加入数组
+const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    if (response.code == 200) {
+        uploadPaymentData.paymentPhotoArray.push(response.data);
+        console.log(uploadPaymentData.paymentPhotoArray);
+        console.log("加入照片数据组");
+    }
+}
+
 // 打开办公经费单详情窗口
 const openMordDetailDialog = async (row: any) => {
     officeExpenseDetail.id = row.id
@@ -423,44 +448,17 @@ const openMordDetailDialog = async (row: any) => {
     officeExpenseDetail.financeState = row.financeState
     officeExpenseDetail.officeDirector = row.officeDirector
     officeExpenseDetail.cashier = row.cashier
+    officeExpenseDetail.paymentCount = row.paymentCount
     officeExpenseDetail.paymentTime = dateConversion(row.paymentTime)
     officeExpenseDetail.paymentPhotoArray = row.paymentPhotoArray
     officeExpenseDetail.createTime = timeConversion(row.createTime)
     officeExpenseDetail.createBy = row.createBy
+    uploadPaymentData.id = row.id
     moreDetailDialogFlag.value = true
 }
 
 const closeMoreDetailDialog = () => {
     moreDetailDialogFlag.value = false;
-}
-
-// 打开单个删除提示窗口
-const openOneDeleteDialog = (index: number, row: officeExpenseModel) => {
-    chooseOfficeExpenseNo.value = row.id;
-    oneDeleteDialogFlag.value = true
-}
-
-// 发送单个删除请求
-const oneDeleteOfficeExpense = () => {
-    changeLoadingTrue();
-    deleteOneOfficeExpenseApi(chooseOfficeExpenseNo.value).then(res => {
-        changeLoadingFalse();
-        if (res.data == 1) {
-            ElMessage({
-                message: '删除办公经费单成功！',
-                type: 'success',
-            })
-            getTableData();
-            oneDeleteDialogFlag.value = false
-        }
-        else {
-            ElMessage({
-                message: '删除办公经费单失败！',
-                type: 'error',
-                duration: 4000
-            })
-        }
-    })
 }
 
 // 转变loading状态
@@ -471,13 +469,6 @@ const changeLoadingTrue = () => {
 // 转变loading状态
 const changeLoadingFalse = () => {
     loading.value = false;
-}
-
-// 关闭新增窗口
-const closeAddDialog = () => {
-    addDialogFlag.value = false;
-    ReturnTop();
-    firstFormRef.value?.resetFields();
 }
 
 // 新增窗口滑动回最顶端

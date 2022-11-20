@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -173,14 +174,16 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
         Page<ShippingContract> page =new Page<>(currentPage,pageSize);
         page=shippingContractMapper.selectPage(page,qw);
-        for (ShippingContract record : page.getRecords()) {
+        Iterator<ShippingContract> iterator=page.getRecords().iterator();
+        while (iterator.hasNext()){
+            ShippingContract record=iterator.next();
 //            获取董事长审核信息，并添加进对象中
             QueryWrapper<ShippingStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).isNotNull("state").orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews =shippingStateInfoMapper.selectList(stateQw);
 
             if(shippingStateViews.size()==0){
-                page.getRecords().remove(record);
+                iterator.remove();
             }else{
                 record.setShippingDirector(shippingStateViews);
 
@@ -225,14 +228,16 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                 .or().like("create_by",searchWord)).orderByDesc("create_time");
         Page<ShippingContract> page =new Page<>(currentPage,pageSize);
         page=shippingContractMapper.selectPage(page,qw);
-        for (ShippingContract record : page.getRecords()) {
+        Iterator<ShippingContract> iterator=page.getRecords().iterator();
+        while (iterator.hasNext()){
+            ShippingContract record=iterator.next();
 //            获取董事长审核信息，并添加进对象中
             QueryWrapper<ShippingStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).isNotNull("state").orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews =shippingStateInfoMapper.selectList(stateQw);
 
             if(shippingStateViews.size()==0){
-                page.getRecords().remove(record);
+                iterator.remove();
             }else{
                 record.setShippingDirector(shippingStateViews);
 
@@ -272,6 +277,8 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         if(paymentPhotos!=""){
             oldShippingContract.setPaymentPhoto(paymentPhotos);
         }
+        oldShippingContract.setCashier(shippingContract.getCashier());
+        oldShippingContract.setPaymentCount(oldShippingContract.getExpenses());
         oldShippingContract.setPaymentTime(shippingContract.getPaymentTime());
         return shippingContractMapper.updateById(oldShippingContract);
     }

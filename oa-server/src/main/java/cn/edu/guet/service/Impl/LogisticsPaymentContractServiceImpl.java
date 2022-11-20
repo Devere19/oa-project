@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -139,14 +140,16 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
         Page<LogisticsPaymentContractView> page =new Page<>(currentPage,pageSize);
         page=logisticsPaymentContractInfoMapper.selectPage(page,qw);
-        for (LogisticsPaymentContractView record : page.getRecords()) {
+        Iterator<LogisticsPaymentContractView> iterator=page.getRecords().iterator();
+        while (iterator.hasNext()){
+            LogisticsPaymentContractView record=iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<LogisticsPaymentStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("logistics_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
 
             if(logisticsPaymentStateViews.size()==0){
-                page.getRecords().remove(record);
+                iterator.remove();
             }else{
                 record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
 
@@ -176,14 +179,16 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 .or().like("create_by",searchWord)).orderByDesc("create_time");
         Page<LogisticsPaymentContractView> page =new Page<>(currentPage,pageSize);
         page=logisticsPaymentContractInfoMapper.selectPage(page,qw);
-        for (LogisticsPaymentContractView record : page.getRecords()) {
+        Iterator<LogisticsPaymentContractView> iterator=page.getRecords().iterator();
+        while (iterator.hasNext()){
+            LogisticsPaymentContractView record=iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<LogisticsPaymentStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("logistics_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
 
             if(logisticsPaymentStateViews.size()==0){
-                page.getRecords().remove(record);
+                iterator.remove();
             }else{
                 record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
 
@@ -212,6 +217,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         if(paymentPhotos!=""){
             oldLogisticsPaymentContract.setPaymentPhoto(paymentPhotos);
         }
+        oldLogisticsPaymentContract.setCashier(logisticsPaymentContract.getCashier());
         oldLogisticsPaymentContract.setPaymentTime(logisticsPaymentContract.getPaymentTime());
         return logisticsPaymentContractMapper.updateById(oldLogisticsPaymentContract);
     }

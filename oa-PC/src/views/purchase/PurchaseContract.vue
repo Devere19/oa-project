@@ -281,7 +281,7 @@
       <div>
         <el-row justify="center">
           <el-col :span="10">
-            <el-table ref="secondTableRef" class="contractDetailTable" :data="secondTableData" style="width: 99%"
+            <el-table ref="secondTableRef" class="contractDetailTable" :data="secondTableData" style="width: 99%;"
               border="true" highlight-current-row>
               <el-table-column property="factoryName" align="center" label="厂名" />
               <el-table-column property="inOutGoodsCount" align="center" label="入库数量" />
@@ -297,15 +297,15 @@
             </el-table>
           </el-col>
           <el-col :span="14">
-            <el-table ref="thirdTableRef" class="contractDetailTable" :data="thirdTableData" style="width: 99%"
+            <el-table ref="thirdTableRef" class="contractDetailTable" :data="thirdTableData" style="width: 99%;"
               border="true" highlight-current-row>
-              <el-table-column property="saleContractNo" align="center" label="销售合同编号" />
+              <el-table-column property="saleContractNo" align="center" width="120" label="销售合同编号" />
               <el-table-column property="totalWeight" align="center" label="出库总量" />
-              <el-table-column property="logisticsContractNo" align="center" label="运输合同编号" />
+              <el-table-column property="logisticsContractNo" align="center" width="120" label="运输合同编号" />
               <el-table-column property="licensePlateNumber" align="center" label="车牌" />
               <el-table-column property="goodsWeight" align="center" label="车载货量" />
               <el-table-column property="goodsUnit" align="center" label="重量单位" />
-              <el-table-column property="outboundTime" align="center" label="出库日期" />
+              <el-table-column property="outboundTime" :formatter="conversionDate" align="center" label="出库日期" />
             </el-table>
           </el-col>
         </el-row>
@@ -315,7 +315,7 @@
       :before-close="closeAddPaymentDialog">
       <ul ref="addPaymentDialogTop" style="overflow: auto;height:120px;padding: 0;">
         <el-form ref="secondFormRef" :rules="secondRules" label-position="right" label-width="120px"
-          :model="NewPurchasePaymentContractData" style="max-width: 98%">
+          :model="NewPurchasePaymentContractData" style="max-width: 98%;">
           <el-row justify="center">
             <el-col :span="16">
               <el-form-item label="采购合同编号" prop="purchaseContractNo">
@@ -356,7 +356,7 @@ import { purchaseContractModel, inboundDataModel } from '@/api/purchaseContract/
 import {
   getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi,
   deleteOnePurchaseContractApi, deleteMorePurchaseContractApi, setPurchaseContractPigeonholeApi,
-  addNewPurchaseContractApi, getPurchaseDetail
+  addNewPurchaseContractApi, getPurchaseDetailApi
 } from '@/api/purchaseContract'
 import { addNewPurchasePaymentContractApi } from '@/api/purchasePaymentContract'
 
@@ -386,6 +386,8 @@ const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const addPaymentDialogTop = ref<any>()
 const ownFlag = ref(false)
+
+const loginUserName = ref("")
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 const secondTableRef = ref<InstanceType<typeof ElTable>>()
@@ -439,6 +441,7 @@ const NewPurchasePaymentContractData = reactive({
   id: '',
   purchaseContractNo: '',
   paymentCount: '',
+  createBy: ''
 })
 
 // NewPurchaseContractData.paymentAmount = computed(() => {
@@ -593,6 +596,7 @@ const sendNewPurchaseContract = async (formEl1: FormInstance | undefined) => {
       if (ownFlag.value != true) {
         if (total == Number(NewPurchaseContractData.goodsCount)) {
           changeLoadingTrue();
+          NewPurchaseContractData.createBy = loginUserName.value;
           console.log(NewPurchaseContractData);
           addNewPurchaseContractApi(NewPurchaseContractData).then(res => {
             changeLoadingFalse();
@@ -655,6 +659,7 @@ const sendNewPurchasePaymentContract = async (formEl1: FormInstance | undefined)
   await formEl1.validate((valid, fields) => {
     if (valid) {
       changeLoadingTrue();
+      NewPurchasePaymentContractData.createBy = loginUserName.value;
       console.log(NewPurchasePaymentContractData);
       addNewPurchasePaymentContractApi(NewPurchasePaymentContractData).then(res => {
         changeLoadingFalse();
@@ -744,12 +749,19 @@ const openMordDetailDialog = async (row: any) => {
   PurchaseContractDetail.unpaidAmount = row.unpaidAmount
   PurchaseContractDetail.createTime = timeConversion(row.createTime)
   PurchaseContractDetail.createBy = row.createBy
-  await getPurchaseDetail(row.purchaseContractNo, row.goodsName).then(res => {
+  await getPurchaseDetailApi(row.purchaseContractNo, row.goodsName).then(res => {
     secondTableData.value = res.data;
   })
 }
 
 const moreOutboundDetail = (row: any) => {
+  if (row.outboundDetailInfos[0] == null) {
+    ElMessage({
+      message: '该单暂无出库详情！',
+      type: 'warning',
+      duration: 4000
+    })
+  }
   thirdTableData.value = row.outboundDetailInfos;
 }
 
@@ -974,5 +986,10 @@ const disabledDate = (time: Date) => {
 
 .moreDetailContent {
   font-size: 15px;
+}
+
+.contractDetailTable {
+  height: 400px;
+  margin-bottom: 20px;
 }
 </style>

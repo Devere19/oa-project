@@ -323,6 +323,8 @@ const firstFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const contractExistFlag = ref(false)
 
+const loginUserName = ref("")
+
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
 // 新增物流付款单
@@ -330,6 +332,7 @@ const NewLogisticsPaymentContractData = reactive({
     id: '',
     logisticsContractNo: '',
     paymentCount: '',
+    createBy: ''
 })
 
 // 详情
@@ -432,6 +435,7 @@ const sendNewLogisticsPaymentContract = async (formEl1: FormInstance | undefined
         if (valid) {
             if (contractExistFlag.value == true) {
                 changeLoadingTrue();
+                NewLogisticsPaymentContractData.createBy = loginUserName.value;
                 console.log(NewLogisticsPaymentContractData);
                 addNewLogisticsPaymentContractApi(NewLogisticsPaymentContractData).then(res => {
                     changeLoadingFalse();
