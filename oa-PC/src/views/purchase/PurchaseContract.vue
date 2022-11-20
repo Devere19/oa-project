@@ -28,7 +28,7 @@
       <el-table-column label="采购合同编号" align="center" width="120">
         <template #default="scope">{{ scope.row.purchaseContractNo }}</template>
       </el-table-column>
-      <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" />
+      <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" width="140" />
       <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
       <el-table-column property="squeezeSeason" align="center" label="榨季" />
       <el-table-column property="inboundTime" :formatter="conversionDate" align="center" label="入库时间" width="105" />
@@ -61,7 +61,9 @@
                   1 ?
                   "归档" : "还原"
             }}</el-button>
-          <el-button :icon="Delete" size="default" type="danger" @click="openOneDeleteDialog(scope.$index, scope.row)">
+          <el-button :icon="Delete" size="default" type="danger"
+            :disabled="scope.row.paymentAmount != scope.row.unpaidAmount"
+            @click="openOneDeleteDialog(scope.$index, scope.row)">
             删除</el-button>
         </template>
       </el-table-column>

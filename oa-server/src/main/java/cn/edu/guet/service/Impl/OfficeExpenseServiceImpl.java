@@ -119,6 +119,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     @Override
     public int deleteOneOfficeExpense(int id) {
         OfficeExpense officeExpense=officeExpenseMapper.selectById(id);
+
 //        删除相关审核记录
         QueryWrapper<OfficeDirectorState> directorStateQw= new QueryWrapper<>();
         directorStateQw.eq("office_expense_id",officeExpense.getId());

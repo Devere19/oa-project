@@ -38,6 +38,11 @@
                     {{ scope.row.officeDirector[2].state == null ? "未处理" : "已通过✔" }}
                 </template>
             </el-table-column>
+            <el-table-column align="center" label="付款金额">
+                <template #default="scope">
+                    {{ scope.row.paymentCount == null ? "0" : scope.row.paymentCount }}
+                </template>
+            </el-table-column>
             <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间" />
             <el-table-column align="center" label="付款流水截图" width="130">
                 <template #default="scope">
@@ -54,7 +59,7 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :icon="Delete" size="default" type="danger"
+                    <el-button :disabled="scope.row.paymentTime != null" :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
                         删除</el-button>
                 </template>

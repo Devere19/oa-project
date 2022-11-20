@@ -1,5 +1,6 @@
 package cn.edu.guet.service.Impl;
 
+import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
 
@@ -9,6 +10,7 @@ import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
 import cn.edu.guet.bean.purchaseContract.OutboundDetailInfo;
 import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import cn.edu.guet.mapper.*;
+import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.UnitUtils;
 import com.alibaba.fastjson.JSONArray;
@@ -54,10 +56,22 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     @Autowired
     private OutboundDetailInfoMapper outboundDetailInfoMapper;
 
+    @Autowired
+    private PurchasePaymentContractMapper purchasePaymentContractMapper;
+
+    @Autowired
+    private PurchasePaymentContractService purchasePaymentContractService;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteOnePurchaseContract(int id) {
         PurchaseContract purchaseContract=purchaseContractMapper.selectById(id);
+//        删未审核完成的采购付款单
+        QueryWrapper<PurchasePaymentContract> QwPPC= new QueryWrapper<>();
+        QwPPC.eq("purchase_contract_no",purchaseContract.getPurchaseContractNo());
+        purchasePaymentContractMapper.delete(QwPPC);
+
+//        删库存和入库记录
         QueryWrapper<OtherInOut> QwOtherInOut= new QueryWrapper<>();
         QwOtherInOut.eq("in_out_contract_no",purchaseContract.getPurchaseContractNo());
         List<OtherInOut> otherInOuts=otherInOutMapper.selectList(QwOtherInOut);
