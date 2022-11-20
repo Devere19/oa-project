@@ -1,10 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.TotalIncomeSpendView;
-import cn.edu.guet.mapper.FfsIncomeSpendInfoMapper;
-import cn.edu.guet.mapper.JtIncomeSpendInfoMapper;
-import cn.edu.guet.mapper.TotalIncomeSpendInfoMapper;
-import cn.edu.guet.mapper.YxIncomeSpendInfoMapper;
+import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.IncomeSpendInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +33,13 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
     @Autowired
     private FfsIncomeSpendInfoMapper ffsIncomeSpendInfoMapper;
 
+    @Autowired
+    private OfficeExpenseMapper officeExpenseMapper;
+
     @Override
     public List getChartIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate) {
         if("0".equals(dataType)){
+//            整体业务
             if("0".equals(dataCompany)){
                 if(timeType==0){
 //                    获取总体日
@@ -94,6 +95,19 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
                 }else if(timeType==3){
 //                    获取丰沣顺年
                     return ffsIncomeSpendInfoMapper.getFfsYearIncomeSpendData(startDate, endDate);
+                }
+            }
+//            办公经费
+        }else if("1".equals(dataType)){
+            if("0".equals(dataCompany)){
+                if(timeType==0){
+                    return totalIncomeSpendInfoMapper.getTotalDayOfficeExpenseData(startDate, endDate);
+                }else if(timeType==1){
+                    return totalIncomeSpendInfoMapper.getTotalMonthOfficeExpenseData(startDate, endDate);
+                }else if(timeType==2){
+                    return totalIncomeSpendInfoMapper.getTotalSeasonOfficeExpenseData(startDate, endDate);
+                }else if(timeType==3){
+                    return totalIncomeSpendInfoMapper.getTotalYearOfficeExpenseData(startDate, endDate);
                 }
             }
         }
@@ -152,8 +166,13 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
                 numberFfs.add(ffsIncomeSpendInfoMapper.getFfsYearIncomeSpendData(currentYear, currentYear));
                 return numberFfs;
             }
-        }else{
-
+        }else if("1".equals(dataType)){
+            List numberTotal=new ArrayList<>();
+            numberTotal.add(totalIncomeSpendInfoMapper.getTotalDayOfficeExpenseData(currentDay,currentDay));
+            numberTotal.add(totalIncomeSpendInfoMapper.getTotalMonthOfficeExpenseData(currentMonth, currentMonth));
+            numberTotal.add(totalIncomeSpendInfoMapper.getTotalSeasonOfficeExpenseData(currentSeason, currentSeason));
+            numberTotal.add(totalIncomeSpendInfoMapper.getTotalYearOfficeExpenseData(currentYear, currentYear));
+            return numberTotal;
         }
         return null;
     }

@@ -147,8 +147,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
             stateQw.eq("purchase_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<PurchasePaymentStateView> purchasePaymentStateViews = purchasePaymentStateInfoMapper.selectList(stateQw);
 
-            if(purchasePaymentStateViews.size()==0){
+            if(purchasePaymentStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setPurchasePaymentDirector(purchasePaymentStateViews);
 
@@ -187,8 +188,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
             stateQw.eq("purchase_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<PurchasePaymentStateView> purchasePaymentStateViews = purchasePaymentStateInfoMapper.selectList(stateQw);
 
-            if(purchasePaymentStateViews.size()==0){
+            if(purchasePaymentStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setPurchasePaymentDirector(purchasePaymentStateViews);
 

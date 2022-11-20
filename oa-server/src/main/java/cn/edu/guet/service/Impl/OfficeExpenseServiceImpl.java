@@ -141,8 +141,9 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
             stateQw.eq("office_expense_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<OfficeStateView> officeStateViews=(officeStateInfoMapper.selectList(stateQw));
 
-            if(officeStateViews.size()==0){
+            if(officeStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setOfficeDirector(officeStateViews);
 
@@ -179,8 +180,9 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
             stateQw.eq("office_expense_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<OfficeStateView> officeStateViews=(officeStateInfoMapper.selectList(stateQw));
 
-            if(officeStateViews.size()==0){
+            if(officeStateViews.size()<3){
                 iterator.remove();
+                page.setTotal(page.getTotal()-1);
             }else{
                 record.setOfficeDirector(officeStateViews);
 

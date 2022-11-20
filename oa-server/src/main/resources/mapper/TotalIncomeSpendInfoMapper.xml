@@ -35,4 +35,37 @@
         HAVING legend BETWEEN #{startDate}  and #{endDate}
         ORDER BY legend
     </select>
+
+
+    <select id="getTotalDayOfficeExpenseData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT payment_time legend, SUM(expenses) spend
+        FROM office_expense
+        WHERE payment_time between #{startDate}  and #{endDate}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getTotalMonthOfficeExpenseData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(payment_time, '%Y-%m') legend, SUM(expenses) spend
+        FROM office_expense
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getTotalSeasonOfficeExpenseData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) legend,
+                SUM(expenses) spend
+        FROM office_expense
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getTotalYearOfficeExpenseData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(payment_time, '%Y') legend, SUM(expenses) spend
+        FROM office_expense
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
 </mapper>
