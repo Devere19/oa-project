@@ -3,6 +3,7 @@ export type purchasePaymentContractModel = {
     id: any,
     purchaseContractNo: string,
     paymentCount: string,
+    createBy: string,
 }
 
 export type purchasePaymentDirectorModel = {

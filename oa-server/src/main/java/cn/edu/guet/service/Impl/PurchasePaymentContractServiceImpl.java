@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -138,14 +139,16 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
         Page<PurchasePaymentContractView> page =new Page<>(currentPage,pageSize);
         page=purchasePaymentContractInfoMapper.selectPage(page,qw);
-        for (PurchasePaymentContractView record : page.getRecords()) {
+        Iterator<PurchasePaymentContractView> iterator=page.getRecords().iterator();
+        while (iterator.hasNext()){
+            PurchasePaymentContractView record=iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<PurchasePaymentStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("purchase_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<PurchasePaymentStateView> purchasePaymentStateViews = purchasePaymentStateInfoMapper.selectList(stateQw);
 
             if(purchasePaymentStateViews.size()==0){
-                page.getRecords().remove(record);
+                iterator.remove();
             }else{
                 record.setPurchasePaymentDirector(purchasePaymentStateViews);
 
@@ -176,14 +179,16 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
                 .or().like("create_by",searchWord)).orderByDesc("create_time");
         Page<PurchasePaymentContractView> page =new Page<>(currentPage,pageSize);
         page=purchasePaymentContractInfoMapper.selectPage(page,qw);
-        for (PurchasePaymentContractView record : page.getRecords()) {
+        Iterator<PurchasePaymentContractView> iterator=page.getRecords().iterator();
+        while (iterator.hasNext()){
+            PurchasePaymentContractView record=iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<PurchasePaymentStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("purchase_payment_contract_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<PurchasePaymentStateView> purchasePaymentStateViews = purchasePaymentStateInfoMapper.selectList(stateQw);
 
             if(purchasePaymentStateViews.size()==0){
-                page.getRecords().remove(record);
+                iterator.remove();
             }else{
                 record.setPurchasePaymentDirector(purchasePaymentStateViews);
 
@@ -212,6 +217,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         if(paymentPhotos!=""){
             oldPurchasePaymentContract.setPaymentPhoto(paymentPhotos);
         }
+        oldPurchasePaymentContract.setCashier(purchasePaymentContract.getCashier());
         oldPurchasePaymentContract.setPaymentTime(purchasePaymentContract.getPaymentTime());
         return purchasePaymentContractMapper.updateById(oldPurchasePaymentContract);
     }

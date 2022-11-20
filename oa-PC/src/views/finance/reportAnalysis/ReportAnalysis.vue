@@ -195,7 +195,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import echarts from "@/utils/echartsUtil";
-import { getChartIncomeSpendDataApi, getNumberIncomeSpendDataApi } from '@/api/ReportAnalysis'
+import { getChartIncomeSpendDataApi, getNumberIncomeSpendDataApi } from '@/api/reportAnalysis'
 // 引入柱状图图表，图表后缀都为 Chart
 import { LineChart } from "echarts/charts";
 echarts.use([LineChart]);

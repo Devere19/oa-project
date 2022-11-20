@@ -1,16 +1,14 @@
 package cn.edu.guet.controller;
 
 import cn.edu.guet.bean.LogisticsPaymentContract;
+import cn.edu.guet.bean.OfficeExpense;
 import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.cashier.sale.SaleModel;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
-import cn.edu.guet.service.LogisticsPaymentContractService;
-import cn.edu.guet.service.PurchasePaymentContractService;
-import cn.edu.guet.service.SaleContractService;
-import cn.edu.guet.service.ShippingContractService;
+import cn.edu.guet.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +29,12 @@ public class CashierController {
 
     @Autowired
     private ShippingContractService shippingContractService;
+
     @Autowired
     private SaleContractService saleContractService;
+
+    @Autowired
+    private OfficeExpenseService officeExpenseService;
 
     //    获取出纳的采购付款单数据
     @RequestMapping("/getCashierPurchasePayment")
@@ -101,6 +103,24 @@ public class CashierController {
         }else {
             return ResultUtils.error("上传失败");
         }
+    }
+
+    //    获取出纳的采购付款单数据
+    @RequestMapping("/getCashierOfficeExpense")
+    public HttpResult getCashierOfficeExpense(int current, int page){
+        return ResultUtils.success("查询成功",officeExpenseService.getCashierOfficeExpense(current,page));
+    }
+
+    //    出纳查询采购付款单数据
+    @RequestMapping("/searchCashierOfficeExpense")
+    public HttpResult searchCashierOfficeExpense(int current,int page,String searchWord){
+        return ResultUtils.success("查询成功",officeExpenseService.searchCashierOfficeExpense(current,page,searchWord));
+    }
+
+    //    出纳完善采购付款单数据
+    @RequestMapping("/uploadCashierOfficeExpense")
+    public HttpResult uploadCashierOfficeExpense(@RequestBody OfficeExpense officeExpense){
+        return ResultUtils.success("上传成功",officeExpenseService.uploadCashierOfficeExpense(officeExpense));
     }
 
 }

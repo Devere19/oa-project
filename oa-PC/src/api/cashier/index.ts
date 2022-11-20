@@ -1,11 +1,11 @@
 import http from "@/http";
 import { ListParm } from "@/api/sale/SaleModel";
-import { purchasePaymentModel, logisticsPaymentModel, shippingPaymentModel } from "./CashierModel";
-import {SaleModel} from '@/api/cashier/CashierModel'
+import { purchasePaymentModel, logisticsPaymentModel, shippingPaymentModel, officeExpenseModel } from "./CashierModel";
+import { SaleModel } from '@/api/cashier/CashierModel'
 
 //分页获取销售单
-export const getCashierSaleContractApi=(listParm:ListParm)=>{
-    return http.get("cashier/getCashierSaleContract",listParm)
+export const getCashierSaleContractApi = (listParm: ListParm) => {
+    return http.get("cashier/getCashierSaleContract", listParm)
 }
 
 //分页获取采购付款单
@@ -78,6 +78,30 @@ export const uploadCashierShippingApi = (shippingContract: shippingPaymentModel)
 }
 
 //上传销售单的付款数据
-export const editCashierSaleApi=(saleModel:SaleModel)=>{
-    return http.put("cashier/editCashierSale",saleModel)
+export const editCashierSaleApi = (saleModel: SaleModel) => {
+    return http.put("cashier/editCashierSale", saleModel)
+}
+
+
+//分页获取办公付款单
+export const getCashierOfficeExpenseApi = (currentPage: number, pageSize: number) => {
+    return http.get("cashier/getCashierOfficeExpense", {
+        current: currentPage,
+        page: pageSize,
+    })
+}
+
+// 分页查询办公付款单
+export const searchCashierOfficeExpenseApi = (currentPage: number, pageSize: number, searchWord: string) => {
+    return http.get("cashier/searchCashierOfficeExpense", {
+        current: currentPage,
+        page: pageSize,
+        searchWord: searchWord,
+    })
+}
+
+//上传办公付款单的付款数据
+export const uploadCashierOfficeExpenseApi = (officeExpense: officeExpenseModel) => {
+    return http.post("cashier/uploadCashierOfficeExpense",
+        officeExpense)
 }

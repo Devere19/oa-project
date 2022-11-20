@@ -3,6 +3,7 @@ export type logisticsPaymentContractModel = {
     id: any,
     logisticsContractNo: string,
     paymentCount: string,
+    createBy: string,
 }
 
 export type logisticsPaymentDirectorModel = {

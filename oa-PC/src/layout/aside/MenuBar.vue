@@ -146,6 +146,16 @@ const menus = reactive([
           // roles: ['sys:menu'],
         },
       },
+      {
+        path: '/cashier/cashierOfficeExpense',
+        component: '/cashier/officeExpense/CashierOfficeExpense',
+        name: 'cashierOfficeExpense',
+        meta: {
+          title: '办公经费',
+          icon: 'Menu',
+          // roles: ['sys:menu'],
+        },
+      },
     ],
   },
   {
@@ -263,9 +273,9 @@ const menus = reactive([
     },
   },
   {
-    path: '/clientGetList',
+    path: '/customerList',
     component: 'Layout',
-    name: 'clientGetList',
+    name: 'customerList',
     meta: {
       title: '客户管理',
       icon: 'Setting',

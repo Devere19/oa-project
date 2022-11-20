@@ -330,6 +330,8 @@ const firstFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const contractExistFlag = ref(false)
 
+const loginUserName = ref("")
+
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
 // 新增采购付款单
@@ -337,6 +339,7 @@ const NewPurchasePaymentContractData = reactive({
     id: '',
     purchaseContractNo: '',
     paymentCount: '',
+    createBy: ''
 })
 
 // 详情
@@ -440,6 +443,7 @@ const sendNewPurchasePaymentContract = async (formEl1: FormInstance | undefined)
         if (valid) {
             if (contractExistFlag.value == true) {
                 changeLoadingTrue();
+                NewPurchasePaymentContractData.createBy = loginUserName.value;
                 console.log(NewPurchasePaymentContractData);
                 addNewPurchasePaymentContractApi(NewPurchasePaymentContractData).then(res => {
                     changeLoadingFalse();

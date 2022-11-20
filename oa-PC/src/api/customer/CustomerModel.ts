@@ -6,3 +6,13 @@ export type CustomerType = {
 export type SelectCustomer = {
   list: CustomerType[]
 }
+
+export type customerModel = {
+  id: any
+  customerEnterpriseName: string
+  customerName: string
+  customerPhone: string
+  customerAddress: string
+  createBy: string
+  lastUpdateBy: string
+}

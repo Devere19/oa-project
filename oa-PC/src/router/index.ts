@@ -125,6 +125,16 @@ const routes: Array<RouteRecordRaw> = [
           icon: 'Menu',
           // roles: ["sys:menu"]
         }
+      },
+      {
+        path: '/cashier/cashierOfficeExpense',
+        name: 'cashierOfficeExpense',
+        component: () => import('@/views/cashier/officeExpense/CashierOfficeExpense.vue'),
+        meta: {
+          name: '出纳办公经费',
+          icon: 'Menu',
+          // roles: ["sys:menu"]
+        }
       }
     ]
   },
@@ -263,13 +273,13 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/clientGet',
+    path: '/customer',
     component: Layout,
-    redirect: '/clientGetList',
+    redirect: '/customerList',
     children: [{
-      path: '/clientGetList',
-      component: () => import('@/views/client/ClientGetList.vue'),
-      name: 'clientGetList',
+      path: '/customerList',
+      component: () => import('@/views/customer/CustomerList.vue'),
+      name: 'customerList',
       meta: {
         title: '客户管理',
         icon: 'Setting',
