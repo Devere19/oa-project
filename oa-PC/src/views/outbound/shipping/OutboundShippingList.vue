@@ -108,7 +108,7 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :icon="Delete" size="default" type="danger"
+                    <el-button :disabled="scope.row.paymentCount != null" :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
                         删除</el-button>
                 </template>
