@@ -294,7 +294,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { logisticsPaymentContractModel, logisticsPaymentDirectorModel } from '@/api/logisticsPaymentContract/LogisticsPaymentContractModel'
 import { getCashierLogisticsPaymentApi, searchCashierLogisticsPaymentApi, uploadCashierLogisticsPaymentApi } from '@/api/cashier'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -363,6 +364,7 @@ const disabledDate = (time: Date) => {
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取物流付款单数据

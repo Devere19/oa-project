@@ -59,8 +59,10 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="200" fixed="right">
+            <el-table-column align="center" label="操作" width="290" fixed="right">
                 <template #default="scope">
+                    <el-button :icon="Select" size="default" type="success" @click="openMordDetailDialog(scope.row)">通过
+                    </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
@@ -303,14 +305,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, markRaw } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
 import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { purchasePaymentContractModel, purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/PurchasePaymentContractModel'
 import { getPurchasePaymentContractDataApi, searchPurchasePaymentContractApi, checkPurchaseContractNoApi, addNewPurchasePaymentContractApi, deleteOnePurchasePaymentContractApi } from '@/api/purchasePaymentContract'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -331,6 +334,7 @@ const addDialogTop = ref<any>()
 const contractExistFlag = ref(false)
 
 const loginUserName = ref("")
+const loginUserRole = ref("")
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
@@ -378,6 +382,7 @@ const firstRules = reactive<FormRules>({
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取采购付款单数据
@@ -386,7 +391,6 @@ const getTableData = () => {
     getPurchasePaymentContractDataApi(currentPage.value, pageSize.value).then(res => {
         total.value = res.data.total;//总记录
         firstTableData.value = res.data.records;
-        console.log(res.data.records);
         changeLoadingFalse();
     });
 }

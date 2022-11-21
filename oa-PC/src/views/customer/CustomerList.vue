@@ -137,7 +137,8 @@ import { conversionDateTime, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { customerModel } from '@/api/customer/CustomerModel'
 import { getCustomerDataApi, searchCustomerApi, deleteOneCustomerApi, addNewCustomerApi, updateCustomerApi } from '@/api/customer'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -193,6 +194,7 @@ const firstRules = reactive<FormRules>({
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取客户数据

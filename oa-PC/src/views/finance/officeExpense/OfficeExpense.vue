@@ -267,7 +267,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 // import type from 'element-plus'
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
 import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, deleteOneOfficeExpenseApi } from '@/api/officeExpense'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -335,6 +336,7 @@ const disabledDate = (time: Date) => {
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取办公经费单数据
