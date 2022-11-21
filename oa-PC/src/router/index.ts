@@ -26,7 +26,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       name: '系统管理',
-      icon: 'Shop',
+      icon: 'Setting',
       roles: ['sys:manage'],
     },
     children: [

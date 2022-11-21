@@ -14,8 +14,8 @@ import { storeToRefs } from 'pinia';
 import { permsStore } from '@/store/perm'
 import { getPermissions } from '@/api/user';
 import { getNickNameApi } from '@/api/user';
-import {userStore} from '@/store/nickName'
-const userNickNameStore=userStore()
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 const permStore = permsStore()
 const store = navTreeStore()
 // const { navTree } = storeToRefs(store)
@@ -23,7 +23,7 @@ const router = useRouter()
 
 const loginForm = reactive({
     username: 'admin',
-    password: 'admin',
+    password: '123456',
 })
 
 const login = async () => {
@@ -37,7 +37,7 @@ const login = async () => {
         console.log("用户菜单", navTree.data)
         store.setNaveTree(navTree.data)
         let perms = await getPermissions(loginForm.username)
-        console.log("用户权限",perms.data)
+        console.log("用户权限", perms.data)
         permStore.setPerms(perms.data)
         //获取登录人的信息 登陆成功通过username返回user信息
         let user = await getNickNameApi(loginForm.username)
@@ -54,4 +54,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
 </style>
