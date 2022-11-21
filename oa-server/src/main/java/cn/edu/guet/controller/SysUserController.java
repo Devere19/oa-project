@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -44,13 +45,13 @@ public class SysUserController {
     @PostMapping
     public HttpResult add(@RequestBody SysUser sysUser) {
         // sysUser.setCreateTime(new Date());
-        System.out.println("新增用户");
+         System.out.println("新增用户"+sysUser);
          if (StringUtils.isNotEmpty(sysUser.getPassword())) {
              String salt = PasswordUtils.getSalt();
              String encode = PasswordUtils.encode(sysUser.getPassword(), salt);
              sysUser.setPassword(encode);
              sysUser.setSalt(salt);
-             sysUser.setCreateTime(new Date());
+             // sysUser.setCreateTime(new Date());
          }
          //判断该用户是否存在
          QueryWrapper<SysUser> query = new QueryWrapper<>();
@@ -68,7 +69,7 @@ public class SysUserController {
     //编辑
     @PutMapping
     public HttpResult edit(@RequestBody SysUser sysUser) {
-        sysUser.setLastUpdateTime(new Date());
+        // sysUser.setLastUpdateTime(new Date());
         // if (StringUtils.isNotEmpty(sysUser.getPassword())) {
         //     sysUser.setPassword(DigestUtils.md5DigestAsHex(sysUser.getPassword().getBytes()));
         // }
@@ -99,11 +100,11 @@ public class SysUserController {
     @GetMapping("/list")
     public HttpResult list(PageParm parm) {
         IPage<SysUser> list = sysUserService.getList(parm);
-        if (list.getRecords().size() > 0) {
-            list.getRecords().forEach(item -> {
-                item.setPassword("");
-            });
-        }
+        // if (list.getRecords().size() > 0) {
+        //     list.getRecords().forEach(item -> {
+        //         item.setPassword("");
+        //     });
+        // }
         System.out.println("list");
         return ResultUtils.success("查询成功", list);
     }

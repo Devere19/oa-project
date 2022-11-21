@@ -1,12 +1,12 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
 import Layout from '@/layout/index.vue'
 const routes: Array<RouteRecordRaw> = [
-  // {
-  //   path: '/',
-  //   component: () => import('@/views/login/login.vue')
-  // },
   {
     path: '/',
+    component: () => import('@/views/login/login.vue')
+  },
+  {
+    path: '/index',
     component: Layout,
     redirect: '/dashboard',
     children: [{
@@ -15,7 +15,8 @@ const routes: Array<RouteRecordRaw> = [
       name: 'index',
       meta: {
         name: '首页',
-        icon: 'house'
+        icon: 'house',
+        roles: ['sys:dashboard'],
       },
     }]
   },
@@ -26,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       name: '系统管理',
       icon: 'Shop',
-      // roles: ["sys:manage"]
+      roles: ['sys:manage'],
     },
     children: [
       {
@@ -34,35 +35,35 @@ const routes: Array<RouteRecordRaw> = [
         name: 'userList',
         component: () => import('@/views/system/user/UserList.vue'),
         meta: {
-          name: '用户管理',
-          icon: 'User',
-          // roles: ["sys:user"]
-        }
+          title: '员工管理',
+          icon: 'UserFilled',
+          roles: ['sys:user'],
+        },
       },
       {
         path: '/roleList',
         name: 'roleList',
         component: () => import('@/views/system/role/RoleList.vue'),
         meta: {
-          name: '角色管理',
-          icon: 'Avatar',
-          // roles: ["sys:role"]
-        }
+          title: '角色管理',
+          icon: 'Wallet',
+          roles: ['sys:role'],
+        },
       },
       {
         path: '/menuList',
         name: 'menuList',
         component: () => import('@/views/system/menu/MenuList.vue'),
         meta: {
-          name: '菜单管理',
+          title: '菜单管理',
           icon: 'Menu',
-          // roles: ["sys:menu"]
-        }
+          roles: ['sys:menu'],
+        },
       }
     ]
   },
   {
-    path: '/purchase',
+    path: '/purchaseContract',
     component: Layout,
     redirect: '/purchaseContract',
     children: [{
@@ -71,8 +72,8 @@ const routes: Array<RouteRecordRaw> = [
       name: 'purchaseContract',
       meta: {
         title: '采购单',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
+        icon: 'ShoppingCart',
+        roles: ['sys:purchaseContract'],
       },
     }]
   },
@@ -81,9 +82,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'cashier',
     component: Layout,
     meta: {
-      name: '出纳',
-      icon: 'Shop',
-      // roles: ["sys:manage"]
+      title: '出纳',
+      icon: 'Money',
+      roles: ['sys:cashier'],
     },
     children: [
       {
@@ -91,55 +92,55 @@ const routes: Array<RouteRecordRaw> = [
         name: 'cashierPurchasePayment',
         component: () => import('@/views/cashier/purchasePayment/CashierPurchasePayment.vue'),
         meta: {
-          name: '出纳采购单',
-          icon: 'User',
-          // roles: ["sys:user"]
-        }
+          title: '采购付款单',
+          icon: 'Money',
+          roles: ['sys:cashierPurchasePayment'],
+        },
       },
       {
         path: '/cashier/cashierSale',
         name: 'cashierSale',
         component: () => import('@/views/cashier/sale/CashierSale.vue'),
         meta: {
-          name: '出纳销售单',
-          icon: 'Avatar',
-          // roles: ["sys:role"]
-        }
+          title: '出纳销售单',
+          icon: 'Money',
+          roles: ['sys:cashierSale'],
+        },
       },
       {
         path: '/cashier/cashierLogisticsPayment',
         name: 'cashierLogisticsPayment',
         component: () => import('@/views/cashier/logisticsPayment/CashierLogisticsPayment.vue'),
         meta: {
-          name: '出纳物流单',
-          icon: 'Menu',
-          // roles: ["sys:menu"]
-        }
+          title: '物流付款单',
+          icon: 'Money',
+          roles: ['sys:cashierLogisticsPayment'],
+        },
       },
       {
         path: '/cashier/cashierShipping',
         name: 'cashierShipping',
         component: () => import('@/views/cashier/shipping/CashierShipping.vue'),
         meta: {
-          name: '出纳海运单',
-          icon: 'Menu',
-          // roles: ["sys:menu"]
-        }
+          title: '出纳海运单',
+          icon: 'Money',
+          roles: ['sys:cashierShipping'],
+        },
       },
       {
         path: '/cashier/cashierOfficeExpense',
         name: 'cashierOfficeExpense',
         component: () => import('@/views/cashier/officeExpense/CashierOfficeExpense.vue'),
         meta: {
-          name: '出纳办公经费',
-          icon: 'Menu',
-          // roles: ["sys:menu"]
-        }
+          title: '办公经费',
+          icon: 'Money',
+          roles: ['sys:cashierOfficeExpense'],
+        },
       }
     ]
   },
   {
-    path: '/warehouse',
+    path: '/warehouseManagement',
     component: Layout,
     redirect: '/warehouseManagement',
     children: [{
@@ -148,13 +149,13 @@ const routes: Array<RouteRecordRaw> = [
       name: 'warehouseManagement',
       meta: {
         title: '仓库管理',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
+        icon: 'Discount',
+        roles: ['sys:warehouseManagement'],
       },
     }]
   },
   {
-    path: '/sale',
+    path: '/saleContract',
     component: Layout,
     redirect: '/saleContract',
     children: [{
@@ -163,8 +164,8 @@ const routes: Array<RouteRecordRaw> = [
       name: 'saleContract',
       meta: {
         title: '销售单',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
+        icon: 'Document',
+        roles: ['sys:saleContract'],
       },
     }]
   },
@@ -173,9 +174,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'outbound',
     component: Layout,
     meta: {
-      name: '出库信息',
+      title: '出库信息',
       icon: 'Shop',
-      // roles: ["sys:manage"]
+      roles: ['sys:outbound'],
     },
     children: [
       {
@@ -183,20 +184,20 @@ const routes: Array<RouteRecordRaw> = [
         name: 'outboundLogisticsList',
         component: () => import('@/views/outbound/logistics/OutboundLogisticsList.vue'),
         meta: {
-          name: '出库物流单',
-          icon: 'User',
-          // roles: ["sys:user"]
-        }
+          title: '出库物流单',
+          icon: 'Bicycle',
+          roles: ['sys:outboundLogisticsList'],
+        },
       },
       {
         path: '/outbound/outboundShippingList',
         name: 'outboundShippingList',
         component: () => import('@/views/outbound/shipping/OutboundShippingList.vue'),
         meta: {
-          name: '出库海运单',
-          icon: 'Avatar',
-          // roles: ["sys:role"]
-        }
+          title: '出库海运单',
+          icon: 'Ship',
+          roles: ['sys:outboundShippingList'],
+        },
       },
     ]
   },
@@ -205,9 +206,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'finance',
     component: Layout,
     meta: {
-      name: '财务管理',
-      icon: 'Shop',
-      // roles: ["sys:manage"]
+      title: '财务管理',
+      icon: 'Coin',
+      roles: ['sys:finance'],
     },
     children: [
       {
@@ -215,35 +216,35 @@ const routes: Array<RouteRecordRaw> = [
         name: 'reportAnalysis',
         component: () => import('@/views/finance/reportAnalysis/ReportAnalysis.vue'),
         meta: {
-          name: '报表分析',
-          icon: 'User',
-          // roles: ["sys:user"]
-        }
+          title: '报表分析',
+          icon: 'TrendCharts',
+          roles: ['sys:reportAnalysis'],
+        },
       },
       {
         path: '/finance/officeExpense',
         name: 'officeExpense',
         component: () => import('@/views/finance/officeExpense/OfficeExpense.vue'),
         meta: {
-          name: '办公经费',
-          icon: 'Avatar',
-          // roles: ["sys:role"]
-        }
+          title: '办公经费',
+          icon: 'TrendCharts',
+          roles: ['sys:officeExpense'],
+        },
       },
       {
         path: '/finance/priceTrend',
         name: 'priceTrend',
         component: () => import('@/views/finance/priceTrend/PriceTrend.vue'),
         meta: {
-          name: '单价走势',
-          icon: 'Avatar',
-          // roles: ["sys:role"]
-        }
+          title: '单价走势',
+          icon: 'TrendCharts',
+          roles: ['sys:priceTrend'],
+        },
       },
     ]
   },
   {
-    path: '/purchasePayment',
+    path: '/purchasePaymentContract',
     component: Layout,
     redirect: '/purchasePaymentContract',
     children: [{
@@ -252,13 +253,13 @@ const routes: Array<RouteRecordRaw> = [
       name: 'purchasePaymentContract',
       meta: {
         title: '采购付款单',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
+        icon: 'Document',
+        roles: ['sys:purchasePaymentContract'],
       },
     }]
   },
   {
-    path: '/logisticsPayment',
+    path: '/logisticsPaymentContract',
     component: Layout,
     redirect: '/logisticsPaymentContract',
     children: [{
@@ -267,13 +268,13 @@ const routes: Array<RouteRecordRaw> = [
       name: 'logisticsPaymentContract',
       meta: {
         title: '物流付款单',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
+        icon: 'Document',
+        roles: ['sys:logisticsPaymentContract'],
       },
     }]
   },
   {
-    path: '/customer',
+    path: '/customerList',
     component: Layout,
     redirect: '/customerList',
     children: [{
@@ -282,97 +283,11 @@ const routes: Array<RouteRecordRaw> = [
       name: 'customerList',
       meta: {
         title: '客户管理',
-        icon: 'Setting',
-        // roles: ['sys:manage'],
+        icon: 'User',
+        roles: ['sys:customerList'],
       },
     }]
   },
-
-  // {
-  //   path: '/goodsList',
-  //   redirect: '/goodsList',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/goodsList',
-  //       name: 'goodsList',
-  //       component: () => import('@/views/goods/GoodsList.vue'),
-  //       meta: {
-  //         name: '商品管理',
-  //         icon: 'Goods',
-  //         // roles: ["sys:goods"]
-  //       }
-  //     },
-  //   ]
-  // },
-  // {
-  //   path: '/shoppingCart',
-  //   redirect: '/shoppingCart',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/shoppingCart',
-  //       name: 'shoppingCart',
-  //       component: () => import('@/views/shoppingCart/shoppingCart.vue'),
-  //       meta: {
-  //         name: '订单管理',
-  //         icon: 'ShoppingCart',
-  //         // roles: ["sys:order"]
-  //       }
-  //     },
-  //   ]
-  // },
-  // {
-  //   path: '/trendCharts',
-  //   redirect: '/trendCharts',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/trendCharts',
-  //       name: 'trendCharts',
-  //       component: () => import('@/views/analysis/analysis.vue'),
-  //       meta: {
-  //         name: '销售分析',
-  //         icon: 'TrendCharts',
-  //         // roles: ["sys:analysis"]
-  //       }
-  //     },
-  //   ]
-  // },
-  // {
-  //   path: '/member',
-  //   redirect: '/member',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/member',
-  //       name: 'member',
-  //       component: () => import('@/views/member/memberList.vue'),
-  //       meta: {
-  //         name: '会员信息',
-  //         icon: 'Present',
-  //         // roles: ["sys:member"]
-  //       }
-  //     },
-  //   ]
-  // },
-  // {
-  //   path: '/giftList',
-  //   redirect: '/giftList',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: '/giftList',
-  //       name: 'giftList',
-  //       component: () => import('@/views/image/imageList.vue'),
-  //       meta: {
-  //         name: '节日礼盒',
-  //         icon: 'GoodsFilled',
-  //         // roles: ["sys:goods"]
-  //       }
-  //     },
-  //   ]
-  // },
 ]
 
 const router = createRouter({

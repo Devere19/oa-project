@@ -43,7 +43,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public SysUser findByName(String name) {
-        SysUser sysUser = sysUserMapper.findByName(name);
+        // SysUser sysUser = sysUserMapper.findByName(name);
+        QueryWrapper<SysUser> sysUserQueryWrapper = new QueryWrapper<>();
+        sysUserQueryWrapper.lambda().eq(SysUser::getName,name);
+        SysUser sysUser = sysUserMapper.selectOne(sysUserQueryWrapper);
+
         if (sysUser != null) {
             List<SysUserRole> userRoles = findUserRoles(sysUser.getId());
             sysUser.setUserRoles(userRoles);

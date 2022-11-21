@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,21 +20,23 @@ public class SysUser extends BaseModel {
 
     private String nickName;
 
-    private String avatar;
+    private int age;
+
+    private String mobile;
+
+    private String identity;
+
+    private String homeAddress;
+
+    private Date onboardingTime;
+
+    private Date departureTime;
 
     private String password;
 
     private String salt;
 
-    private String email;
-
-    private String mobile;
-
-    private Byte status;
-
-    private Long deptId;
-
-    private Byte delFlag;
+    private String status;
 
 	//表明roleId字段不属于sys_user表，需要排除
 	@TableField(exist = false)

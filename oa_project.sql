@@ -11,7 +11,7 @@
  Target Server Version : 80024
  File Encoding         : 65001
 
- Date: 17/11/2022 20:52:05
+ Date: 21/11/2022 10:52:21
 */
 
 SET NAMES utf8mb4;
@@ -32,13 +32,13 @@ CREATE TABLE `customer`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of customer
 -- ----------------------------
-INSERT INTO `customer` VALUES (1, '桂林骏泰科技信息有限公司', NULL, NULL, NULL, '2022-11-16 17:19:08', NULL, '2022-11-16 17:19:08', NULL);
-INSERT INTO `customer` VALUES (2, '国信蓝桥', NULL, NULL, NULL, '2022-11-16 17:19:38', NULL, '2022-11-16 17:19:38', NULL);
+INSERT INTO `customer` VALUES (1, '桂林骏泰科技信息有限公司', '李哥', '15077777777', '广西桂林', '2022-11-16 17:19:08', '张三', '2022-11-20 16:57:33', NULL);
+INSERT INTO `customer` VALUES (2, '国信蓝桥', '刘哥', '15088888888', '北京', '2022-11-16 17:19:38', '张三', '2022-11-20 16:57:34', NULL);
 
 -- ----------------------------
 -- Table structure for logistics_contract
@@ -61,15 +61,16 @@ CREATE TABLE `logistics_contract`  (
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `logistics_unique`(`logistics_contract_no`) USING BTREE COMMENT '保证物流合同编号唯一'
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of logistics_contract
 -- ----------------------------
-INSERT INTO `logistics_contract` VALUES (13, 'WL00001', 'XS00001', 20.00, '吨', 1000.00, 'http://localhost:9000/static/images/7bf08d56b11b4d26b1fd09de4b903173.jpg', '2022-11-14 16:00:00', '1月', '1', '2022-11-16 17:35:50', '李四', '2022-11-16 17:35:50', NULL);
-INSERT INTO `logistics_contract` VALUES (14, 'WL00002', 'XS00002', 10.00, '吨', 1000.00, '', '2022-11-16 16:00:00', '2月', '1', '2022-11-17 12:34:28', '李四', '2022-11-17 12:34:28', NULL);
-INSERT INTO `logistics_contract` VALUES (15, 'WL00003', 'XS00003', 1.00, '吨', 500.00, 'http://localhost:9000/static/images/da803eb41d0d4754882b76ef39fdb6c6.jpg', '2022-11-16 16:00:00', '5月', '1', '2022-11-17 12:54:43', '李四', '2022-11-17 12:54:43', NULL);
-INSERT INTO `logistics_contract` VALUES (21, 'WL0004', 'XS00003', 10.00, '吨', 1000.00, 'http://localhost:9000/static/images/ddd1d5c2909049a88ab231d33a370bd2.jpg', '2022-11-16 16:00:00', 'DASDAS', '1', '2022-11-17 16:44:39', '李四', '2022-11-17 16:44:39', NULL);
+INSERT INTO `logistics_contract` VALUES (13, 'WL00001', 'XS00001', 20.00, '吨', 1000.00, 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', '2022-11-14 16:00:00', '1月', '1', '2022-11-16 17:35:50', '李四', '2022-11-18 13:45:18', NULL);
+INSERT INTO `logistics_contract` VALUES (14, 'WL00002', 'XS00002', 10.00, '吨', 1000.00, 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', '2022-11-16 16:00:00', '2月', '1', '2022-11-17 12:34:28', '李四', '2022-11-18 13:45:20', NULL);
+INSERT INTO `logistics_contract` VALUES (15, 'WL00003', 'XS00003', 1.00, '吨', 500.00, 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', '2022-11-16 16:00:00', '5月', '1', '2022-11-17 12:54:43', '李四', '2022-11-18 13:45:21', NULL);
+INSERT INTO `logistics_contract` VALUES (21, 'WL0004', 'XS00003', 10.00, '吨', 1000.00, 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', '2022-11-16 16:00:00', 'DASDAS', '1', '2022-11-17 16:44:39', '李四', '2022-11-18 13:45:22', NULL);
+INSERT INTO `logistics_contract` VALUES (22, 'WL00005', 'XS00002', 30.00, '吨', 10000.00, '', '2022-11-17 16:00:00', '5月', '1', '2022-11-18 22:57:19', '李四', '2022-11-18 22:57:19', NULL);
 
 -- ----------------------------
 -- Table structure for logistics_detail
@@ -91,7 +92,7 @@ CREATE TABLE `logistics_detail`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of logistics_detail
@@ -101,6 +102,9 @@ INSERT INTO `logistics_detail` VALUES (6, 'WL00001', 'CG00002', 'C厂', '2022-11
 INSERT INTO `logistics_detail` VALUES (7, 'WL00002', 'CG00002', 'A厂', '2022-11-09 16:00:00', '桂C3333', 10.00, '吨', '湾仔码头', 100.00, '2022-11-17 12:34:29', '', '2022-11-17 12:34:29', NULL);
 INSERT INTO `logistics_detail` VALUES (8, 'WL00003', 'CG00003', 'A厂', '2022-11-16 16:00:00', '桂C00123', 1.00, '吨', '陵川县', 500.00, '2022-11-17 12:54:43', '', '2022-11-17 12:54:43', NULL);
 INSERT INTO `logistics_detail` VALUES (12, 'WL0004', 'CG00004', 'D厂', '2022-11-16 16:00:00', '桂C45620', 10.00, '吨', '北京', 1000.00, '2022-11-17 16:44:39', '', '2022-11-17 16:44:39', NULL);
+INSERT INTO `logistics_detail` VALUES (13, 'WL00005', 'CG00002', 'A厂', '2022-11-17 16:00:00', '桂C5550', 10.00, '吨', '湾仔码头', 10.00, '2022-11-18 22:57:20', '', '2022-11-18 22:57:20', NULL);
+INSERT INTO `logistics_detail` VALUES (14, 'WL00005', 'CG00002', 'A厂', '2022-11-17 16:00:00', '桂C6660', 10.00, '吨', '湾仔码头', 10.00, '2022-11-18 22:57:20', '', '2022-11-18 22:57:20', NULL);
+INSERT INTO `logistics_detail` VALUES (15, 'WL00005', 'CG00002', 'C厂', '2022-11-17 16:00:00', '桂C8888', 10.00, '吨', '湾仔码头', 10.00, '2022-11-18 22:57:20', '', '2022-11-18 22:57:20', NULL);
 
 -- ----------------------------
 -- Table structure for logistics_director_state
@@ -159,6 +163,60 @@ INSERT INTO `logistics_payment_contract` VALUES (2, 'WL00002', NULL, 500.00, '20
 INSERT INTO `logistics_payment_contract` VALUES (3, 'WL00003', NULL, 500.00, NULL, NULL, NULL, NULL, '2022-11-17 14:03:33', NULL, '2022-11-17 14:03:33', NULL);
 
 -- ----------------------------
+-- Table structure for office_director_state
+-- ----------------------------
+DROP TABLE IF EXISTS `office_director_state`;
+CREATE TABLE `office_director_state`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `office_expense_id` int(0) NULL DEFAULT NULL COMMENT '办公经费单ID',
+  `user_id` int(0) NULL DEFAULT NULL COMMENT '董事会用户ID',
+  `state` int(0) NULL DEFAULT NULL COMMENT '董事会审核状态',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
+  `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of office_director_state
+-- ----------------------------
+INSERT INTO `office_director_state` VALUES (16, 3, 5, 1, '2022-11-19 17:03:53', NULL, '2022-11-19 18:43:48', NULL);
+INSERT INTO `office_director_state` VALUES (17, 3, 4, 1, '2022-11-19 17:03:53', NULL, '2022-11-19 18:43:49', NULL);
+INSERT INTO `office_director_state` VALUES (18, 3, 3, 1, '2022-11-19 17:03:53', NULL, '2022-11-19 18:43:50', NULL);
+INSERT INTO `office_director_state` VALUES (19, 4, 5, 1, '2022-11-19 17:04:07', NULL, '2022-11-19 18:43:52', NULL);
+INSERT INTO `office_director_state` VALUES (20, 4, 4, 1, '2022-11-19 17:04:07', NULL, '2022-11-19 18:43:53', NULL);
+INSERT INTO `office_director_state` VALUES (21, 4, 3, 1, '2022-11-19 17:04:07', NULL, '2022-11-19 18:43:55', NULL);
+
+-- ----------------------------
+-- Table structure for office_expense
+-- ----------------------------
+DROP TABLE IF EXISTS `office_expense`;
+CREATE TABLE `office_expense`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '办公经费单ID',
+  `items_list` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '支出项目清单',
+  `expenses` decimal(18, 2) NULL DEFAULT NULL COMMENT '支出金额总计',
+  `time` date NULL DEFAULT NULL COMMENT '日期',
+  `finance_staff` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '财务名称',
+  `finance_state` int(0) NULL DEFAULT NULL COMMENT '财务审核状态',
+  `cashier` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '出纳名称',
+  `payment_count` decimal(18, 2) NULL DEFAULT NULL COMMENT '付款金额',
+  `payment_time` date NULL DEFAULT NULL COMMENT '付款时间',
+  `payment_photo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '付款流水截图',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '创建者名称',
+  `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
+  `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of office_expense
+-- ----------------------------
+INSERT INTO `office_expense` VALUES (3, '笔墨纸砚', 1000.00, '2022-11-19', '王五', 1, NULL, NULL, NULL, NULL, '2022-11-19 17:03:53', '', '2022-11-19 17:49:47', NULL);
+INSERT INTO `office_expense` VALUES (4, '乒乓球', 50.00, '2022-11-15', '李四', 1, '', 50.00, '2022-11-19', 'http://localhost:9000/static/images/7a9bae30cae14a21b03744ad72f98c58.jpg', '2022-11-19 17:04:07', '', '2022-11-19 19:01:48', NULL);
+
+-- ----------------------------
 -- Table structure for other_in_out
 -- ----------------------------
 DROP TABLE IF EXISTS `other_in_out`;
@@ -175,7 +233,7 @@ CREATE TABLE `other_in_out`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 68 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of other_in_out
@@ -192,6 +250,9 @@ INSERT INTO `other_in_out` VALUES (58, 40, 1, 'CG00004', '白糖', 10.00, '吨',
 INSERT INTO `other_in_out` VALUES (59, 38, 0, 'XS00002', '白菜', 10.00, '吨', '2022-11-17 12:34:29', NULL, '2022-11-17 12:34:29', NULL);
 INSERT INTO `other_in_out` VALUES (60, 36, 0, 'XS00003', '白糖', 1.00, '吨', '2022-11-17 12:54:43', NULL, '2022-11-17 12:54:43', NULL);
 INSERT INTO `other_in_out` VALUES (64, 40, 0, 'WL0004', '白糖', 10.00, '吨', '2022-11-17 16:44:39', NULL, '2022-11-17 16:44:39', NULL);
+INSERT INTO `other_in_out` VALUES (65, 38, 0, 'WL00005', '白菜', 10.00, '吨', '2022-11-18 22:57:20', NULL, '2022-11-18 22:57:20', NULL);
+INSERT INTO `other_in_out` VALUES (66, 38, 0, 'WL00005', '白菜', 10.00, '吨', '2022-11-18 22:57:21', NULL, '2022-11-18 22:57:21', NULL);
+INSERT INTO `other_in_out` VALUES (67, 39, 0, 'WL00005', '白菜', 10.00, '吨', '2022-11-18 22:57:21', NULL, '2022-11-18 22:57:21', NULL);
 
 -- ----------------------------
 -- Table structure for other_warehouse
@@ -215,8 +276,8 @@ CREATE TABLE `other_warehouse`  (
 -- ----------------------------
 INSERT INTO `other_warehouse` VALUES (36, 'A厂', '白糖', 298000.000000, '斤', '2022-11-16 17:21:17', NULL, '2022-11-16 17:21:17', NULL);
 INSERT INTO `other_warehouse` VALUES (37, 'B厂', '白糖', 200000.000000, '斤', '2022-11-16 17:21:17', NULL, '2022-11-16 17:21:17', NULL);
-INSERT INTO `other_warehouse` VALUES (38, 'A厂', '白菜', 260000.000000, '斤', '2022-11-16 17:22:59', NULL, '2022-11-16 17:22:59', NULL);
-INSERT INTO `other_warehouse` VALUES (39, 'C厂', '白菜', 80000.000000, '斤', '2022-11-16 17:22:59', NULL, '2022-11-16 17:22:59', NULL);
+INSERT INTO `other_warehouse` VALUES (38, 'A厂', '白菜', 220000.000000, '斤', '2022-11-16 17:22:59', NULL, '2022-11-16 17:22:59', NULL);
+INSERT INTO `other_warehouse` VALUES (39, 'C厂', '白菜', 60000.000000, '斤', '2022-11-16 17:22:59', NULL, '2022-11-16 17:22:59', NULL);
 INSERT INTO `other_warehouse` VALUES (40, 'D厂', '白糖', 60000.000000, '斤', '2022-11-17 11:52:49', NULL, '2022-11-17 11:52:49', NULL);
 
 -- ----------------------------
@@ -261,7 +322,7 @@ CREATE TABLE `own_warehouse`  (
 -- ----------------------------
 -- Records of own_warehouse
 -- ----------------------------
-INSERT INTO `own_warehouse` VALUES (12, '自家仓库', '白糖', 0.000000, '斤', '2022-11-17 16:15:41', NULL, '2022-11-17 16:15:41', NULL);
+INSERT INTO `own_warehouse` VALUES (12, '自家仓库', '白糖', 1.000000, '斤', '2022-11-17 16:15:41', NULL, '2022-11-20 22:12:01', NULL);
 
 -- ----------------------------
 -- Table structure for purchase_contract
@@ -323,9 +384,9 @@ INSERT INTO `purchase_director_state` VALUES (3, 2, 3, NULL, '2022-11-16 19:40:0
 INSERT INTO `purchase_director_state` VALUES (4, 3, 5, NULL, '2022-11-16 19:41:42', NULL, '2022-11-16 19:41:42', NULL);
 INSERT INTO `purchase_director_state` VALUES (5, 3, 4, NULL, '2022-11-16 19:41:42', NULL, '2022-11-16 19:41:42', NULL);
 INSERT INTO `purchase_director_state` VALUES (6, 3, 3, NULL, '2022-11-16 19:41:42', NULL, '2022-11-16 19:41:42', NULL);
-INSERT INTO `purchase_director_state` VALUES (7, 4, 5, NULL, '2022-11-17 12:15:26', NULL, '2022-11-17 12:15:26', NULL);
-INSERT INTO `purchase_director_state` VALUES (8, 4, 4, NULL, '2022-11-17 12:15:26', NULL, '2022-11-17 12:15:26', NULL);
-INSERT INTO `purchase_director_state` VALUES (9, 4, 3, NULL, '2022-11-17 12:15:26', NULL, '2022-11-17 12:15:26', NULL);
+INSERT INTO `purchase_director_state` VALUES (7, 4, 5, NULL, '2022-11-17 12:15:26', NULL, '2022-11-19 17:52:49', NULL);
+INSERT INTO `purchase_director_state` VALUES (8, 4, 4, NULL, '2022-11-17 12:15:26', NULL, '2022-11-19 17:52:59', NULL);
+INSERT INTO `purchase_director_state` VALUES (9, 4, 3, NULL, '2022-11-17 12:15:26', NULL, '2022-11-19 17:52:59', NULL);
 
 -- ----------------------------
 -- Table structure for purchase_payment_contract
@@ -350,9 +411,9 @@ CREATE TABLE `purchase_payment_contract`  (
 -- ----------------------------
 -- Records of purchase_payment_contract
 -- ----------------------------
-INSERT INTO `purchase_payment_contract` VALUES (2, 'CG00001', NULL, 100000.00, '2022-11-16', NULL, NULL, NULL, '2022-11-16 19:40:04', NULL, '2022-11-16 19:43:00', NULL);
-INSERT INTO `purchase_payment_contract` VALUES (3, 'CG00002', NULL, 100000.00, '2022-11-15', NULL, NULL, NULL, '2022-11-16 19:41:42', NULL, '2022-11-16 20:05:12', NULL);
-INSERT INTO `purchase_payment_contract` VALUES (4, 'CG00003', NULL, 50000.00, '2022-11-17', NULL, NULL, NULL, '2022-11-17 12:15:26', NULL, '2022-11-17 12:16:18', NULL);
+INSERT INTO `purchase_payment_contract` VALUES (2, 'CG00001', NULL, 100000.00, NULL, NULL, NULL, NULL, '2022-11-16 19:40:04', NULL, '2022-11-20 18:21:53', NULL);
+INSERT INTO `purchase_payment_contract` VALUES (3, 'CG00002', NULL, 100000.00, NULL, NULL, NULL, NULL, '2022-11-16 19:41:42', NULL, '2022-11-20 18:21:53', NULL);
+INSERT INTO `purchase_payment_contract` VALUES (4, 'CG00003', NULL, 50000.00, NULL, NULL, '王五', 1, '2022-11-17 12:15:26', NULL, '2022-11-20 18:21:53', NULL);
 
 -- ----------------------------
 -- Table structure for sale_contract
@@ -390,7 +451,7 @@ CREATE TABLE `sale_contract`  (
 -- Records of sale_contract
 -- ----------------------------
 INSERT INTO `sale_contract` VALUES (19, 'XS00001', 1, '广西南宁锦泰行工贸有限公司', '白菜', 100.00, '吨', 1.00, 400000.00, '2022-11-13', '出厂净重结算', '陆运', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 400000.00, '2022-11-16', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', '', '1', '1月', '2022-11-16 17:30:33', '张三', '2022-11-17 20:34:48', NULL);
-INSERT INTO `sale_contract` VALUES (20, 'XS00002', 2, '广西永湘物流有限公司', '白菜', 30.00, '吨', 1000.00, 50000.00, '2022-11-11', '出厂净重结算', '海运：港到港', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 1000.00, '2022-11-08', 'http://localhost:9000/static/images/ebbbbfde0581465184cc530f89fb9ac2.jpg', '出纳人员姓名', '1', '2月', '2022-11-16 21:48:51', '张三', '2022-11-17 20:38:33', NULL);
+INSERT INTO `sale_contract` VALUES (20, 'XS00002', 2, '广西永湘物流有限公司', '白菜', 30.00, '吨', 2.00, 50000.00, '2022-11-11', '出厂净重结算', '海运：港到港', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 1000.00, '2022-04-21', 'http://localhost:9000/static/images/ebbbbfde0581465184cc530f89fb9ac2.jpg', '出纳人员姓名', '1', '2月', '2022-11-16 21:48:51', '张三', '2022-11-18 15:45:29', NULL);
 INSERT INTO `sale_contract` VALUES (22, 'XS00003', 2, '广西永湘物流有限公司', '白糖', 100.00, '吨', 1.00, 1000.00, '2022-11-12', '出厂净重结算', '陆运', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 18000.00, '2022-11-13', 'http://localhost:9000/static/images/355ebf06b5a44b669a775eeb2b226209.jpg', '出纳人员姓名', '1', '5月', '2022-11-17 12:41:57', '张三', '2022-11-17 20:26:35', NULL);
 
 -- ----------------------------
@@ -434,7 +495,7 @@ CREATE TABLE `shipping_contract`  (
 -- ----------------------------
 -- Records of shipping_contract
 -- ----------------------------
-INSERT INTO `shipping_contract` VALUES (7, 'HY00001', 'WL00001', '顺丰', '2022-11-16 00:00:00', '湾仔码头', '珍珠港', 'JZX00001', 'QF00001', '张三', 100.00, '新南车队', 1000.00, '东方海外', 4000.00, '老北车队', 1000.00, 6100.00, 'http://localhost:9000/static/images/6a75499791544492904e307d4048cfa6.jpg', NULL, NULL, NULL, NULL, '2022-11-16', NULL, '2022-11-16 18:31:29', NULL, '2022-11-16 19:58:49', NULL);
+INSERT INTO `shipping_contract` VALUES (7, 'HY00001', 'WL00001', '顺丰', '2022-11-16 00:00:00', '湾仔码头', '珍珠港', 'JZX00001', 'QF00001', '张三', 100.00, '新南车队', 1000.00, '东方海外', 4000.00, '老北车队', 1000.00, 6100.00, 'http://localhost:9000/static/images/6a75499791544492904e307d4048cfa6.jpg', '王五', 1, '', 6100.00, '2022-11-19', 'http://localhost:9000/static/images/23540aebb2494bb0b5276ff42992297e.jpg', '2022-11-16 18:31:29', NULL, '2022-11-19 18:42:47', NULL);
 INSERT INTO `shipping_contract` VALUES (8, 'HY00002', 'WL00002', '韵达', '2022-11-17 00:00:00', '湾仔码头', '青螺湾', 'JZX00002', 'QF00002', '王五', 500.00, '新南车队', 1000.00, '东方海外', 5000.00, '老北车队', 1000.00, 7500.00, NULL, NULL, NULL, NULL, NULL, '2022-11-17', NULL, '2022-11-17 12:46:18', NULL, '2022-11-17 12:52:44', NULL);
 
 -- ----------------------------
@@ -456,12 +517,12 @@ CREATE TABLE `shipping_director_state`  (
 -- ----------------------------
 -- Records of shipping_director_state
 -- ----------------------------
-INSERT INTO `shipping_director_state` VALUES (1, 'HY00001', 5, NULL, '2022-11-16 18:31:30', NULL, '2022-11-16 18:31:30', NULL);
-INSERT INTO `shipping_director_state` VALUES (2, 'HY00001', 4, NULL, '2022-11-16 18:31:30', NULL, '2022-11-16 18:31:30', NULL);
-INSERT INTO `shipping_director_state` VALUES (3, 'HY00001', 3, NULL, '2022-11-16 18:31:30', NULL, '2022-11-16 18:31:30', NULL);
-INSERT INTO `shipping_director_state` VALUES (4, 'HY00002', 5, NULL, '2022-11-17 12:46:18', NULL, '2022-11-17 12:46:18', NULL);
-INSERT INTO `shipping_director_state` VALUES (5, 'HY00002', 4, NULL, '2022-11-17 12:46:18', NULL, '2022-11-17 12:46:18', NULL);
-INSERT INTO `shipping_director_state` VALUES (6, 'HY00002', 3, NULL, '2022-11-17 12:46:18', NULL, '2022-11-17 12:46:18', NULL);
+INSERT INTO `shipping_director_state` VALUES (1, 'HY00001', 5, 1, '2022-11-16 18:31:30', NULL, '2022-11-20 17:40:31', NULL);
+INSERT INTO `shipping_director_state` VALUES (2, 'HY00001', 4, 1, '2022-11-16 18:31:30', NULL, '2022-11-20 17:40:32', NULL);
+INSERT INTO `shipping_director_state` VALUES (3, 'HY00001', 3, 1, '2022-11-16 18:31:30', NULL, '2022-11-20 17:41:59', NULL);
+INSERT INTO `shipping_director_state` VALUES (4, 'HY00002', 5, 1, '2022-11-17 12:46:18', NULL, '2022-11-19 18:32:25', NULL);
+INSERT INTO `shipping_director_state` VALUES (5, 'HY00002', 4, 1, '2022-11-17 12:46:18', NULL, '2022-11-19 18:32:26', NULL);
+INSERT INTO `shipping_director_state` VALUES (6, 'HY00002', 3, 1, '2022-11-17 12:46:18', NULL, '2022-11-19 18:32:28', NULL);
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -512,7 +573,7 @@ CREATE TABLE `sys_menu`  (
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, '顶级菜单', '/system', NULL, 0, 'Shop', 0, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (2, '用户管理', 1, '系统管理', '/userList', NULL, 1, 'User', 1, NULL, NULL, NULL, '2022-08-03 03:32:03', 0);
+INSERT INTO `sys_menu` VALUES (2, '员工管理', 1, '系统管理', '/userList', NULL, 1, 'User', 1, NULL, NULL, NULL, '2022-11-20 15:20:04', 0);
 INSERT INTO `sys_menu` VALUES (3, '查看', 2, '用户管理', NULL, 'sys:user:view', 2, NULL, 0, NULL, NULL, NULL, '2022-08-03 03:48:15', 0);
 INSERT INTO `sys_menu` VALUES (4, '新增', 2, '用户管理', NULL, 'sys:user:add', 2, NULL, 1, NULL, NULL, NULL, '2022-08-03 03:33:09', 0);
 INSERT INTO `sys_menu` VALUES (5, '修改', 2, '用户管理', NULL, 'sys:user:edit', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
@@ -522,37 +583,66 @@ INSERT INTO `sys_menu` VALUES (8, '查看', 7, '角色管理', NULL, 'sys:role:v
 INSERT INTO `sys_menu` VALUES (9, '新增', 7, '角色管理', NULL, 'sys:role:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (10, '修改', 7, '角色管理', NULL, 'sys:role:edit', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (11, '删除', 7, '角色管理', NULL, 'sys:role:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (12, '菜单管理', 1, '系统管理', '/menuList', NULL, 1, 'Menu', 53, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (12, '菜单管理', 1, '系统管理', '/menuList', NULL, 1, 'Menu', 3, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (13, '查看', 12, '菜单管理', NULL, 'sys:menu:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (14, '新增', 12, '菜单管理', NULL, 'sys:menu:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (15, '修改', 12, '菜单管理', NULL, 'sys:menu:edit', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (16, '删除', 12, '菜单管理', NULL, 'sys:menu:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (17, '订单管理', 0, '顶级菜单', '/shoppingCart', NULL, 1, 'ShoppingCart', 4, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (18, '查看', 17, '订单管理', NULL, 'sys:shoppingCart:view', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (19, '新增', 17, '订单管理', NULL, 'sys:shoppingCart:add', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (20, '修改', 17, '订单管理', NULL, 'sys:shoppingCart:edit', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (21, '删除', 17, '订单管理', NULL, 'sys:shoppingCart:delete', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (22, '会员信息', 0, '顶级菜单', '/member', NULL, 1, 'Present', 6, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (23, '查看', 22, '会员信息', NULL, 'sys:member:view', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (24, '新增', 22, '会员信息', NULL, 'sys:member:add', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (25, '修改', 22, '会员信息', NULL, 'sys:member:edit', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (26, '删除', 22, '会员信息', NULL, 'sys:member:delete', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (27, '轮播图管理', 0, '顶级菜单', '/giftList', NULL, 1, 'GoodsFilled', 7, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (28, '查看', 27, '礼盒管理', NULL, 'sys:giftList:view', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (29, '新增', 27, '礼盒管理', NULL, 'sys:giftList:add', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (30, '修改', 27, '礼盒管理', NULL, 'sys:giftList:edit', 2, NULL, NULL, NULL, NULL, NULL, '2022-08-03 03:43:57', 0);
-INSERT INTO `sys_menu` VALUES (31, '删除', 27, '礼盒管理', NULL, 'sys:giftList:delete', 2, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (32, '商品管理', 0, '顶级菜单', '/goodsList', 'sys:goods', 1, 'Goods', 5, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (33, '查看', 32, '商品管理', '', 'sys:goods:view', 2, '', 1, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (34, '新增', 32, '商品管理', '', 'sys:goods:add', 2, '', 2, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (35, '修改', 32, '商品管理', '', 'sys:goods:edit', 2, '', 3, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (36, '删除', 32, '商品管理', '', 'sys:goods:delete', 2, '', 4, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (37, '销售分析', 0, '顶级菜单', '/trendCharts', 'sys:analysis', 1, 'TrendCharts', 8, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (38, '查看', 37, '销售分析', '', 'sys:analysis:view', 2, '', 1, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (39, '新增', 37, '销售分析', '', 'sys:analysis:add', 2, '', 2, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (40, '修改', 37, '销售分析', '', 'sys:analysis:edit', 2, '', 3, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (41, '删除', 37, '销售分析', '', 'sys:analysis:delete', 2, '', 4, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES (71, '首页', 0, NULL, '/Index', NULL, 1, 'house', -1, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (17, '采购单', 0, '顶级菜单', '/purchaseContract', NULL, 1, 'ShoppingCart', 1, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (73, '查看', 17, '采购单', NULL, 'sys:purchaseContract:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (75, '新增', 17, '采购单', NULL, 'sys:purchaseContract:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (76, '归档', 17, '采购单', NULL, 'sys:purchaseContract:hole', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (77, '删除', 17, '采购单', NULL, 'sys:purchaseContract:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (78, '付款', 17, '采购单', NULL, 'sys:purchaseContract:pay', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (79, '出纳', 0, '顶级菜单', '/cashier', NULL, 0, 'Money', 2, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (80, '采购付款单', 79, '出纳', '/cashier/cashierPurchasePayment', NULL, 1, 'Money', 1, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (81, '出纳销售单', 79, '出纳', '/cashier/cashierSale', NULL, 1, 'Money', 2, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (82, '查看', 81, '出纳销售单', NULL, 'sys:cashierSale:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (83, '上传', 81, '出纳销售单', NULL, 'sys:cashierSale:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (84, '物流付款单', 79, '出纳', '/cashier/cashierLogisticsPayment', NULL, 1, 'Money', 3, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (85, '出纳海运单', 79, '出纳', '/cashier/cashierShipping', NULL, 1, 'Money', 4, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (86, '查看', 85, '出纳海运单', NULL, 'sys:cashierShipping:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (87, '上传', 85, '出纳海运单', NULL, 'sys:cashierShipping:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (88, '办公经费', 79, '出纳', '/cashier/cashierOfficeExpense', NULL, 1, 'Money', 5, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (89, '查看', 88, '办公经费', NULL, 'sys:cashierOfficeExpense:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (90, '上传', 88, '办公经费', NULL, 'sys:cashierOfficeExpense:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (91, '仓库管理', 0, '顶级菜单', '/warehouseManagement', NULL, 1, 'Discount', 3, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (92, '销售单', 0, '顶级菜单', '/saleContract', NULL, 1, 'Document', 4, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (93, '查看', 92, '销售单', NULL, 'sys:saleContract:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (94, '新增', 92, '销售单', NULL, 'sys:saleContract:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (95, '归档', 92, '销售单', NULL, 'sys:saleContract:hole', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (96, '删除', 92, '销售单', NULL, 'sys:saleContract:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (97, '出库信息', 0, '顶级菜单', '/outbound', NULL, 0, 'Shop', 5, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (98, '出库物流单', 97, '出库信息', '/outbound/outboundLogisticsList', NULL, 1, 'Bicycle', 1, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (99, '查看', 98, '出库物流单', NULL, 'sys:outboundLogisticsList:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (100, '新增', 98, '出库物流单', NULL, 'sys:outboundLogisticsList:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (101, '归档', 98, '出库物流单', NULL, 'sys:outboundLogisticsList:hole', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (102, '删除', 98, '出库物流单', NULL, 'sys:outboundLogisticsList:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (103, '出库海运单', 97, '出库信息', '/outbound/outboundShippingList', NULL, 1, 'Ship', 2, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (104, '查看', 103, '出库海运单', NULL, 'sys:outboundShippingList:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (105, '新增', 103, '出库海运单', NULL, 'sys:outboundShippingList:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (106, '归档', 103, '出库海运单', NULL, 'sys:outboundShippingList:hole', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (107, '删除', 103, '出库海运单', NULL, 'sys:outboundShippingList:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (108, '财务管理', 0, '顶级菜单', '/finance', NULL, 0, 'Coin', 6, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (109, '报表分析', 108, '财务管理', '/finance/reportAnalysis', NULL, 1, 'TrendCharts', 1, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (110, '办公经费', 108, '财务管理', '/finance/officeExpense', NULL, 1, 'TrendCharts', 2, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (111, '查看', 110, '办公经费', NULL, 'sys:officeExpense:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (112, '新增', 110, '办公经费', NULL, 'sys:officeExpense:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (113, '删除', 110, '办公经费', NULL, 'sys:officeExpense:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (114, '单价走势', 108, '财务管理', '/finance/priceTrend', NULL, 1, 'TrendCharts', 3, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (115, '采购付款单', 0, '顶级菜单', '/purchasePaymentContract', NULL, 1, 'Document', 7, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (116, '查看', 115, '采购付款单', NULL, 'sys:purchasePaymentContract:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (117, '新增', 115, '采购付款单', NULL, 'sys:purchasePaymentContract:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (118, '删除', 115, '采购付款单', NULL, 'sys:purchasePaymentContract:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (119, '物流付款单', 0, '顶级菜单', '/logisticsPaymentContract', NULL, 1, 'Document', 8, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (120, '查看', 119, '物流付款单', NULL, 'sys:logisticsPaymentContract:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (121, '新增', 119, '物流付款单', NULL, 'sys:logisticsPaymentContract:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (122, '删除', 119, '物流付款单', NULL, 'sys:logisticsPaymentContract:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (123, '客户管理', 0, '顶级菜单', '/customerList', NULL, 1, 'User', 9, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (124, '查看', 123, '客户管理', NULL, 'sys:customerList:view', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (125, '新增', 123, '客户管理', NULL, 'sys:customerList:add', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (126, '删除', 123, '客户管理', NULL, 'sys:customerList:delete', 2, NULL, 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (127, '首页', 0, '顶级菜单', '/dashboard', NULL, 1, 'house', -1, NULL, NULL, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -574,10 +664,11 @@ CREATE TABLE `sys_role`  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, 'admin', '超级管理员', 'admin', '2019-01-19 11:11:11', 'admin', '2019-01-19 19:07:18', 0);
-INSERT INTO `sys_role` VALUES (2, 'pm', '项目经理', 'admin', '2019-01-19 11:11:11', 'admin', '2019-01-19 11:39:28', 0);
-INSERT INTO `sys_role` VALUES (3, 'dev', '开发人员', 'admin', '2019-01-19 11:11:11', 'admin', '2019-01-19 11:39:28', 0);
-INSERT INTO `sys_role` VALUES (4, 'test', '测试人员', 'admin', '2019-01-19 11:11:11', 'admin', '2019-01-19 11:11:11', 0);
-INSERT INTO `sys_role` VALUES (5, 'director', '董事会', 'admin', NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (5, 'dongshihui', '董事会', 'admin', NULL, NULL, '2022-11-20 08:03:46', 0);
+INSERT INTO `sys_role` VALUES (6, 'chuna', '出纳', NULL, '2022-11-20 08:02:08', NULL, '2022-11-20 08:03:53', 0);
+INSERT INTO `sys_role` VALUES (7, 'caigouyuan', '采购员', NULL, '2022-11-20 08:02:48', NULL, '2022-11-20 08:03:58', 0);
+INSERT INTO `sys_role` VALUES (8, 'xiaoshouyuan', '销售员', NULL, '2022-11-20 08:04:10', NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (9, 'caiwu', '财务', NULL, '2022-11-20 08:05:02', NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -597,66 +688,153 @@ CREATE TABLE `sys_role_menu`  (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES (469, 2, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (470, 2, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (471, 2, 3, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (472, 2, 4, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (473, 2, 5, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (474, 2, 6, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (480, 2, 7, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (481, 2, 8, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (482, 2, 9, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (483, 2, 10, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (484, 2, 11, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (485, 2, 12, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (486, 2, 13, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (487, 2, 14, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (488, 2, 15, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (489, 2, 16, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (490, 2, 17, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (491, 2, 18, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (492, 2, 19, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (493, 2, 20, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (494, 2, 21, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (495, 2, 22, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (496, 2, 23, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (497, 2, 24, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (498, 2, 25, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (499, 2, 26, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (500, 2, 27, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (501, 2, 28, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (502, 2, 29, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (503, 2, 30, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (504, 2, 31, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (505, 2, 32, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (506, 2, 33, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (507, 2, 34, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (508, 2, 35, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (509, 2, 36, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (608, 4, 1, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (609, 4, 2, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (610, 4, 3, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (611, 4, 7, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (612, 4, 8, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (613, 4, 12, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (614, 4, 13, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (615, 4, 17, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (616, 4, 18, 'admin', '2019-01-22 14:46:44', NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (623, 2, 37, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (624, 2, 38, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (625, 2, 39, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (626, 2, 40, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (627, 2, 41, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (638, 4, 27, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (639, 4, 28, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (641, 4, 32, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (642, 4, 33, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (645, 2, 71, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (646, 4, 71, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (652, 3, 71, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (653, 3, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (654, 3, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role_menu` VALUES (655, 3, 3, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (803, 1, 127, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (804, 1, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (805, 1, 2, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (806, 1, 3, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (807, 1, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (808, 1, 4, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (809, 1, 6, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (810, 1, 7, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (811, 1, 8, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (812, 1, 9, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (813, 1, 10, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (814, 1, 11, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (815, 1, 12, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (816, 1, 13, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (817, 1, 14, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (818, 1, 15, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (819, 1, 16, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (820, 1, 17, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (821, 1, 73, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (822, 1, 75, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (823, 1, 76, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (824, 1, 77, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (825, 1, 78, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (826, 1, 79, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (827, 1, 80, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (828, 1, 81, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (829, 1, 84, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (830, 1, 85, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (831, 1, 88, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (832, 1, 91, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (833, 1, 92, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (834, 1, 94, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (835, 1, 93, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (836, 1, 95, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (837, 1, 96, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (838, 1, 97, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (839, 1, 98, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (840, 1, 103, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (841, 1, 108, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (842, 1, 109, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (843, 1, 110, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (844, 1, 113, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (845, 1, 112, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (846, 1, 111, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (847, 1, 114, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (848, 1, 115, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (849, 1, 117, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (850, 1, 116, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (851, 1, 118, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (852, 1, 119, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (853, 1, 122, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (854, 1, 121, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (855, 1, 120, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (856, 1, 123, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (857, 1, 126, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (858, 1, 125, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (859, 1, 124, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (860, 5, 127, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (861, 5, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (862, 5, 2, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (863, 5, 3, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (864, 5, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (865, 5, 4, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (866, 5, 6, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (867, 5, 7, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (868, 5, 8, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (869, 5, 9, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (870, 5, 10, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (871, 5, 11, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (872, 5, 12, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (873, 5, 13, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (874, 5, 14, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (875, 5, 15, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (876, 5, 16, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (877, 5, 17, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (878, 5, 73, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (879, 5, 76, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (880, 5, 78, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (881, 5, 91, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (882, 5, 92, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (883, 5, 93, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (884, 5, 95, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (885, 5, 97, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (886, 5, 98, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (887, 5, 99, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (888, 5, 101, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (889, 5, 103, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (890, 5, 106, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (891, 5, 104, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (892, 5, 108, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (893, 5, 109, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (894, 5, 110, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (895, 5, 113, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (896, 5, 112, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (897, 5, 111, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (898, 5, 114, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (899, 5, 115, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (900, 5, 117, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (901, 5, 116, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (902, 5, 118, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (903, 5, 119, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (904, 5, 122, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (905, 5, 121, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (906, 5, 120, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (907, 5, 123, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (908, 5, 126, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (909, 5, 125, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (910, 5, 124, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (911, 6, 127, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (912, 6, 79, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (913, 6, 80, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (914, 6, 81, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (915, 6, 82, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (916, 6, 83, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (917, 6, 84, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (918, 6, 85, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (919, 6, 86, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (920, 6, 87, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (921, 6, 88, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (922, 6, 89, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (923, 6, 90, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (924, 6, 123, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (925, 6, 126, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (926, 6, 125, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (927, 6, 124, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (950, 7, 127, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (951, 7, 17, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (952, 7, 73, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (953, 7, 75, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (954, 7, 76, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (955, 7, 77, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (956, 7, 78, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (957, 7, 123, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (958, 7, 126, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (959, 7, 125, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (960, 7, 124, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (961, 8, 127, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (962, 8, 91, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (963, 8, 92, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (964, 8, 94, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (965, 8, 93, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (966, 8, 95, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (967, 8, 96, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (968, 8, 123, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (969, 8, 126, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (970, 8, 125, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_role_menu` VALUES (971, 8, 124, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -666,30 +844,30 @@ CREATE TABLE `sys_user`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `nick_name` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
-  `avatar` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像',
+  `age` int(0) NULL DEFAULT NULL COMMENT '年龄',
+  `mobile` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `identity` varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '身份证号',
+  `home_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '家庭住址',
+  `onboarding_time` date NULL DEFAULT NULL COMMENT '入职时间',
+  `departure_time` date NULL DEFAULT NULL COMMENT '离职时间',
   `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
   `salt` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '加密盐',
-  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `mobile` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态  0：禁用   1：正常',
-  `dept_id` bigint(0) NULL DEFAULT NULL COMMENT '机构ID',
+  `status` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态   在职/离职',
   `create_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `last_update_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `last_update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `del_flag` tinyint(0) NULL DEFAULT 0 COMMENT '是否删除  -1：已删除  0：正常',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '超管', 'http://rfzhrumxc.hn-bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720220814131142.jpg', 'bd1718f058d8a02468134432b8656a86', 'YzcmCZNvbXocrsz9dm8e', 'liwei.bluesky@hotmail.com', '18076757556', 1, 1, 'admin', '2021-08-13 18:11:11', 'admin', '2021-08-13 18:11:11', 0);
-INSERT INTO `sys_user` VALUES (2, 'liwei', '李伟', 'http://rfzhrumxc.hn-bkt.clouddn.com/QQ%E5%9B%BE%E7%89%8720220814131142.jpg', '727f76787b7a79cc5942ee7714579e3c', 'b3f2ded289524fe98b12', '7274561@qq.com', '13730550682', 1, 38, 'admin', '2021-08-13 19:43:00', 'admin', '2021-08-14 18:10:02', 0);
-INSERT INTO `sys_user` VALUES (3, 'huangjiasen', '黄佳森', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_user` VALUES (4, 'xiexiaodong', '谢晓东', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_user` VALUES (5, 'linguofeng', '林国丰', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES (1, 'admin', '超管', 21, '18076757556', '452402200004090930', '广西桂林', '2022-11-17', NULL, '25a8f5416ef8a4c72d68e07170010030', '53caae756e414182914a', '在职', 'admin', '2021-08-13 18:11:11', 'admin', '2022-11-19 14:09:42');
+INSERT INTO `sys_user` VALUES (3, 'huangjaisen', '黄佳森', 50, '15555555555', '000000000000000000', '广西南宁', '2022-11-19', NULL, '25a8f5416ef8a4c72d68e07170010030', '53caae756e414182914a', '在职', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user` VALUES (4, 'xiexiaodong', '谢晓东', 50, '00000000000', '000000000000000000', '广西南宁', '2022-11-12', NULL, '31735eaa63e572eca5be029eb0e57310', 'b22850c877074c2abd0d', '在职', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user` VALUES (5, 'linguofeng', '林国丰', 50, '11111111111', '333333333333333333', '广西南宁', '2022-11-09', NULL, 'b1c5b3d735dbe4cdb44cef856ba5c958', 'ec032ec23df44d2ebe87', '在职', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -704,16 +882,16 @@ CREATE TABLE `sys_user_role`  (
   `last_update_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `last_update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 98 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 106 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
 -- ----------------------------
-INSERT INTO `sys_user_role` VALUES (1, 1, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user_role` VALUES (94, 2, 4, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user_role` VALUES (95, 3, 5, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user_role` VALUES (96, 4, 5, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user_role` VALUES (97, 5, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user_role` VALUES (108, 3, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user_role` VALUES (109, 4, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user_role` VALUES (110, 5, 5, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user_role` VALUES (111, 1, 2, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user_role` VALUES (112, 8, 2, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- View structure for director
@@ -731,7 +909,7 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `ffs_income_spend_info` A
 -- View structure for inbound_detail_info
 -- ----------------------------
 DROP VIEW IF EXISTS `inbound_detail_info`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `inbound_detail_info` AS select `purchase_contract`.`purchase_contract_no` AS `purchase_contract_no`,`ware`.`factory_name` AS `factory_name`,`io`.`in_out_goods_name` AS `in_out_goods_name`,`io`.`in_out_goods_count` AS `in_out_goods_count`,`ware`.`goods_unit` AS `goods_unit` from ((`other_in_out` `io` join `purchase_contract`) join `other_warehouse` `ware`) where ((`io`.`in_out_contract_no` = `purchase_contract`.`purchase_contract_no`) and (`io`.`in_out_type` = 1) and (`ware`.`goods_name` = `io`.`in_out_goods_name`) and (`ware`.`goods_unit` = `io`.`in_out_goods_unit`) and (`io`.`other_warehouse_id` = `ware`.`id`)) union select `purchase_contract`.`purchase_contract_no` AS `purchase_contract_no`,`ware`.`factory_name` AS `factory_name`,`io`.`in_out_goods_name` AS `in_out_goods_name`,`io`.`in_out_goods_count` AS `in_out_goods_count`,`ware`.`goods_unit` AS `goods_unit` from ((`own_in_out` `io` join `purchase_contract`) join `own_warehouse` `ware`) where ((`io`.`in_out_contract_no` = `purchase_contract`.`purchase_contract_no`) and (`io`.`in_out_type` = 1) and (`ware`.`goods_name` = `io`.`in_out_goods_name`) and (`ware`.`goods_unit` = `io`.`in_out_goods_unit`));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `inbound_detail_info` AS select `purchase_contract`.`purchase_contract_no` AS `purchase_contract_no`,`ware`.`factory_name` AS `factory_name`,`io`.`in_out_goods_name` AS `in_out_goods_name`,`io`.`in_out_goods_count` AS `in_out_goods_count`,`io`.`in_out_goods_unit` AS `goods_unit` from ((`other_in_out` `io` join `purchase_contract`) join `other_warehouse` `ware`) where ((`io`.`in_out_contract_no` = `purchase_contract`.`purchase_contract_no`) and (`io`.`in_out_type` = 1) and (`ware`.`goods_name` = `io`.`in_out_goods_name`) and (`io`.`other_warehouse_id` = `ware`.`id`)) union select `purchase_contract`.`purchase_contract_no` AS `purchase_contract_no`,`ware`.`factory_name` AS `factory_name`,`io`.`in_out_goods_name` AS `in_out_goods_name`,`io`.`in_out_goods_count` AS `in_out_goods_count`,`io`.`in_out_goods_unit` AS `in_out_goods_unit` from ((`own_in_out` `io` join `purchase_contract`) join `own_warehouse` `ware`) where ((`io`.`in_out_contract_no` = `purchase_contract`.`purchase_contract_no`) and (`io`.`in_out_type` = 1) and (`ware`.`goods_name` = `io`.`in_out_goods_name`));
 
 -- ----------------------------
 -- View structure for jt_income_spend_info
@@ -752,10 +930,16 @@ DROP VIEW IF EXISTS `logistics_payment_state_info`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `logistics_payment_state_info` AS select `lds`.`id` AS `id`,`lds`.`logistics_payment_contract_id` AS `logistics_payment_contract_id`,`lds`.`user_id` AS `user_id`,`d`.`nick_name` AS `nick_name`,`lds`.`state` AS `state` from (`director` `d` join `logistics_director_state` `lds`) where (`d`.`id` = `lds`.`user_id`);
 
 -- ----------------------------
+-- View structure for office_state_info
+-- ----------------------------
+DROP VIEW IF EXISTS `office_state_info`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `office_state_info` AS select `ods`.`id` AS `id`,`ods`.`office_expense_id` AS `office_expense_id`,`ods`.`user_id` AS `user_id`,`d`.`nick_name` AS `nick_name`,`ods`.`state` AS `state` from (`director` `d` join `office_director_state` `ods`) where (`d`.`id` = `ods`.`user_id`);
+
+-- ----------------------------
 -- View structure for outbound_detail_info
 -- ----------------------------
 DROP VIEW IF EXISTS `outbound_detail_info`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `outbound_detail_info` AS select `p`.`purchase_contract_no` AS `purchase_contract_no`,`s`.`sale_contract_no` AS `sale_contract_no`,`ld`.`logistics_contract_no` AS `logistics_contract_no`,`s`.`goods_name` AS `goods_name`,`ld`.`goods_factory` AS `goods_factory`,`ld`.`license_plate_number` AS `license_plate_number`,`ld`.`goods_weight` AS `goods_weight`,`ld`.`goods_unit` AS `goods_unit`,`ld`.`outbound_time` AS `outbound_time`,`temp`.`total_weight` AS `total_weight` from ((((`purchase_contract` `p` join `logistics_detail` `ld`) join `sale_contract` `s`) join `logistics_contract` `l`) join (select `ld`.`goods_factory` AS `goods_factory`,sum(`ld`.`goods_weight`) AS `total_weight` from (((`purchase_contract` `p` join `logistics_detail` `ld`) join `sale_contract` `s`) join `logistics_contract` `l`) where ((`p`.`purchase_contract_no` = `ld`.`purchase_contract_no`) and (`s`.`sale_contract_no` = `l`.`sale_contract_no`) and (`l`.`logistics_contract_no` = `ld`.`logistics_contract_no`)) group by `ld`.`goods_factory`) `temp`) where ((`p`.`purchase_contract_no` = `ld`.`purchase_contract_no`) and (`s`.`sale_contract_no` = `l`.`sale_contract_no`) and (`l`.`logistics_contract_no` = `ld`.`logistics_contract_no`) and (`temp`.`goods_factory` = `ld`.`goods_factory`));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `outbound_detail_info` AS select `p`.`purchase_contract_no` AS `purchase_contract_no`,`s`.`sale_contract_no` AS `sale_contract_no`,`ld`.`logistics_contract_no` AS `logistics_contract_no`,`s`.`goods_name` AS `goods_name`,`ld`.`goods_factory` AS `goods_factory`,`ld`.`license_plate_number` AS `license_plate_number`,`ld`.`goods_weight` AS `goods_weight`,`ld`.`goods_unit` AS `goods_unit`,`ld`.`outbound_time` AS `outbound_time`,`temp`.`total_weight` AS `total_weight` from ((((`purchase_contract` `p` join `logistics_detail` `ld`) join `sale_contract` `s`) join `logistics_contract` `l`) join (select `t`.`purchase_contract_no` AS `purchase_contract_no`,`t`.`sale_contract_no` AS `sale_contract_no`,`t`.`logistics_contract_no` AS `logistics_contract_no`,`t`.`goods_factory` AS `goods_factory`,sum(`t`.`goods_weight`) AS `total_weight` from (select `p`.`purchase_contract_no` AS `purchase_contract_no`,`s`.`sale_contract_no` AS `sale_contract_no`,`ld`.`logistics_contract_no` AS `logistics_contract_no`,`s`.`goods_name` AS `goods_name`,`ld`.`goods_factory` AS `goods_factory`,`ld`.`license_plate_number` AS `license_plate_number`,`ld`.`goods_weight` AS `goods_weight`,`ld`.`goods_unit` AS `goods_unit`,`ld`.`outbound_time` AS `outbound_time` from (((`purchase_contract` `p` join `logistics_detail` `ld`) join `sale_contract` `s`) join `logistics_contract` `l`) where ((`p`.`purchase_contract_no` = `ld`.`purchase_contract_no`) and (`s`.`sale_contract_no` = `l`.`sale_contract_no`) and (`l`.`logistics_contract_no` = `ld`.`logistics_contract_no`))) `t` group by `t`.`purchase_contract_no`,`t`.`sale_contract_no`,`t`.`logistics_contract_no`,`t`.`goods_factory`) `temp`) where ((`p`.`purchase_contract_no` = `ld`.`purchase_contract_no`) and (`s`.`sale_contract_no` = `l`.`sale_contract_no`) and (`l`.`logistics_contract_no` = `ld`.`logistics_contract_no`) and (`temp`.`goods_factory` = `ld`.`goods_factory`) and (`temp`.`purchase_contract_no` = `ld`.`purchase_contract_no`) and (`temp`.`sale_contract_no` = `l`.`sale_contract_no`) and (`temp`.`logistics_contract_no` = `l`.`logistics_contract_no`));
 
 -- ----------------------------
 -- View structure for purchase_contract_info
