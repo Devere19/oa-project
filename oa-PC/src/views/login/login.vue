@@ -41,7 +41,7 @@ const login = async () => {
         permStore.setPerms(perms.data)
         //获取登录人的信息 登陆成功通过username返回user信息
         let user = await getNickNameApi(loginForm.username)
-        console.log("获取用户nickName", user.data)
+        console.log("获取用户信息", user.data)
         userNickNameStore.setUser(user.data)
         router.push('/index');
     } else {
