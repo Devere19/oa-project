@@ -1,9 +1,10 @@
 <template>
 	<view class="center">
 		<view class="userInfo">
-			<image class="logo-img" :src="user.userPhoto" @tap="viewUserAvatar(user.userPhoto)"></image>
+			<image class="logo-img" :src="user.userPhoto"></image>
+			<!-- <image class="logo-img" :src="user.userPhoto" @tap="viewUserAvatar(user.userPhoto)"></image> -->
 			<view class="logo-title">
-				<text class="user-name">{{user.name}}</text>
+				<text class="user-name">{{user.nickName}}</text>
 			</view>
 		</view>
 <!-- 		<uni-grid class="grid" :column="4" :showBorder="false" :square="true">
@@ -29,7 +30,8 @@
 				dataObject: null,
 				times: 0,
 				user: {
-					name: "您未登录，请先登录",
+					userId:'',
+					nickName: '',
 					userPhoto: "/static/UIImages/defaultAvatar.png"
 				},
 				gridList: [{
@@ -69,8 +71,13 @@
 				]
 			}
 		},
-		onLoad() {
-
+		mounted() {
+			//页面加载完成，获取本地存储的用户信息
+			const userData = uni.getStorageSync('userInfo');
+			if(userData){
+				this.user.userId=userData.userId;
+				this.user.nickName=userData.nickName;
+			}
 		},
 		onShow() {
 			
@@ -92,10 +99,16 @@
 				})
 			},
 			tapList(item) {
-				uni.showToast({
-					title: '你点击了' + item,
-					icon: 'none'
-				})
+				if(item=="退出登录"){
+					uni.reLaunch({
+						url: '/pages/login/login?data=exit'
+					});
+				}else{
+					uni.showToast({
+						title: '你点击了' + item,
+						icon: 'none'
+					})
+				}
 			},
 		}
 	}

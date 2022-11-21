@@ -1,5 +1,12 @@
 {
-	"pages": [{
+	"pages": [
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
 			"path": "pages/MainInterface/audit",
 			"style": {
 				"navigationBarTitleText": "审批"
@@ -54,7 +61,18 @@
 		{
 			"path": "pages/audit/shipping",
 			"style": {
-				"navigationBarTitleText": "物流海运"
+				"navigationBarTitleText": "物流海运",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
 			}
 		},
 		{
