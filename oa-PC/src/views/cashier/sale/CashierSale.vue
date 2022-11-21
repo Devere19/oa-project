@@ -59,10 +59,10 @@
             <el-table-column prop="createBy" label="创建者名称"></el-table-column>
             <el-table-column fixed="right" label="操作" align="center" width="280">
                 <template #default="scope">
-                    <el-button type="primary" size="default" @click="detailBtn(scope.row)">详情
+                    <el-button type="primary" :icon="MoreFilled" size="default" @click="detailBtn(scope.row)">详情
                     </el-button>
 
-                    <el-button type="primary" size="default" @click="editBtn(scope.row.id)">上传
+                    <el-button type="success" :icon="Upload" size="default" @click="editBtn(scope.row.id)">上传
                     </el-button>
 
                 </template>
@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus, Edit, Delete, Search, Close } from "@element-plus/icons-vue";
+import { Plus, Edit, Delete, Search, Close, Upload, MoreFilled } from "@element-plus/icons-vue";
 import useTable from '@/composables/cashier/sale/useTable'
 import { conversionDate } from '@/utils/timeFormat'
 import CashierSaleDetail from '@/views/cashier/sale/CashierSaleDetail.vue'

@@ -59,17 +59,19 @@
       <!-- <el-table-column prop="pigeonhole" label="归档"></el-table-column> -->
       <el-table-column prop="squeezeSeason" label="榨季"></el-table-column>
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
-      <el-table-column fixed="right" label="操作" align="center" width="280">
+      <el-table-column fixed="right" label="操作" align="center" width="320">
         <template #default="scope">
-          <el-button type="primary" size="default" @click="detailBtn(scope.row)">详情
+          <el-button type="primary" :icon="MoreFilled" size="default" @click="detailBtn(scope.row)">详情
           </el-button>
-          <el-button type="success" size="default" @click="changePigeonhole(scope.row.id)">{{ isPigeonhole ? "归档" :
-              "取消归档"
-          }}
+          <el-button :type="scope.row.pigeonhole == 1 ? 'info' : 'success'"
+            :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
+                isPigeonhole ? "归档" :
+                  "取消归档"
+            }}
           </el-button>
           <!-- <el-button type="primary" size="default" @click="">修改
           </el-button> -->
-          <el-button type="danger" size="default" @click="deleteBtn(scope.row.id)">删除
+          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -92,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, Edit, Delete, Search, Close } from "@element-plus/icons-vue";
+import { Plus, Edit, Delete, Search, Close, MoreFilled, Hide, View, Money } from "@element-plus/icons-vue";
 import useTable from '@/composables/sale/useTable';
 import useSale from "@/composables/sale/useSale";
 import AddSaleContract from "@/views/sale/AddSaleContract.vue"
