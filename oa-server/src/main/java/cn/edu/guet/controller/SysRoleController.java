@@ -67,10 +67,12 @@ public class SysRoleController {
     @DeleteMapping("/{roleId}")
     public HttpResult deleteRole(@PathVariable("roleId") Long roleId) {
         if (sysRoleService.removeById(roleId)) {
+            //删除对应的角色权限
+            QueryWrapper<SysRoleMenu> query = new QueryWrapper<>();
+            query.lambda().eq(SysRoleMenu::getRoleId,roleId);
+            roleMenuService.remove(query);
             return ResultUtils.success("删除成功!");
         }
-        //删除对应的角色权限
-
         return ResultUtils.error("删除失败!");
     }
 

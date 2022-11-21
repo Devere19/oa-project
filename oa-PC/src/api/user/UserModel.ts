@@ -22,9 +22,14 @@ export type AddUserModel = {
   type: string,  //新增：0 编辑：1
   roleId: string,
   name: string,
-  password: string,
-  mobile: string,
-  email: string,
-  status: string,
   nickName: string
+  age:string,
+  mobile:string,
+  identity:string,
+  homeAddress:string,
+  onboardingTime:string,
+  departureTime:string,
+  password:string,
+  status:string,  //在职/离职
+  salt:string
 }

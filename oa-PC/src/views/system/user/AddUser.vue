@@ -10,6 +10,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
+            <el-form-item prop="name" label="用户名">
+              <el-input v-model="addModel.name"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="age" label="年龄">
+              <el-input v-model="addModel.age"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :offset="0">
             <el-form-item prop="mobile" label="电话">
               <el-input v-model="addModel.mobile"></el-input>
             </el-form-item>
@@ -17,10 +29,29 @@
         </el-row>
         <el-row>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="email" label="邮箱">
-              <el-input v-model="addModel.email"></el-input>
+            <el-form-item prop="identity" label="身份证">
+              <el-input v-model="addModel.identity"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="homeAddress" label="家庭住址">
+              <el-input v-model="addModel.homeAddress"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="onboardingTime" label="入职时间">
+              <el-date-picker v-model="addModel.onboardingTime" type="date" placeholder="入职时间" size="default" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="departureTime" label="离职时间">
+              <el-date-picker v-model="addModel.departureTime" type="date" placeholder="离职时间" size="default" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="roleId" label="角色">
               <el-select v-model="addModel.roleId" class="m-2" placeholder="请选择角色" size="default">
@@ -28,28 +59,22 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="status" label="状态">
               <el-radio-group v-model="addModel.status">
-                <el-radio :label="0">停用</el-radio>
-                <el-radio :label="1">启用</el-radio>
+                <el-radio label="在职">在职</el-radio>
+                <el-radio label="离职">离职</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12" :offset="0" v-if="addModel.type == '0'">
-            <el-form-item prop="name" label="账户">
-              <el-input v-model="addModel.name"></el-input>
+            <el-form-item prop="password" label="密码">
+              <el-input v-model="addModel.password"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-col :span="12" :offset="0" v-if="addModel.type == '0'">
-          <el-form-item prop="password" label="密码">
-            <el-input v-model="addModel.password"></el-input>
-          </el-form-item>
-        </el-col>
-
       </el-form>
 
     </template>
@@ -83,8 +108,10 @@ const show = async (type: string, row?: AddUserModel) => {
   addModel.roleId = "";
   addModel.mobile = "";
   addModel.name = "";
-  dialog.height = 270
+  dialog.height = 300
   addModel.type = type
+  addModel.password = ''
+  addModel.salt = ''
   //获取角色数据
   await listRole()
   await getRole(row!?.id)
@@ -114,11 +141,16 @@ const addModel = reactive<AddUserModel>({
   type: "",
   roleId: "",
   name: "",
-  password: "",
-  mobile: "",
-  email: "",
-  status: "",
-  nickName: "",
+  nickName: '',
+  age: '',
+  mobile: '',
+  identity: '',
+  homeAddress: '',
+  onboardingTime: '',
+  departureTime: '',
+  password: '',
+  status: '',  //在职/离职
+  salt: ''
 })
 
 
@@ -166,6 +198,27 @@ const rules = reactive({
       message: "请选择角色",
     },
   ],
+  age: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入年龄",
+    },
+  ],
+  identity: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入身份证",
+    },
+  ],
+  homeAddress: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入家庭地址",
+    },
+  ],
 })
 
 //注册事件
@@ -195,4 +248,5 @@ const commit = () => {
 </script>
 
 <style scoped>
+
 </style>

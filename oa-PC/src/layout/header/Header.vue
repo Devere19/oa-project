@@ -4,26 +4,27 @@
     <template #content>
       <a href="#" class="tuichu">退出登录</a>
     </template>
-    <el-avatar size="large" shape="circle" :src="user.userMessage.avatar" fit="fill">
+    <el-avatar size="large" shape="circle" :src="avatar" fit="fill">
     </el-avatar>
   </el-tooltip>
 
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { userStore } from '@/store/nickName'
 
 const user = reactive({
   userMessage: {}
 })
 
-// const userNickName = userStore()
-// user.userMessage = userNickName.getUser
-user.userMessage={
-  nickName:'开发者',
-  avatar:'http://cdn.glypro19.com/oaassets/QQ%E5%9B%BE%E7%89%8720221022063943.png'
-}
+const userNickName = userStore()
+user.userMessage = userNickName.getUser
+const avatar = ref('http://cdn.glypro19.com/oaassets/QQ%E5%9B%BE%E7%89%8720221022063943.png')
+// user.userMessage={
+//   nickName:'开发者',
+//   avatar:'http://cdn.glypro19.com/oaassets/QQ%E5%9B%BE%E7%89%8720221022063943.png'
+// }
 </script>
 
 <style scoped>

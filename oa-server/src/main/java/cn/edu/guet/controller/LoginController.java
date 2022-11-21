@@ -44,8 +44,8 @@ public class LoginController {
             return ResultUtils.error("密码不正确");
         }
         // 账号锁定
-        if (user.getStatus() == 0) {
-            return ResultUtils.error("账号已被锁定,请联系管理员");
+        if (user.getStatus().equals("离职")) {
+            return ResultUtils.error("改员工已离职,请联系管理员");
         }
         // 系统登录认证
         JwtAuthenticationToken token = SecurityUtils.login(request, username, password, authenticationManager);

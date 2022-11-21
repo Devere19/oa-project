@@ -36,8 +36,8 @@ class Http {
     //请求发送之前的处理，通常用来携带token到请求的头部
     this.instance.interceptors.request.use((config: AxiosRequestConfig) => {
       //在请求的头部添加token 
-      // let token = sessionStorage.getItem('token');  //可以在cookies、sessionStorage里面获取
-      let token = '';  //可以在cookies、sessionStorage里面获取
+      let token = sessionStorage.getItem('token');  //可以在cookies、sessionStorage里面获取
+      // let token = '';  //可以在cookies、sessionStorage里面获取
       if (token) {
         //设置token到头部
         config.headers!['token'] = token

@@ -3,18 +3,18 @@
         <el-container>
             <el-aside>
                 <el-header>
-                    <logo :collapsed="collapsed"></logo>
+                    <logo :collapsed="false"></logo>
                 </el-header>
-                <SiderBar :collapsed="collapsed"></SiderBar>
+                <SiderBar :collapsed="false"></SiderBar>
             </el-aside>
             <el-container>
                 <el-header>
                     <!-- 侧边栏展开折叠按钮 -->
-                    <el-row>
+                    <!-- <el-row>
                         <el-icon style="font-size: 30px;" @click="() => { collapsed = !collapsed }">
                             <component :is="collapsed ? Expand : Fold"></component>
                         </el-icon>
-                    </el-row>
+                    </el-row> -->
                     <HeaderVue class="userMessage"></HeaderVue>
                 </el-header>
                 <el-main>
@@ -33,40 +33,41 @@ import { Expand, Fold } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import HeaderVue from './header/Header.vue'
 
-const collapsed = ref<boolean>(false);
+
+// const collapsed = ref<boolean>(false);
 </script>
 <style lang="scss" scoped>
 .layout {
     height: 100vh;
     display: flex;
+
     .el-header {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    background-color: #009688;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 40px;
-}
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        background-color: #009688;
+        color: var(--el-text-color-primary);
+        text-align: center;
+        line-height: 40px;
+    }
 
-.el-aside {
-    background-color:#545c64;
-    text-align: center;
-    line-height: 200px;
-    width: fit-content;
-}
+    .el-aside {
+        background-color: #545c64;
+        text-align: center;
+        line-height: 200px;
+        // width: fit-content;
+        width: auto
+    }
 
-.el-main {
-    background-color: white;
-    color: var(--el-text-color-primary);
-    // text-align: center;
-    // line-height: 160px;
-}
+    .el-main {
+        background-color: white;
+        color: var(--el-text-color-primary);
+        // text-align: center;
+        // line-height: 160px;
+    }
 
-.el-aside>.el-header {
-    background-color: #545c64;
+    .el-aside>.el-header {
+        background-color: #545c64;
+    }
 }
-}
-
-
 </style>
