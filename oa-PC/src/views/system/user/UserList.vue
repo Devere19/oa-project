@@ -11,7 +11,7 @@
       <el-form-item>
         <el-button @click="searchBtn" :icon="Search" :disabled="isSearch">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close" :disabled="isSearch">重置</el-button>
-        <el-button type="primary" @click="addBtn" :icon="Plus" :disabled="isAdd">新增</el-button>
+        <el-button type="primary" @click="addBtn" :icon="Plus" :disabled="isAdd" >新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -70,6 +70,7 @@ const { isAdd, isDelete, isEdit, isSearch } = isHavePerms('sys:user:view', 'sys:
 
 //表格
 const { listParm, getList, refresh, searchBtn, resetBtn, tableList, sizeChange, currentChange, tableHeight } = useTable()
+
 
 
 //新增、编辑
