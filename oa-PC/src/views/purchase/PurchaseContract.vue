@@ -361,7 +361,8 @@ import {
   addNewPurchaseContractApi, getPurchaseDetailApi
 } from '@/api/purchaseContract'
 import { addNewPurchasePaymentContractApi } from '@/api/purchasePaymentContract'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -504,6 +505,7 @@ const customerData = reactive<SelectCustomer>({
 
 onMounted(() => {
   getTTableData();
+  loginUserName.value = userNickNameStore.user.nickName;
   getSelectApi().then(res => {
     customerData.list = res.data;
   })

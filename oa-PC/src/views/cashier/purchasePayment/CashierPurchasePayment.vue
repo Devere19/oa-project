@@ -301,7 +301,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { purchasePaymentContractModel, purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/purchasePaymentContractModel'
 import { getCashierPurchasePaymentApi, searchCashierPurchasePaymentApi, uploadCashierPurchasePaymentApi } from '@/api/cashier'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -371,6 +372,7 @@ const disabledDate = (time: Date) => {
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取采购付款单数据

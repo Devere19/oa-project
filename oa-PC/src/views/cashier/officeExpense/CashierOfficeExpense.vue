@@ -250,7 +250,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
 import { getCashierOfficeExpenseApi, searchCashierOfficeExpenseApi, uploadCashierOfficeExpenseApi } from '@/api/cashier'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -311,6 +312,7 @@ const disabledDate = (time: Date) => {
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取办公经费单数据

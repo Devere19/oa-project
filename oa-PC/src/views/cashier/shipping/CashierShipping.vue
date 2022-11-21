@@ -374,7 +374,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
 import { getCashierShippingApi, searchCashierShippingApi, uploadCashierShippingApi } from '@/api/cashier'
-
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 
 const searchData = ref("")
 const total = ref(0)
@@ -453,6 +454,7 @@ const disabledDate = (time: Date) => {
 
 onMounted(() => {
     getTableData();
+    loginUserName.value = userNickNameStore.user.nickName;
 })
 
 // 获取海运单数据
