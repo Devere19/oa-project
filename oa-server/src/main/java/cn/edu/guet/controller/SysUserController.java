@@ -1,10 +1,12 @@
 package cn.edu.guet.controller;
 
 import cn.edu.guet.bean.PageParm;
+import cn.edu.guet.bean.SysRole;
 import cn.edu.guet.bean.SysUser;
 import cn.edu.guet.bean.SysUserRole;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
+import cn.edu.guet.service.SysRoleService;
 import cn.edu.guet.service.SysUserRoleService;
 import cn.edu.guet.service.SysUserService;
 import cn.edu.guet.util.PasswordUtils;
@@ -33,6 +35,9 @@ public class SysUserController {
 
     @Resource
     private SysUserRoleService sysUserRoleService;
+
+    @Resource
+    private SysRoleService sysRoleService;
 
     @GetMapping(value = "/findPermissions")
     public HttpResult findPermissions(@RequestParam String name) {
@@ -126,7 +131,17 @@ public class SysUserController {
         System.out.println("需要的username是："+name);
         QueryWrapper<SysUser> query = new QueryWrapper<>();
         query.lambda().eq(SysUser::getName,name);
-        return ResultUtils.success("查询成功",sysUserService.getOne(query));
+        SysUser sysUser = sysUserService.getOne(query);
+        //赋值roleId和roleName
+        QueryWrapper<SysUserRole> sysUserRoleQueryWrapper = new QueryWrapper<>();
+        sysUserRoleQueryWrapper.lambda().eq(SysUserRole::getUserId,sysUser.getId());
+        SysUserRole sysUserRole = sysUserRoleService.getOne(sysUserRoleQueryWrapper);
+        QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
+        sysRoleQueryWrapper.lambda().eq(SysRole::getId,sysUserRole.getRoleId());
+        SysRole sysRole = sysRoleService.getOne(sysRoleQueryWrapper);
+        sysUser.setRoleId(sysRole.getId());
+        sysUser.setRoleNames(sysRole.getName());
+        return ResultUtils.success("查询成功",sysUser);
     }
 
 }
