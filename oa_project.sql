@@ -11,7 +11,7 @@
  Target Server Version : 80024
  File Encoding         : 65001
 
- Date: 21/11/2022 10:52:21
+ Date: 22/11/2022 17:17:30
 */
 
 SET NAMES utf8mb4;
@@ -38,7 +38,7 @@ CREATE TABLE `customer`  (
 -- Records of customer
 -- ----------------------------
 INSERT INTO `customer` VALUES (1, '桂林骏泰科技信息有限公司', '李哥', '15077777777', '广西桂林', '2022-11-16 17:19:08', '张三', '2022-11-20 16:57:33', NULL);
-INSERT INTO `customer` VALUES (2, '国信蓝桥', '刘哥', '15088888888', '北京', '2022-11-16 17:19:38', '张三', '2022-11-20 16:57:34', NULL);
+INSERT INTO `customer` VALUES (2, '国信蓝桥', '刘哥', '15065423589', '北京', '2022-11-16 17:19:38', '张三', '2022-11-20 16:57:34', '超管');
 
 -- ----------------------------
 -- Table structure for logistics_contract
@@ -253,6 +253,9 @@ INSERT INTO `other_in_out` VALUES (64, 40, 0, 'WL0004', '白糖', 10.00, '吨', 
 INSERT INTO `other_in_out` VALUES (65, 38, 0, 'WL00005', '白菜', 10.00, '吨', '2022-11-18 22:57:20', NULL, '2022-11-18 22:57:20', NULL);
 INSERT INTO `other_in_out` VALUES (66, 38, 0, 'WL00005', '白菜', 10.00, '吨', '2022-11-18 22:57:21', NULL, '2022-11-18 22:57:21', NULL);
 INSERT INTO `other_in_out` VALUES (67, 39, 0, 'WL00005', '白菜', 10.00, '吨', '2022-11-18 22:57:21', NULL, '2022-11-18 22:57:21', NULL);
+INSERT INTO `other_in_out` VALUES (68, 41, 1, 'CG00005', '橘子', 50.00, '吨', '2022-11-22 14:51:35', NULL, '2022-11-22 14:51:35', NULL);
+INSERT INTO `other_in_out` VALUES (69, 42, 1, 'CG00006', '西瓜', 10.00, '吨', '2022-11-22 14:58:18', NULL, '2022-11-22 14:58:18', NULL);
+INSERT INTO `other_in_out` VALUES (70, 43, 1, 'CG00007', '榴莲', 50.00, '斤', '2022-11-22 15:37:20', 'xiexiaodong', '2022-11-22 15:37:20', 'xiexiaodong');
 
 -- ----------------------------
 -- Table structure for other_warehouse
@@ -279,6 +282,9 @@ INSERT INTO `other_warehouse` VALUES (37, 'B厂', '白糖', 200000.000000, '斤'
 INSERT INTO `other_warehouse` VALUES (38, 'A厂', '白菜', 220000.000000, '斤', '2022-11-16 17:22:59', NULL, '2022-11-16 17:22:59', NULL);
 INSERT INTO `other_warehouse` VALUES (39, 'C厂', '白菜', 60000.000000, '斤', '2022-11-16 17:22:59', NULL, '2022-11-16 17:22:59', NULL);
 INSERT INTO `other_warehouse` VALUES (40, 'D厂', '白糖', 60000.000000, '斤', '2022-11-17 11:52:49', NULL, '2022-11-17 11:52:49', NULL);
+INSERT INTO `other_warehouse` VALUES (41, 'F厂', '橘子', 100000.000000, '斤', '2022-11-22 14:51:35', NULL, '2022-11-22 14:51:35', NULL);
+INSERT INTO `other_warehouse` VALUES (42, 'G厂', '西瓜', 20000.000000, '斤', '2022-11-22 14:58:17', NULL, '2022-11-22 14:58:17', NULL);
+INSERT INTO `other_warehouse` VALUES (43, 'H厂', '榴莲', 50.000000, '斤', '2022-11-22 15:37:20', 'xiexiaodong', '2022-11-22 15:37:20', 'xiexiaodong');
 
 -- ----------------------------
 -- Table structure for own_in_out
@@ -296,11 +302,14 @@ CREATE TABLE `own_in_out`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of own_in_out
 -- ----------------------------
+INSERT INTO `own_in_out` VALUES (17, 0, '222', '白糖', 10.00, '吨', '2022-11-21 18:41:09', NULL, '2022-11-22 14:14:58', NULL);
+INSERT INTO `own_in_out` VALUES (18, 1, '11', '白菜', 10.00, '斤', '2022-11-21 22:20:27', NULL, '2022-11-21 22:20:27', NULL);
+INSERT INTO `own_in_out` VALUES (19, 2, '333', '白糖', 50.00, '吨', '2022-11-22 14:14:55', NULL, '2022-11-22 14:14:55', NULL);
 
 -- ----------------------------
 -- Table structure for own_warehouse
@@ -317,12 +326,13 @@ CREATE TABLE `own_warehouse`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of own_warehouse
 -- ----------------------------
 INSERT INTO `own_warehouse` VALUES (12, '自家仓库', '白糖', 1.000000, '斤', '2022-11-17 16:15:41', NULL, '2022-11-20 22:12:01', NULL);
+INSERT INTO `own_warehouse` VALUES (13, '自家仓库', '白菜', 2.000000, '斤', '2022-11-21 22:21:00', NULL, '2022-11-21 22:21:00', NULL);
 
 -- ----------------------------
 -- Table structure for purchase_contract
@@ -358,6 +368,9 @@ INSERT INTO `purchase_contract` VALUES (57, 'CG00001', 1, '广西南宁锦泰行
 INSERT INTO `purchase_contract` VALUES (58, 'CG00002', 2, '广西永湘物流有限公司', '2月', '2022-11-14', '白菜', 200.00, '吨', 0.50, 200000.00, 200000.00, 'http://localhost:9000/static/images/f936cd6ed61e423ca9f617ea9559bf1d.jpg,http://localhost:9000/static/images/ce7eaad52a8d47ea84ef6f7247bee078.jpg', 1, '2022-11-16 17:22:59', '', '2022-11-17 12:01:32', NULL);
 INSERT INTO `purchase_contract` VALUES (59, 'CG00003', 1, '广西永湘物流有限公司', '3月', '2022-11-17', '白糖', 100.00, '吨', 0.60, 120000.00, 120000.00, 'http://localhost:9000/static/images/d531e32e280645cdaa7b060449fb3454.jpg', 1, '2022-11-17 11:52:49', '', '2022-11-17 11:52:49', NULL);
 INSERT INTO `purchase_contract` VALUES (60, 'CG00004', 2, '广西丰沣顺国际物流有限公司', '4月', '2022-11-15', '白糖', 10.00, '吨', 0.55, 11000.00, 11000.00, 'http://localhost:9000/static/images/25761e697f7044c69b2ce0022d08084d.jpg', 1, '2022-11-17 11:54:02', '', '2022-11-17 12:01:36', NULL);
+INSERT INTO `purchase_contract` VALUES (61, 'CG00005', 1, '广西丰沣顺国际物流有限公司', '5月', '2022-11-22', '橘子', 50.00, '吨', 0.01, 60000.00, 60000.00, 'http://localhost:9000/static/images/052d36adddbc4820b4c5ed198ae79001.jpg', 1, '2022-11-22 14:51:35', '超管', '2022-11-22 14:51:35', NULL);
+INSERT INTO `purchase_contract` VALUES (62, 'CG00006', 1, '广西永湘物流有限公司', '1的撒', '2022-11-22', '西瓜', 10.00, '吨', 0.01, 6000.00, 6000.00, 'http://localhost:9000/static/images/b47b0d614d7343c4902e48d6a16ef549.jpg,http://localhost:9000/static/images/943e5f3aef75402e87d9e26486c8fb1a.jpg', 1, '2022-11-22 14:58:18', '超管', '2022-11-22 14:58:18', NULL);
+INSERT INTO `purchase_contract` VALUES (63, 'CG00007', 1, '广西南宁锦泰行工贸有限公司', '6月', '2022-11-15', '榴莲', 50.00, '斤', 20.00, 9000.00, 9000.00, 'http://localhost:9000/static/images/c8a77cd62bb7406cad24874a745e6d01.jpg', 1, '2022-11-22 15:37:20', 'xiexiaodong', '2022-11-22 15:39:21', 'xiexiaodong');
 
 -- ----------------------------
 -- Table structure for purchase_director_state
@@ -373,7 +386,7 @@ CREATE TABLE `purchase_director_state`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of purchase_director_state
@@ -387,6 +400,9 @@ INSERT INTO `purchase_director_state` VALUES (6, 3, 3, NULL, '2022-11-16 19:41:4
 INSERT INTO `purchase_director_state` VALUES (7, 4, 5, NULL, '2022-11-17 12:15:26', NULL, '2022-11-19 17:52:49', NULL);
 INSERT INTO `purchase_director_state` VALUES (8, 4, 4, NULL, '2022-11-17 12:15:26', NULL, '2022-11-19 17:52:59', NULL);
 INSERT INTO `purchase_director_state` VALUES (9, 4, 3, NULL, '2022-11-17 12:15:26', NULL, '2022-11-19 17:52:59', NULL);
+INSERT INTO `purchase_director_state` VALUES (10, 5, 5, NULL, '2022-11-21 12:21:28', NULL, '2022-11-21 12:21:28', NULL);
+INSERT INTO `purchase_director_state` VALUES (11, 5, 4, NULL, '2022-11-21 12:21:28', NULL, '2022-11-21 12:21:28', NULL);
+INSERT INTO `purchase_director_state` VALUES (12, 5, 3, NULL, '2022-11-21 12:21:28', NULL, '2022-11-21 12:21:28', NULL);
 
 -- ----------------------------
 -- Table structure for purchase_payment_contract
@@ -406,7 +422,7 @@ CREATE TABLE `purchase_payment_contract`  (
   `last_update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '最新更新时间',
   `last_update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '最新更新者名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of purchase_payment_contract
@@ -414,6 +430,7 @@ CREATE TABLE `purchase_payment_contract`  (
 INSERT INTO `purchase_payment_contract` VALUES (2, 'CG00001', NULL, 100000.00, NULL, NULL, NULL, NULL, '2022-11-16 19:40:04', NULL, '2022-11-20 18:21:53', NULL);
 INSERT INTO `purchase_payment_contract` VALUES (3, 'CG00002', NULL, 100000.00, NULL, NULL, NULL, NULL, '2022-11-16 19:41:42', NULL, '2022-11-20 18:21:53', NULL);
 INSERT INTO `purchase_payment_contract` VALUES (4, 'CG00003', NULL, 50000.00, NULL, NULL, '王五', 1, '2022-11-17 12:15:26', NULL, '2022-11-20 18:21:53', NULL);
+INSERT INTO `purchase_payment_contract` VALUES (5, 'CG00003', NULL, 50000.00, NULL, NULL, NULL, NULL, '2022-11-21 12:21:28', '超管', '2022-11-21 12:21:28', NULL);
 
 -- ----------------------------
 -- Table structure for sale_contract
@@ -451,8 +468,8 @@ CREATE TABLE `sale_contract`  (
 -- Records of sale_contract
 -- ----------------------------
 INSERT INTO `sale_contract` VALUES (19, 'XS00001', 1, '广西南宁锦泰行工贸有限公司', '白菜', 100.00, '吨', 1.00, 400000.00, '2022-11-13', '出厂净重结算', '陆运', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 400000.00, '2022-11-16', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', '', '1', '1月', '2022-11-16 17:30:33', '张三', '2022-11-17 20:34:48', NULL);
-INSERT INTO `sale_contract` VALUES (20, 'XS00002', 2, '广西永湘物流有限公司', '白菜', 30.00, '吨', 2.00, 50000.00, '2022-11-11', '出厂净重结算', '海运：港到港', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 1000.00, '2022-04-21', 'http://localhost:9000/static/images/ebbbbfde0581465184cc530f89fb9ac2.jpg', '出纳人员姓名', '1', '2月', '2022-11-16 21:48:51', '张三', '2022-11-18 15:45:29', NULL);
-INSERT INTO `sale_contract` VALUES (22, 'XS00003', 2, '广西永湘物流有限公司', '白糖', 100.00, '吨', 1.00, 1000.00, '2022-11-12', '出厂净重结算', '陆运', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 18000.00, '2022-11-13', 'http://localhost:9000/static/images/355ebf06b5a44b669a775eeb2b226209.jpg', '出纳人员姓名', '1', '5月', '2022-11-17 12:41:57', '张三', '2022-11-17 20:26:35', NULL);
+INSERT INTO `sale_contract` VALUES (20, 'XS00002', 2, '广西永湘物流有限公司', '白菜', 30.00, '吨', 2.00, 50000.00, '2022-11-09', '出厂净重结算', '海运：港到港', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 1000.00, '2022-04-19', 'http://localhost:9000/static/images/ebbbbfde0581465184cc530f89fb9ac2.jpg', '出纳人员姓名', '1', '2月', '2022-11-16 21:48:51', '张三', '2022-11-18 15:45:29', NULL);
+INSERT INTO `sale_contract` VALUES (22, 'XS00003', 2, '广西永湘物流有限公司', '白糖', 100.00, '吨', 1.00, 1000.00, '2022-11-08', '出厂净重结算', '陆运', 'http://localhost:9000/static/images/d3267eda04344f999e7b7b97c5b7633a.jpg,http://localhost:9000/static/images/016f93c02de04b03b5bc071bbe85af2d.jpg', 18000.00, '2022-11-09', 'http://localhost:9000/static/images/355ebf06b5a44b669a775eeb2b226209.jpg', '出纳人员姓名', '1', '5月', '2022-11-17 12:41:57', '张三', '2022-11-17 20:26:35', NULL);
 
 -- ----------------------------
 -- Table structure for shipping_contract
@@ -546,6 +563,221 @@ CREATE TABLE `sys_log`  (
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
+INSERT INTO `sys_log` VALUES (1, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 777, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (2, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 134, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (3, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 86, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (4, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 187, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (5, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findTree()', '\"admin\"', 171, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (6, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 41, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (7, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 147, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (8, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (name = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":...', 53, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (9, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 52, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (10, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":\"i...', 46, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (11, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 194, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (12, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 127, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (13, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 178, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (14, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 85, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (15, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 166, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (16, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 204, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (17, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 94, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (18, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 168, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (19, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 141, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (20, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.list()', '{\"customSqlSegment\":\" ORDER BY order_num ASC\",\"emptyOfEntity\":true,\"emptyOfNormal\":true,\"emptyOfWhere\":true,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[],\"orderBy\":[{\"sqlSegment\":\"order_num ASC\"}...', 73, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (21, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 153, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (22, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 120, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (23, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 140, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (24, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 97, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (25, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.list()', '{\"customSqlSegment\":\" ORDER BY order_num ASC\",\"emptyOfEntity\":true,\"emptyOfNormal\":true,\"emptyOfWhere\":true,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[],\"orderBy\":[{\"sqlSegment\":\"order_num ASC\"}...', 108, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (26, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 98, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (27, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 164, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (28, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 87, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (29, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 140, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (30, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 127, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (31, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 181, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (32, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 144, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (33, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.updateById()', '{\"id\":1,\"lastUpdateTime\":1669096902127,\"name\":\"超级管理员\",\"remark\":\"超级管理员\"}', 131, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (34, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 88, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (35, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 148, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (36, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.list()', NULL, 93, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (37, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 106, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (38, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 116, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (39, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 170, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (40, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 77, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (41, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.updateById()', '{\"id\":5,\"lastUpdateTime\":1669096915375,\"name\":\"董事会\",\"remark\":\"董事会\"}', 145, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (42, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 138, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (43, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.updateById()', '{\"id\":6,\"lastUpdateTime\":1669096923633,\"name\":\"出纳\",\"remark\":\"出纳\"}', 157, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (44, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 181, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (45, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.updateById()', '{\"id\":7,\"lastUpdateTime\":1669096927663,\"name\":\"采购员\",\"remark\":\"采购员\"}', 175, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (46, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 182, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (47, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.updateById()', '{\"id\":8,\"lastUpdateTime\":1669096930903,\"name\":\"销售员\",\"remark\":\"销售员\"}', 157, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (48, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 130, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (49, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.updateById()', '{\"id\":9,\"lastUpdateTime\":1669096934277,\"name\":\"财务\",\"remark\":\"财务\"}', 154, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (50, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 169, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (51, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 141, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (52, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.list()', NULL, 121, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (53, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 125, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (54, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 81, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (55, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 146, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (56, NULL, NULL, 'cn.edu.guet.service.Impl.OwnWarehouseServiceImpl.getOwnWarehouseData()', '1', 152, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (57, NULL, NULL, 'cn.edu.guet.service.Impl.OwnInOutServiceImpl.getOwnInOutData()', '\"白糖\"', 104, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (58, NULL, NULL, 'cn.edu.guet.service.Impl.OwnInOutServiceImpl.getOwnInOutData()', '\"白糖\"', 44, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (59, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 92, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (60, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 141, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (61, NULL, NULL, 'cn.edu.guet.service.Impl.OwnWarehouseServiceImpl.getOwnWarehouseData()', '1', 176, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (62, NULL, NULL, 'cn.edu.guet.service.Impl.OwnInOutServiceImpl.getOwnInOutData()', '\"白糖\"', 112, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (63, NULL, NULL, 'cn.edu.guet.service.Impl.OwnInOutServiceImpl.getOwnInOutData()', '\"白糖\"', 57, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (64, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.getCustomerData()', '1', 148, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (65, NULL, NULL, 'cn.edu.guet.service.Impl.LogisticsPaymentContractServiceImpl.getLogisticsPaymentContractData()', '1', 271, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (66, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 151, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (67, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 259, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (68, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 106, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (69, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 153, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (70, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 96, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (71, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.list()', '{\"customSqlSegment\":\" ORDER BY order_num ASC\",\"emptyOfEntity\":true,\"emptyOfNormal\":true,\"emptyOfWhere\":true,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[],\"orderBy\":[{\"sqlSegment\":\"order_num ASC\"}...', 120, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (72, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 122, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (73, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 103, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (74, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 164, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (75, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00004\"', 153, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (76, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 88, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (77, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 143, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (78, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 121, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (79, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 169, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (80, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 145, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (81, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 194, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (82, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 1117, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (83, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 1277, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (84, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 98, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (85, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 157, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (86, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 68, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (87, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 193, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (88, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 164, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (89, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 206, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (90, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 709, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (91, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 794, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (92, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.addNewPurchaseContract()', '{\"contractPhoto\":\"http://localhost:9000/static/images/052d36adddbc4820b4c5ed198ae79001.jpg\",\"contractPhotoArray\":[\"http://localhost:9000/static/images/052d36adddbc4820b4c5ed198ae79001.jpg\"],\"createBy\"...', 430, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (93, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 141, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (94, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 561, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (95, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 739, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (96, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 178, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (97, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 120, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (98, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 85, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (99, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 181, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (100, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findTree()', '\"admin\"', 104, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (101, NULL, NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 49, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (102, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 205, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (103, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (name = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":...', 60, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (104, NULL, NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 64, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (105, NULL, NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":\"i...', 76, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (106, NULL, NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 105, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (107, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 155, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (108, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.addNewPurchaseContract()', '{\"contractPhoto\":\"http://localhost:9000/static/images/b47b0d614d7343c4902e48d6a16ef549.jpg,http://localhost:9000/static/images/943e5f3aef75402e87d9e26486c8fb1a.jpg\",\"contractPhotoArray\":[\"http://local...', 366, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (109, NULL, NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 117, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (110, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 778, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (111, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 144, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (112, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 70, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (113, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 161, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (114, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findTree()', '\"admin\"', 70, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (115, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 88, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (116, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 246, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (117, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (name = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":...', 79, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (118, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 50, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (119, 'admin', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":\"i...', 50, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (120, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"xiexiaodong\"', 183, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (121, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"xiexiaodong\"', 159, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (122, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"xiexiaodong\"', 48, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (123, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"xiexiaodong\"', 153, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (124, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findTree()', '\"xiexiaodong\"', 65, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (125, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"xiexiaodong\"', 97, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (126, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"xiexiaodong\"', 177, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (127, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (name = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":...', 57, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (128, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 39, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (129, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":\"i...', 86, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (130, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 110, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (131, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 209, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (132, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.addNewPurchaseContract()', '{\"contractPhoto\":\"http://localhost:9000/static/images/c8a77cd62bb7406cad24874a745e6d01.jpg\",\"contractPhotoArray\":[\"http://localhost:9000/static/images/c8a77cd62bb7406cad24874a745e6d01.jpg\"],\"createBy\"...', 320, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (133, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 112, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (134, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 747, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (135, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findByName()', '\"admin\"', 130, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (136, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 67, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (137, 'xiexiaodong', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 169, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (138, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findTree()', '\"admin\"', 57, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (139, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.findByUser()', '\"admin\"', 47, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (140, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.findPermissions()', '\"admin\"', 130, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (141, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (name = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":...', 65, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (142, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (user_id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegmen...', 69, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (143, 'admin', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getOne()', '{\"customSqlSegment\":\"WHERE (id = #{ew.paramNameValuePairs.MPGENVAL1})\",\"emptyOfEntity\":true,\"emptyOfNormal\":false,\"emptyOfWhere\":false,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[{\"sqlSegment\":\"i...', 58, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (144, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 193, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (145, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 92, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (146, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 164, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (147, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00007\"', 141, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (148, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00006\"', 120, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (149, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00004\"', 164, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (150, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getCashierPurchasePayment()', '1', 208, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (151, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 94, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (152, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 185, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (153, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getCashierSaleContract()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 239, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (154, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getCashierPurchasePayment()', '1', 187, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (155, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getCashierSaleContract()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 754, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (156, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getList()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 355, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (157, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getPurchasePaymentContractData()', '1', 329, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (158, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getList()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 337, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (159, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 131, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (160, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getCashierSaleContract()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 298, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (161, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getPurchasePaymentContractData()', '1', 421, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (162, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getCashierPurchasePayment()', '1', 179, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (163, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getCashierSaleContract()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 247, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (164, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getCashierSaleContract()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 342, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (165, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getList()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 272, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (166, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getCashierSaleContract()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 308, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (167, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsPaymentContractServiceImpl.getCashierLogisticsPayment()', '1', 139, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (168, 'admin', NULL, 'cn.edu.guet.service.Impl.OfficeExpenseServiceImpl.getCashierOfficeExpense()', '1', 307, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (169, 'admin', NULL, 'cn.edu.guet.service.Impl.OwnWarehouseServiceImpl.getOwnWarehouseData()', '1', 272, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (170, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getList()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 305, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (171, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 5712, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (172, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL0004\"', 6032, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (173, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00003\"', 7587, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (174, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00002\"', 8165, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (175, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL0004\"', 1278, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (176, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00002\"', 549, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (177, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00002\"', 498, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (178, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00002\"', 60, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (179, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00002\"', 63, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (180, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getDetailLogistics()', '\"WL00002\"', 118, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (181, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsContractServiceImpl.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 10350, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (182, 'admin', NULL, 'cn.edu.guet.service.Impl.ShippingContractServiceImpl.getshippingContractData()', '1', 10486, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (183, 'admin', NULL, 'cn.edu.guet.service.Impl.OfficeExpenseServiceImpl.getOfficeExpenseData()', '1', 261, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (184, 'admin', NULL, 'cn.edu.guet.service.Impl.AnalysisDataServiceImpl.getGoodsNameData()', NULL, 194, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (185, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getPurchasePaymentContractData()', '1', 310, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (186, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsPaymentContractServiceImpl.getLogisticsPaymentContractData()', '1', 6774, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (187, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getPurchasePaymentContractData()', '1', 516, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (188, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsPaymentContractServiceImpl.getLogisticsPaymentContractData()', '1', 326, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (189, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.getCustomerData()', '1', 119, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (190, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsPaymentContractServiceImpl.getLogisticsPaymentContractData()', '1', 277, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (191, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getPurchasePaymentContractData()', '1', 708, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (192, 'admin', NULL, 'cn.edu.guet.service.Impl.SaleContractServiceImpl.getList()', '{\"currentPage\":1,\"goodsName\":\"\",\"pageSize\":10,\"saleCompanyName\":\"\",\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 271, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (193, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchasePaymentContractServiceImpl.getPurchasePaymentContractData()', '1', 431, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (194, 'admin', NULL, 'cn.edu.guet.service.Impl.LogisticsPaymentContractServiceImpl.getLogisticsPaymentContractData()', '1', 427, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (195, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.getCustomerData()', '1', 5207, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (196, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 3224, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (197, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.getCustomerData()', '1', 11229, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (198, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.updateCustomer()', '{\"createBy\":\"张三\",\"customerAddress\":\"北京\",\"customerEnterpriseName\":\"国信蓝桥\",\"customerName\":\"刘哥\",\"customerPhone\":\"15065423589\",\"id\":2,\"lastUpdateBy\":\"超管\"}', 625, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (199, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.getCustomerData()', '1', 167, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (200, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.getCustomerData()', '1', 20293, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (201, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 985, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (202, 'admin', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 245, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (203, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 363, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (204, 'admin', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 121, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (205, 'admin', NULL, 'cn.edu.guet.service.Impl.SysUserServiceImpl.getList()', '{\"currentPage\":1,\"nickName\":\"\",\"pageSize\":10,\"phone\":\"\"}', 147, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (206, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.getAllMenu()', NULL, 5537, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (207, 'admin', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 7516, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (208, 'admin', NULL, 'cn.edu.guet.service.Impl.SysMenuServiceImpl.list()', '{\"customSqlSegment\":\" ORDER BY order_num ASC\",\"emptyOfEntity\":true,\"emptyOfNormal\":true,\"emptyOfWhere\":true,\"expression\":{\"groupBy\":[],\"having\":[],\"normal\":[],\"orderBy\":[{\"sqlSegment\":\"order_num ASC\"}...', 6865, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (209, 'admin', NULL, 'cn.edu.guet.service.Impl.SysRoleServiceImpl.getList()', '{\"currentPage\":1,\"pageSize\":10,\"roleName\":\"\"}', 3005, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (210, 'admin', NULL, 'cn.edu.guet.service.Impl.CustomerServiceImpl.list()', NULL, 200, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (211, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractViewServiceImpl.getTPurchaseContractData()', '1', 297, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (212, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00007\"', 1002, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (213, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00004\"', 163, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (214, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00006\"', 155, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_log` VALUES (215, 'admin', NULL, 'cn.edu.guet.service.Impl.PurchaseContractServiceImpl.getPurchaseDetail()', '\"CG00007\"', 123, '0:0:0:0:0:0:0:1', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -567,12 +799,12 @@ CREATE TABLE `sys_menu`  (
   `last_update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `del_flag` tinyint(0) NULL DEFAULT 0 COMMENT '是否删除  -1：已删除  0：正常',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 72 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, '顶级菜单', '/system', NULL, 0, 'Shop', 0, NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, '顶级菜单', '/system', NULL, 0, 'Setting', 0, NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_menu` VALUES (2, '员工管理', 1, '系统管理', '/userList', NULL, 1, 'User', 1, NULL, NULL, NULL, '2022-11-20 15:20:04', 0);
 INSERT INTO `sys_menu` VALUES (3, '查看', 2, '用户管理', NULL, 'sys:user:view', 2, NULL, 0, NULL, NULL, NULL, '2022-08-03 03:48:15', 0);
 INSERT INTO `sys_menu` VALUES (4, '新增', 2, '用户管理', NULL, 'sys:user:add', 2, NULL, 1, NULL, NULL, NULL, '2022-08-03 03:33:09', 0);
@@ -658,17 +890,17 @@ CREATE TABLE `sys_role`  (
   `last_update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `del_flag` tinyint(0) NULL DEFAULT 0 COMMENT '是否删除  -1：已删除  0：正常',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, 'admin', '超级管理员', 'admin', '2019-01-19 11:11:11', 'admin', '2019-01-19 19:07:18', 0);
-INSERT INTO `sys_role` VALUES (5, 'dongshihui', '董事会', 'admin', NULL, NULL, '2022-11-20 08:03:46', 0);
-INSERT INTO `sys_role` VALUES (6, 'chuna', '出纳', NULL, '2022-11-20 08:02:08', NULL, '2022-11-20 08:03:53', 0);
-INSERT INTO `sys_role` VALUES (7, 'caigouyuan', '采购员', NULL, '2022-11-20 08:02:48', NULL, '2022-11-20 08:03:58', 0);
-INSERT INTO `sys_role` VALUES (8, 'xiaoshouyuan', '销售员', NULL, '2022-11-20 08:04:10', NULL, NULL, 0);
-INSERT INTO `sys_role` VALUES (9, 'caiwu', '财务', NULL, '2022-11-20 08:05:02', NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (1, '超级管理员', '超级管理员', 'admin', '2019-01-19 11:11:11', 'admin', '2022-11-22 06:01:42', 0);
+INSERT INTO `sys_role` VALUES (5, '董事会', '董事会', 'admin', NULL, NULL, '2022-11-22 06:01:55', 0);
+INSERT INTO `sys_role` VALUES (6, '出纳', '出纳', NULL, '2022-11-20 08:02:08', NULL, '2022-11-22 06:02:04', 0);
+INSERT INTO `sys_role` VALUES (7, '采购员', '采购员', NULL, '2022-11-20 08:02:48', NULL, '2022-11-22 06:02:08', 0);
+INSERT INTO `sys_role` VALUES (8, '销售员', '销售员', NULL, '2022-11-20 08:04:10', NULL, '2022-11-22 06:02:11', 0);
+INSERT INTO `sys_role` VALUES (9, '财务', '财务', NULL, '2022-11-20 08:05:02', NULL, '2022-11-22 06:02:14', 0);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -683,7 +915,7 @@ CREATE TABLE `sys_role_menu`  (
   `last_update_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `last_update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 656 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 972 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -882,7 +1114,7 @@ CREATE TABLE `sys_user_role`  (
   `last_update_by` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
   `last_update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 106 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -890,8 +1122,7 @@ CREATE TABLE `sys_user_role`  (
 INSERT INTO `sys_user_role` VALUES (108, 3, 5, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_user_role` VALUES (109, 4, 5, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_user_role` VALUES (110, 5, 5, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user_role` VALUES (111, 1, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_user_role` VALUES (112, 8, 2, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_user_role` VALUES (111, 1, 1, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- View structure for director

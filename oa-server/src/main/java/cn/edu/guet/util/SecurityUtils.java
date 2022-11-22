@@ -58,17 +58,15 @@ public class SecurityUtils {
      */
     public static String getUsername() {
         String username = null;
-        // Authentication authentication = getAuthentication();
-        // Object principal = authentication.getPrincipal();
-        // username = ((UserDetails) principal).getUsername();
-        // System.out.println("username："+username);
         Authentication authentication = getAuthentication();
         if (authentication != null) {
-            System.out.println("进入一级循环");
+            // 获取登录用户名
             Object principal = authentication.getPrincipal();
+            // 因为这里 principal instanceof UserDetails 可能为假
             if (principal != null && principal instanceof UserDetails) {
                 username = ((UserDetails) principal).getUsername();
-                System.out.println("username："+username);
+            } else {
+                username = (String) principal;
             }
         }
         return username;
@@ -85,6 +83,10 @@ public class SecurityUtils {
             Object principal = authentication.getPrincipal();
             if (principal != null && principal instanceof UserDetails) {
                 username = ((UserDetails) principal).getUsername();
+                System.out.println("username："+username);
+            } else {
+                username = (String) principal;
+                System.out.println("username："+username);
             }
         }
         return username;

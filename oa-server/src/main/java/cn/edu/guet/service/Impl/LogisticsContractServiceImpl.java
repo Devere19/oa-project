@@ -15,6 +15,7 @@ import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.SaleContractService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -170,11 +171,15 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         List<String> contractPhotoList = logisticsContract.getContractPhotoList();
         logisticsContract.setContractPhoto(ImageUtils.getDBString(contractPhotoList));
         logisticsContract.setPigeonhole("1");
+        logisticsContract.setCreateBy(SecurityUtils.getUsername());
+        logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
         logisticsContractMapper.insert(logisticsContract);
         List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
         //新增对应的物流详情但
         for (LogisticsDetail logisticsDetail : logisticsDetailList) {
             logisticsDetail.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
+            logisticsDetail.setCreateBy(SecurityUtils.getUsername());
+            logisticsDetail.setLastUpdateBy(SecurityUtils.getUsername());
             logisticsDetailMapper.insert(logisticsDetail);
         }
 
@@ -209,6 +214,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     System.out.println("选择的是斤");
                     ownWarehouse.setGoodsCount(goodsCount.add(totalWeight));
                 }
+                ownWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
                 ownWarehouseMapper.updateById(ownWarehouse);
             } else {
                 System.out.println("自家仓库没有该物品");
@@ -224,6 +230,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     addOwnWarehouse.setGoodsCount(logisticsContract.getTotalWeight());
                 }
                 addOwnWarehouse.setGoodsUnit("斤");
+                addOwnWarehouse.setCreateBy(SecurityUtils.getUsername());
+                addOwnWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
                 ownWarehouseMapper.insert(addOwnWarehouse);
             }
             //新增自家仓库入库记录
@@ -233,6 +241,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             ownInOut.setInOutGoodsName(goodsName);
             ownInOut.setInOutGoodsCount(logisticsContract.getTotalWeight());
             ownInOut.setInOutGoodsUnit(logisticsContract.getGoodsUnit());
+            ownInOut.setCreateBy(SecurityUtils.getUsername());
+            ownInOut.setLastUpdateBy(SecurityUtils.getUsername());
             ownInOutMapper.insert(ownInOut);
             //外商库存库存修改和出库记录
             for (LogisticsDetail logisticsDetail : logisticsDetailList) {
@@ -251,6 +261,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     System.out.println("流详情货物单位选择的是斤");
                     one.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
                 }
+                one.setLastUpdateBy(SecurityUtils.getUsername());
                 otherWarehouseMapper.updateById(one);
                 //出库记录
                 Integer id = one.getId();
@@ -261,6 +272,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 otherInOut.setInOutGoodsName(goodsName);
                 otherInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
                 otherInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
+                otherInOut.setCreateBy(SecurityUtils.getUsername());
+                otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
                 otherInOutMapper.insert(otherInOut);
             }
         } else {
@@ -281,6 +294,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                         System.out.println("流详情货物单位选择的是斤");
                         ownWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
                     }
+                    ownWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
+                    ownWarehouseMapper.updateById(ownWarehouse);
                     //自家仓库出库记录
                     OwnInOut ownInOut = new OwnInOut();
                     ownInOut.setInOutType(0);
@@ -288,6 +303,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     ownInOut.setInOutGoodsName(goodsName);
                     ownInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
                     ownInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
+                    ownInOut.setCreateBy(SecurityUtils.getUsername());
+                    ownInOut.setLastUpdateBy(SecurityUtils.getUsername());
                     ownInOutMapper.insert(ownInOut);
                 } else {
                     //如果采购合同不是000
@@ -305,6 +322,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                         System.out.println("流详情货物单位选择的是斤");
                         otherWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
                     }
+                    otherWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
                     otherWarehouseMapper.updateById(otherWarehouse);
                     //外商仓库出库记录
                     Integer id = otherWarehouse.getId();
@@ -315,6 +333,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     otherInOut.setInOutGoodsName(goodsName);
                     otherInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
                     otherInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
+                    otherInOut.setCreateBy(SecurityUtils.getUsername());
+                    otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
                     otherInOutMapper.insert(otherInOut);
                 }
             }

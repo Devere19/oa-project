@@ -3,6 +3,7 @@ package cn.edu.guet.service.Impl;
 import cn.edu.guet.bean.customer.Customer;
 import cn.edu.guet.mapper.CustomerMapper;
 import cn.edu.guet.service.CustomerService;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -42,6 +43,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public int addNewCustomer(Customer customer) {
+        customer.setCreateBy(SecurityUtils.getUsername());
+        customer.setLastUpdateBy(SecurityUtils.getUsername());
         return customerMapper.insert(customer);
     }
 
@@ -52,7 +55,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         data.setCustomerName(customer.getCustomerName());
         data.setCustomerPhone(customer.getCustomerPhone());
         data.setCustomerAddress(customer.getCustomerAddress());
-        data.setLastUpdateBy(customer.getLastUpdateBy());
+        data.setLastUpdateBy(SecurityUtils.getUsername());
         return customerMapper.updateById(data);
     }
 
