@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 
 /**
  * 身份验证提供者
@@ -15,9 +16,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @Author Liwei
  * @Date 2021-08-13 17:52
  */
+@Component
 public class JwtAuthenticationProvider extends DaoAuthenticationProvider {
 
     public JwtAuthenticationProvider(UserDetailsService userDetailsService) {
+        setHideUserNotFoundExceptions(false);
         setUserDetailsService(userDetailsService);
     }
 

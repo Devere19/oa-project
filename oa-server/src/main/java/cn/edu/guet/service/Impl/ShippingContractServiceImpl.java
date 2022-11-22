@@ -7,6 +7,7 @@ import cn.edu.guet.mapper.ShippingDirectorStateMapper;
 import cn.edu.guet.mapper.ShippingStateInfoMapper;
 import cn.edu.guet.service.ShippingContractService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -129,7 +130,8 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         if(ImageUtils.getDBString(shippingContract.getContractPhotoArray())!=""){
             shippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
         }
-
+        shippingContract.setCreateBy(SecurityUtils.getUsername());
+        shippingContract.setLastUpdateBy(SecurityUtils.getUsername());
         int result=shippingContractMapper.insert(shippingContract);
 
         if(result==1){
@@ -143,6 +145,8 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                 ShippingDirectorState shippingDirectorState=new ShippingDirectorState();
                 shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
                 shippingDirectorState.setUserId(Math.toIntExact(director.getId()));
+                shippingDirectorState.setCreateBy(SecurityUtils.getUsername());
+                shippingDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                 shippingDirectorStateMapper.insert(shippingDirectorState);
             }
         }
@@ -279,7 +283,8 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         if(paymentPhotos!=""){
             oldShippingContract.setPaymentPhoto(paymentPhotos);
         }
-        oldShippingContract.setCashier(shippingContract.getCashier());
+        oldShippingContract.setCashier(SecurityUtils.getUsername());
+        oldShippingContract.setLastUpdateBy(SecurityUtils.getUsername());
         oldShippingContract.setPaymentCount(oldShippingContract.getExpenses());
         oldShippingContract.setPaymentTime(shippingContract.getPaymentTime());
         return shippingContractMapper.updateById(oldShippingContract);

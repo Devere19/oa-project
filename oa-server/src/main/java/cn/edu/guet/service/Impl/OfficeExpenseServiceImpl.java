@@ -5,6 +5,7 @@ import cn.edu.guet.bean.OfficeExpense;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.OfficeExpenseService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -97,6 +98,8 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
 
     @Override
     public int addNewOfficeExpense(OfficeExpense officeExpense) {
+        officeExpense.setCreateBy(SecurityUtils.getUsername());
+        officeExpense.setLastUpdateBy(SecurityUtils.getUsername());
         int result=officeExpenseMapper.insert(officeExpense);
 
         if(result==1) {
@@ -110,6 +113,8 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
                 OfficeDirectorState officeDirectorState = new OfficeDirectorState();
                 officeDirectorState.setOfficeExpenseId(officeExpense.getId());
                 officeDirectorState.setUserId(Math.toIntExact(director.getId()));
+                officeDirectorState.setCreateBy(SecurityUtils.getUsername());
+                officeDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                 officeDirectorStateMapper.insert(officeDirectorState);
             }
         }
@@ -211,7 +216,8 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         if(paymentPhotos!=""){
             oldOfficeExpense.setPaymentPhoto(paymentPhotos);
         }
-        oldOfficeExpense.setCashier(officeExpense.getCashier());
+        oldOfficeExpense.setCashier(SecurityUtils.getUsername());
+        oldOfficeExpense.setLastUpdateBy(SecurityUtils.getUsername());
         oldOfficeExpense.setPaymentCount(oldOfficeExpense.getExpenses());
         oldOfficeExpense.setPaymentTime(officeExpense.getPaymentTime());
         return officeExpenseMapper.updateById(oldOfficeExpense);

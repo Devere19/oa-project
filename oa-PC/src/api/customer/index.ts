@@ -29,7 +29,7 @@ export const addNewCustomerApi = (customer: customerModel) => {
         customer)
 }
 
-//新增客户数据
+//修改客户数据
 export const updateCustomerApi = (customer: customerModel) => {
     return http.post("api/customer/updateCustomer",
         customer)

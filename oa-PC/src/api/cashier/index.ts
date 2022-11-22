@@ -3,10 +3,6 @@ import { ListParm } from "@/api/sale/SaleModel";
 import { purchasePaymentModel, logisticsPaymentModel, shippingPaymentModel, officeExpenseModel } from "./CashierModel";
 import { SaleModel } from '@/api/cashier/CashierModel'
 
-//分页获取销售单
-export const getCashierSaleContractApi = (listParm: ListParm) => {
-    return http.get("cashier/getCashierSaleContract", listParm)
-}
 
 //分页获取采购付款单
 export const getCashierPurchasePaymentApi = (currentPage: number, pageSize: number) => {
@@ -75,6 +71,11 @@ export const searchCashierShippingApi = (currentPage: number, pageSize: number, 
 export const uploadCashierShippingApi = (shippingContract: shippingPaymentModel) => {
     return http.post("cashier/uploadCashierShipping",
         shippingContract)
+}
+
+//分页获取销售单
+export const getCashierSaleContractApi = (listParm: ListParm) => {
+    return http.get("cashier/getCashierSaleContract", listParm)
 }
 
 //上传销售单的付款数据
