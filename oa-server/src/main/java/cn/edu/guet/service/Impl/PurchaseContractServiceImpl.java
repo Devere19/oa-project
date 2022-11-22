@@ -12,6 +12,7 @@ import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import cn.edu.guet.util.UnitUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -131,6 +132,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int addNewPurchaseContract(PurchaseContract purchaseContract) {
+        System.out.println("谁操作了方法"+SecurityUtils.getUsername());
         purchaseContract.setSupplierNo(String.valueOf(purchaseContract.getCustomerEnterpriseName()));
         purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount());
         String contractPhotos=ImageUtils.getDBString(purchaseContract.getContractPhotoArray());
@@ -161,6 +163,8 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     }else{
                         otherWarehouse.setGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
                     }
+                    otherWarehouse.setCreateBy(SecurityUtils.getUsername());
+                    otherWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
                     int otherWarehouseId=addOtherWarehouse(otherWarehouse);
 //                    获取到相应外商仓库的仓库ID，存储入库流水单
                     if(otherWarehouseId!=0){
@@ -171,6 +175,8 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                         otherInOut.setInOutGoodsName(purchaseContract.getGoodsName());
                         otherInOut.setInOutGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
                         otherInOut.setInOutGoodsUnit(purchaseContract.getGoodsUnit());
+                        otherInOut.setCreateBy(SecurityUtils.getUsername());
+                        otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
                         otherInOutMapper.insert(otherInOut);
                     }
                 }else {
@@ -180,6 +186,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     }else{
                         tempOtherWarehouse.setGoodsCount(tempOtherWarehouse.getGoodsCount().add(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
                     }
+                    tempOtherWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
                     otherWarehouseMapper.updateById(tempOtherWarehouse);
                     OtherInOut otherInOut=new OtherInOut();
                     otherInOut.setOtherWarehouseId(tempOtherWarehouse.getId());
@@ -188,6 +195,8 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     otherInOut.setInOutGoodsName(purchaseContract.getGoodsName());
                     otherInOut.setInOutGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
                     otherInOut.setInOutGoodsUnit(purchaseContract.getGoodsUnit());
+                    otherInOut.setCreateBy(SecurityUtils.getUsername());
+                    otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
                     otherInOutMapper.insert(otherInOut);
                 }
             }else{
@@ -227,6 +236,8 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
 //                }
             }
         }
+        purchaseContract.setCreateBy(SecurityUtils.getUsername());
+        purchaseContract.setLastUpdateBy(SecurityUtils.getUsername());
         return purchaseContractMapper.insert(purchaseContract);
     }
 

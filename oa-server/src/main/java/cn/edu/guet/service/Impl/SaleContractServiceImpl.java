@@ -14,6 +14,7 @@ import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsDetailService;
 import cn.edu.guet.service.SaleContractService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -202,6 +203,8 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             saleContract.setContractPhoto(contractPhotoStr);
         }
         saleContract.setPigeonhole("1");
+        saleContract.setCreateBy(SecurityUtils.getUsername());
+        saleContract.setLastUpdateBy(SecurityUtils.getUsername());
         int insert = this.baseMapper.insert(saleContract);
         if (insert > 0) {
             return true;
@@ -307,7 +310,8 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
     public int editCashierSale(SaleModel saleModel) {
         //根据id拿到销售单
         SaleContract saleContract = saleContractMapper.selectById(saleModel.getId());
-        saleContract.setRevenueBy(saleModel.getRevenueBy());
+        saleContract.setRevenueBy(SecurityUtils.getUsername());
+        saleContract.setLastUpdateBy(SecurityUtils.getUsername());
         saleContract.setRevenueAmount(saleModel.getRevenueAmount());
         saleContract.setRevenueTime(saleModel.getRevenueTime());
         //图片处理

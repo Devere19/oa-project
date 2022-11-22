@@ -4,6 +4,7 @@ import cn.edu.guet.bean.*;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.LogisticsPaymentContractService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -102,6 +103,8 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int addNewLogisticsPaymentContract(LogisticsPaymentContract logisticsPaymentContract) {
+        logisticsPaymentContract.setCreateBy(SecurityUtils.getUsername());
+        logisticsPaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
         int result=logisticsPaymentContractMapper.insert(logisticsPaymentContract);
 
         if(result==1){
@@ -115,6 +118,8 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 LogisticsDirectorState logisticsDirectorState=new LogisticsDirectorState();
                 logisticsDirectorState.setLogisticsPaymentContractId(logisticsPaymentContract.getId());
                 logisticsDirectorState.setUserId(Math.toIntExact(director.getId()));
+                logisticsDirectorState.setCreateBy(SecurityUtils.getUsername());
+                logisticsDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                 logisticsDirectorStateMapper.insert(logisticsDirectorState);
             }
         }
@@ -219,7 +224,8 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         if(paymentPhotos!=""){
             oldLogisticsPaymentContract.setPaymentPhoto(paymentPhotos);
         }
-        oldLogisticsPaymentContract.setCashier(logisticsPaymentContract.getCashier());
+        oldLogisticsPaymentContract.setCashier(SecurityUtils.getUsername());
+        oldLogisticsPaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
         oldLogisticsPaymentContract.setPaymentTime(logisticsPaymentContract.getPaymentTime());
         return logisticsPaymentContractMapper.updateById(oldLogisticsPaymentContract);
     }

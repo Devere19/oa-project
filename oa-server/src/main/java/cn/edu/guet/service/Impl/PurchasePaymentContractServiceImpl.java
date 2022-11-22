@@ -4,6 +4,7 @@ import cn.edu.guet.bean.*;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
+import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -102,6 +103,8 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int addNewPurchasePaymentContract(PurchasePaymentContract purchasePaymentContract) {
+        purchasePaymentContract.setCreateBy(SecurityUtils.getUsername());
+        purchasePaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
         int result=purchasePaymentContractMapper.insert(purchasePaymentContract);
 
         if(result==1) {
@@ -115,6 +118,8 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
                 PurchaseDirectorState purchaseDirectorState = new PurchaseDirectorState();
                 purchaseDirectorState.setPurchasePaymentContractId(purchasePaymentContract.getId());
                 purchaseDirectorState.setUserId(Math.toIntExact(director.getId()));
+                purchaseDirectorState.setCreateBy(SecurityUtils.getUsername());
+                purchaseDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                 purchaseDirectorStateMapper.insert(purchaseDirectorState);
             }
         }
@@ -219,7 +224,8 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         if(paymentPhotos!=""){
             oldPurchasePaymentContract.setPaymentPhoto(paymentPhotos);
         }
-        oldPurchasePaymentContract.setCashier(purchasePaymentContract.getCashier());
+        oldPurchasePaymentContract.setCashier(SecurityUtils.getUsername());
+        oldPurchasePaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
         oldPurchasePaymentContract.setPaymentTime(purchasePaymentContract.getPaymentTime());
         return purchasePaymentContractMapper.updateById(oldPurchasePaymentContract);
     }
