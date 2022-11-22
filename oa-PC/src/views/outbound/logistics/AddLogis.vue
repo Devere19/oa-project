@@ -38,8 +38,8 @@
           </el-col>
           <el-col :span="12" :offset="0">
             <el-form-item prop="logisticsContractTime" label="物流单合同签订时间" label-width='150px' label-position="right">
-              <el-date-picker v-model="addModel.logisticsContractTime" type="date" placeholder="请选择合同时间"
-                size="default" />
+              <el-date-picker v-model="addModel.logisticsContractTime" type="date" format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD" placeholder="请选择合同时间" size="default" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -92,7 +92,8 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.outboundTime'" label="出库日期" label-width='150px'
                 label-position="right">
-                <el-date-picker v-model="item.outboundTime" type="date" placeholder="请选择出库日期" size="default" />
+                <el-date-picker v-model="item.outboundTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+                  placeholder="请选择出库日期" size="default" />
 
               </el-form-item>
             </el-col>

@@ -95,7 +95,7 @@ public class CashierController {
         return ResultUtils.success("查询成功",saleContractService.getCashierSaleContract(listParm));
     }
 
-    //上传销售单的首款数据
+    //上传销售单的付款数据
     @PutMapping("/editCashierSale")
     public HttpResult editCashierSale(@RequestBody SaleModel saleModel){
         if (saleContractService.editCashierSale(saleModel)>0){

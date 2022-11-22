@@ -26,9 +26,13 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 /**
  * @Author Devere19
@@ -74,6 +78,19 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
+        //起止时间
+        if (listParm.getStartTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getStartTime());
+            query.lambda().ge(SaleContract::getSaleContractTime,format);
+        }
+        if (listParm.getEndTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getEndTime());
+            query.lambda().le(SaleContract::getSaleContractTime,format);
+        }
+
+
         //查看归档为1的数据
         query.lambda().eq(SaleContract::getPigeonhole, 1);
         query.orderByDesc("id");
@@ -151,6 +168,17 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         //榨季
         if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
+        }
+        //起止时间
+        if (listParm.getStartTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getStartTime());
+            query.lambda().ge(SaleContract::getSaleContractTime,format);
+        }
+        if (listParm.getEndTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getEndTime());
+            query.lambda().le(SaleContract::getSaleContractTime,format);
         }
         //查看归档为1的数据
         query.lambda().eq(SaleContract::getPigeonhole, 0);

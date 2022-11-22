@@ -3,8 +3,8 @@ import { AddSaleModel, ListParm } from "./SaleModel";
 
 
 //销售单列表(分页查询) 查询归档为1的数据
-export const searchPigeonholeOneApi = (parm: ListParm) => {
-  return http.get("/api/saleContract/list", parm)
+export const searchPigeonholeOneApi = (listParm: ListParm) => {
+  return http.post("/api/saleContract/list", listParm)
 }
 
 //归档
@@ -13,8 +13,8 @@ export const changePigeonholeApi = (id: number) => {
 }
 
 //销售单列表(分页查询) 查询归档为0的数据
-export const searchPigeonholeZeroApi = (parm: ListParm) => {
-  return http.get("/api/saleContract/searchPigeonholeZero", parm)
+export const searchPigeonholeZeroApi = (listParm: ListParm) => {
+  return http.post("/api/saleContract/searchPigeonholeZero", listParm)
 }
 
 //删除 通过id删除
@@ -41,6 +41,6 @@ export const getRemainingOutboundVolumeApi = (saleContractNo: string) => {
 
 
 //根据销售合同编号查到所有的物流详情表
-export const getDetailSaleContract=(saleContractNo:string)=>{
+export const getDetailSaleContract = (saleContractNo: string) => {
   return http.get(`/api/saleContract/getDetailSaleContract/${saleContractNo}`)
 }
