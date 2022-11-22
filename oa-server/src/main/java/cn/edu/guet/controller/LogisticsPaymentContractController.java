@@ -47,4 +47,10 @@ public class LogisticsPaymentContractController {
     public HttpResult checkLogisticsContractNo(String logisticsContractNo){
         return ResultUtils.success("获取成功",logisticsContractService.checkLogisticsContractNo(logisticsContractNo));
     }
+
+    //    APP接口
+    @RequestMapping("/getDirectorLPC")
+    public HttpResult getDirectorLPC(int current, int page, int userId ,int type){
+        return ResultUtils.success("查询成功",logisticsPaymentContractService.getDirectorLPC(current,page,userId,type));
+    }
 }

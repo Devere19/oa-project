@@ -47,4 +47,10 @@ public class PurchasePaymentContractController {
     public HttpResult checkPurchaseContractNo(String purchaseContractNo){
         return ResultUtils.success("获取成功",purchaseContractViewService.checkPurchaseContractNo(purchaseContractNo));
     }
+
+//    APP接口
+    @RequestMapping("/getDirectorPPC")
+    public HttpResult getDirectorPPC(int current, int page, int userId ,int type){
+        return ResultUtils.success("查询成功",purchasePaymentContractService.getDirectorPPC(current,page,userId,type));
+    }
 }
