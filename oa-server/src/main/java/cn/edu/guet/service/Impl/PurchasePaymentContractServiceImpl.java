@@ -6,6 +6,7 @@ import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -228,6 +229,20 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         oldPurchasePaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
         oldPurchasePaymentContract.setPaymentTime(purchasePaymentContract.getPaymentTime());
         return purchasePaymentContractMapper.updateById(oldPurchasePaymentContract);
+    }
+
+    @Override
+    public int changeFinanceState(String purchaseContractNo) {
+        UpdateWrapper<PurchasePaymentContract> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("purchase_contract_no",purchaseContractNo).set("finance_state", 1);
+        return purchasePaymentContractMapper.update(null, updateWrapper);
+    }
+
+    @Override
+    public int changeDirectorState(int purchasePaymentContractId, int userId) {
+        UpdateWrapper<PurchaseDirectorState> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("purchase_payment_contract_id",purchasePaymentContractId).eq("user_id",userId).set("state", 1);
+        return purchaseDirectorStateMapper.update(null, updateWrapper);
     }
 
 }

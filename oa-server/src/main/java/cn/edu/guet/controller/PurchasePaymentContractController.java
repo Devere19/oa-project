@@ -21,6 +21,7 @@ public class PurchasePaymentContractController {
     @Autowired
     private PurchaseContractViewService purchaseContractViewService;
 
+
     //    获取采购付款单数据
     @RequestMapping("/getPurchasePaymentContractData")
     public HttpResult getPurchasePaymentContractData(int current, int page){
@@ -46,5 +47,15 @@ public class PurchasePaymentContractController {
     @RequestMapping("/checkPurchaseContractNo")
     public HttpResult checkPurchaseContractNo(String purchaseContractNo){
         return ResultUtils.success("获取成功",purchaseContractViewService.checkPurchaseContractNo(purchaseContractNo));
+    }
+
+    @RequestMapping("/changeFinanceState")
+    public  HttpResult changeFinanceState(String purchaseContractNo){
+        return ResultUtils.success("已通过",purchasePaymentContractService.changeFinanceState(purchaseContractNo));
+    }
+
+    @RequestMapping("/changeDirectorState")
+    public  HttpResult changeDirectorState(int purchasePaymentContractId, int userId){
+        return ResultUtils.success("已通过",purchasePaymentContractService.changeDirectorState(purchasePaymentContractId,userId));
     }
 }

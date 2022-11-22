@@ -36,3 +36,17 @@ export const checkPurchaseContractNoApi = (purchaseContractNo: string) => {
     })
 }
 
+//财务审批通过
+export const changeFinanceState = (purchaseContractNo: string) => {
+    return http.get("purchasePaymentContract/changeFinanceState", {
+        purchaseContractNo: purchaseContractNo,
+    })
+}
+
+//董事会审批通过
+export const changeDirectorState = (purchasePaymentContractId:number,userId:number) => {
+    return http.get("purchasePaymentContract/changeDirectorState", {
+        purchasePaymentContractId: purchasePaymentContractId,
+        userId:userId
+    })
+}
