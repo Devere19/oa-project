@@ -35,8 +35,8 @@ public class LogisticsContractController {
      * @param listParm
      * @return
      */
-    @GetMapping("/list")
-    public HttpResult getList(ListParm listParm) {
+    @PostMapping("/list")
+    public HttpResult getList(@RequestBody ListParm listParm) {
         IPage<LogisticsContract> list = logisticsContractService.getList(listParm);
         return ResultUtils.success("查询成功", list);
     }
@@ -47,8 +47,8 @@ public class LogisticsContractController {
      * @param listParm
      * @return
      */
-    @GetMapping("/searchPigeonholeZero")
-    public HttpResult searchPigeonholeZero(ListParm listParm) {
+    @PostMapping("/searchPigeonholeZero")
+    public HttpResult searchPigeonholeZero(@RequestBody ListParm listParm) {
         IPage<LogisticsContract> list = logisticsContractService.searchPigeonholeZero(listParm);
         return ResultUtils.success("查询成功", list);
     }

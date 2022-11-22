@@ -6,7 +6,8 @@ export type ListParm = {
   saleContractNo: string,
   //榨季
   squeezeSeason: string
-
+  startTime:string
+  endTime:string
   currentPage: number,
   pageSize: number,
   total: number

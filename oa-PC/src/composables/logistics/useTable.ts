@@ -21,6 +21,8 @@ export default function useTable() {
     logisticsContractNo: '',
     saleContractNo: '',
     squeezeSeason: '',
+    startTime:'',
+    endTime:'',
     currentPage: 1,
     pageSize: 10,
     total: 0
@@ -77,6 +79,8 @@ export default function useTable() {
     listParm.logisticsContractNo = ''
     listParm.saleContractNo = ''
     listParm.squeezeSeason = ''
+    listParm.startTime = ''
+    listParm.endTime = ''
     refresh()
   }
 

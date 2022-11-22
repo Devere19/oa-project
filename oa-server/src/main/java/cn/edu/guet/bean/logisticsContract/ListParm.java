@@ -8,6 +8,8 @@ package cn.edu.guet.bean.logisticsContract;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * 物流单查询列表
  */
@@ -19,6 +21,8 @@ public class ListParm {
     private String saleContractNo;
     //榨季
     private String squeezeSeason;
+    private Date startTime;
+    private Date endTime;
     private int currentPage;
     private int pageSize;
 }

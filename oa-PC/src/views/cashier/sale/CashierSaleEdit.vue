@@ -6,7 +6,8 @@
                 <el-row>
                     <el-col :span="12" :offset="0">
                         <el-form-item prop="revenueTime" label="收款时间">
-                            <el-date-picker v-model="addModel.revenueTime" type="date" placeholder="" size="default" />
+                            <el-date-picker v-model="addModel.revenueTime" type="date" placeholder="" size="default"
+                                format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
                         </el-form-item>
                     </el-col>
                 </el-row>

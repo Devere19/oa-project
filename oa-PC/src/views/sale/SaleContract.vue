@@ -3,16 +3,24 @@
     <!-- 搜索栏目 -->
     <el-form :model="listParm" :inline="true" size="default">
       <el-form-item label="">
-        <el-input v-model="listParm.saleContractNo" placeholder="请输入合同编号"></el-input>
+        <el-input v-model="listParm.saleContractNo" placeholder="请输入合同编号" style="width:150px"></el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-input v-model="listParm.saleCompanyName" placeholder="请输入销售方公司名"></el-input>
+        <el-input v-model="listParm.saleCompanyName" placeholder="请输入销售方公司名" style="width:150px"></el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-input v-model="listParm.goodsName" placeholder="请输入货物名称"></el-input>
+        <el-input v-model="listParm.goodsName" placeholder="请输入货物名称" style="width:150px"></el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-input v-model="listParm.squeezeSeason" placeholder="请输入榨季"></el-input>
+        <el-input v-model="listParm.squeezeSeason" placeholder="请输入榨季" style="width:150px"></el-input>
+      </el-form-item>
+      <el-form-item label="">
+        <el-date-picker v-model="listParm.startTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+          placeholder="开始时间" style="width:120px" />
+      </el-form-item>
+      <el-form-item label="">
+        <el-date-picker v-model="listParm.endTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+          placeholder="截止时间" style="width:120px" />
       </el-form-item>
       <el-form-item>
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
