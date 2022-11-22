@@ -88,7 +88,7 @@ import useDetail from '@/composables/logistics/useDetail';
 import DetailLogsitics from './DetailLogsitics.vue';
 import AddLogis from './AddLogis.vue';
 //表格相关属性
-const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero } = useTable()
+const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero ,sizeChange,currentChange} = useTable()
 
 //物流单相关属性
 const { changePigeonhole, deleteBtn, addRef, addBtn } = useLogistics(refresh)

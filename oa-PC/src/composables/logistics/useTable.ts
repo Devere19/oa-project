@@ -28,6 +28,17 @@ export default function useTable() {
     total: 0
   })
 
+   //页容量改变时出发
+   const sizeChange = (val: number) => {
+    listParm.pageSize = val
+    refresh()
+  }
+
+  //页数改变时出发
+  const currentChange = (val: number) => {
+    listParm.currentPage = val
+    refresh()
+  }
   //查询归档为1的列表
   const getList = async () => {
     let res = await searchPigeonholeOneApi(listParm)
@@ -96,6 +107,6 @@ export default function useTable() {
 
 
   return {
-    listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero
+    listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero,sizeChange,currentChange
   }
 }
