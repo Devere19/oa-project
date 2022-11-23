@@ -233,9 +233,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
 
 
     @Override
-    public int changeFinanceState(String purchaseContractNo) {
+    public int changeFinanceState(String purchaseContractNo,String financeStaff) {
         UpdateWrapper<PurchasePaymentContract> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("purchase_contract_no",purchaseContractNo).set("finance_state", 1);
+        updateWrapper.eq("purchase_contract_no",purchaseContractNo).set("finance_state", 1).set("finance_staff",financeStaff);
         return purchasePaymentContractMapper.update(null, updateWrapper);
     }
 

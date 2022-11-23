@@ -51,8 +51,8 @@ public class PurchasePaymentContractController {
 
 
     @RequestMapping("/changeFinanceState")
-    public  HttpResult changeFinanceState(String purchaseContractNo){
-        return ResultUtils.success("已通过",purchasePaymentContractService.changeFinanceState(purchaseContractNo));
+    public  HttpResult changeFinanceState(String purchaseContractNo,String financeStaff){
+        return ResultUtils.success("已通过",purchasePaymentContractService.changeFinanceState(purchaseContractNo,financeStaff));
     }
 
     @RequestMapping("/changeDirectorState")

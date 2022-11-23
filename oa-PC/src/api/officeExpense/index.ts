@@ -28,3 +28,19 @@ export const addNewOfficeExpenseApi = (officeExpense: officeExpenseModel) => {
     return http.post("officeExpense/addNewOfficeExpense",
         officeExpense)
 }
+
+//财务审批通过
+export const changeFinanceState = (id: number,financeStaff:string) => {
+    return http.get("officeExpense/changeFinanceState", {
+        id: id,
+        financeStaff:financeStaff
+    })
+}
+
+//董事会审批通过
+export const changeDirectorState = (officeExpenseId:number,userId:string) => {
+    return http.get("officeExpense/changeDirectorState", {
+        officeExpenseId: officeExpenseId,
+        userId:userId
+    })
+}

@@ -6,6 +6,7 @@ import cn.edu.guet.service.LogisticsPaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -310,6 +311,20 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
             }
         }
         return page;
+    }
+
+    @Override
+    public int changeFinanceState(String logisticsContractNo, String financeStaff) {
+        UpdateWrapper<LogisticsPaymentContract> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("logistics_contract_no",logisticsContractNo).set("finance_state", 1).set("finance_staff",financeStaff);
+        return logisticsPaymentContractMapper.update(null, updateWrapper);
+    }
+
+    @Override
+    public int changeDirectorState(int logisticsPaymentContractId, int userId) {
+        UpdateWrapper<LogisticsDirectorState> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("logistics_payment_contract_id", logisticsPaymentContractId).eq("user_id", userId).set("state", 1);
+        return logisticsDirectorStateMapper.update(null, updateWrapper);
     }
 }
 

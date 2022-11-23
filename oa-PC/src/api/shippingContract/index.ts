@@ -35,3 +35,19 @@ export const checkContainerNoApi = (containerNo: string) => {
         containerNo: containerNo,
     })
 }
+
+//财务审批通过
+export const changeFinanceState = (shippingContractNo: string,financeStaff:string) => {
+    return http.get("shippingContract/changeFinanceState", {
+        shippingContractNo: shippingContractNo,
+        financeStaff:financeStaff
+    })
+}
+
+//董事会审批通过
+export const changeDirectorState = (shippingContractNo:number,userId:string) => {
+    return http.get("shippingContract/changeDirectorState", {
+        shippingContractNo: shippingContractNo,
+        userId:userId
+    })
+}
