@@ -1,5 +1,5 @@
 import http from "../../http";
-import { AddSaleModel, ListParm } from "./SaleModel";
+import { AddSaleModel, ListParm ,ExportListParm} from "./SaleModel";
 
 
 //销售单列表(分页查询) 查询归档为1的数据
@@ -43,4 +43,9 @@ export const getRemainingOutboundVolumeApi = (saleContractNo: string) => {
 //根据销售合同编号查到所有的物流详情表
 export const getDetailSaleContract = (saleContractNo: string) => {
   return http.get(`/api/saleContract/getDetailSaleContract/${saleContractNo}`)
+}
+
+//导出excel传递参数
+export const exportApi = (listParm: ExportListParm) => {
+  return http.post("/api/saleContract/exportListParm", listParm)
 }

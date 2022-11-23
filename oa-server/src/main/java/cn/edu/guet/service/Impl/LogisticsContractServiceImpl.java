@@ -2,9 +2,7 @@ package cn.edu.guet.service.Impl;
 
 
 import cn.edu.guet.bean.LogisticsPaymentContract;
-import cn.edu.guet.bean.logisticsContract.ListParm;
-import cn.edu.guet.bean.logisticsContract.LogisticsContract;
-import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
+import cn.edu.guet.bean.logisticsContract.*;
 import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
 import cn.edu.guet.bean.own.OwnInOut;
@@ -90,7 +88,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         }
         //查看归档为1的数据
         query.lambda().eq(LogisticsContract::getPigeonhole, 1);
-        query.orderByDesc("create_time");
+        query.orderByDesc("id");
 
         Page<LogisticsContract> logisticsContractPage = logisticsContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
@@ -142,7 +140,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         }
         //查看归档为1的数据
         query.lambda().eq(LogisticsContract::getPigeonhole, 0);
-        query.orderByDesc("create_time");
+        query.orderByDesc("id");
 
         Page<LogisticsContract> logisticsContractPage = logisticsContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
@@ -509,6 +507,62 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         queryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
         logisticsDetailMapper.delete(queryWrapper);
         return 1;
+    }
+
+    @Override
+    public List<ExportOutLogisticsContract> getExportList(ExportListParm listParm) {
+        QueryWrapper<LogisticsContract> query = new QueryWrapper<>();
+        //构造查询条件
+        //物流单合同编号
+        if (StringUtils.isNotEmpty(listParm.getLogisticsContractNo())) {
+            query.lambda().like(LogisticsContract::getLogisticsContractNo, listParm.getLogisticsContractNo());
+        }
+
+        //销售单合同编号
+        if (StringUtils.isNotEmpty(listParm.getSaleContractNo())) {
+            query.lambda().like(LogisticsContract::getSaleContractNo, listParm.getSaleContractNo());
+        }
+        //榨季
+        if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
+            query.lambda().like(LogisticsContract::getSqueezeSeason, listParm.getSqueezeSeason());
+        }
+        //起止时间
+        if (listParm.getStartTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getStartTime());
+            query.lambda().ge(LogisticsContract::getLogisticsContractTime,format);
+        }
+        if (listParm.getEndTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getEndTime());
+            query.lambda().le(LogisticsContract::getLogisticsContractTime,format);
+        }
+        //查看归档为1的数据
+        if (listParm.getIsPigeonhole().equals("1")){
+            query.lambda().eq(LogisticsContract::getPigeonhole, 1);
+        }else {
+            query.lambda().eq(LogisticsContract::getPigeonhole, 0);
+        }
+        //查看归档为1的数据
+
+        query.orderByDesc("id");
+        List<LogisticsContract> logisticsContracts = logisticsContractMapper.selectList(query);
+        ArrayList<ExportOutLogisticsContract> list = new ArrayList<>();
+        for (LogisticsContract logisticsContract : logisticsContracts) {
+            ExportOutLogisticsContract exportOutLogisticsContract = new ExportOutLogisticsContract();
+            exportOutLogisticsContract.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
+            exportOutLogisticsContract.setSaleContractNo(logisticsContract.getSaleContractNo());
+            exportOutLogisticsContract.setTotalWeight(logisticsContract.getTotalWeight());
+            exportOutLogisticsContract.setGoodsUnit(logisticsContract.getGoodsUnit());
+            exportOutLogisticsContract.setFreight(logisticsContract.getFreight());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(logisticsContract.getLogisticsContractTime());
+            exportOutLogisticsContract.setLogisticsContractTime(format);
+            exportOutLogisticsContract.setSqueezeSeason(logisticsContract.getSqueezeSeason());
+            exportOutLogisticsContract.setCreateBy(logisticsContract.getCreateBy());
+            list.add(exportOutLogisticsContract);
+        }
+        return list;
     }
 }
 

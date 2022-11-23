@@ -6,8 +6,8 @@ export type ListParm = {
   saleContractNo: string,
   //榨季
   squeezeSeason: string
-  startTime:string
-  endTime:string
+  startTime: string
+  endTime: string
   currentPage: number,
   pageSize: number,
   total: number
@@ -43,4 +43,19 @@ export type AddLogisticsModel = {
   squeezeSeason: string,
   createBy: string,
   logisticsDetailList: LogisticsDetailList[]
+}
+
+
+//列表查询参数类型
+export type ExportListParm = {
+  //物流单合同编号
+  logisticsContractNo: string,
+  //销售单合同编号
+  saleContractNo: string,
+  //榨季
+  squeezeSeason: string
+  startTime: string
+  endTime: string
+  //是否归档 0归档  1未归档
+  isPigeonhole: string
 }

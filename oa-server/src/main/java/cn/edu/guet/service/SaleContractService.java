@@ -2,12 +2,15 @@ package cn.edu.guet.service;
 
 import cn.edu.guet.bean.cashier.sale.SaleModel;
 import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
+import cn.edu.guet.bean.sale.ExportListParm;
+import cn.edu.guet.bean.sale.ExportOutSaleContract;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.bean.sale.SaleContract;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -59,4 +62,6 @@ public interface SaleContractService extends IService<SaleContract> {
     IPage<SaleContract> getCashierSaleContract(ListParm listParm);
 
     int editCashierSale(SaleModel saleModel);
+
+    List<ExportOutSaleContract> getExportList(ExportListParm listParm);
 }

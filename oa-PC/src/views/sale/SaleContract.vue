@@ -28,7 +28,7 @@
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
         <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
         </el-button>
-        <el-button type="success" @click="" :icon="Plus">导出</el-button>
+        <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格 -->
@@ -109,14 +109,43 @@ import AddSaleContract from "@/views/sale/AddSaleContract.vue"
 import DetailSaleContract from "./DetailSaleContract.vue";
 import useDetail from '@/composables/sale/useDetail'
 import { conversionDate, conversionDateTime } from '@/utils/timeFormat'
+import { exportApi } from '@/api/sale/index'
+import { ExportListParm } from '@/api/sale/SaleModel'
+import { reactive, ref } from "vue";
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
 
-//销售单新增、编辑、删除
+//销售单新增、编辑、删除、导出
 const { changePigeonhole, deleteBtn, addBtn, addRef } = useSale(refresh)
 
 // 销售单详情相关操作
 const { detailRef, detailBtn } = useDetail()
+
+//导出表格
+const exportOutBtn = async () => {
+  exportListParm.saleContractNo = listParm.saleContractNo
+  exportListParm.saleCompanyName = listParm.saleCompanyName
+  exportListParm.goodsName = listParm.goodsName
+  exportListParm.squeezeSeason = listParm.squeezeSeason
+  exportListParm.startTime = listParm.startTime
+  exportListParm.endTime = listParm.endTime
+  exportListParm.isPigeonhole = isPigeonhole.value == true ? '1' : '0'
+  let res = await exportApi(exportListParm)
+  if (res && res.code == 200) {
+    const abtn = document.createElement("a");
+    abtn.href = "http://localhost:9000/api/saleContract/exportExcel"
+    abtn.click();
+  }
+}
+const exportListParm = reactive<ExportListParm>({
+  saleContractNo: '',
+  saleCompanyName: '',
+  goodsName: '',
+  squeezeSeason: '',
+  startTime: '',
+  endTime: '',
+  isPigeonhole: '1'
+})
 
 </script>
 

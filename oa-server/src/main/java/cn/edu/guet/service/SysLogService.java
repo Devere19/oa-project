@@ -1,6 +1,8 @@
 package cn.edu.guet.service;
 
-import cn.edu.guet.bean.SysLog;
+import cn.edu.guet.bean.log.ListParm;
+import cn.edu.guet.bean.log.SysLog;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,4 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @Version 1.0
  */
 public interface SysLogService extends IService<SysLog> {
+    IPage getList(ListParm listParm);
+
 }

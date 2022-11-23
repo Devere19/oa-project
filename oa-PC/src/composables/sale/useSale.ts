@@ -46,6 +46,6 @@ export default function useSale(refresh: FuncList) {
     changePigeonhole,
     deleteBtn,
     addBtn,
-    addRef
+    addRef,
   }
 }

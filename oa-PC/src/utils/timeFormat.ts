@@ -6,14 +6,31 @@
  */
 // 表格，日期带时分秒时间转换
 export const conversionDateTime = (row: any, column: any) => {
-
+    const daterc = row[column.property]
+    if (daterc == null) {
+        return "未知"
+    }
     let dateee = new Date(row[column.property]).toJSON();
     if (dateee != null) {
-
-        return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
     } else {
         return "未知"
     }
+
+}
+// 表格，日期带时分秒时间转换
+export const conversionDateTimeNull = (row: any, column: any) => {
+    const daterc = row[column.property]
+    if (daterc == null) {
+        return null
+    }
+    let dateee = new Date(row[column.property]).toJSON();
+    if (dateee != null) {
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    } else {
+        return null
+    }
+
 }
 
 /**
@@ -80,7 +97,7 @@ export const timeConversion = (time: any) => {
 
     let dateee = new Date(time).toJSON();
     if (dateee != null) {
-        return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
     } else {
         return time
     }

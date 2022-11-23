@@ -1,7 +1,7 @@
 package cn.edu.guet.aspect;
 
 
-import cn.edu.guet.bean.SysLog;
+import cn.edu.guet.bean.log.SysLog;
 import cn.edu.guet.service.SysLogService;
 import cn.edu.guet.util.HttpUtils;
 import cn.edu.guet.util.IPUtils;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * 系统日志，切面处理类，记录日志
@@ -81,6 +82,15 @@ public class SysLogAspect {
 
         // 执行时长(毫秒)
         sysLog.setTime(time);
+
+        //创建者
+        sysLog.setCreateBy(SecurityUtils.getUsername());
+        //创建时间
+        sysLog.setCreateTime(new Date());
+        //最近操作
+        sysLog.setLastUpdateBy(SecurityUtils.getUsername());
+        //最近操作时间
+        sysLog.setLastUpdateTime(new Date());
 
         // 保存系统日志
         sysLogService.save(sysLog);

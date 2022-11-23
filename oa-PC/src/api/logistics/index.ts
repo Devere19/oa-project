@@ -1,5 +1,5 @@
 import http from "../../http";
-import { AddLogisticsModel, ListParm } from "./LogisticsModel";
+import { AddLogisticsModel, ExportListParm, ListParm } from "./LogisticsModel";
 
 //物流单列表(分页查询) 查询归档为1的数据
 export const searchPigeonholeOneApi = (listParm: ListParm) => {
@@ -32,4 +32,10 @@ export const getDetailLogistics = (logisticsContractNo: string) => {
 //新增物流单和对应的详情单
 export const addLogisticsApi = (parm: AddLogisticsModel) => {
   return http.post("/api/logistics/add", parm)
+}
+
+
+//导出excel传递参数
+export const exportApi = (listParm: ExportListParm) => {
+  return http.post("/api/logistics/exportListParm", listParm)
 }

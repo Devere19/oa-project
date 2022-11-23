@@ -5,6 +5,8 @@ import cn.edu.guet.bean.cashier.sale.SaleModel;
 import cn.edu.guet.bean.customer.Customer;
 import cn.edu.guet.bean.logisticsContract.LogisticsContract;
 import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
+import cn.edu.guet.bean.sale.ExportListParm;
+import cn.edu.guet.bean.sale.ExportOutSaleContract;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.http.ResultUtils;
@@ -346,5 +348,76 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         List<String> revenuePhotoList = saleModel.getRevenuePhotoList();
         saleContract.setRevenuePhoto(ImageUtils.getDBString(revenuePhotoList));
         return saleContractMapper.updateById(saleContract);
+    }
+
+    @Override
+    public List<ExportOutSaleContract> getExportList(ExportListParm listParm) {
+        QueryWrapper<SaleContract> query = new QueryWrapper<>();
+        //构造查询条件
+        //合同编号
+        if (StringUtils.isNotEmpty(listParm.getSaleContractNo())) {
+            query.lambda().like(SaleContract::getSaleContractNo, listParm.getSaleContractNo());
+        }
+        //销售方公司id
+        if (StringUtils.isNotEmpty(listParm.getSaleCompanyName())) {
+            //通过公司名称拿到客户表对应的id
+            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
+            Customer customer = customerMapper.selectOne(queryWrapper);
+            query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+        }
+        //货物名称
+        if (StringUtils.isNotEmpty(listParm.getGoodsName())) {
+            query.lambda().like(SaleContract::getGoodsName, listParm.getGoodsName());
+        }
+        //榨季
+        if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
+            query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
+        }
+        //起止时间
+        if (listParm.getStartTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getStartTime());
+            query.lambda().ge(SaleContract::getSaleContractTime,format);
+        }
+        if (listParm.getEndTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getEndTime());
+            query.lambda().le(SaleContract::getSaleContractTime,format);
+        }
+        //查看归档为1的数据
+        if (listParm.getIsPigeonhole().equals("1")){
+            query.lambda().eq(SaleContract::getPigeonhole, 1);
+        }else {
+            query.lambda().eq(SaleContract::getPigeonhole, 0);
+        }
+        query.orderByDesc("id");
+        List<SaleContract> saleContracts = saleContractMapper.selectList(query);
+        List<ExportOutSaleContract> list = new ArrayList<>();
+        for (SaleContract saleContract : saleContracts) {
+            ExportOutSaleContract exportOutSaleContract = new ExportOutSaleContract();
+            exportOutSaleContract.setSaleContractNo(saleContract.getSaleContractNo());
+            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(Customer::getId,saleContract.getSaleCustomerId());
+            Customer customer = customerMapper.selectOne(queryWrapper);
+            exportOutSaleContract.setCustomerFactory(customer.getCustomerEnterpriseName());
+            exportOutSaleContract.setOwnCompanyName(saleContract.getOwnCompanyName());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(saleContract.getSaleContractTime());
+            exportOutSaleContract.setSaleContractTime(format);
+            exportOutSaleContract.setGoodsName(saleContract.getGoodsName());
+            exportOutSaleContract.setGoodsCount(saleContract.getGoodsCount());
+            exportOutSaleContract.setGoodsUnit(saleContract.getGoodsUnit());
+            exportOutSaleContract.setGoodsUnitPrice(saleContract.getGoodsUnitPrice());
+            exportOutSaleContract.setGoodsTotalPrice(saleContract.getGoodsTotalPrice());
+            exportOutSaleContract.setPaymentMethod(saleContract.getPaymentMethod());
+            exportOutSaleContract.setTransportMethod(saleContract.getTransportMethod());
+            exportOutSaleContract.setRevenueAmount(saleContract.getRevenueAmount());
+            exportOutSaleContract.setRevenueBy(saleContract.getRevenueBy());
+            exportOutSaleContract.setSqueezeSeason(saleContract.getSqueezeSeason());
+            exportOutSaleContract.setCreateBy(saleContract.getCreateBy());
+            list.add(exportOutSaleContract);
+        }
+        return list;
     }
 }
