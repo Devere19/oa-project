@@ -9,6 +9,7 @@ import cn.edu.guet.service.ShippingContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -362,7 +363,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                     }
                 }
             }
-            
+
             record.setShippingDirector(shippingStateViews);
 
             //处理图片，形成一个图片数组
@@ -395,6 +396,20 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> searchDirectorSC(int currentPage, int pageSize, String searchWord, int userId) {
         return null;
+    }
+
+    @Override
+    public int changeFinanceState(String shippingContractNo, String financeStaff) {
+        UpdateWrapper<ShippingContract> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("shipping_contract_no",shippingContractNo).set("finance_state", 1).set("finance_staff",financeStaff);
+        return shippingContractMapper.update(null, updateWrapper);
+    }
+
+    @Override
+    public int changeDirectorState(String shippingContractNo, int userId) {
+        UpdateWrapper<ShippingDirectorState> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("shipping_contract_no", shippingContractNo).eq("user_id", userId).set("state", 1);
+        return shippingDirectorStateMapper.update(null, updateWrapper);
     }
 }
 

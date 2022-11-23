@@ -7,6 +7,7 @@ import cn.edu.guet.service.OfficeExpenseService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -365,6 +366,20 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
             }
         }
         return page;
+    }
+
+    @Override
+    public int changeFinanceState(int id, String financeStaff) {
+        UpdateWrapper<OfficeExpense> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id",id).set("finance_state", 1).set("finance_staff",financeStaff);
+        return officeExpenseMapper.update(null, updateWrapper);
+    }
+
+    @Override
+    public int changeDirectorState(int officeExpenseId, int userId) {
+        UpdateWrapper<OfficeDirectorState> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("office_expense_id", officeExpenseId).eq("user_id", userId).set("state", 1);
+        return officeDirectorStateMapper.update(null, updateWrapper);
     }
 }
 

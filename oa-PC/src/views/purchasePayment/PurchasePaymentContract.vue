@@ -61,7 +61,8 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="290" fixed="right">
                 <template #default="scope">
-                    <el-button :icon="Select" size="default" type="success" @click="openMordDetailDialog(scope.row)">通过
+                    <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
+                               :disabled="loginUserRole =='财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row): true): true)">通过
                     </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
@@ -306,12 +307,12 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted, markRaw } from 'vue'
-import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
+import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules,ElMessageBox } from 'element-plus'
 import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { purchasePaymentContractModel, purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/PurchasePaymentContractModel'
-import { getPurchasePaymentContractDataApi, searchPurchasePaymentContractApi, checkPurchaseContractNoApi, addNewPurchasePaymentContractApi, deleteOnePurchasePaymentContractApi } from '@/api/purchasePaymentContract'
+import { getPurchasePaymentContractDataApi, searchPurchasePaymentContractApi, checkPurchaseContractNoApi, addNewPurchasePaymentContractApi, deleteOnePurchasePaymentContractApi,changeFinanceState,changeDirectorState } from '@/api/purchasePaymentContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -335,6 +336,7 @@ const contractExistFlag = ref(false)
 
 const loginUserName = ref("")
 const loginUserRole = ref("")
+const loginUserId = ref("")
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
@@ -383,7 +385,66 @@ const firstRules = reactive<FormRules>({
 onMounted(() => {
     getTableData();
     loginUserName.value = userNickNameStore.user.nickName;
+    loginUserRole.value = userNickNameStore.user.roleNames
+    loginUserId.value = userNickNameStore.user.id
 })
+
+//审批通过，根据身份修改采购付款单响应审核状态
+const changeState = (row:any) => {
+    if (loginUserRole.value == '财务'){
+      ElMessageBox.confirm(
+          '您确定要通过吗?',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            title:'系统提示'
+          }
+      ).then(() => {
+        changeFinanceState(row.purchaseContractNo,loginUserName.value).then(res => {
+          ElMessage({
+            message: "已通过",
+            type: 'success',
+            duration: 3000
+          })
+          getTableData();
+        });
+      })
+
+    }else if (loginUserRole.value == '董事会'){
+      ElMessageBox.confirm(
+          '您确定要通过吗?',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            title:'系统提示'
+          }
+      ).then(() => {
+        changeDirectorState(row.id,loginUserId.value).then(res => {
+          ElMessage({
+            message: "已通过",
+            type: 'success',
+            duration: 3000
+          })
+          getTableData();
+        })
+      })
+    }
+}
+
+//判断董事会审批是否重复
+const JudgmentRepeated = (row:any) => {
+  console.log(userNickNameStore.user.roleNames)
+  for (var i = 0;i<row.purchasePaymentDirector.length;i++){
+    if (row.purchasePaymentDirector[i].userId == userNickNameStore.user.id){
+        if (row.purchasePaymentDirector[i].state == null){
+          return false;
+        }else{
+          return true;
+        }
+    }
+  }
+  return true;
+}
 
 // 获取采购付款单数据
 const getTableData = () => {
@@ -487,8 +548,10 @@ const sendNewPurchasePaymentContract = async (formEl1: FormInstance | undefined)
     })
 }
 
+
 // 打开采购付款单详情窗口
 const openMordDetailDialog = async (row: any) => {
+  console.log(row.purchasePaymentDirector);
     purchasePaymentContractDetail.purchaseContractNo = row.purchaseContractNo
     purchasePaymentContractDetail.paymentAmount = row.paymentAmount
     purchasePaymentContractDetail.paymentCount = row.paymentCount

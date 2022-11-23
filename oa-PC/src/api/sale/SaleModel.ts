@@ -8,6 +8,10 @@ export type ListParm = {
   goodsName: string,
   //榨季
   squeezeSeason: string
+  //开始时间
+  startTime: string
+  //结束时间
+  endTime: string
   currentPage: number,
   pageSize: number,
   total: number
@@ -30,7 +34,7 @@ export type AddSaleModel = {
   contractPhotoList: any,
   revenueAmount: string,
   revenuePhoto: string,
-  revenuePhotoList:any,
+  revenuePhotoList: any,
   revenueBy: string,
   pigeonhole: string,
   squeezeSeason: string,

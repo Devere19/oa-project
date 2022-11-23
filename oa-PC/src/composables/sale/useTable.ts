@@ -10,6 +10,8 @@ export default function useTable() {
     saleCompanyName: '',
     goodsName: '',
     squeezeSeason: '',
+    startTime: '',
+    endTime: '',
     currentPage: 1,
     pageSize: 10,
     total: 0
@@ -98,6 +100,8 @@ export default function useTable() {
     listParm.saleCompanyName = ''
     listParm.saleContractNo = ''
     listParm.squeezeSeason = ''
+    listParm.startTime = ''
+    listParm.endTime = ''
     // getList()
     if (isPigeonhole.value) {
       //查询归档为1的列表

@@ -2,14 +2,14 @@ import http from "../../http";
 import { AddLogisticsModel, ListParm } from "./LogisticsModel";
 
 //物流单列表(分页查询) 查询归档为1的数据
-export const searchPigeonholeOneApi = (parm: ListParm) => {
-  return http.get("/api/logistics/list", parm)
+export const searchPigeonholeOneApi = (listParm: ListParm) => {
+  return http.post("/api/logistics/list", listParm)
 }
 
 
 //物流单列表(分页查询) 查询归档为0的数据
-export const searchPigeonholeZeroApi = (parm: ListParm) => {
-  return http.get("/api/logistics/searchPigeonholeZero", parm)
+export const searchPigeonholeZeroApi = (listParm: ListParm) => {
+  return http.post("/api/logistics/searchPigeonholeZero", listParm)
 }
 
 //归档
@@ -24,7 +24,7 @@ export const deleteByIdApi = (id: number) => {
 }
 
 //根据物流合同编号查到所有的物流详情表
-export const getDetailLogistics=(logisticsContractNo:string)=>{
+export const getDetailLogistics = (logisticsContractNo: string) => {
   return http.get(`/api/logistics/getDetailLogistics/${logisticsContractNo}`)
 }
 

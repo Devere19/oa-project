@@ -41,8 +41,9 @@ public class SaleContractController {
      * @param listParm
      * @return
      */
-    @GetMapping("/list")
-    public HttpResult getList(ListParm listParm) {
+    @PostMapping("/list")
+    public HttpResult getList(@RequestBody ListParm listParm) {
+        System.out.println("拿到的listParm："+listParm);
         IPage<SaleContract> list = saleContractService.getList(listParm);
         return ResultUtils.success("查询成功", list);
     }
@@ -66,8 +67,8 @@ public class SaleContractController {
      * @param listParm
      * @return
      */
-    @GetMapping("/searchPigeonholeZero")
-    public HttpResult searchPigeonholeZero(ListParm listParm) {
+    @PostMapping("/searchPigeonholeZero")
+    public HttpResult searchPigeonholeZero(@RequestBody ListParm listParm) {
         IPage<SaleContract> list = saleContractService.searchPigeonholeZero(listParm);
         return ResultUtils.success("查询成功", list);
     }
@@ -90,7 +91,7 @@ public class SaleContractController {
         QueryWrapper<LogisticsContract> logisticsContractQueryWrapper = new QueryWrapper<>();
         logisticsContractQueryWrapper.lambda().eq(LogisticsContract::getSaleContractNo, saleContractNo);
         List<LogisticsContract> list = logisticsContractService.list(logisticsContractQueryWrapper);
-        if (list != null) {
+        if (list.size()>0) {
             return ResultUtils.error("该销售单已经有物流信息，不允许删除");
         }
         if (saleContractService.removeById(id)) {
