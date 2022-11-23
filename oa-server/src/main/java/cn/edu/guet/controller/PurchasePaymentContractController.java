@@ -50,6 +50,24 @@ public class PurchasePaymentContractController {
     }
 
 
+//    APP接口
+    @RequestMapping("/getDirectorPPC")
+    public HttpResult getDirectorPPC(int current, int page, int userId ,int type){
+        return ResultUtils.success("查询成功",purchasePaymentContractService.getDirectorPPC(current,page,userId,type));
+
+    }
+
+    @RequestMapping("/getOneDirectorPPC")
+    public HttpResult getOneDirectorPPC(int id){
+        return ResultUtils.success("查询成功",purchasePaymentContractService.getOneDirectorPPC(id));
+    }
+
+    @RequestMapping("/searchDirectorPPC")
+    public HttpResult searchDirectorPPC(int current, int page,String searchWord,int userId){
+        return ResultUtils.success("查询成功",purchasePaymentContractService.searchDirectorPPC(current,page,searchWord,userId));
+    }
+
+//    审批
     @RequestMapping("/changeFinanceState")
     public  HttpResult changeFinanceState(int id,String financeStaff){
         return ResultUtils.success("已通过",purchasePaymentContractService.changeFinanceState(id,financeStaff));
@@ -58,12 +76,5 @@ public class PurchasePaymentContractController {
     @RequestMapping("/changeDirectorState")
     public  HttpResult changeDirectorState(int purchasePaymentContractId, int userId) {
         return ResultUtils.success("已通过", purchasePaymentContractService.changeDirectorState(purchasePaymentContractId, userId));
-    }
-
-//    APP接口
-    @RequestMapping("/getDirectorPPC")
-    public HttpResult getDirectorPPC(int current, int page, int userId ,int type){
-        return ResultUtils.success("查询成功",purchasePaymentContractService.getDirectorPPC(current,page,userId,type));
-
     }
 }

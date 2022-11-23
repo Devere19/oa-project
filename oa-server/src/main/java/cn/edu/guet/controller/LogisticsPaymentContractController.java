@@ -49,9 +49,23 @@ public class LogisticsPaymentContractController {
     }
 
     //    APP接口
+
+    /**
+     * * APP获取董事会物流付款单
+     * @param current
+     * @param page
+     * @param userId
+     * @param type
+     * @return
+     */
     @RequestMapping("/getDirectorLPC")
     public HttpResult getDirectorLPC(int current, int page, int userId ,int type){
         return ResultUtils.success("查询成功",logisticsPaymentContractService.getDirectorLPC(current,page,userId,type));
+    }
+
+    @RequestMapping("/searchDirectorLPC")
+    public HttpResult searchDirectorLPC(int current, int page,String searchWord,int userId){
+        return ResultUtils.success("查询成功",logisticsPaymentContractService.searchDirectorLPC(current,page,searchWord,userId));
     }
 
     //审批

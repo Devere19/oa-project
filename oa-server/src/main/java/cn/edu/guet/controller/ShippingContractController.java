@@ -51,6 +51,11 @@ public class ShippingContractController {
         return ResultUtils.success("查询成功",shippingContractService.getDirectorSC(current,page,userId,type));
     }
 
+    @RequestMapping("/searchDirectorSC")
+    public HttpResult searchDirectorSC(int current, int page,String searchWord, int userId){
+        return ResultUtils.success("查询成功",shippingContractService.searchDirectorSC(current,page,searchWord,userId));
+    }
+
     //审批
     @RequestMapping("/changeFinanceState")
     public  HttpResult changeFinanceState(String shippingContractNo,String financeStaff){

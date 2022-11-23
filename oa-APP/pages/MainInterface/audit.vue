@@ -9,8 +9,7 @@
 			</uni-search-bar>
 		</view>
 		<view class="cardGroup">
-			<!-- 暂时不做采购单 -->
-			<!-- 			<uni-card :isFull="true" padding="0" title="采购单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
+<!-- 			<uni-card :isFull="true" padding="0" title="采购单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
 				<view>
 					<uni-list v-for="(item,index) in purchaseList">
 						<uni-list-item :title="item.goodsName" :rightText="item.supplier" link=""
@@ -18,7 +17,7 @@
 					</uni-list>
 				</view>
 			</uni-card> -->
-			<uni-card :isFull="true" padding="0" title="采购付款单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
+			<uni-card :isFull="true" padding="0" title="采购付款单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchasePayment">
 			<!-- 当没有以下部分内容时，需要padding="0"这个属性，有的话，再去掉，否则排版不够美观 -->
 				<!-- 				<uni-grid :column="3" :highlight="true" :showBorder="false" :square="false" @change="purchaseCardClick">
 					<uni-grid-item v-for="(item, index) in purchaseCount" :index="index">
@@ -33,22 +32,20 @@
 				</uni-grid> -->
 				<view>
 					<uni-list v-for="(item,index) in purchasePaymentList" :key="item.id">
-						<uni-list-item :title="item.goodsName" :rightText="item.paymentCount" link=""
+						<uni-list-item :title="item.goodsName" :rightText="'￥'+item.paymentCount" link=""
 							@tap="toDetail('purchase',item.id)" showArrow></uni-list-item>
 					</uni-list>
 				</view>
 			</uni-card>
-			<!-- 暂时不做销售单 -->
-<!-- 			<uni-card :isFull="true" padding="0" title="销售单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
+<!-- 			<uni-card :isFull="true" padding="0" title="销售单" extra="更多>" :style="'margin-top:15rpx'" @tap="toSale">
 				<view>
 					<uni-list v-for="(item,index) in purchaseList">
 						<uni-list-item :title="item.goodsName" :rightText="item.supplier" link=""
 							@tap="toDetail('purchase',item.contractNo)" showArrow></uni-list-item>
 					</uni-list>
 				</view>
-			</uni-card> -->
-			<!-- 暂时不做物流单 -->
-<!-- 			<uni-card :isFull="true" padding="0" title="物流单" extra="更多>" :style="'margin-top:15rpx'" @tap="toLogistics">
+			</uni-card>
+			<uni-card :isFull="true" padding="0" title="物流单" extra="更多>" :style="'margin-top:15rpx'" @tap="toLogistics">
 				<view>
 					<uni-list v-for="(item,index) in logisticsList">
 						<uni-list-item :title="'￥'+item.freight" :rightText="item.factoryName" link=""
@@ -57,7 +54,7 @@
 					</uni-list>
 				</view>
 			</uni-card> -->
-			<uni-card :isFull="true" padding="0" title="物流付款单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
+			<uni-card :isFull="true" padding="0" title="物流付款单" extra="更多>" :style="'margin-top:15rpx'" @tap="toLogisticsPayment">
 <!-- 				<uni-grid :column="3" :highlight="true" :showBorder="false" :square="false"
 					@change="logisticsCardClick">
 					<uni-grid-item v-for="(item, index) in logisticsCount" :index="index">
@@ -72,7 +69,7 @@
 				</uni-grid> -->
 				<view>
 					<uni-list v-for="(item,index) in logisticsPaymentList" :key="item.id">
-						<uni-list-item :title="'￥'+item.paymentCount" :rightText="item.goodsName" link=""
+						<uni-list-item :title="item.goodsName" :rightText="'￥'+item.paymentCount" link=""
 							@tap="toDetail('logistics',item.id)" showArrow>
 						</uni-list-item>
 					</uni-list>
@@ -92,7 +89,7 @@
 				</uni-grid> -->
 				<view>
 					<uni-list v-for="(item,index) in shippingList" :key="item.shippingContractNo">
-						<uni-list-item :title="'￥'+item.expenses" :rightText="item.principal" link=""
+						<uni-list-item :title="item.principal" :rightText="'￥'+item.expenses" link=""
 							@tap="toDetail('shipping',item.shippingContractNo)" showArrow>
 							<!-- 						<uni-list-item :title="'￥'+item.expenses" :rightText="item.CarrierCompanyName" :link="{url:'/pages/detail/shippingDetail?contractNo='+contractNo}" @tap="toDetail('shipping',item.contractNo)" showArrow> -->
 						</uni-list-item>
@@ -100,10 +97,10 @@
 				</view>
 			</uni-card>
 			<uni-card :isFull="true" padding="0" title="办公经费单" extra="更多>" :style="'margin-top:15rpx'"
-				@tap="toPurchase">
+				@tap="toOfficeExpense">
 				<view>
 					<uni-list v-for="(item,index) in officeExpenseList" :key="item.id">
-						<uni-list-item :title="item.expenses" :rightText="item.itemsList" link=""
+						<uni-list-item :title="item.itemsList" :rightText="'￥'+item.expenses" link=""
 							@tap="toDetail('purchase',item.id)" showArrow></uni-list-item>
 					</uni-list>
 				</view>
@@ -242,7 +239,7 @@
 					url: '/purchasePaymentContract/getDirectorPPC',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -263,7 +260,7 @@
 					url: '/logisticsPaymentContract/getDirectorLPC',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -284,7 +281,7 @@
 					url: '/shippingContract/getDirectorSC',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -305,7 +302,7 @@
 					url: '/officeExpense/getDirectorOE',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -383,6 +380,20 @@
 					})
 				}
 			},
+			toPurchasePayment(e) {
+				if (e == "extra") {
+					uni.navigateTo({
+						url: "/pages/audit/purchasePayment"
+					})
+				}
+			},
+			toSale(e) {
+				if (e == "extra") {
+					uni.navigateTo({
+						url: "/pages/audit//sale"
+					})
+				}
+			},
 			toLogistics(e) {
 				if (e == "extra") {
 					uni.navigateTo({
@@ -390,10 +401,24 @@
 					})
 				}
 			},
+			toLogisticsPayment(e) {
+				if (e == "extra") {
+					uni.navigateTo({
+						url: "/pages/audit/logisticsPayment"
+					})
+				}
+			},
 			toShipping(e) {
 				if (e == "extra") {
 					uni.navigateTo({
 						url: "/pages/audit/shipping"
+					})
+				}
+			},
+			toOfficeExpense(e) {
+				if (e == "extra") {
+					uni.navigateTo({
+						url: "/pages/audit/officeExpense"
 					})
 				}
 			},

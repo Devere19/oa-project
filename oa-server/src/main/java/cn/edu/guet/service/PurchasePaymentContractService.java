@@ -3,8 +3,11 @@ package cn.edu.guet.service;
 
 import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.bean.PurchasePaymentContractView;
+import cn.edu.guet.bean.PurchasePaymentStateView;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author 陶祎祎
@@ -29,5 +32,7 @@ public interface PurchasePaymentContractService extends IService<PurchasePayment
 
 //    APP
     Page<PurchasePaymentContractView> getDirectorPPC(int currentPage, int pageSize, int userId ,int type);
+    PurchasePaymentContractView getOneDirectorPPC(int id);
+    Page<PurchasePaymentContractView> searchDirectorPPC(int currentPage, int pageSize ,String searchWord, int userId);
 
 }
