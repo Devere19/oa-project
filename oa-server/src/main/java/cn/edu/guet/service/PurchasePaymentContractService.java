@@ -23,7 +23,7 @@ public interface PurchasePaymentContractService extends IService<PurchasePayment
     int uploadCashierPurchasePayment(PurchasePaymentContract purchasePaymentContract);
 
     //审批
-    int changeFinanceState(String purchaseContractNo,String financeStaff);
+    int changeFinanceState(int id,String financeStaff);
     int changeDirectorState(int purchasePaymentContractId,int userId);
 
 

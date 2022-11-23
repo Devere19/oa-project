@@ -27,6 +27,6 @@ public interface LogisticsPaymentContractService extends IService<LogisticsPayme
     Page<LogisticsPaymentContractView> getDirectorLPC(int currentPage, int pageSize, int userId , int type);
 
     //审批
-    int changeFinanceState(String logisticsContractNo,String financeStaff);
+    int changeFinanceState(int id,String financeStaff);
     int changeDirectorState(int logisticsPaymentContractId,int userId);
 }

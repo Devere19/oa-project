@@ -44,7 +44,7 @@
                             {{ numberData[0].spend }}
                         </span>
                     </div>
-                    <div class="detailButton">
+                    <div class="detailButton" @click="dayViewDetail">
                         查看细则
                     </div>
                 </div>
@@ -190,6 +190,59 @@
             </el-tabs>
         </div>
     </div>
+
+  <el-dialog v-model="detialDialogFlag" title="详情" width="70%" draggable center :before-close="closeAddDialog">
+    <ul ref="addDialogTop" style="overflow: auto;height:700px;padding: 0;">
+      <span class="title" style="line-height: 50px;">收入详情:</span><br />
+      <el-table ref="firstTableRef" class="purchaseContractTable"  style="width: 98% ;height: 30%" :data="tableList.earnlist"
+                border="true" highlight-current-row>
+        <!-- 暂时隐藏index -->
+        <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
+        <el-table-column property="saleContractNo" label="销售合同编号" align="center" ></el-table-column>
+        <el-table-column property="customerEnterpriseName" align="center" label="销售公司" />
+        <el-table-column property="ownCompanyName" align="center" label="己方公司"/>
+        <el-table-column property="revenueTime" :formatter="conversionDate" sortable align="center" label="收款时间" />
+        <el-table-column property="goodsTotalPrice" align="center" label="收款金额" />
+        <el-table-column prop="revenuePhoto" label="收款流水单截图">
+          <template #default="scope">
+            <el-image style="width: 60px; height: 60px"
+                      :src="scope.row.revenuePhoto == '' ? null : scope.row.revenuePhoto"
+                      :preview-src-list="scope.row.revenuePhotoList" :initial-index="4" fit="cover" preview-teleported="true" />
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <span class="title" style="line-height: 50px;">支出详情:</span><br />
+      <el-table ref="firstTableRef" class="purchaseContractTable"  style="width: 98% ;height: 30%"
+                border="true" highlight-current-row>
+        <!-- 暂时隐藏index -->
+        <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
+        <el-table-column property="inOutContractNo" label="采购合同编号" align="center" ></el-table-column>
+        <el-table-column property="inOutGoodsName" align="center" label="供货公司" />
+        <el-table-column property="inOutType" align="center" label="己方公司"/>
+        <el-table-column property="inOutGoodsCount" :formatter="conversionDate" sortable align="center" label="付款时间" />
+        <el-table-column property="inOutGoodsUnit" align="center" label="付款金额" />
+        <el-table-column property="createBy" align="center" label="付款流水图" />
+      </el-table>
+
+      <el-table ref="firstTableRef" class="purchaseContractTable"  style="width: 98% ;height: 30%"
+                border="true" highlight-current-row>
+        <!-- 暂时隐藏index -->
+        <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
+        <el-table-column property="inOutContractNo" label="销售合同编号" align="center" ></el-table-column>
+        <el-table-column property="inOutGoodsName" align="center" label="销售公司" />
+        <el-table-column property="inOutType" align="center" label="己方公司"/>
+        <el-table-column property="inOutGoodsCount" :formatter="conversionDate" sortable align="center" label="收款时间" />
+        <el-table-column property="inOutGoodsUnit" align="center" label="收款金额" />
+        <el-table-column property="createBy" align="center" label="收款流水图" />
+      </el-table>
+    </ul>
+    <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="closeAddDialog">关闭</el-button>
+                </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -216,6 +269,7 @@ const choosedYEndYear = ref<Date>();
 const SYearFlag = ref(false);
 const YYearFlag = ref(false);
 const SSeasonFlag = ref(false);
+const detialDialogFlag = ref(false)
 
 const activeTab = ref('0')
 const loading = ref(false)
@@ -228,6 +282,12 @@ const thirdChartRef = ref<HTMLElement>();
 let thirdChartObject: echarts.ECharts | null = null;
 const fourthChartRef = ref<HTMLElement>();
 let fourthChartObject: echarts.ECharts | null = null;
+
+//日报细则，表格数据
+const tableList = reactive({
+  earnlist: [],
+  paylist:[]
+})
 
 const numberData = reactive<{
     income: string,
@@ -507,6 +567,10 @@ const disabledDate = (time: Date) => {
     return time.getTime() > Date.now()
 }
 
+const dayViewDetail = () => {
+  detialDialogFlag.value = true
+}
+
 onMounted(() => {
     // 获取图表对象
     // firstChartObject.value = echarts.init(firstChartRef.value!, 'dark')
@@ -514,6 +578,10 @@ onMounted(() => {
     // 设置图表数据
     firstChartObject.setOption(firstOption);
 });
+
+const closeAddDialog = () => {
+  detialDialogFlag.value = false;
+}
 
 // 响应类型的修改
 const changeType = () => {
