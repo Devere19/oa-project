@@ -398,6 +398,7 @@ const changeState = (row:any) => {
           type: 'success',
           duration: 3000
         })
+        getTableData();
       });
     }else if (loginUserRole.value == '董事会'){
       changeDirectorState(row.id,loginUserId.value).then(res => {
@@ -406,6 +407,7 @@ const changeState = (row:any) => {
           type: 'success',
           duration: 3000
         })
+        getTableData();
       })
     }
 }

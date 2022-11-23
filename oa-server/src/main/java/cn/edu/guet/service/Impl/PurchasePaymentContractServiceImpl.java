@@ -242,8 +242,10 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Override
     public int changeDirectorState(int purchasePaymentContractId, int userId) {
         UpdateWrapper<PurchaseDirectorState> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("purchase_payment_contract_id",purchasePaymentContractId).eq("user_id",userId).set("state", 1);
+        updateWrapper.eq("purchase_payment_contract_id", purchasePaymentContractId).eq("user_id", userId).set("state", 1);
         return purchaseDirectorStateMapper.update(null, updateWrapper);
+
+    }
 
 //    APP方法
     /**

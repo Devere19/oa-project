@@ -56,8 +56,9 @@ public class PurchasePaymentContractController {
     }
 
     @RequestMapping("/changeDirectorState")
-    public  HttpResult changeDirectorState(int purchasePaymentContractId, int userId){
-        return ResultUtils.success("已通过",purchasePaymentContractService.changeDirectorState(purchasePaymentContractId,userId));
+    public  HttpResult changeDirectorState(int purchasePaymentContractId, int userId) {
+        return ResultUtils.success("已通过", purchasePaymentContractService.changeDirectorState(purchasePaymentContractId, userId));
+    }
 
 //    APP接口
     @RequestMapping("/getDirectorPPC")

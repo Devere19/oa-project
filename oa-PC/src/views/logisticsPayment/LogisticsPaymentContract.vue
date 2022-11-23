@@ -60,6 +60,9 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="200" fixed="right">
                 <template #default="scope">
+                  <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
+                             :disabled="loginUserRole =='财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? JudgmentRepeated(scope.row) : false)">通过
+                  </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
@@ -302,7 +305,7 @@ import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/ico
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { logisticsPaymentContractModel, logisticsPaymentDirectorModel } from '@/api/logisticsPaymentContract/LogisticsPaymentContractModel'
-import { getLogisticsPaymentContractDataApi, searchLogisticsPaymentContractApi, checkLogisticsContractNoApi, addNewLogisticsPaymentContractApi, deleteOneLogisticsPaymentContractApi } from '@/api/logisticsPaymentContract'
+import { getLogisticsPaymentContractDataApi, searchLogisticsPaymentContractApi, checkLogisticsContractNoApi, addNewLogisticsPaymentContractApi, deleteOneLogisticsPaymentContractApi,changeDirectorState, changeFinanceState } from '@/api/logisticsPaymentContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -325,6 +328,8 @@ const addDialogTop = ref<any>()
 const contractExistFlag = ref(false)
 
 const loginUserName = ref("")
+const loginUserRole = ref("")
+const loginUserId = ref("")
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
@@ -372,7 +377,47 @@ const firstRules = reactive<FormRules>({
 onMounted(() => {
     getTableData();
     loginUserName.value = userNickNameStore.user.nickName;
+    loginUserRole.value = userNickNameStore.user.roleNames
+    loginUserId.value = userNickNameStore.user.id
 })
+
+//审批通过，根据身份修改采购付款单响应审核状态
+const changeState = (row:any) => {
+  if (loginUserRole.value == '财务'){
+    changeFinanceState(row.logisticsContractNo).then(res => {
+      ElMessage({
+        message: "已通过",
+        type: 'success',
+        duration: 3000
+      })
+      getTableData();
+    });
+  }else if (loginUserRole.value == '董事会'){
+    changeDirectorState(row.id,loginUserId.value).then(res => {
+      ElMessage({
+        message: "已通过",
+        type: 'success',
+        duration: 3000
+      })
+      getTableData();
+    })
+  }
+}
+
+//判断董事会审批是否重复
+const JudgmentRepeated = (row:any) => {
+  console.log(userNickNameStore.user.roleNames)
+  for (var i = 0;i<row.logisticsPaymentDirector.length;i++){
+    if (row.logisticsPaymentDirector[i].userId == userNickNameStore.user.id){
+      if (row.logisticsPaymentDirector[i].state == null){
+        return false;
+      }else{
+        return true;
+      }
+    }
+  }
+  return true;
+}
 
 // 获取物流付款单数据
 const getTableData = () => {
