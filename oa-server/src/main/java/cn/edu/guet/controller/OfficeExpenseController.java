@@ -44,4 +44,15 @@ public class OfficeExpenseController {
     public HttpResult getDirectorOE(int current, int page, int userId ,int type){
         return ResultUtils.success("查询成功",officeExpenseService.getDirectorOE(current,page,userId,type));
     }
+
+    //审批
+    @RequestMapping("/changeFinanceState")
+    public  HttpResult changeFinanceState(int id,String financeStaff){
+        return ResultUtils.success("已通过",officeExpenseService.changeFinanceState(id,financeStaff));
+    }
+
+    @RequestMapping("/changeDirectorState")
+    public  HttpResult changeDirectorState(int officeExpenseId, int userId)  {
+        return ResultUtils.success("已通过", officeExpenseService.changeDirectorState(officeExpenseId, userId));
+    }
 }

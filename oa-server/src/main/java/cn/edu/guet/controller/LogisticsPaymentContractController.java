@@ -53,4 +53,15 @@ public class LogisticsPaymentContractController {
     public HttpResult getDirectorLPC(int current, int page, int userId ,int type){
         return ResultUtils.success("查询成功",logisticsPaymentContractService.getDirectorLPC(current,page,userId,type));
     }
+
+    //审批
+    @RequestMapping("/changeFinanceState")
+    public  HttpResult changeFinanceState(String logisticsContractNo, String financeStaff){
+        return ResultUtils.success("已通过",logisticsPaymentContractService.changeFinanceState(logisticsContractNo,financeStaff));
+    }
+
+    @RequestMapping("/changeDirectorState")
+    public  HttpResult changeDirectorState(int logisticsPaymentContractId, int userId) {
+        return ResultUtils.success("已通过", logisticsPaymentContractService.changeDirectorState(logisticsPaymentContractId, userId));
+    }
 }
