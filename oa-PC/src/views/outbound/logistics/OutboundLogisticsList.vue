@@ -25,7 +25,7 @@
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
         <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
         </el-button>
-        <el-button type="success" @click="" :icon="Plus">导出</el-button>
+        <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
       </el-form-item>
     </el-form>
 
@@ -87,6 +87,9 @@ import useLogistics from '@/composables/logistics/useLogistics'
 import useDetail from '@/composables/logistics/useDetail';
 import DetailLogsitics from './DetailLogsitics.vue';
 import AddLogis from './AddLogis.vue';
+import { exportApi } from '@/api/logistics';
+import { ExportListParm } from '@/api/logistics/LogisticsModel';
+import { reactive } from 'vue';
 //表格相关属性
 const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero ,sizeChange,currentChange} = useTable()
 
@@ -95,6 +98,32 @@ const { changePigeonhole, deleteBtn, addRef, addBtn } = useLogistics(refresh)
 
 //详情相关属性
 const { detailBtn, detailRef } = useDetail()
+
+
+//导出表格
+const exportOutBtn = async () => {
+  exportListParm.saleContractNo = listParm.saleContractNo
+  exportListParm.logisticsContractNo = listParm.logisticsContractNo
+  exportListParm.squeezeSeason = listParm.squeezeSeason
+  exportListParm.startTime = listParm.startTime
+  exportListParm.endTime = listParm.endTime
+  exportListParm.isPigeonhole = isPigeonhole.value == true ? '1' : '0'
+  let res = await exportApi(exportListParm)
+  if (res && res.code == 200) {
+    const abtn = document.createElement("a");
+    abtn.href = "http://localhost:9000/api/logistics/exportExcel"
+    abtn.click();
+  }
+}
+
+const exportListParm = reactive<ExportListParm>({
+  logisticsContractNo:'',
+  saleContractNo:'',
+  squeezeSeason: '',
+  startTime: '',
+  endTime: '',
+  isPigeonhole: '1'
+})
 
 </script>
 

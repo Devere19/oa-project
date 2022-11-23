@@ -59,6 +59,16 @@ const routes: Array<RouteRecordRaw> = [
           icon: 'Menu',
           roles: ['sys:menu'],
         },
+      },
+      {
+        path: '/logList',
+        name: 'logList',
+        component: () => import('@/views/system/log/LogList.vue'),
+        meta: {
+          title: '日志管理',
+          icon: 'Monitor',
+          roles: ['sys:log'],
+        },
       }
     ]
   },

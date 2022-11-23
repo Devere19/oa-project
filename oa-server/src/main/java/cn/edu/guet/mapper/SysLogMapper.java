@@ -1,6 +1,6 @@
 package cn.edu.guet.mapper;
 
-import cn.edu.guet.bean.SysLog;
+import cn.edu.guet.bean.log.SysLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

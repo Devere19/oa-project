@@ -37,9 +37,9 @@ export const checkLogisticsContractNoApi = (logisticsContractNo: string) => {
 }
 
 //财务审批通过
-export const changeFinanceState = (logisticsContractNo: string,financeStaff:string) => {
+export const changeFinanceState = (id: number,financeStaff:string) => {
     return http.get("logisticsPaymentContract/changeFinanceState", {
-        logisticsContractNo: logisticsContractNo,
+        id: id,
         financeStaff:financeStaff
     })
 }

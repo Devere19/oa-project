@@ -70,8 +70,8 @@ public class LogisticsPaymentContractController {
 
     //审批
     @RequestMapping("/changeFinanceState")
-    public  HttpResult changeFinanceState(String logisticsContractNo, String financeStaff){
-        return ResultUtils.success("已通过",logisticsPaymentContractService.changeFinanceState(logisticsContractNo,financeStaff));
+    public  HttpResult changeFinanceState(int id, String financeStaff){
+        return ResultUtils.success("已通过",logisticsPaymentContractService.changeFinanceState(id,financeStaff));
     }
 
     @RequestMapping("/changeDirectorState")

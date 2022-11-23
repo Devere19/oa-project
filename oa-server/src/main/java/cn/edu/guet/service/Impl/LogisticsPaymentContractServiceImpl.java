@@ -303,7 +303,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                     }
                 }
             }
-            
+
             record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
             //处理图片，形成一个图片数组
             String paymentPhoto = record.getPaymentPhoto();
@@ -327,9 +327,9 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     }
 
     @Override
-    public int changeFinanceState(String logisticsContractNo, String financeStaff) {
+    public int changeFinanceState(int id, String financeStaff) {
         UpdateWrapper<LogisticsPaymentContract> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("logistics_contract_no",logisticsContractNo).set("finance_state", 1).set("finance_staff",financeStaff);
+        updateWrapper.eq("id",id).set("finance_state", 1).set("finance_staff",financeStaff);
         return logisticsPaymentContractMapper.update(null, updateWrapper);
     }
 

@@ -400,7 +400,7 @@ const changeState = (row:any) => {
             title:'系统提示'
           }
       ).then(() => {
-        changeFinanceState(row.purchaseContractNo,loginUserName.value).then(res => {
+        changeFinanceState(row.id,loginUserName.value).then(res => {
           ElMessage({
             message: "已通过",
             type: 'success',

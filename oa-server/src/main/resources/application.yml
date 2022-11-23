@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.141.150.151:3306/oa_project?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://8.141.150.151:3306/oa_project?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
     password: Guoleyuan0627!
   #应用名称
@@ -17,6 +17,8 @@ spring:
   web:
     resources:
       static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:static
+  jackson:
+    time-zone: GMT+8
 
 #mybatos-Plus配置
 mybatis-plus:
