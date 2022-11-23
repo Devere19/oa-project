@@ -6,13 +6,18 @@ package cn.edu.guet.bean.sale;
  * @Version 1.0
  */
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 销售单分页查询封装Bean
  */
 @Data
-public class ListParm {
+public class ListParm implements Serializable {
     //销售单合同号
     private String saleContractNo;
     //销售方公司名称
@@ -21,6 +26,11 @@ public class ListParm {
     private String goodsName;
     //榨季
     private String squeezeSeason;
+    //起止时间
+    private Date startTime;
+
+    private Date endTime;
+
     private int currentPage;
     private int pageSize;
 }

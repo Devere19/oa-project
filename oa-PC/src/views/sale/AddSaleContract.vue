@@ -91,7 +91,8 @@
           </el-col>
           <el-col :span="12" :offset="0">
             <el-form-item prop="saleContractTime" label="合同时间">
-              <el-date-picker v-model="addModel.saleContractTime" type="date" placeholder="请选择合同时间" size="default" />
+              <el-date-picker v-model="addModel.saleContractTime" type="date" format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD" placeholder="请选择合同时间" size="default" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -211,7 +212,7 @@ const addModel = reactive<AddSaleModel>({
   contractPhotoList: [],
   revenueAmount: '',
   revenuePhoto: '',
-  revenuePhotoList:[],
+  revenuePhotoList: [],
   revenueBy: '',
   pigeonhole: '',
   squeezeSeason: '',

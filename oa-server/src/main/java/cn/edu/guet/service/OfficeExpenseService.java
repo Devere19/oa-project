@@ -2,6 +2,7 @@ package cn.edu.guet.service;
 
 
 import cn.edu.guet.bean.OfficeExpense;
+import cn.edu.guet.bean.ShippingContract;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,4 +21,7 @@ public interface OfficeExpenseService extends IService<OfficeExpense> {
     Page<OfficeExpense> getCashierOfficeExpense(int currentPage, int pageSize);
     Page<OfficeExpense> searchCashierOfficeExpense(int currentPage, int pageSize,String searchWord);
     int uploadCashierOfficeExpense(OfficeExpense officeExpense);
+
+    //    APP
+    Page<OfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId , int type);
 }

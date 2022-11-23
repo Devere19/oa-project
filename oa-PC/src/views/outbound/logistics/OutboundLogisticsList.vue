@@ -11,6 +11,14 @@
       <el-form-item label="">
         <el-input v-model="listParm.squeezeSeason" placeholder="请输入榨季"></el-input>
       </el-form-item>
+      <el-form-item label="">
+        <el-date-picker v-model="listParm.startTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+          placeholder="开始时间" style="width:120px" />
+      </el-form-item>
+      <el-form-item label="">
+        <el-date-picker v-model="listParm.endTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+          placeholder="截止时间" style="width:120px" />
+      </el-form-item>
       <el-form-item>
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
@@ -43,9 +51,10 @@
             @click="detailBtn(scope.row.logisticsContractNo, scope.row.saleContractNo)">详情
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'info' : 'success'"
-            :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{ isPigeonhole ? "归档" :
-              "取消归档"
-          }}
+            :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
+                isPigeonhole ? "归档" :
+                  "取消归档"
+            }}
           </el-button>
           <!-- <el-button type="primary" size="default" @click="">修改
           </el-button> -->
@@ -54,6 +63,13 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 分页 -->
+    <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page.sync="listParm.currentPage"
+      :page-sizes="[10, 20, 40, 80, 100]" :page-size="listParm.pageSize"
+      layout="total, sizes, prev, pager, next, jumper" :total="listParm.total" background>
+      :pager-count="7">
+    </el-pagination>
 
     <!-- 物流详情 -->
     <DetailLogsitics ref="detailRef"></DetailLogsitics>
@@ -65,14 +81,14 @@
 
 <script setup lang="ts">
 import useTable from '@/composables/logistics/useTable'
-import { Plus, Edit, Delete, Search, Close , MoreFilled, Hide, View, Money} from "@element-plus/icons-vue";
+import { Plus, Edit, Delete, Search, Close, MoreFilled, Hide, View, Money } from "@element-plus/icons-vue";
 import { conversionDate } from '@/utils/timeFormat'
 import useLogistics from '@/composables/logistics/useLogistics'
 import useDetail from '@/composables/logistics/useDetail';
 import DetailLogsitics from './DetailLogsitics.vue';
 import AddLogis from './AddLogis.vue';
 //表格相关属性
-const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero } = useTable()
+const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero ,sizeChange,currentChange} = useTable()
 
 //物流单相关属性
 const { changePigeonhole, deleteBtn, addRef, addBtn } = useLogistics(refresh)

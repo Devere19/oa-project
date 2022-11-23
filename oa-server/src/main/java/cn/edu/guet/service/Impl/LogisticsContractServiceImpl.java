@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,6 +77,17 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
             query.lambda().like(LogisticsContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
+        //起止时间
+        if (listParm.getStartTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getStartTime());
+            query.lambda().ge(LogisticsContract::getLogisticsContractTime,format);
+        }
+        if (listParm.getEndTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getEndTime());
+            query.lambda().le(LogisticsContract::getLogisticsContractTime,format);
+        }
         //查看归档为1的数据
         query.lambda().eq(LogisticsContract::getPigeonhole, 1);
         query.orderByDesc("create_time");
@@ -116,6 +128,17 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         //榨季
         if (StringUtils.isNotEmpty(listParm.getSqueezeSeason())) {
             query.lambda().like(LogisticsContract::getSqueezeSeason, listParm.getSqueezeSeason());
+        }
+        //起止时间
+        if (listParm.getStartTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getStartTime());
+            query.lambda().ge(LogisticsContract::getLogisticsContractTime,format);
+        }
+        if (listParm.getEndTime()!=null){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String format = sdf.format(listParm.getEndTime());
+            query.lambda().le(LogisticsContract::getLogisticsContractTime,format);
         }
         //查看归档为1的数据
         query.lambda().eq(LogisticsContract::getPigeonhole, 0);

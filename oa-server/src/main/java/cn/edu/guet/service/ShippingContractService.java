@@ -24,4 +24,7 @@ public interface ShippingContractService extends IService<ShippingContract> {
     Page<ShippingContract> getCashierShipping(int currentPage, int pageSize);
     Page<ShippingContract> searchCashierShipping(int currentPage, int pageSize,String searchWord);
     int uploadCashierShipping(ShippingContract shippingContract);
+
+    //    APP
+    Page<ShippingContract> getDirectorSC(int currentPage, int pageSize, int userId ,int type);
 }

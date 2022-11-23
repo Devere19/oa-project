@@ -38,4 +38,10 @@ public class OfficeExpenseController {
     public HttpResult addNewOfficeExpense(@RequestBody OfficeExpense officeExpense){
         return ResultUtils.success("新增成功",officeExpenseService.addNewOfficeExpense(officeExpense));
     }
+
+    //    APP接口
+    @RequestMapping("/getDirectorOE")
+    public HttpResult getDirectorOE(int current, int page, int userId ,int type){
+        return ResultUtils.success("查询成功",officeExpenseService.getDirectorOE(current,page,userId,type));
+    }
 }

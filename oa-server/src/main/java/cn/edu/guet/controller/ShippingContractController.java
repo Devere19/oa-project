@@ -44,4 +44,10 @@ public class ShippingContractController {
     public HttpResult checkContainerNo(String containerNo){
         return ResultUtils.success("获取成功",shippingContractService.checkContainerNo(containerNo));
     }
+
+    //    APP接口
+    @RequestMapping("/getDirectorSC")
+    public HttpResult getDirectorSC(int current, int page, int userId ,int type){
+        return ResultUtils.success("查询成功",shippingContractService.getDirectorSC(current,page,userId,type));
+    }
 }

@@ -21,6 +21,12 @@ public interface PurchasePaymentContractService extends IService<PurchasePayment
     Page<PurchasePaymentContractView> getCashierPurchasePayment(int currentPage, int pageSize);
     Page<PurchasePaymentContractView> searchCashierPurchasePayment(int currentPage, int pageSize,String searchWord);
     int uploadCashierPurchasePayment(PurchasePaymentContract purchasePaymentContract);
+
     int changeFinanceState(String purchaseContractNo);
     int changeDirectorState(int purchasePaymentContractId,int userId);
+
+
+//    APP
+    Page<PurchasePaymentContractView> getDirectorPPC(int currentPage, int pageSize, int userId ,int type);
+
 }
