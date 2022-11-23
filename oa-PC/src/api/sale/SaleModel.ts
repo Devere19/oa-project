@@ -41,3 +41,21 @@ export type AddSaleModel = {
   createBy: string,
   saleContractTime: string,
 }
+
+//列表查询参数类型
+export type ExportListParm = {
+  //合同编号
+  saleContractNo: string,
+  //销售方公司名
+  saleCompanyName: string,
+  //货物名称
+  goodsName: string,
+  //榨季
+  squeezeSeason: string
+  //开始时间
+  startTime: string
+  //结束时间
+  endTime: string
+  //是否归档 0归档  1未归档
+  isPigeonhole: string
+}

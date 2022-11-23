@@ -1,12 +1,11 @@
 package cn.edu.guet.service;
 
-import cn.edu.guet.bean.logisticsContract.ListParm;
-import cn.edu.guet.bean.logisticsContract.LogisticsContract;
+import cn.edu.guet.bean.logisticsContract.*;
 
-import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -57,4 +56,12 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @return  0 已经有付款单了  1 正常删除   -1 删除失败
      */
     int delete(Integer id);
+
+    /**
+     * 导出excel
+     * @param listParm
+     * @return
+     */
+    List<ExportOutLogisticsContract> getExportList(ExportListParm listParm);
+
 }

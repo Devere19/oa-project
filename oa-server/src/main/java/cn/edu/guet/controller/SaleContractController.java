@@ -1,8 +1,13 @@
 package cn.edu.guet.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.edu.guet.bean.SysUser;
 import cn.edu.guet.bean.logisticsContract.LogisticsContract;
 import cn.edu.guet.bean.logisticsContract.LogisticsDetail;
+import cn.edu.guet.bean.sale.ExportListParm;
+import cn.edu.guet.bean.sale.ExportOutSaleContract;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.http.HttpResult;
@@ -11,12 +16,17 @@ import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.SaleContractService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.commons.lang.StringUtils;
 import org.apache.coyote.Response;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -135,6 +145,46 @@ public class SaleContractController {
     public HttpResult getDetailSaleContract(@PathVariable("saleContractNo") String saleContractNo) {
         //根据销售合同找到所有的物流单，再根据物流合同找到所有的物流详情表
         return ResultUtils.success("查询成功", saleContractService.getDetailSaleContract(saleContractNo));
+    }
+
+    @PostMapping("/exportListParm")
+    public HttpResult ExportExcel(HttpServletRequest request,@RequestBody ExportListParm listParm) throws Exception {
+        request.getServletContext().setAttribute("listParm",listParm);
+        System.out.println("存进的全局属性："+listParm);
+        return ResultUtils.success("传递参数成功");
+    }
+    /**
+     * 导出为Excel表格
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping("/exportExcel")
+    public void ExportExcel(HttpServletResponse response, HttpServletRequest request) throws Exception {
+        ExportListParm listParm = (ExportListParm) request.getServletContext().getAttribute("listParm");
+        System.out.println("拿到的全局数据:"+listParm);
+        // 导出
+        String fileName = "销售单.xlsx";
+        ExportParams exportParams = new ExportParams();
+        exportParams.setType(ExcelType.XSSF);
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, ExportOutSaleContract.class, saleContractService.getExportList(listParm));
+        downloadExcel(fileName, workbook, response);
+    }
+
+    public static void downloadExcel(String fileName, Workbook workbook, HttpServletResponse response) throws Exception {
+        try {
+            if (StringUtils.isEmpty(fileName)) {
+                throw new RuntimeException("导出文件名不能为空");
+            }
+            String encodeFileName = URLEncoder.encode(fileName, "UTF-8");
+            response.setHeader("content-Type", "application/vnd.ms-excel; charset=utf-8");
+            response.setHeader("Content-Disposition", "attachment;filename=" + encodeFileName);
+            response.setHeader("FileName", encodeFileName);
+            response.setHeader("Access-Control-Expose-Headers", "FileName");
+            workbook.write(response.getOutputStream());
+            workbook.close();
+        } catch (Exception e) {
+            workbook.close();
+        }
     }
 
 
