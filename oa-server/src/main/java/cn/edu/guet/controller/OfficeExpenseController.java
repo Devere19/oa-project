@@ -44,4 +44,9 @@ public class OfficeExpenseController {
     public HttpResult getDirectorOE(int current, int page, int userId ,int type){
         return ResultUtils.success("查询成功",officeExpenseService.getDirectorOE(current,page,userId,type));
     }
+
+    @RequestMapping("/searchDirectorOE")
+    public HttpResult searchDirectorOE(int current, int page,String searchWord,int userId){
+        return ResultUtils.success("查询成功",officeExpenseService.searchDirectorOE(current,page,searchWord,userId));
+    }
 }

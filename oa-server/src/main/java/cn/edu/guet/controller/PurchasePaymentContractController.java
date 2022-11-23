@@ -53,4 +53,9 @@ public class PurchasePaymentContractController {
     public HttpResult getDirectorPPC(int current, int page, int userId ,int type){
         return ResultUtils.success("查询成功",purchasePaymentContractService.getDirectorPPC(current,page,userId,type));
     }
+
+    @RequestMapping("/searchDirectorPPC")
+    public HttpResult searchDirectorPPC(int current, int page,String searchWord,int userId){
+        return ResultUtils.success("查询成功",purchasePaymentContractService.searchDirectorPPC(current,page,searchWord,userId));
+    }
 }

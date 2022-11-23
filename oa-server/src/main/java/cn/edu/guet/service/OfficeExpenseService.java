@@ -24,4 +24,5 @@ public interface OfficeExpenseService extends IService<OfficeExpense> {
 
     //    APP
     Page<OfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId , int type);
+    Page<OfficeExpense> searchDirectorOE(int currentPage, int pageSize, String searchWord, int userId);
 }

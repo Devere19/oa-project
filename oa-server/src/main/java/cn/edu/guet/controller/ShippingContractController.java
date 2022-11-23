@@ -50,4 +50,9 @@ public class ShippingContractController {
     public HttpResult getDirectorSC(int current, int page, int userId ,int type){
         return ResultUtils.success("查询成功",shippingContractService.getDirectorSC(current,page,userId,type));
     }
+
+    @RequestMapping("/searchDirectorSC")
+    public HttpResult searchDirectorSC(int current, int page,String searchWord, int userId){
+        return ResultUtils.success("查询成功",shippingContractService.searchDirectorSC(current,page,searchWord,userId));
+    }
 }
