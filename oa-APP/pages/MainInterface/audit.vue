@@ -239,7 +239,7 @@
 					url: '/purchasePaymentContract/getDirectorPPC',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -260,7 +260,7 @@
 					url: '/logisticsPaymentContract/getDirectorLPC',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -281,7 +281,7 @@
 					url: '/shippingContract/getDirectorSC',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
@@ -302,7 +302,7 @@
 					url: '/officeExpense/getDirectorOE',
 					data: {
 						current: 1,
-						page: 2,
+						page: 5,
 						userId: this.user.userId,
 						type: 0
 					}
