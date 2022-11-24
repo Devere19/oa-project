@@ -2,7 +2,9 @@
   <el-main>
     <!-- 搜索栏 -->
     <el-form :model="listParm" :inline="true" size="default">
-
+      <el-form-item>
+        <el-button @click="deleteBtn" type="danger" plain :icon="Delete">删除7天前记录</el-button>
+      </el-form-item>
     </el-form>
     <!-- 表格数据 -->
     <el-table :data="tableList.list" border stripe size="small" table-layout="auto" :height="tableHeight" :fit="true">
@@ -31,6 +33,20 @@ import { getListApi } from '@/api/log/index'
 import { onMounted, reactive, ref } from 'vue';
 import { conversionDateTimeNull } from '@/utils/timeFormat'
 import { table } from 'console';
+import { Close, Delete } from "@element-plus/icons-vue";
+import { deleteApi } from '@/api/log/index';
+import { ElMessage } from 'element-plus';
+
+const deleteBtn = async () => {
+  let res = await deleteApi()
+  if (res && res.code == 200) {
+    ElMessage.success(res.msg)
+    //刷新表格
+    getList()
+  } else {
+    ElMessage.error(res.msg)
+  }
+}
 
 const tableList = reactive({
   list: []

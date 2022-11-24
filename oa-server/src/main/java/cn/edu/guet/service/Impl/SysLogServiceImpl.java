@@ -5,6 +5,7 @@ import cn.edu.guet.bean.log.ListParm;
 import cn.edu.guet.bean.log.SysLog;
 import cn.edu.guet.mapper.SysLogMapper;
 import cn.edu.guet.service.SysLogService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author 郭乐源
@@ -31,5 +34,13 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         QueryWrapper<SysLog> query = new QueryWrapper<>();
         query.orderByDesc("id");
         return sysLogMapper.selectPage(page,query);
+    }
+
+    @Override
+    public void delete() {
+        //删除7天前的日志
+        QueryWrapper<SysLog> sysLogQueryWrapper = new QueryWrapper<>();
+        sysLogQueryWrapper.lambda().le(SysLog::getCreateTime, DateUtil.offsetWeek(new Date(),-1));
+        sysLogMapper.delete(sysLogQueryWrapper);
     }
 }
