@@ -25,8 +25,8 @@
 										</uni-row>
 										<uni-row>
 											<uni-col class="horizontalCenter">
-												<dyDatePicker class="datePicker horizontalCenter" :childValue="nowDate"
-													placeholder="请选择日期" :maxSelect="nowDate" @getData="getData">
+												<dyDatePicker class="datePicker horizontalCenter" :childValue="choosedDay"
+													placeholder="请选择日期" :maxSelect="nowDate" @getData="chooseDate">
 												</dyDatePicker>
 											</uni-col>
 										</uni-row>
@@ -49,7 +49,7 @@
 										</uni-row>
 										<uni-row>
 											<uni-col>
-												<view class="number horizontalCenter">{{expenditures}}</view>
+												<view class="number horizontalCenter">{{spend}}</view>
 											</uni-col>
 										</uni-row>
 										<uni-row>
@@ -60,10 +60,10 @@
 										<uni-row>
 											<uni-col>
 												<view class="number horizontalCenter">
-													{{Math.round((revenue-expenditures)*100)/100}}</view>
+													{{Math.round((revenue-spend)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
-<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+										<view v-show="currentSwiper==0" style="marginTop:50rpx">
 											<uni-row>
 												<uni-col>
 													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
@@ -75,7 +75,7 @@
 														{{officeSpending}}</view>
 												</uni-col>
 											</uni-row>
-										</view> -->
+										</view>
 									</view>
 								</view>
 								<view v-show="timeCurrent === 1">
@@ -88,8 +88,8 @@
 										<uni-row>
 											<uni-col class="horizontalCenter">
 												<dyDatePicker timeType="month" class="datePicker horizontalCenter"
-													:childValue="nowDate" laceholder="请选择月份" :maxSelect="nowDate"
-													@getData="getData">
+													:childValue="choosedMonth" laceholder="请选择月份" :maxSelect="nowDate"
+													@getData="chooseDate">
 												</dyDatePicker>
 											</uni-col>
 										</uni-row>
@@ -112,7 +112,7 @@
 										</uni-row>
 										<uni-row>
 											<uni-col>
-												<view class="number horizontalCenter">{{expenditures}}</view>
+												<view class="number horizontalCenter">{{spend}}</view>
 											</uni-col>
 										</uni-row>
 										<uni-row>
@@ -123,10 +123,10 @@
 										<uni-row>
 											<uni-col>
 												<view class="number horizontalCenter">
-													{{Math.round((revenue-expenditures)*100)/100}}</view>
+													{{Math.round((revenue-spend)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
-<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+										<view v-show="currentSwiper==0" style="marginTop:50rpx">
 											<uni-row>
 												<uni-col>
 													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
@@ -138,7 +138,7 @@
 														{{officeSpending}}</view>
 												</uni-col>
 											</uni-row>
-										</view> -->
+										</view>
 									</view>
 								</view>
 								<view v-show="timeCurrent === 2">
@@ -150,9 +150,8 @@
 										</uni-row>
 										<uni-row>
 											<uni-col :span="12" class="horizontalCenter">
-												<dyDatePicker timeType="year" class="datePicker horizontalCenter" :childValue="nowDate"
-													placeholder="请选择年份" :maxSelect="nowDate" @getData="getData">
-<!-- 													placeholder="请选择年份" :maxSelect="nowDate" @getData="getYearData"> -->
+												<dyDatePicker timeType="year" class="datePicker horizontalCenter" :childValue="choosedSYear"
+													placeholder="请选择年份" :maxSelect="nowDate" @getData="chooseDate">
 												</dyDatePicker>
 											</uni-col>
 											<uni-col :span="12" class="horizontalCenter">
@@ -181,7 +180,7 @@
 										</uni-row>
 										<uni-row>
 											<uni-col>
-												<view class="number horizontalCenter">{{expenditures}}</view>
+												<view class="number horizontalCenter">{{spend}}</view>
 											</uni-col>
 										</uni-row>
 										<uni-row>
@@ -192,10 +191,10 @@
 										<uni-row>
 											<uni-col>
 												<view class="number horizontalCenter">
-													{{Math.round((revenue-expenditures)*100)/100}}</view>
+													{{Math.round((revenue-spend)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
-<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+										<view v-show="currentSwiper==0" style="marginTop:50rpx">
 											<uni-row>
 												<uni-col>
 													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
@@ -207,7 +206,7 @@
 														{{officeSpending}}</view>
 												</uni-col>
 											</uni-row>
-										</view> -->
+										</view>
 									</view>
 								</view>
 								<view v-show="timeCurrent === 3">
@@ -219,8 +218,8 @@
 										</uni-row>
 										<uni-row>
 											<uni-col class="horizontalCenter">
-												<dyDatePicker timeType="year" class="datePicker horizontalCenter" :childValue="nowDate"
-													placeholder="请选择年份" :maxSelect="nowDate" @getData="getData">
+												<dyDatePicker timeType="year" class="datePicker horizontalCenter" :childValue="choosedYear"
+													placeholder="请选择年份" :maxSelect="nowDate" @getData="chooseDate">
 												</dyDatePicker>
 											</uni-col>
 										</uni-row>
@@ -243,7 +242,7 @@
 										</uni-row>
 										<uni-row>
 											<uni-col>
-												<view class="number horizontalCenter">{{expenditures}}</view>
+												<view class="number horizontalCenter">{{spend}}</view>
 											</uni-col>
 										</uni-row>
 										<uni-row>
@@ -254,10 +253,10 @@
 										<uni-row>
 											<uni-col>
 												<view class="number horizontalCenter">
-													{{Math.round((revenue-expenditures)*100)/100}}</view>
+													{{Math.round((revenue-spend)*100)/100}}</view>
 											</uni-col>
 										</uni-row>
-<!-- 										<view v-show="currentSwiper==0" style="marginTop:50rpx">
+										<view v-show="currentSwiper==0" style="marginTop:50rpx">
 											<uni-row>
 												<uni-col>
 													<view class="bigTitle horizontalCenter" style="color: #ff007f">办公支出:</view>
@@ -269,7 +268,7 @@
 														{{officeSpending}}</view>
 												</uni-col>
 											</uni-row>
-										</view> -->
+										</view>
 									</view>
 								</view>
 							</view>
@@ -295,15 +294,18 @@
 				currentSwiper: 0,
 				timeItems: ['日', '月', '季', '年'],
 				timeCurrent: 0,
-				nowDate: "",
-				revenue: 0,
-				expenditures: 0,
-				officeSpending:0,
-				// chooseYearTF: true,
-				// chooseSeasonTF: true,
+				nowDate: '',
 				currentSeason:0,
-				seasonList:["1,2,3月","4,5,6月","7,8,9月","10,11,12月"],
-				companyList: ["总体", "广西永湘物流有限公司", "广西南宁锦泰行工贸有限公司", "广西丰沣顺国际物流有限公司"]
+				seasonList:["第一季度","第二季度","第三季度","第四季度"],
+				companyList: ["总体", "广西永湘物流有限公司", "广西南宁锦泰行工贸有限公司", "广西丰沣顺国际物流有限公司"],
+				choosedDay:'',
+				choosedMonth:'',
+				choosedSYear:'',
+				choosedSSeason:'',
+				choosedYear:'',
+				revenue: 0,
+				spend: 0,
+				officeSpending:0,
 			}
 		},
 		onLoad() {
@@ -312,10 +314,16 @@
 				title: this.companyList[0].companyName
 			});
 			this.getscreenheight();
-
-			this.nowDate = new Date().toISOString().slice(0, 10);
-
-			this.setNumber();
+			
+			// 获取当前日期,转换为ISO会丢失时区，所以需要加8小时
+			this.nowDate = new Date(+new Date()+8*3600*1000).toISOString().slice(0, 10);
+			this.setNumber(0,this.nowDate);
+			this.choosedDay=this.nowDate;
+			this.choosedMonth=this.nowDate.slice(0,7);
+			this.choosedSYear=this.nowDate.slice(0,4);
+			this.choosedSSeason=this.getSeason(this.nowDate.slice(5,7));
+			this.choosedYear=this.nowDate.slice(0,4);
+			
 		},
 		methods: {
 			getscreenheight() {
@@ -334,52 +342,175 @@
 			changeCompany(e) {
 				this.chooseCompany = e.detail.value;
 				this.currentSwiper = this.chooseCompany;
-				console.log(this.currentSwiper);
-				this.setNumber();
+				this.getNewData();
 			},
 			changeSwiper(e) {
 				this.chooseCompany = e.detail.current;
 				this.currentSwiper=this.chooseCompany;
-				this.setNumber();
+				this.getNewData();
 			},
 			chooseTimeItems(e) {
 				if (this.timeCurrent != e.currentIndex) {
 					this.timeCurrent = e.currentIndex;
+					this.getNewData();
 				}
-				this.setNumber();
 			},
-			getData(time) {
+			getNewData(){
+				if(this.timeCurrent==0){
+					this.setNumber(0,this.choosedDay);
+				}else if(this.timeCurrent==1){
+					this.setNumber(1,this.choosedMonth);
+				}else if(this.timeCurrent==2){
+					this.setNumber(2,this.choosedSYear+this.choosedSSeason)
+				}else if(this.timeCurrent==3){
+					this.setNumber(3,this.choosedYear);
+				}
+			},
+			chooseDate(time) {
 				console.log(time);
-				this.setNumber();
-			},
-			// getYearData(time) {
-			// 	console.log(time);
-				// this.chooseYearTF=true;
-				// if(this.chooseSeasonTF==true){
-					// this.setNumber();
-				// }
-			// },
-			setNumber() {
-				this.revenue = this.getRandom(10000, 100000);
-				this.expenditures = this.getRandom(10000, this.revenue);
-				this.officeSpending=this.getRandom(1000, 10000);
-				console.log(this.revenue);
-				console.log(this.expenditures);
-			},
-			getRandom(min, max) {
-				var temp = max - min;
-				var random = Math.random();
-				var num = Math.round((min + Math.round(random * temp * 100) / 100) * 100) / 100;
-				return num;
+				if(this.timeCurrent==0){
+					this.choosedDay=time;
+					this.setNumber(0,this.choosedDay);
+				}else if(this.timeCurrent==1){
+					this.choosedMonth=time;
+					this.setNumber(1,this.choosedMonth);
+				}else if(this.timeCurrent==2){
+					this.choosedSYear=time;
+					if(this.choosedSSeason!=''){
+						this.setNumber(2,this.choosedSYear+this.choosedSSeason);
+					}
+				}else if(this.timeCurrent==3){
+					this.choosedYear=time;
+					this.setNumber(3,this.choosedYear);
+				}
 			},
 			chooseSeason(e){
-				console.log(e);
 				this.currentSeason=e.detail.value;
-				// this.chooseSeasonTF=true;
-				// if(this.chooseYearTF==true){
-					this.setNumber();
-				// }
-			}
+				if(e.detail.value==0){
+					this.choosedSSeason="-1"
+				}else if(e.detail.value==1){
+					this.choosedSSeason="-2"
+				}else if(e.detail.value==2){
+					this.choosedSSeason="-3"
+				}else if(e.detail.value==3){
+					this.choosedSSeason="-4"
+				}
+				if(this.choosedSYear!=''){
+					this.setNumber(2,this.choosedSYear+this.choosedSSeason);
+				}
+			},
+			getSeason(time){
+				if(time<4){
+					this.currentSeason=0;
+					return '-1'
+				}else if(time<7){
+					this.currentSeason=1;
+					return '-2'
+				}else if(time<10){
+					this.currentSeason=2;
+					return '-3'
+				}else if(time<13){
+					this.currentSeason=3;
+					return '-4'
+				}
+			},
+			setNumber(timeType,date) {
+				console.log(timeType,date);
+				if(this.chooseCompany==0){
+					this.$request({
+						url: '/finance/getChartIncomeSpendData',
+						data: {
+							dataType: 0,
+							dataCompany:this.chooseCompany,
+							timeType:timeType,
+							startDate:date,
+							endDate:date,
+						}
+					}).then(res => {
+						if (res.code == 200) {
+							if(res.data[0]!=null){
+								if(res.data[0].income!=null){
+									this.revenue=res.data[0].income;
+								}else{
+									this.revenue=0
+								}
+								if(res.data[0].spend!=null){
+									this.spend=res.data[0].spend;
+								}else{
+									this.spend=0
+								}
+							}else{
+								this.revenue=0;
+								this.spend=0;
+							}
+						}
+					}, err => {
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
+					});
+					this.$request({
+						url: '/finance/getChartIncomeSpendData',
+						data: {
+							dataType: 1,
+							dataCompany:this.chooseCompany,
+							timeType:timeType,
+							startDate:date,
+							endDate:date,
+						}
+					}).then(res => {
+						if (res.code == 200) {
+							if(res.data[0]!=null){
+								if(res.data[0].spend!=null){
+									this.officeSpending=res.data[0].spend
+								}else{
+									this.officeSpending=0
+								}
+							}
+						}
+					}, err => {
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
+					})
+				}else{
+					this.$request({
+						url: '/finance/getChartIncomeSpendData',
+						data: {
+							dataType: 0,
+							dataCompany:this.chooseCompany,
+							timeType:timeType,
+							startDate:date,
+							endDate:date,
+						}
+					}).then(res => {
+						if (res.code == 200) {
+							if(res.data[0]!=null){
+								if(res.data[0].income!=null){
+									this.revenue=res.data[0].income;
+								}else{
+									this.revenue=0
+								}
+								if(res.data[0].spend!=null){
+									this.spend=res.data[0].spend;
+								}else{
+									this.spend=0
+								}
+							}else{
+								this.revenue=0;
+								this.spend=0;
+							}
+						}
+					}, err => {
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
+					})
+				}
+			},
 		}
 	}
 </script>

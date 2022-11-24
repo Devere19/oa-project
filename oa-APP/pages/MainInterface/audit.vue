@@ -1,13 +1,14 @@
 <template>
 	<view>
-		<view class="searchBox">
+		<!-- 搜索 -->
+		<!-- <view class="searchBox"> -->
 			<!-- 			<uni-search-bar v-model="searchValue" bgColor="#ffffff" :focus="false" @confirm="searchClick" @blur="searchBlur" @focus="searchFocus"
 				@input="searchInput" @cancel="searchCancel" @clear="searchClear">
 			</uni-search-bar> -->
-			<uni-search-bar v-model="searchValue" placeholder="请输入要搜索的内容" bgColor="#ffffff" :focus="false"
+<!-- 			<uni-search-bar v-model="searchValue" placeholder="请输入要搜索的内容" bgColor="#ffffff" :focus="false"
 				@confirm="searchClick">
-			</uni-search-bar>
-		</view>
+			</uni-search-bar> -->
+		<!-- </view> -->
 		<view class="cardGroup">
 <!-- 			<uni-card :isFull="true" padding="0" title="采购单" extra="更多>" :style="'margin-top:15rpx'" @tap="toPurchase">
 				<view>
@@ -33,7 +34,7 @@
 				<view>
 					<uni-list v-for="(item,index) in purchasePaymentList" :key="item.id">
 						<uni-list-item :title="item.goodsName" :rightText="'￥'+item.paymentCount" link=""
-							@tap="toDetail('purchase',item.id)" showArrow></uni-list-item>
+							@tap="toDetail('purchasePayment',item.id)" showArrow></uni-list-item>
 					</uni-list>
 				</view>
 			</uni-card>
@@ -70,7 +71,7 @@
 				<view>
 					<uni-list v-for="(item,index) in logisticsPaymentList" :key="item.id">
 						<uni-list-item :title="item.goodsName" :rightText="'￥'+item.paymentCount" link=""
-							@tap="toDetail('logistics',item.id)" showArrow>
+							@tap="toDetail('logisticsPayment',item.id)" showArrow>
 						</uni-list-item>
 					</uni-list>
 				</view>
@@ -90,7 +91,7 @@
 				<view>
 					<uni-list v-for="(item,index) in shippingList" :key="item.shippingContractNo">
 						<uni-list-item :title="item.principal" :rightText="'￥'+item.expenses" link=""
-							@tap="toDetail('shipping',item.shippingContractNo)" showArrow>
+							@tap="toDetail('shipping',item.id)" showArrow>
 							<!-- 						<uni-list-item :title="'￥'+item.expenses" :rightText="item.CarrierCompanyName" :link="{url:'/pages/detail/shippingDetail?contractNo='+contractNo}" @tap="toDetail('shipping',item.contractNo)" showArrow> -->
 						</uni-list-item>
 					</uni-list>
@@ -101,7 +102,7 @@
 				<view>
 					<uni-list v-for="(item,index) in officeExpenseList" :key="item.id">
 						<uni-list-item :title="item.itemsList" :rightText="'￥'+item.expenses" link=""
-							@tap="toDetail('purchase',item.id)" showArrow></uni-list-item>
+							@tap="toDetail('officeExpense',item.id)" showArrow></uni-list-item>
 					</uni-list>
 				</view>
 			</uni-card>
@@ -122,72 +123,6 @@
 				logisticsPaymentList:[],
 				shippingList:[],
 				officeExpenseList:[],
-				// 采购单数据
-				// purchaseList: [{
-				// 		contractNo: "TR000728394561",
-				// 		supplier: "xx食品厂",
-				// 		goodsName: "白糖",
-				// 	},
-				// 	{
-				// 		contractNo: "TR000728394562",
-				// 		supplier: "ww食品厂",
-				// 		goodsName: "蜂蜜",
-				// 	}
-				// ],
-				// 采购付款单审批状态
-				// purchasePaymentCount: [{
-				// 		count: 4,
-				// 		tips: "待审批"
-				// 	},
-				// 	{
-				// 		count: 12,
-				// 		tips: "已审批"
-				// 	},
-				// 	{
-				// 		count: 10,
-				// 		tips: "已完成"
-				// 	}
-				// ],
-				// 物流付款单数据
-				// logisticsPaymentList: [{
-				// 		contractNo: "TR000728394561",
-				// 		factoryName: "7号仓库",
-				// 		freight: 4000
-				// 	},
-				// 	{
-				// 		contractNo: "TR000728394562",
-				// 		factoryName: "11号仓库",
-				// 		freight: 12000
-				// 	},
-				// ],
-				// 物流付款单审批状态
-				// logisticsCount: [{
-				// 		count: 7,
-				// 		tips: "待审批"
-				// 	},
-				// 	{
-				// 		count: 3,
-				// 		tips: "已审批"
-				// 	},
-				// 	{
-				// 		count: 10,
-				// 		tips: "已完成"
-				// 	}
-				// ],
-				// 海运单审批状态
-				// shoppingCount: [{
-				// 		count: 17,
-				// 		tips: "待审批"
-				// 	},
-				// 	{
-				// 		count: 12,
-				// 		tips: "已审批"
-				// 	},
-				// 	{
-				// 		count: 14,
-				// 		tips: "已完成"
-				// 	}
-				// ],
 			}
 		},
 		created() {
@@ -426,17 +361,38 @@
 				if (type == "purchase") {
 					uni.navigateTo({
 						// 普通参数传输
-						url: '/pages/detail/purchaseDetail?contractNo=' + contractNo
+						url: '/pages/detail/purchaseDetail?contractId=' + contractNo
 					})
-				} else if (type == "logistics") {
+				} else if (type == "purchasePayment") {
 					uni.navigateTo({
 						// 普通参数传输
-						url: '/pages/detail/logisticsDetail?contractNo=' + contractNo
+						url: '/pages/detail/purchasePaymentDetail?contractId=' + contractNo
+					})
+				} else if (type == "sale") {
+					uni.navigateTo({
+						// 普通参数传输
+						url: '/pages/detail/saleDetail?contractId=' + contractNo
+					})
+				}
+				else if (type == "logistics") {
+					uni.navigateTo({
+						// 普通参数传输
+						url: '/pages/detail/logisticsDetail?contractId=' + contractNo
+					})
+				}else if (type == "logisticsPayment") {
+					uni.navigateTo({
+						// 普通参数传输
+						url: '/pages/detail/logisticsPaymentDetail?contractId=' + contractNo
+					})
+				}else if (type == "shipping") {
+					uni.navigateTo({
+						// 普通参数传输
+						url: '/pages/detail/shippingDetail?contractId=' + contractNo
 					})
 				} else {
 					uni.navigateTo({
 						// 普通参数传输
-						url: '/pages/detail/shippingDetail?contractNo=' + contractNo
+						url: '/pages/detail/officeExpenseDetail?contractId=' + contractNo
 					})
 				}
 			}

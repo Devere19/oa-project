@@ -7,7 +7,7 @@
 		</view>
 		<view class="topCard">
 			<uni-grid :column="3" :highlight="true" :showBorder="false" :square="false" @change="topCardClick">
-				<uni-grid-item v-for="(item, index) in topList" :index="index" :key="index">
+				<uni-grid-item v-for="(item, index) in topList" :index="index" :key="item.id">
 					<view class="topCardItem">
 						<view class="topCardItemBorder" :style="{'border-right':index<2?'#8799a3 solid 1rpx':'0rpx'}">
 							<text class="count"
@@ -24,9 +24,9 @@
 				@confirm="searchClick">
 			</uni-search-bar>
 		</view>
-		<view v-show="chooseForm==0" v-for="(item,index) in unauditedList" :key="item.contractNo" class="formCard">
-			<uni-transition custom-class="transition" :duration=500 :mode-class="item.modeClass" :show="item.show">
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运物流单" :subTitle="item.contractNo"
+		<view v-show="chooseForm==0" v-for="(item,index) in unauditedList" :key="item.id" class="formCard">
+			<!-- <uni-transition custom-class="transition" :duration=500 :mode-class="item.modeClass" :show="item.show"> -->
+				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运单" :subTitle="item.shippingContractNo"
 					:extra="item.carrierCompanyName">
 					<view class="cardContent">
 						<uni-row style="width: 100%;">
@@ -47,7 +47,7 @@
 						</uni-row>
 						<uni-row style="width: 100%;">
 							<uni-col :span="8">
-								费用 :
+								总费用 :
 							</uni-col>
 							<uni-col :span="16">
 								{{item.expenses}}
@@ -55,22 +55,22 @@
 						</uni-row>
 					</view>
 					<view class="auditStatusGroup">
-						<view v-for="(statusItem,statusIndex) in directorList" :key="statusItem.directorId"
+						<view v-for="(statusItem,statusIndex) in item.shippingDirector" :key="statusItem.userId"
 							class="auditStatusItem">
-							<view>{{statusItem.directorName}}</view>
+							<view>{{statusItem.nickName}}</view>
 							<view v-show="statusIndex==0">
 								<uni-icons :style="'margin-left:15rpx'"
-									:type="item.firstState === 0 ? '' : item.firstState===1?'checkmarkempty':'closeempty'"
+									:type="statusItem.state == null ? '' : 'checkmarkempty'"
 									size="24" color="#0081ff"></uni-icons>
 							</view>
 							<view v-show="statusIndex==1">
 								<uni-icons :style="'margin-left:15rpx'"
-									:type="item.secondState === 0 ? '' : item.secondState===1?'checkmarkempty':'closeempty'"
+									:type="statusItem.state == null ? '' : 'checkmarkempty'"
 									size="24" color="#0081ff"></uni-icons>
 							</view>
 							<view v-show="statusIndex==2">
 								<uni-icons :style="'margin-left:15rpx'"
-									:type="item.thridState === 0 ? '' : item.thridState===1?'checkmarkempty':'closeempty'"
+									:type="statusItem.state == null ? '' : 'checkmarkempty'"
 									size="24" color="#0081ff"></uni-icons>
 							</view>
 						</view>
@@ -79,108 +79,105 @@
 						<view class="actionGroupItem" @tap="actionsClick('pass',item,index)">
 							<button class="buttonGroup" type="primary">通过</button>
 						</view>
-<!-- 						<view class="actionGroupItem" @tap="actionsClick('refuse',item,index)">
-							<button class="buttonGroup" type="warn">拒绝</button>
-						</view> -->
 						<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
 							<button class="buttonGroup">详情</button>
 						</view>
 					</view>
 				</uni-card>
-			</uni-transition>
+			<!-- </uni-transition> -->
 		</view>
-		<view v-show="chooseForm==1" v-for="(item,index) in auditedList" :key="item.contractNo" class="formCard">
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运物流单" :subTitle="item.contractNo"
-					:extra="item.carrierCompanyName">
-					<view class="cardContent">
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								集装箱号 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.containerNo}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								铅封号 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.sealNo}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								费用 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.expenses}}
-							</uni-col>
-						</uni-row>
-					</view>
-					<view class="auditStatusGroup">
-						<view v-for="(statusItem,statusIndex) in directorList" :key="statusItem.directorId"
-							class="auditStatusItem">
-							<view>{{statusItem.directorName}}</view>
-							<view v-show="statusIndex==0">
-								<uni-icons :style="'margin-left:15rpx'"
-									:type="item.firstState === 0 ? '' : item.firstState===1?'checkmarkempty':'closeempty'"
-									size="24" color="#0081ff"></uni-icons>
-							</view>
-							<view v-show="statusIndex==1">
-								<uni-icons :style="'margin-left:15rpx'"
-									:type="item.secondState === 0 ? '' : item.secondState===1?'checkmarkempty':'closeempty'"
-									size="24" color="#0081ff"></uni-icons>
-							</view>
-							<view v-show="statusIndex==2">
-								<uni-icons :style="'margin-left:15rpx'"
-									:type="item.thridState === 0 ? '' : item.thridState===1?'checkmarkempty':'closeempty'"
-									size="24" color="#0081ff"></uni-icons>
-							</view>
+		<view v-show="chooseForm==1" v-for="(item,index) in auditedList" :key="item.id" class="formCard">
+			<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运单" :subTitle="item.shippingContractNo"
+				:extra="item.carrierCompanyName">
+				<view class="cardContent">
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							集装箱号 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.containerNo}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							铅封号 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.sealNo}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							总费用 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.expenses}}
+						</uni-col>
+					</uni-row>
+				</view>
+				<view class="auditStatusGroup">
+					<view v-for="(statusItem,statusIndex) in item.shippingDirector" :key="statusItem.userId"
+						class="auditStatusItem">
+						<view>{{statusItem.nickName}}</view>
+						<view v-show="statusIndex==0">
+							<uni-icons :style="'margin-left:15rpx'"
+								:type="statusItem.state == null ? '' : 'checkmarkempty'"
+								size="24" color="#0081ff"></uni-icons>
+						</view>
+						<view v-show="statusIndex==1">
+							<uni-icons :style="'margin-left:15rpx'"
+								:type="statusItem.state == null ? '' : 'checkmarkempty'"
+								size="24" color="#0081ff"></uni-icons>
+						</view>
+						<view v-show="statusIndex==2">
+							<uni-icons :style="'margin-left:15rpx'"
+								:type="statusItem.state == null ? '' : 'checkmarkempty'"
+								size="24" color="#0081ff"></uni-icons>
 						</view>
 					</view>
-					<view slot="actions" class="actionGroup">
-						<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
-							<button class="buttonGroup">详情</button>
-						</view>
+				</view>
+				<view slot="actions" class="actionGroup">
+					<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
+						<button class="buttonGroup">详情</button>
 					</view>
-				</uni-card>
+				</view>
+			</uni-card>
 		</view>
-		<view v-show="chooseForm==2" v-for="(item,index) in completedList" :key="item.contractNo" class="formCard">
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运物流单" :subTitle="item.contractNo"
-					:extra="item.carrierCompanyName">
-					<view class="cardContent">
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								集装箱号 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.containerNo}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								铅封号 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.sealNo}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								费用 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.expenses}}
-							</uni-col>
-						</uni-row>
+		<view v-show="chooseForm==2" v-for="(item,index) in completedList" :key="item.id" class="formCard">
+			<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="海运单" :subTitle="item.shippingContractNo"
+				:extra="item.carrierCompanyName">
+				<view class="cardContent">
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							集装箱号 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.containerNo}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							铅封号 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.sealNo}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							总费用 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.expenses}}
+						</uni-col>
+					</uni-row>
+				</view>
+				<view slot="actions" class="actionGroup">
+					<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
+						<button class="buttonGroup">详情</button>
 					</view>
-					<view slot="actions" class="actionGroup">
-						<view class="actionGroupItem" @tap="actionsClick('more',item,index)">
-							<button class="buttonGroup">详情</button>
-						</view>
-					</view>
-				</uni-card>
+				</view>
+			</uni-card>
 		</view>
 	</view>
 </template>
@@ -190,193 +187,297 @@
 		data() {
 			return {
 				searchValue: "",
-				directorList: [{
-						directorId: "00001",
-						directorName: "黄佳森"
-					},
-					{
-						directorId: "00002",
-						directorName: "谢晓东"
-					},
-					{
-						directorId: "00003",
-						directorName: "林国丰"
-					}
-				],
+				user: {
+					userId: '',
+					nickName: '',
+				},
 				topList: [{
-						count: 17,
-						tips: "待审批"
+						id:0,
+						count: 0,
+						tips: "待审批",
+						current:1,
+						page:5
 					},
 					{
-						count: 12,
-						tips: "已审批"
+						id:1,
+						count: 0,
+						tips: "已审批",
+						current:1,
+						page:5
 					},
 					{
-						count: 14,
-						tips: "已完成"
+						id:2,
+						count: 0,
+						tips: "已完成",
+						current:1,
+						page:5
 					}
 				],
 				chooseForm: 0,
-				unauditedList: [{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-						firstState: 0,
-						secondState: 1,
-						thridState: 0,
-						show: true,
-						modeClass: 'fade'
-					},
-					{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-						firstState: 0,
-						secondState: 1,
-						thridState: 0,
-						show: true,
-						modeClass: 'fade'
-					},
-					{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-						firstState: 0,
-						secondState: 1,
-						thridState: 1,
-						show: true,
-						modeClass: 'fade'
-					}
-				],
-				auditedList: [{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-						firstState: 1,
-						secondState: 1,
-						thridState: 0,
-					},
-					{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-						firstState: 1,
-						secondState: 0,
-						thridState: 1,
-					},
-					{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-						firstState: 1,
-						secondState: 1,
-						thridState: 0,
-					}
-				],
-				completedList: [{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-					},
-					{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-					},
-					{
-						contractNo: "TR00272839456",
-						carrierCompanyName: "东方海外货柜航运有限公司",
-						containerNo: "EASU9809490",
-						sealNo: "C56765",
-						expenses: 13888,
-					}
-				]
+				unauditedList: [],
+				auditedList: [],
+				completedList: []
 			}
 		},
-		onLoad(data) {
-			console.log(data);
-			if(data.chooseForm==1){
-				this.chooseForm=1;
-			}else if(data.chooseForm==2){
-				this.chooseForm=2;
+		mounted() {
+			//页面加载完成，获取本地存储的用户信息
+			const userData = uni.getStorageSync('userInfo');
+			if (userData) {
+				this.user.userId = userData.userId;
+				this.user.nickName = userData.nickName;
+				this.getContractData();
 			}
 		},
+		// onLoad(data) {
+		// 	console.log(data);
+		// 	if (data.chooseForm == 1) {
+		// 		this.chooseForm = 1;
+		// 	} else if (data.chooseForm == 2) {
+		// 		this.chooseForm = 2;
+		// 	}
+		// },
 		onNavigationBarButtonTap(){
 			uni.switchTab({
 				url:"/pages/MainInterface/audit"
 			})
 		},
 		onReachBottom() {
-			if(this.chooseForm==0){
-				this.unauditedList = [...this.unauditedList, ...this.unauditedList]
-			}else if(this.chooseForm==1){
-				this.auditedList = [...this.auditedList, ...this.auditedList]
-			}else{
-				this.completedList=[...this.completedList, ...this.completedList]
+			if (this.chooseForm == 0) {
+				this.getUnAuditedData();
+			} else if (this.chooseForm == 1) {
+				this.getAuditedData();
+			} else {
+				this.getCompletedData();
 			}
 		},
 		methods: {
+			getContractData(){
+				// 获取未审批物流付款单
+				this.$request({
+					url: '/shippingContract/getDirectorSC',
+					data: {
+						current: this.topList[0].current,
+						page: this.topList[0].page,
+						userId: this.user.userId,
+						type: 0,
+					}
+				}).then(res=>{
+					if(res.code==200){
+						this.unauditedList=res.data.records;
+						this.topList[0].count=res.data.total;
+						console.log(this.unauditedList);
+					}
+				},
+				err=>{
+					uni.showModal({
+						content: "请求服务失败",
+						showCancel: false
+					})
+				})
+				// 获取已审批的物流付款单
+				this.$request({
+					url: '/shippingContract/getDirectorSC',
+					data: {
+						current: this.topList[1].current,
+						page: this.topList[1].page,
+						userId: this.user.userId,
+						type: 1,
+					}
+				}).then(res=>{
+					if(res.code==200){
+						this.auditedList=res.data.records;
+						this.topList[1].count=res.data.total;
+						console.log(this.auditedList);
+					}
+				},
+				err=>{
+					uni.showModal({
+						content: "请求服务失败",
+						showCancel: false
+					})
+				})
+				// 获取已完成的物流付款单
+				this.$request({
+					url: '/shippingContract/getDirectorSC',
+					data: {
+						current: this.topList[2].current,
+						page: this.topList[2].page,
+						userId: this.user.userId,
+						type: 2,
+					}
+				}).then(res=>{
+					if(res.code==200){
+						this.completedList=res.data.records;
+						this.topList[2].count=res.data.total;
+						console.log(this.completedList);
+					}
+				},
+				err=>{
+					uni.showModal({
+						content: "请求服务失败",
+						showCancel: false
+					})
+				})
+			},
+			getUnAuditedData(){
+				if(this.unauditedList.length==this.topList[0].count){
+					uni.showModal({
+						content: "暂无更多数据",
+						showCancel: false
+					})
+				}else{
+					this.topList[0].current=this.topList[0].current+1,
+					this.topList[0].page=this.topList[0].page+5,
+					// 获取未审批采购付款单
+					this.$request({
+						url: '/shippingContract/getDirectorSC',
+						data: {
+							current: this.topList[0].current,
+							page: this.topList[0].page,
+							userId: this.user.userId,
+							type: 0,
+						}
+					}).then(res=>{
+						if(res.code==200){
+							this.unauditedList=[...this.unauditedList, ...res.data.records];
+						}
+					},
+					err=>{
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
+					})
+				}
+			},
+			getAuditedData(){
+				if(this.unauditedList.length==this.topList[0].count){
+					uni.showModal({
+						content: "暂无更多数据",
+						showCancel: false
+					})
+				}else{
+					this.topList[1].current=this.topList[1].current+1,
+					this.topList[1].page=this.topList[1].page+5,
+					// 获取未审批采购付款单
+					this.$request({
+						url: '/shippingContract/getDirectorSC',
+						data: {
+							current: this.topList[1].current,
+							page: this.topList[1].page,
+							userId: this.user.userId,
+							type: 1,
+						}
+					}).then(res=>{
+						if(res.code==200){
+							if(this.auditedList.length==res.data.total){
+								uni.showModal({
+									content: "暂无更多数据",
+									showCancel: false
+								})
+							}else{
+								this.auditedList=[...this.auditedList, ...res.data.records];
+							}
+						}
+					},
+					err=>{
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
+					})
+				}
+			},
+			getCompletedData(){
+				if(this.unauditedList.length==this.topList[0].count){
+					uni.showModal({
+						content: "暂无更多数据",
+						showCancel: false
+					})
+				}else{
+					this.topList[2].current=this.topList[2].current+1,
+					this.topList[2].page=this.topList[2].page+5,
+					// 获取未审批采购付款单
+					this.$request({
+						url: '/shippingContract/getDirectorSC',
+						data: {
+							current: this.topList[2].current,
+							page: this.topList[2].page,
+							userId: this.user.userId,
+							type: 2,
+						}
+					}).then(res=>{
+						if(res.code==200){
+							if(this.completedList.length==res.data.total){
+								uni.showModal({
+									content: "暂无更多数据",
+									showCancel: false
+								})
+							}else{
+								this.completedList=[...this.completedList, ...res.data.records];
+							}
+						}
+					},
+					err=>{
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
+					})
+				}
+			},
 			topCardClick(e) {
 				this.chooseForm = e.detail.index;
-				console.log(this.chooseForm);
 			},
 			searchClick(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
+				uni.navigateTo({
+					// 普通参数传输
+					url: '/pages/search/searchShipping?searchWord=' + res.value
 				})
 			},
 			actionsClick(result, item, index) {
 				if (result == "pass") {
+					let that=this;
 					uni.showModal({
-						content: "操作后无法再进行修改，您确定要‘通过’该单吗？",
+						content: "您确定要‘通过’该单吗？",
 						showCancel: true,
 						success(res) {
 							if (res.confirm) {
-								item.firstState = 1;
-								item.show = false;
-								item.modeClass = ['fade', 'slide-right'];
-								console.log("发送请求,修改审核状态为‘通过’," + item.contractNo);
-							}
-						}
-					})
-				} else if (result == "refuse") {
-					uni.showModal({
-						content: "操作后无法再进行修改，您确定要‘拒绝’该单吗？",
-						showCancel: true,
-						success(res) {
-							if (res.confirm) {
-								item.firstState = 2;
-								item.show = false;
-								item.modeClass = ['fade', 'slide-right'];
-								uni.showToast({
-									icon: 'none',
-									title: "本单已打回，将通知相关人员进行修改"
+								that.$request({
+									url: '/shippingContract/changeDirectorState',
+									data: {
+										shippingContractNo: item.shippingContractNo,
+										userId: that.user.userId,
+									}
+								}).then(res => {
+									if (res.code == 200) {
+										if (res.data == 1) {
+											that.unauditedList.splice(index, 1);
+											that.getContractData();
+											uni.showModal({
+												content: "已通过！",
+												showCancel: false
+											})
+										} else {
+											uni.showModal({
+												content: "修改失败",
+												showCancel: false
+											})
+										}
+									}
+								}, err => {
+									uni.showModal({
+										content: "请求服务失败",
+										showCancel: false
+									})
 								})
-								console.log("发送请求,修改审核状态为‘拒绝’，"+ item.contractNo);
 							}
 						}
 					})
 				} else {
 					uni.navigateTo({
 						// 普通参数传输
-						url: '/pages/detail/shippingDetail?contractNo=' + item.contractNo
+						url: '/pages/detail/shippingDetail?contractId=' + item.id
 					})
 				}
 			},

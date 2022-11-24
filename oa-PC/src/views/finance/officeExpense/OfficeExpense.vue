@@ -56,9 +56,10 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="290" fixed="right">
                 <template #default="scope">
-                  <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
-                             :disabled="loginUserRole =='财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row): true): true)">通过
-                  </el-button>
+                    <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
+                        :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
+                        通过
+                    </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
@@ -264,12 +265,12 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-import {ElTable, ElMessage, FormInstance, FormRules, ElMessageBox} from 'element-plus'
-import { Delete, Search, MoreFilled } from "@element-plus/icons-vue";
+import { ElTable, ElMessage, FormInstance, FormRules, ElMessageBox } from 'element-plus'
+import { Delete, Search, MoreFilled, Select } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
-import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, deleteOneOfficeExpenseApi,changeDirectorState, changeFinanceState } from '@/api/officeExpense'
+import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, deleteOneOfficeExpenseApi, changeDirectorState, changeFinanceState } from '@/api/officeExpense'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -347,60 +348,60 @@ onMounted(() => {
 })
 
 //审批通过，根据身份修改采购付款单响应审核状态
-const changeState = (row:any) => {
-  if (loginUserRole.value == '财务'){
-    ElMessageBox.confirm(
-        '您确定要通过吗?',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          title:'系统提示'
-        }
-    ).then(() => {
-      changeFinanceState(row.id,loginUserName.value).then(res => {
-        ElMessage({
-          message: "已通过",
-          type: 'success',
-          duration: 3000
+const changeState = (row: any) => {
+    if (loginUserRole.value == '财务') {
+        ElMessageBox.confirm(
+            '您确定要通过吗?',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                title: '系统提示'
+            }
+        ).then(() => {
+            changeFinanceState(row.id, loginUserName.value).then(res => {
+                ElMessage({
+                    message: "已通过",
+                    type: 'success',
+                    duration: 3000
+                })
+                getTableData();
+            });
         })
-        getTableData();
-      });
-    })
 
-  }else if (loginUserRole.value == '董事会'){
-    ElMessageBox.confirm(
-        '您确定要通过吗?',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          title:'系统提示'
-        }
-    ).then(() => {
-      changeDirectorState(row.id,loginUserId.value).then(res => {
-        ElMessage({
-          message: "已通过",
-          type: 'success',
-          duration: 3000
+    } else if (loginUserRole.value == '董事会') {
+        ElMessageBox.confirm(
+            '您确定要通过吗?',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                title: '系统提示'
+            }
+        ).then(() => {
+            changeDirectorState(row.id, loginUserId.value).then(res => {
+                ElMessage({
+                    message: "已通过",
+                    type: 'success',
+                    duration: 3000
+                })
+                getTableData();
+            })
         })
-        getTableData();
-      })
-    })
-  }
+    }
 }
 
 //判断董事会审批是否重复
-const JudgmentRepeated = (row:any) => {
-  console.log(userNickNameStore.user.roleNames)
-  for (var i = 0;i<row.officeDirector.length;i++){
-    if (row.officeDirector[i].userId == userNickNameStore.user.id){
-      if (row.officeDirector[i].state == null){
-        return false;
-      }else{
-        return true;
-      }
+const JudgmentRepeated = (row: any) => {
+    console.log(userNickNameStore.user.roleNames)
+    for (var i = 0; i < row.officeDirector.length; i++) {
+        if (row.officeDirector[i].userId == userNickNameStore.user.id) {
+            if (row.officeDirector[i].state == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
-  }
-  return true;
+    return true;
 }
 
 // 获取办公经费单数据

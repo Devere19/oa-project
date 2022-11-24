@@ -104,8 +104,12 @@
 						url: '/pages/login/login?data=exit'
 					});
 				}else{
+					// uni.showToast({
+					// 	title: '你点击了' + item,
+					// 	icon: 'none'
+					// })
 					uni.showToast({
-						title: '你点击了' + item,
+						title: '该功能暂未开发',
 						icon: 'none'
 					})
 				}

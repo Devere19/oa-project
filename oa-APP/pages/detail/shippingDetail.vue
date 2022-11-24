@@ -4,7 +4,7 @@
 			<view>
 				<uni-row>
 					<uni-col class="center" style="border-top: 0rpx solid #00ffff">
-						<view>{{shippingContract.contractNo}}</view>
+						<view>{{shippingContract.shippingContractNo}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -12,7 +12,15 @@
 						<view class="headLine">运输合同编号：</view>
 					</uni-col>
 					<uni-col :span="13">
-						<view class="contractContent">{{shippingContract.logtisticsContractNo}}</view>
+						<view class="contractContent">{{shippingContract.logisticsContractNo}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">委托方：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.principal}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -21,6 +29,22 @@
 					</uni-col>
 					<uni-col :span="13">
 						<view class="contractContent">{{shippingContract.packingTime}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">装箱地点：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.packingLocation}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">卸货工厂：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.unpackingFactory}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -49,10 +73,10 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
-						<view class="headLine">运输相关放方：</view>
+						<view class="headLine">理货费用：</view>
 					</uni-col>
 					<uni-col :span="13">
-						<view class="contractContent">{{shippingContract.release}}</view>
+						<view class="contractContent">{{shippingContract.tallyClerkPrice}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -65,10 +89,26 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
+						<view class="headLine">起运车队费用：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.departurePrice}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
 						<view class="headLine">承运船公司：</view>
 					</uni-col>
 					<uni-col :span="13">
 						<view class="contractContent">{{shippingContract.carrierCompanyName}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">承运船费用：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.carrierCompanyPrice}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -81,7 +121,15 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
-						<view class="headLine">费用：</view>
+						<view class="headLine">目的港车队费用：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.destinationPortPrice}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">总费用：</view>
 					</uni-col>
 					<uni-col :span="13">
 						<view class="contractContent">{{shippingContract.expenses}}</view>
@@ -94,7 +142,9 @@
 				</uni-row>
 				<uni-row>
 					<uni-col class="screenShotCenter">
-						<image class="screenShot" mode="aspectFit" :src="shippingContract.contractPhoto" @tap="viewContractPhoto"></image>
+						<image class="screenShot" mode="aspectFit"
+							:src="shippingContract.contractPhoto==null?'':shippingContract.contractPhoto"
+							@tap="viewContractPhoto"></image>
 					</uni-col>
 				</uni-row>
 			</view>
@@ -117,46 +167,46 @@
 					</uni-col>
 				</uni-row>
 				<view class="auditStatusGroup">
-					<view v-for="(statusItem,statusIndex) in directorList" :key="statusItem.directorId"
-						class="auditStatusItem">
-						<view class="contractContent">{{statusItem.directorName}}</view>
+					<view v-for="(statusItem,statusIndex) in shippingContract.shippingDirector"
+						:key="statusItem.userId" class="auditStatusItem">
+						<view class="contractContent">{{statusItem.nickName}}</view>
 						<view v-show="statusIndex==0">
 							<uni-icons :style="'margin-left:15rpx'"
-								:type="shippingContract.firstState === 0 ? '' : shippingContract.firstState===1?'checkmarkempty':'closeempty'"
-								size="24" color="#0081ff"></uni-icons>
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
 						</view>
 						<view v-show="statusIndex==1">
 							<uni-icons :style="'margin-left:15rpx'"
-								:type="shippingContract.secondState === 0 ? '' : shippingContract.secondState===1?'checkmarkempty':'closeempty'"
-								size="24" color="#0081ff"></uni-icons>
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
 						</view>
 						<view v-show="statusIndex==2">
 							<uni-icons :style="'margin-left:15rpx'"
-								:type="shippingContract.thridState === 0 ? '' : shippingContract.thridState===1?'checkmarkempty':'closeempty'"
-								size="24" color="#0081ff"></uni-icons>
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
 						</view>
 					</view>
 				</view>
 			</view>
-			<view v-show="shippingContract.firstState==1&&shippingContract.secondState==1&&shippingContract.thridState==1">
+			<view v-show="shippingContract.cashier!=null">
 				<uni-row>
 					<uni-col class="center">
 						<view>出纳付款情况</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
-					<uni-col :span="8" :offset="2">
+					<uni-col :span="7" :offset="2">
 						<view class="headLine">付款金额：</view>
 					</uni-col>
-					<uni-col :span="13">
-						<view class="contractContent">{{shippingContract.paymentAmount}}</view>
+					<uni-col :span="14">
+						<view class="contractContent">{{shippingContract.paymentCount}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
-					<uni-col :span="8" :offset="2">
+					<uni-col :span="7" :offset="2">
 						<view class="headLine">付款时间：</view>
 					</uni-col>
-					<uni-col :span="13">
+					<uni-col :span="14">
 						<view class="contractContent">{{shippingContract.paymentTime}}</view>
 					</uni-col>
 				</uni-row>
@@ -167,144 +217,159 @@
 				</uni-row>
 				<uni-row>
 					<uni-col class="screenShotCenter">
-						<image class="screenShot" mode="aspectFit" :src="shippingContract.paymentPhoto" @tap="viewscreenShot"></image>
+						<image class="screenShot" mode="aspectFit"
+							:src="shippingContract.paymentPhoto==null?'':shippingContract.paymentPhoto"
+							@tap="viewscreenShot"></image>
 					</uni-col>
 				</uni-row>
 			</view>
-					</view>
-			<view v-show="shippingContract.firstState==0" class="actionGroup">
-				<view class="actionGroupItem" @tap="actionsClick('pass')">
-					<button class="buttonGroup" type="primary">通过</button>
-				</view>
-<!-- 				<view class="actionGroupItem" @tap="actionsClick('refuse')">
-					<button class="buttonGroup" type="warn">拒绝</button>
-				</view> -->
-				<view class="actionGroupItem" @tap="actionsClick('back')">
-					<button class="buttonGroup">返回</button>
-				</view>
+		</view>
+		<view class="actionGroup">
+			<view v-show="showPassFlag" class="actionGroupItem" @tap="actionsClick('pass')">
+				<button class="buttonGroup" type="primary">通过</button>
 			</view>
-			<view v-show="shippingContract.firstState!=0" class="actionGroup">
-				<view class="actionGroupItem" @tap="actionsClick('bcak')">
-					<button class="buttonGroup">返回</button>
-				</view>
+			<view class="actionGroupItem" @tap="actionsClick('back')">
+				<button class="buttonGroup">返回</button>
 			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+	import {
+		dateConversion
+	} from "@/common/unit/TimeFormatUnit.js"
 	export default {
 		data() {
 			return {
-				shippingContract: {
-					contractNo: "HY00389367824",
-					logtisticsContractNo:"YS00187492233",
-					// 装箱日期
-					packingTime:"2022-10-23",
-					// 集装箱号
-					containerNo:"EASU9809490",
-					// 铅封号
-					sealNo: "C56765",
-					// 理货员
-					tallyClerk:"何某某",
-					// 运输相关放方
-					release:"新南海关",
-					// 起运承运车队
-					departureFleet:"新南物流车队",
-					// 承运船公司
-					carrierCompanyName: "东方海外货柜航运有限公司",
-					// 目的港承运车队
-					destinationPortFleet:"老北物流车队",
-					// 费用
-					expenses: 13888,
-					financeStaff: "李某某",
-					firstState: 0,
-					secondState: 1,
-					thridState: 1,
-					paymentAmount: 27000,
-					paymentTime: "2022-10-23",
-					paymentPhoto: "/static/UIImages/purchaseScreenShot.png",
-					contractPhoto: "/static/UIImages/contract.png"
+				user: {
+					userId: '',
+					nickName: '',
 				},
-				directorList: [{
-						directorId: "00001",
-						directorName: "黄佳森"
-					},
-					{
-						directorId: "00002",
-						directorName: "谢晓东"
-					},
-					{
-						directorId: "00003",
-						directorName: "林国丰"
-					}
-				],
+				shippingContract: null,
+				showPassFlag: '',
+				changeStateFlag: false,
+			}
+		},
+mounted() {
+			//页面加载完成，获取本地存储的用户信息
+			const userData = uni.getStorageSync('userInfo');
+			if (userData) {
+				this.user.userId = userData.userId;
+				this.user.nickName = userData.nickName;
 			}
 		},
 		// data为形参
 		onLoad(data) {
-			// 普通参数接收
-			console.log("合同号：" + data.contractNo);
+			if(JSON.stringify(data)!='{}'){
+				// 参数接收
+				let receiveData=JSON.parse(JSON.stringify(data));
+				this.reflashContract(receiveData.contractId);
+			}else{
+				this.reflashContract(this.shippingContract.id);
+			}
 		},
-		onNavigationBarButtonTap(){
+		onNavigationBarButtonTap() {
 			uni.switchTab({
-				url:"/pages/MainInterface/audit"
+				url: "/pages/MainInterface/audit"
 			})
 		},
 		methods: {
-			viewscreenShot(){
+			viewscreenShot() {
 				uni.previewImage({
-					urls: [this.shippingContract.paymentPhoto]
+					urls: [...this.shippingContract.paymentPhotoArray]
 				})
 			},
 			viewContractPhoto(){
 				uni.previewImage({
-					urls: [this.shippingContract.contractPhoto]
+					urls: [...this.shippingContract.contractPhotoArray]
 				})
 			},
 			actionsClick(result) {
-				const that=this;
 				if (result == "pass") {
+					let that = this;
 					uni.showModal({
-						content: "操作后无法再进行修改，您确定要‘通过’该单吗？",
+						content: "您确定要‘通过’该单吗？",
 						showCancel: true,
 						success(res) {
 							if (res.confirm) {
-								that.shippingContract.firstState = 1;
-								console.log("发送请求,修改审核状态为‘通过’," + that.shippingContract.contractNo);
-								// setTimeout(()=>{
-								// 	this.unauditedList.splice(index, 1);
-								// 	console.log(this.unauditedList);
-								// },500);
-							}
-						}
-					})
-				} else if (result == "refuse") {
-					uni.showModal({
-						content: "操作后无法再进行修改，您确定要‘拒绝’该单吗？",
-						showCancel: true,
-						success(res) {
-							if (res.confirm) {
-								that.shippingContract.firstState = 2;
-								uni.showToast({
-									icon:'none',
-									title:"本单已打回，将通知相关人员进行修改"
+								that.$request({
+									url: '/shippingContract/changeDirectorState',
+									data: {
+										shippingContractNo: that.shippingContract.shippingContractNo,
+										userId: that.user.userId,
+									}
+								}).then(res => {
+									if (res.code == 200) {
+										if (res.data == 1) {
+											that.showPassFlag=false
+											that.changeStateFlag=true
+											that.reflashContract(that.shippingContract.id)
+											uni.showModal({
+												content: "已通过！",
+												showCancel: false
+											})
+										} else {
+											uni.showModal({
+												content: "修改失败",
+												showCancel: false
+											})
+										}
+									}
+								}, err => {
+									uni.showModal({
+										content: "请求服务失败",
+										showCancel: false
+									})
 								})
-								console.log("发送请求,修改审核状态为‘拒绝’");
-								setTimeout(()=>{
-									uni.navigateTo({
-										url:'/pages/audit/shipping'
-									});
-								},1200);
 							}
 						}
 					})
 				} else {
-					uni.navigateBack({
-						delta:1
-					});
-					// uni.navigateTo({
-					// 	url:'/pages/audit/shipping'
-					// });
+					if(this.changeStateFlag){
+						uni.navigateTo({
+							url:'/pages/audit/shipping'
+						});
+					}else{
+						uni.navigateBack({
+							delta:1
+						})
+					}
+				}
+			},
+			reflashContract(id){
+				this.$request({
+					url: '/shippingContract/getOneDirectorSC',
+					data: {
+						id: id,
+					}
+				}).then(res => {
+					if (res.code == 200) {
+						this.shippingContract=res.data;
+						this.shippingContract.packingTime = dateConversion(this.shippingContract.packingTime, 0);
+						if(this.shippingContract.paymentTime!=null){
+							this.shippingContract.paymentTime = dateConversion(this.shippingContract.paymentTime, 0);
+						}
+						this.showPassTF();
+					}
+				}, err => {
+					uni.showModal({
+						content: "请求服务失败",
+						showCancel: false
+					})
+				})
+			},
+			showPassTF(){
+				for(let i=0;i<this.shippingContract.shippingDirector.length;i++){
+					if(this.shippingContract.shippingDirector[i].userId==this.user.userId){
+						if(this.shippingContract.shippingDirector[i].state==null){
+							this.showPassFlag=true;
+							break;
+						}else{
+							this.showPassFlag=false;
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -343,20 +408,20 @@
 		margin-top: 10rpx;
 		margin-bottom: 10rpx;
 	}
-	
-	.contractContent{
+
+	.contractContent {
 		font-size: 28rpx;
 		margin-top: 10rpx;
 		margin-bottom: 10rpx;
 	}
-	
-	.financeStatus{
+
+	.financeStatus {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		flex-direction: row;
 		justify-content: center;
-/* 		padding-top: 10rpx; */
+		/* 		padding-top: 10rpx; */
 	}
 
 	.auditStatusGroup {
@@ -398,8 +463,8 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
-	.screenShot{
+
+	.screenShot {
 		height: 640rpx;
 		width: 320rpx;
 	}

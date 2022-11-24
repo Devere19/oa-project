@@ -323,6 +323,27 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     }
 
     @Override
+    public OfficeExpense getOneDirectorOE(int id) {
+        OfficeExpense officeExpense = officeExpenseMapper.selectById(id);
+        QueryWrapper<OfficeStateView> stateQw = new QueryWrapper<>();
+        stateQw.eq("office_expense_id", id).orderByDesc("nick_name");
+        officeExpense.setOfficeDirector(officeStateInfoMapper.selectList(stateQw));
+        //处理图片，形成一个图片数组
+        String paymentPhoto = officeExpense.getPaymentPhoto();
+//            付款照片
+        if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
+            //分割图片字符串，形成一个数组
+            List<String> list = ImageUtils.imageSplit(paymentPhoto);
+            officeExpense.setPaymentPhotoArray(list);
+            //取第一个图片的url
+            officeExpense.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
+        } else {
+            officeExpense.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
+        }
+        return officeExpense;
+    }
+
+    @Override
     public Page<OfficeExpense> searchDirectorOE(int currentPage, int pageSize, String searchWord, int userId) {
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("items_list",searchWord)
@@ -340,14 +361,14 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
 
             for(int i=0;i<officeStateViews.size();i++){
 //                判断是否有该登录的董事
-                if(officeStateViews.get(i).getUserId()!=userId){
+                if(officeStateViews.get(i).getUserId()==userId){
+                    break;
+                }else{
 //                    如果这次没有，而且第三次了还没有，说明该董事不是审核该笔采购单的，移除该条数据
                     if(i==officeStateViews.size()-1){
                         iterator.remove();
                         page.setTotal(page.getTotal()-1);
                     }
-                }else{
-                    break;
                 }
             }
 
