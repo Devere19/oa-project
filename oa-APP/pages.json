@@ -27,7 +27,41 @@
 		{
 			"path": "pages/audit/purchase",
 			"style": {
-				"navigationBarTitleText": "采购",
+				"navigationBarTitleText": "采购单",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/audit/purchasePayment",
+			"style": {
+				"navigationBarTitleText": "采购付款单",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/audit/sale",
+			"style": {
+				"navigationBarTitleText": "销售单",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -44,7 +78,24 @@
 		{
 			"path": "pages/audit/logistics",
 			"style": {
-				"navigationBarTitleText": "物流",
+				"navigationBarTitleText": "物流单",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/audit/logisticsPayment",
+			"style": {
+				"navigationBarTitleText": "物流付款单",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -61,7 +112,92 @@
 		{
 			"path": "pages/audit/shipping",
 			"style": {
-				"navigationBarTitleText": "物流海运",
+				"navigationBarTitleText": "海运单",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/audit/officeExpense",
+			"style": {
+				"navigationBarTitleText": "办公经费单",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/search/searchPurchasePayment",
+			"style": {
+				"navigationBarTitleText": "采购付款单搜索结果",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/search/searchLogisticsPayment",
+			"style": {
+				"navigationBarTitleText": "物流付款单搜索结果",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/search/searchShipping",
+			"style": {
+				"navigationBarTitleText": "海运单搜索结果",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/search/searchOfficeExpense",
+			"style": {
+				"navigationBarTitleText": "办公经费单搜索结果",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -93,9 +229,60 @@
 			}
 		},
 		{
+			"path": "pages/detail/purchasePaymentDetail",
+			"style": {
+				"navigationBarTitleText": "采购付款单详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/detail/saleDetail",
+			"style": {
+				"navigationBarTitleText": "销售单详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/detail/logisticsDetail",
 			"style": {
-				"navigationBarTitleText": "物流详情",
+				"navigationBarTitleText": "物流单详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/detail/logisticsPaymentDetail",
+			"style": {
+				"navigationBarTitleText": "物流付款单详情",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
@@ -112,7 +299,24 @@
 		{
 			"path": "pages/detail/shippingDetail",
 			"style": {
-				"navigationBarTitleText": "航运详情",
+				"navigationBarTitleText": "海运单详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/detail/officeExpenseDetail",
+			"style": {
+				"navigationBarTitleText": "办公经费单详情",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{

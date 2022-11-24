@@ -1,5 +1,5 @@
 import http from "@/http";
-import { moreDeleteModel, purchaseContractModel } from "./PurchaseContractModel";
+import { moreDeleteModel, purchaseContractModel, PurchaseExportModel } from "./PurchaseContractModel";
 
 //分页获取未归档采购单
 export const getTPurchaseContractDataApi = (currentPage: number, pageSize: number) => {
@@ -18,13 +18,20 @@ export const getFPurchaseContractDataApi = (currentPage: number, pageSize: numbe
 }
 
 // 分页查询采购单
-export const searchPurchaseContractApi = (currentPage: number, pageSize: number, searchWord: string, showPigeonhole: boolean) => {
+export const searchPurchaseContractApi = (currentPage: number, pageSize: number, searchWord: string, showPigeonhole: boolean, startDate: any, endDate: any) => {
     return http.get("purchaseContract/searchPurchaseContract", {
         current: currentPage,
         page: pageSize,
         searchWord: searchWord,
         showPigeonhole: showPigeonhole,
+        startDate: startDate,
+        endDate: endDate,
     })
+}
+
+//导出excel传递参数
+export const sendExportParmApi = (purchaseExportModel: PurchaseExportModel) => {
+    return http.post("/purchaseContract/sendExportParm", purchaseExportModel)
 }
 
 // 删除单笔采购单

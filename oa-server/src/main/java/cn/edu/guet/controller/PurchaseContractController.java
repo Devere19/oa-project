@@ -1,13 +1,29 @@
 package cn.edu.guet.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.edu.guet.bean.purchaseContract.ExportOutPurchaseContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
+import cn.edu.guet.bean.purchaseContract.PurchaseExportModel;
+import cn.edu.guet.bean.sale.ExportListParm;
+import cn.edu.guet.bean.sale.ExportOutSaleContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.PurchaseContractService;
 import cn.edu.guet.service.PurchaseContractViewService;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.sql.Date;
+
+import static cn.edu.guet.util.ExcelUtils.downloadExcel;
 
 /**
  * @author 陶祎祎
@@ -35,8 +51,27 @@ public class PurchaseContractController {
     }
 
     @RequestMapping("/searchPurchaseContract")
-    public HttpResult searchPurchaseContract(int current,int page,String searchWord,boolean showPigeonhole){
-        return ResultUtils.success("查询成功",purchaseContractViewService.searchPurchaseContract(current,page,searchWord,showPigeonhole));
+    public HttpResult searchPurchaseContract(int current, int page, String searchWord, boolean showPigeonhole, Date startDate, Date endDate){
+        return ResultUtils.success("查询成功",purchaseContractViewService.searchPurchaseContract(current,page,searchWord,showPigeonhole,startDate,endDate));
+    }
+
+    @RequestMapping("/sendExportParm")
+    public HttpResult sendExportParm(HttpServletRequest request, @RequestBody PurchaseExportModel purchaseExportModel){
+        request.getServletContext().setAttribute("purchaseExportModel",purchaseExportModel);
+        System.out.println("存进的全局属性："+purchaseExportModel);
+        return ResultUtils.success("传递参数成功");
+    }
+
+    @RequestMapping("/purchaseExportExcel")
+    public void purchaseExportExcel(HttpServletResponse response, HttpServletRequest request) throws Exception {
+        PurchaseExportModel purchaseExportModel = (PurchaseExportModel) request.getServletContext().getAttribute("purchaseExportModel");
+        System.out.println("拿到的全局数据:"+purchaseExportModel);
+        // 导出
+        String fileName = "采购单.xlsx";
+        ExportParams exportParams = new ExportParams();
+        exportParams.setType(ExcelType.XSSF);
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, ExportOutPurchaseContract.class, purchaseContractViewService.purchaseExportExcel(purchaseExportModel.getSearchWord(),purchaseExportModel.isShowPigeonhole(),purchaseExportModel.getStartDate(),purchaseExportModel.getEndDate()));
+        downloadExcel(fileName, workbook, response);
     }
 
     @DeleteMapping("/deleteOnePurchaseContract/{id}")

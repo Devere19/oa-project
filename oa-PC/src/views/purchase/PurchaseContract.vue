@@ -8,18 +8,30 @@
       <el-button class="showPigeonholeButton" type="primary" @click="openAddDialog">
         新增
       </el-button>
+      <!-- <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange" :disabled-date="disabledDate"
+        unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
+        @change="changeDay" style="margin: auto 1%;" /> -->
       <el-input v-model="searchData" size="large" class="searchInput" placeholder="请输入所要查询的采购单信息"
         @keyup.enter="searchTableData">
         <template #append>
           <el-button :icon="Search" @click="searchTableData" />
         </template>
       </el-input>
-      <el-button v-show="firstSelection?.[0] != null" class="moreDeleteButton" type="danger"
+      <!-- <el-button v-show="firstSelection?.[0] != null" class="moreDeleteButton" type="danger"
         @click="openMoreDeleteDialog">批量删除
+      </el-button> -->
+      <el-button class="moreDeleteButton" :icon="Download" type="success" @click="exportExcel">导出
       </el-button>
       <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
       </el-button>
     </div>
+    <el-row justify="center">
+      <el-col span="24">
+        <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange" :disabled-date="disabledDate"
+          unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
+          @change="changeDay" style="margin: 1% 0% 2% 0%;" />
+      </el-col>
+    </el-row>
     <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" border="true"
       highlight-current-row @selection-change="handleSelectionChange">
       <!-- 暂时隐藏批量删除功能 -->
@@ -349,16 +361,16 @@
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Delete, Search, MoreFilled, Hide, View, Money } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Hide, View, Money, Download } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
 import { SelectCustomer } from "@/api/customer/CustomerModel"
-import { purchaseContractModel, inboundDataModel } from '@/api/purchaseContract/PurchaseContractModel';
+import { purchaseContractModel, inboundDataModel, PurchaseExportModel } from '@/api/purchaseContract/PurchaseContractModel';
 import {
   getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi,
   deleteOnePurchaseContractApi, deleteMorePurchaseContractApi, setPurchaseContractPigeonholeApi,
-  addNewPurchaseContractApi, getPurchaseDetailApi
+  addNewPurchaseContractApi, getPurchaseDetailApi, sendExportParmApi
 } from '@/api/purchaseContract'
 import { addNewPurchasePaymentContractApi } from '@/api/purchasePaymentContract'
 import { userStore } from '@/store/nickName'
@@ -389,6 +401,7 @@ const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const addPaymentDialogTop = ref<any>()
 const ownFlag = ref(false)
+const choosedDay = ref<Date[]>([]);
 
 const loginUserName = ref("")
 
@@ -447,6 +460,13 @@ const NewPurchasePaymentContractData = reactive({
   createBy: ''
 })
 
+const exportListParm = reactive<PurchaseExportModel>({
+  searchWord: '',
+  showPigeonhole: false,
+  startDate: null,
+  endDate: null
+})
+
 // NewPurchaseContractData.paymentAmount = computed(() => {
 //   const temp = String(Number(NewPurchaseContractData.goodsCount) * Number(NewPurchaseContractData.goodsUnitPrice))
 //   return temp
@@ -496,7 +516,9 @@ const secondRules = reactive<FormRules>({
   ],
 })
 
-
+const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now()
+}
 
 //定义客户列表数据  label存公司名称  value存客户表id
 const customerData = reactive<SelectCustomer>({
@@ -505,6 +527,10 @@ const customerData = reactive<SelectCustomer>({
 
 onMounted(() => {
   getTTableData();
+
+  console.log(choosedDay.value);
+  console.log(choosedDay.value.length);
+
   loginUserName.value = userNickNameStore.user.nickName;
   getSelectApi().then(res => {
     customerData.list = res.data;
@@ -541,22 +567,26 @@ const changePigeonholeData = (flag: boolean) => {
   }
 }
 
+// 响应标签1日期的修改
+const changeDay = () => {
+  console.log(choosedDay.value);
+}
 
 // 搜索数据
 const searchTableData = () => {
-  if (searchData.value == null || searchData.value == '') {
-    ElMessage({
-      message: '请输入关键词再进行搜索！',
-      type: 'warning',
-      duration: 4000
-    })
-  } else {
+  if (searchData.value != '' || choosedDay.value.length != 0) {
     changeLoadingTrue();
-    searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value, showPigeonhole.value).then(res => {
+    searchPurchaseContractApi(currentPage.value, pageSize.value, searchData.value, showPigeonhole.value, choosedDay.value != null ? choosedDay.value[0] : null, choosedDay.value != null ? choosedDay.value[1] : null).then(res => {
       total.value = res.data.total;//总记录
       firstTableData.value = res.data.records;
       returnAll.value = true;
       changeLoadingFalse();
+    })
+  } else {
+    ElMessage({
+      message: '请输入关键词或选择某个时间段再进行搜索！',
+      type: 'warning',
+      duration: 4000
     })
   }
 }
@@ -569,7 +599,23 @@ const returnAllData = () => {
     getFTableData();
   }
   searchData.value = ""
+  choosedDay.value = []
   returnAll.value = false
+}
+
+//导出表格
+const exportExcel = () => {
+  exportListParm.searchWord = searchData.value
+  exportListParm.showPigeonhole = showPigeonhole.value
+  exportListParm.startDate = choosedDay.value != null ? choosedDay.value[0] : null
+  exportListParm.endDate = choosedDay.value != null ? choosedDay.value[1] : null
+  sendExportParmApi(exportListParm).then(res => {
+    if (res.code == 200) {
+      const abtn = document.createElement("a");
+      abtn.href = "http://localhost:9000/purchaseContract/purchaseExportExcel"
+      abtn.click();
+    }
+  })
 }
 
 // 处理多选变化
@@ -932,10 +978,6 @@ const changeOwnFlag = () => {
   }
 }
 
-
-const disabledDate = (time: Date) => {
-  return time.getTime() > Date.now()
-}
 </script>
 
 <style scoped>
@@ -958,9 +1000,15 @@ const disabledDate = (time: Date) => {
 }
 
 .searchInput {
-  margin: 1% 15%;
+  /* margin: 1% 15% 1% 0%;
+  align-self: center;
+  width: 68% */
+  margin: 0% 15% 0% 1%;
   align-self: center;
   width: 70%
+    /* margin: 1% 15%;
+  align-self: center;
+  width: 70% */
 }
 
 .moreDeleteButton {

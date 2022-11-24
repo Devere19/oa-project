@@ -26,3 +26,10 @@ export type inboundDataModel = {
     factoryName: string
     inboundGoodsCount: string
 }
+
+export type PurchaseExportModel = {
+    searchWord: string
+    showPigeonhole: boolean
+    startDate: any
+    endDate: any
+}

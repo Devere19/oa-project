@@ -63,6 +63,11 @@ public class LogisticsPaymentContractController {
         return ResultUtils.success("查询成功",logisticsPaymentContractService.getDirectorLPC(current,page,userId,type));
     }
 
+    @RequestMapping("/getOneDirectorLPC")
+    public HttpResult getOneDirectorLPC(int id){
+        return ResultUtils.success("查询成功",logisticsPaymentContractService.getOneDirectorLPC(id));
+    }
+
     @RequestMapping("/searchDirectorLPC")
     public HttpResult searchDirectorLPC(int current, int page,String searchWord,int userId){
         return ResultUtils.success("查询成功",logisticsPaymentContractService.searchDirectorLPC(current,page,searchWord,userId));
