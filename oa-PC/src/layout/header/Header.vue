@@ -7,6 +7,7 @@
     <el-avatar size="large" shape="circle" :src="avatar" fit="fill">
     </el-avatar>
   </el-tooltip>
+  <h2>{{ user.userMessage.roleNames }}</h2>
 
 </template>
 
@@ -29,8 +30,12 @@ const avatar = ref('http://cdn.glypro19.com/oaassets/QQ%E5%9B%BE%E7%89%872022102
 
 <style scoped>
 h1 {
-  margin-left: 1300px;
+  margin-left: 75%;
   margin-right: 20px;
+}
+
+h2 {
+  margin-left: 20px;
 }
 
 .tuichu {

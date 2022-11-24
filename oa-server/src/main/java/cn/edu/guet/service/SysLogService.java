@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SysLogService extends IService<SysLog> {
     IPage getList(ListParm listParm);
 
+    //删除7天前的日志
+    void delete();
 }

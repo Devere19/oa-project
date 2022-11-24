@@ -31,7 +31,7 @@ public class SysLogAspect {
     @Resource
     private SysLogService sysLogService;
 
-    @Pointcut("execution(* cn.edu.guet.service.*.*(..))")
+    @Pointcut("execution(* cn.edu.guet.controller.*.*(..))")
     public void logPointCut() {
 
     }
