@@ -394,6 +394,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeFinanceState(int id, String financeStaff) {
         UpdateWrapper<LogisticsPaymentContract> updateWrapper = new UpdateWrapper<>();
@@ -401,6 +402,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         return logisticsPaymentContractMapper.update(null, updateWrapper);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeDirectorState(int logisticsPaymentContractId, int userId) {
         UpdateWrapper<LogisticsDirectorState> updateWrapper = new UpdateWrapper<>();

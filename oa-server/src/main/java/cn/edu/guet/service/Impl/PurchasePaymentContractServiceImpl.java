@@ -1,6 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
@@ -41,6 +42,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
 
     @Autowired
     private DirectorMapper directorMapper;
+
+    @Autowired
+    private PurchaseContractMapper purchaseContractMapper;
 
     @Override
     public Page<PurchasePaymentContractView> getPurchasePaymentContractData(int currentPage, int pageSize) {
@@ -228,10 +232,23 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         oldPurchasePaymentContract.setCashier(SecurityUtils.getUsername());
         oldPurchasePaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
         oldPurchasePaymentContract.setPaymentTime(purchasePaymentContract.getPaymentTime());
-        return purchasePaymentContractMapper.updateById(oldPurchasePaymentContract);
+
+        int result=purchasePaymentContractMapper.updateById(oldPurchasePaymentContract);
+
+        if(result==1){
+            QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
+            qw.eq("purchase_contract_no",oldPurchasePaymentContract.getPurchaseContractNo());
+            PurchaseContract purchaseContract=purchaseContractMapper.selectOne(qw);
+            purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount().subtract(oldPurchasePaymentContract.getPaymentCount()));
+
+            purchaseContractMapper.updateById(purchaseContract);
+        }
+
+        return result;
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeFinanceState(int id, String financeStaff) {
         UpdateWrapper<PurchasePaymentContract> updateWrapper = new UpdateWrapper<>();
@@ -239,6 +256,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         return purchasePaymentContractMapper.update(null, updateWrapper);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeDirectorState(int purchasePaymentContractId, int userId) {
         UpdateWrapper<PurchaseDirectorState> updateWrapper = new UpdateWrapper<>();

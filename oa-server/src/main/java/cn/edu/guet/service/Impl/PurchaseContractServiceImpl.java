@@ -246,6 +246,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
      * @param otherWarehouse
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public int addOtherWarehouse(OtherWarehouse otherWarehouse){
         if(otherWarehouseMapper.insert(otherWarehouse)==1){
             return otherWarehouse.getId();
@@ -259,6 +260,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
      * @param ownWarehouse
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public int addOwnWarehouse(OwnWarehouse ownWarehouse){
         if(ownWarehouseMapper.insert(ownWarehouse)==1){
             return ownWarehouse.getId();
