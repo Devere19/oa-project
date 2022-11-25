@@ -488,6 +488,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeFinanceState(String shippingContractNo, String financeStaff) {
         UpdateWrapper<ShippingContract> updateWrapper = new UpdateWrapper<>();
@@ -495,6 +496,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         return shippingContractMapper.update(null, updateWrapper);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeDirectorState(String shippingContractNo, int userId) {
         UpdateWrapper<ShippingDirectorState> updateWrapper = new UpdateWrapper<>();

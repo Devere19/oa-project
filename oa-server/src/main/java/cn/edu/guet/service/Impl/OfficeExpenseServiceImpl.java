@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -97,6 +98,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addNewOfficeExpense(OfficeExpense officeExpense) {
         officeExpense.setCreateBy(SecurityUtils.getUsername());
@@ -122,6 +124,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         return result;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteOneOfficeExpense(int id) {
         OfficeExpense officeExpense=officeExpenseMapper.selectById(id);
@@ -210,6 +213,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int uploadCashierOfficeExpense(OfficeExpense officeExpense) {
         OfficeExpense oldOfficeExpense= officeExpenseMapper.selectById(officeExpense.getId());
@@ -389,6 +393,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeFinanceState(int id, String financeStaff) {
         UpdateWrapper<OfficeExpense> updateWrapper = new UpdateWrapper<>();
@@ -396,6 +401,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         return officeExpenseMapper.update(null, updateWrapper);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeDirectorState(int officeExpenseId, int userId) {
         UpdateWrapper<OfficeDirectorState> updateWrapper = new UpdateWrapper<>();
