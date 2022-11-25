@@ -171,19 +171,6 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog v-model="oneDeleteDialogFlag" title="提示" width="30%" draggable center>
-      <span>
-        您确定要删除该笔采购单吗
-      </span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button type="primary" @click="oneDeletePurchaseContract">
-            确定
-          </el-button>
-          <el-button @click="oneDeleteDialogFlag = false">取消</el-button>
-        </span>
-      </template>
-    </el-dialog>
     <el-dialog v-model="moreDeleteDialogFlag" title="提示" width="30%" draggable center>
       <span>
         您确定要删除所选中的采购单吗
@@ -360,7 +347,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
+import { ElTable, ElMessage, ElMessageBox, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
 import { Delete, Search, MoreFilled, Hide, View, Money, Download } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
@@ -387,7 +374,6 @@ const thirdTableData = ref([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
 const addPaymentDialogFlag = ref(false)
-const oneDeleteDialogFlag = ref(false)
 const moreDeleteDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
 const choosePurchaseContractNo = ref(0)
@@ -823,8 +809,17 @@ const closeMoreDetailDialog = () => {
 
 // 打开单个删除提示窗口
 const openOneDeleteDialog = (index: number, row: purchaseContractModel) => {
-  choosePurchaseContractNo.value = row.id;
-  oneDeleteDialogFlag.value = true
+  ElMessageBox.confirm(
+    '您确定要删除该笔采购单吗?',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      title: '系统提示'
+    }
+  ).then(() => {
+    choosePurchaseContractNo.value = row.id;
+    oneDeletePurchaseContract()
+  });
 }
 
 // 发送单个删除请求
@@ -842,7 +837,6 @@ const oneDeletePurchaseContract = () => {
       } else {
         getFTableData();
       }
-      oneDeleteDialogFlag.value = false
     }
     else {
       ElMessage({
