@@ -43,8 +43,8 @@ public class ExportOutPurchaseContract {
     /**
      * 入库时间（合同实际签订时间）
      */
-    @Excel(name = "入库时间（合同实际签订时间）")
-    private String inboundTime;
+    @Excel(name = "入库时间（合同实际签订时间）",format = "yyyy-MM-dd",width = 11)
+    private Date inboundTime;
 
     /**
      * 采购货物名称
@@ -85,8 +85,8 @@ public class ExportOutPurchaseContract {
     /**
      * 创建时间
      */
-    @Excel(name = "创建时间")
-    private String createTime;
+    @Excel(name = "创建时间",format = "yyyy-MM-dd HH:mm:ss",width = 12)
+    private Date createTime;
 
     /**
      * 创建者名称
@@ -97,8 +97,8 @@ public class ExportOutPurchaseContract {
     /**
      * 最新更新时间
      */
-    @Excel(name = "最新更新时间")
-    private String lastUpdateTime;
+    @Excel(name = "最新更新时间",format = "yyyy-MM-dd HH:mm:ss",width = 12)
+    private Date lastUpdateTime;
 
     /**
      * 最新更新者名称

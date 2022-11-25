@@ -116,19 +116,6 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="oneDeleteDialogFlag" title="提示" width="30%" draggable center>
-            <span>
-                您确定要删除该笔办公经费单吗
-            </span>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="oneDeleteOfficeExpense">
-                        确定
-                    </el-button>
-                    <el-button @click="oneDeleteDialogFlag = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
         <el-dialog v-model="previewImageFlag">
             <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
         </el-dialog>
@@ -282,7 +269,6 @@ const background = ref(true)
 const firstTableData = ref<officeExpenseModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
-const oneDeleteDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
 const chooseOfficeExpenseNo = ref(0)
 const dialogImageUrl = ref('')
@@ -508,8 +494,17 @@ const closeMoreDetailDialog = () => {
 
 // 打开单个删除提示窗口
 const openOneDeleteDialog = (index: number, row: officeExpenseModel) => {
-    chooseOfficeExpenseNo.value = row.id;
-    oneDeleteDialogFlag.value = true
+    ElMessageBox.confirm(
+        '您确定要删除该笔办公经费单吗?',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            title: '系统提示'
+        }
+    ).then(() => {
+        chooseOfficeExpenseNo.value = row.id;
+        oneDeleteOfficeExpense()
+    });
 }
 
 // 发送单个删除请求
@@ -523,7 +518,6 @@ const oneDeleteOfficeExpense = () => {
                 type: 'success',
             })
             getTableData();
-            oneDeleteDialogFlag.value = false
         }
         else {
             ElMessage({

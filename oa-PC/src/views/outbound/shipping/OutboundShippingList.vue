@@ -105,9 +105,10 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="290" fixed="right">
                 <template #default="scope">
-                  <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
-                             :disabled="loginUserRole =='财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row): true): true)">通过
-                  </el-button>
+                    <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
+                        :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
+                        通过
+                    </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
@@ -257,19 +258,6 @@
                         确定
                     </el-button>
                     <el-button @click="closeAddDialog">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
-        <el-dialog v-model="oneDeleteDialogFlag" title="提示" width="30%" draggable center>
-            <span>
-                您确定要删除该笔海运单吗
-            </span>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="oneDeletePurchaseContract">
-                        确定
-                    </el-button>
-                    <el-button @click="oneDeleteDialogFlag = false">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -517,13 +505,13 @@
   
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import {ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules, ElMessageBox} from 'element-plus'
+import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules, ElMessageBox } from 'element-plus'
 import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
-import { getShippingContractDataApi, searchShippingContractApi, checkContainerNoApi, addNewShippingContractApi, deleteOneShippingContractApi,changeDirectorState, changeFinanceState } from '@/api/shippingContract'
+import { getShippingContractDataApi, searchShippingContractApi, checkContainerNoApi, addNewShippingContractApi, deleteOneShippingContractApi, changeDirectorState, changeFinanceState } from '@/api/shippingContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -535,9 +523,8 @@ const background = ref(true)
 const firstTableData = ref<shippingContractModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
-const oneDeleteDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
-const choosePurchaseContractNo = ref(0)
+const chooseShippingContractNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 const PhotoData = ref<UploadUserFile[]>([])
@@ -682,60 +669,60 @@ onMounted(() => {
 })
 
 //审批通过，根据身份修改采购付款单响应审核状态
-const changeState = (row:any) => {
-  if (loginUserRole.value == '财务'){
-    ElMessageBox.confirm(
-        '您确定要通过吗?',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          title:'系统提示'
-        }
-    ).then(() => {
-      changeFinanceState(row.shippingContractNo,loginUserName.value).then(res => {
-        ElMessage({
-          message: "已通过",
-          type: 'success',
-          duration: 3000
+const changeState = (row: any) => {
+    if (loginUserRole.value == '财务') {
+        ElMessageBox.confirm(
+            '您确定要通过吗?',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                title: '系统提示'
+            }
+        ).then(() => {
+            changeFinanceState(row.shippingContractNo, loginUserName.value).then(res => {
+                ElMessage({
+                    message: "已通过",
+                    type: 'success',
+                    duration: 3000
+                })
+                getTableData();
+            });
         })
-        getTableData();
-      });
-    })
 
-  }else if (loginUserRole.value == '董事会'){
-    ElMessageBox.confirm(
-        '您确定要通过吗?',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          title:'系统提示'
-        }
-    ).then(() => {
-      changeDirectorState(row.shippingContractNo,loginUserId.value).then(res => {
-        ElMessage({
-          message: "已通过",
-          type: 'success',
-          duration: 3000
+    } else if (loginUserRole.value == '董事会') {
+        ElMessageBox.confirm(
+            '您确定要通过吗?',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                title: '系统提示'
+            }
+        ).then(() => {
+            changeDirectorState(row.shippingContractNo, loginUserId.value).then(res => {
+                ElMessage({
+                    message: "已通过",
+                    type: 'success',
+                    duration: 3000
+                })
+                getTableData();
+            })
         })
-        getTableData();
-      })
-    })
-  }
+    }
 }
 
 //判断董事会审批是否重复
-const JudgmentRepeated = (row:any) => {
-  console.log(userNickNameStore.user.roleNames)
-  for (var i = 0;i<row.shippingDirector.length;i++){
-    if (row.shippingDirector[i].userId == userNickNameStore.user.id){
-      if (row.shippingDirector[i].state == null){
-        return false;
-      }else{
-        return true;
-      }
+const JudgmentRepeated = (row: any) => {
+    console.log(userNickNameStore.user.roleNames)
+    for (var i = 0; i < row.shippingDirector.length; i++) {
+        if (row.shippingDirector[i].userId == userNickNameStore.user.id) {
+            if (row.shippingDirector[i].state == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
-  }
-  return true;
+    return true;
 }
 
 // 获取海运单数据
@@ -880,14 +867,23 @@ const closeMoreDetailDialog = () => {
 
 // 打开单个删除提示窗口
 const openOneDeleteDialog = (index: number, row: shippingContractModel) => {
-    choosePurchaseContractNo.value = row.id;
-    oneDeleteDialogFlag.value = true
+    ElMessageBox.confirm(
+        '您确定要删除该笔海运单吗?',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            title: '系统提示'
+        }
+    ).then(() => {
+        chooseShippingContractNo.value = row.id;
+        oneDeletePurchaseContract()
+    });
 }
 
 // 发送单个删除请求
 const oneDeletePurchaseContract = () => {
     changeLoadingTrue();
-    deleteOneShippingContractApi(choosePurchaseContractNo.value).then(res => {
+    deleteOneShippingContractApi(chooseShippingContractNo.value).then(res => {
         changeLoadingFalse();
         if (res.data == 1) {
             ElMessage({
@@ -895,7 +891,6 @@ const oneDeletePurchaseContract = () => {
                 type: 'success',
             })
             getTableData();
-            oneDeleteDialogFlag.value = false
         }
         else {
             ElMessage({

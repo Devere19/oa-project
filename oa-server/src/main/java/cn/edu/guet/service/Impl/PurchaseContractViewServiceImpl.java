@@ -171,23 +171,23 @@ public class PurchaseContractViewServiceImpl extends ServiceImpl<PurchaseContrac
         }
         List<PurchaseContractView> purchaseContractViews=purchaseContractViewMapper.selectList(qw);
         List<ExportOutPurchaseContract> exportOutPurchaseContracts=new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for(PurchaseContractView purchaseContractView : purchaseContractViews){
             ExportOutPurchaseContract exportOutPurchaseContract=new ExportOutPurchaseContract();
             exportOutPurchaseContract.setPurchaseContractNo(purchaseContractView.getPurchaseContractNo());
             exportOutPurchaseContract.setCustomerEnterpriseName(purchaseContractView.getCustomerEnterpriseName());
             exportOutPurchaseContract.setOwnCompanyName(purchaseContractView.getOwnCompanyName());
             exportOutPurchaseContract.setSqueezeSeason(purchaseContractView.getSqueezeSeason());
-            exportOutPurchaseContract.setInboundTime(sdf.format(purchaseContractView.getInboundTime()));
+            exportOutPurchaseContract.setInboundTime(purchaseContractView.getInboundTime());
             exportOutPurchaseContract.setGoodsName(purchaseContractView.getGoodsName());
             exportOutPurchaseContract.setGoodsCount(purchaseContractView.getGoodsCount());
             exportOutPurchaseContract.setGoodsUnit(purchaseContractView.getGoodsUnit());
             exportOutPurchaseContract.setGoodsUnitPrice(purchaseContractView.getGoodsUnitPrice());
             exportOutPurchaseContract.setPaymentAmount(purchaseContractView.getPaymentAmount());
             exportOutPurchaseContract.setUnpaidAmount(purchaseContractView.getUnpaidAmount());
-            exportOutPurchaseContract.setCreateTime(sdf.format(purchaseContractView.getCreateTime()));
+            exportOutPurchaseContract.setCreateTime(purchaseContractView.getCreateTime());
             exportOutPurchaseContract.setCreateBy(purchaseContractView.getCreateBy());
-            exportOutPurchaseContract.setLastUpdateTime(sdf.format(purchaseContractView.getLastUpdateTime()));
+            exportOutPurchaseContract.setLastUpdateTime(purchaseContractView.getLastUpdateTime());
             exportOutPurchaseContract.setLastUpdateBy(purchaseContractView.getLastUpdateBy());
             exportOutPurchaseContracts.add(exportOutPurchaseContract);
         }
