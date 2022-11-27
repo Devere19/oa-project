@@ -18,6 +18,7 @@ public interface LogisticsPaymentContractService extends IService<LogisticsPayme
     Page<LogisticsPaymentContractView> searchLogisticsPaymentContract(int currentPage, int pageSize,String searchWord);
     int addNewLogisticsPaymentContract(LogisticsPaymentContract logisticsPaymentContract);
     int deleteOneLogisticsPaymentContract(int id);
+    LogisticsPaymentContractView getOneLogisticsPaymentContract(int id);
 
     //    出纳
     Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize);

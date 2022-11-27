@@ -172,7 +172,7 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.cashier == null ? "暂无" :
-                                officeExpenseDetail.financeStaff
+                                officeExpenseDetail.cashier
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">

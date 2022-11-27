@@ -144,6 +144,17 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     }
 
     @Override
+    public PurchasePaymentContractView getOnePurchasePaymentContract(int id) {
+        PurchasePaymentContractView purchasePaymentContractView=purchasePaymentContractInfoMapper.selectById(id);
+
+        QueryWrapper<PurchasePaymentStateView> stateQw = new QueryWrapper<>();
+        stateQw.eq("purchase_payment_contract_id", id).orderByDesc("nick_name");
+        purchasePaymentContractView.setPurchasePaymentDirector(purchasePaymentStateInfoMapper.selectList(stateQw));
+
+        return purchasePaymentContractView;
+    }
+
+    @Override
     public Page<PurchasePaymentContractView> getCashierPurchasePayment(int currentPage, int pageSize) {
         QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");

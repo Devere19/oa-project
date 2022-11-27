@@ -27,7 +27,7 @@ import java.util.Objects;
 public class Customer {
     //客户表主键
     @TableId(type = IdType.AUTO)
-    private int id;
+    private Integer id;
     //公司名称
     private String customerEnterpriseName;
     //联系人

@@ -142,6 +142,17 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     }
 
     @Override
+    public LogisticsPaymentContractView getOneLogisticsPaymentContract(int id) {
+        LogisticsPaymentContractView logisticsPaymentContractView=logisticsPaymentContractInfoMapper.selectById(id);
+
+        QueryWrapper<LogisticsPaymentStateView> stateQw = new QueryWrapper<>();
+        stateQw.eq("logistics_payment_contract_id", id).orderByDesc("nick_name");
+        logisticsPaymentContractView.setLogisticsPaymentDirector(logisticsPaymentStateInfoMapper.selectList(stateQw));
+
+        return logisticsPaymentContractView;
+    }
+
+    @Override
     public Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize) {
         QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");

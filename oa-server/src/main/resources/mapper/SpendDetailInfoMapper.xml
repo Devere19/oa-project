@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.SpendDetailInfoMapper">
+    <select id="getTotalDaySpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT payment_time time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        WHERE payment_time between #{startDate} and #{endDate}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getTotalMonthSpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT date_format(payment_time, '%Y-%m') time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        HAVING time_flag between #{startDate} and #{endDate}
+        ORDER BY time_flag
+    </select>
+
+    <select id="getTotalSeasonSpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        HAVING time_flag between #{startDate} and #{endDate}
+        ORDER BY time_flag
+    </select>
+
+    <select id="getTotalYearSpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT date_format(payment_time, '%Y') time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        HAVING time_flag between #{startDate} and #{endDate}
+        ORDER BY time_flag
+    </select>
+
+    <select id="getCompanyDaySpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT payment_time time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        WHERE payment_time between #{startDate}  and #{endDate} AND own_company_name=#{company}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getCompanyMonthSpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT date_format(payment_time, '%Y-%m') time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        WHERE own_company_name=#{company}
+        HAVING time_flag between #{startDate} and #{endDate}
+        ORDER BY time_flag
+    </select>
+
+    <select id="getCompanySeasonSpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        WHERE own_company_name=#{company}
+        HAVING time_flag between #{startDate} and #{endDate}
+        ORDER BY time_flag
+    </select>
+
+    <select id="getCompanyYearSpendData" resultType="cn.edu.guet.bean.SpendDetailView">
+        SELECT date_format(payment_time, '%Y') time_flag,id,type,own_company_name,relation_contract_no,payment_count,payment_time,payment_photo
+        FROM spend_detail_info
+        WHERE own_company_name=#{company}
+        HAVING time_flag between #{startDate} and #{endDate}
+        ORDER BY time_flag
+    </select>
+
+    <select id="getDayOfficeExpenseData" resultType="cn.edu.guet.bean.OfficeExpense">
+        SELECT *
+        FROM office_expense
+        WHERE payment_time between #{startDate} and #{endDate}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getMonthOfficeExpenseData" resultType="cn.edu.guet.bean.OfficeExpense">
+        SELECT *
+        FROM office_expense
+        HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y-%m')
+    </select>
+
+    <select id="getSeasonOfficeExpenseData" resultType="cn.edu.guet.bean.OfficeExpense">
+        SELECT *
+        FROM office_expense
+        HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
+    </select>
+
+    <select id="getYearOfficeExpenseData" resultType="cn.edu.guet.bean.OfficeExpense">
+        SELECT *
+        FROM office_expense
+        HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y')
+    </select>
+</mapper>

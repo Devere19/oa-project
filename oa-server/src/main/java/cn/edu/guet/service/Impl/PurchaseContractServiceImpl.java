@@ -1,15 +1,17 @@
 package cn.edu.guet.service.Impl;
 
+import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.PurchasePaymentContract;
+import cn.edu.guet.bean.customer.Customer;
 import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
 
 import cn.edu.guet.bean.own.OwnInOut;
 import cn.edu.guet.bean.own.OwnWarehouse;
-import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
-import cn.edu.guet.bean.purchaseContract.OutboundDetailInfo;
-import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
+import cn.edu.guet.bean.purchaseContract.*;
 import cn.edu.guet.mapper.*;
+import cn.edu.guet.service.CustomerService;
+import cn.edu.guet.service.PurchaseContractViewService;
 import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
@@ -18,13 +20,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.service.PurchaseContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +65,10 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     private PurchasePaymentContractMapper purchasePaymentContractMapper;
 
     @Autowired
-    private PurchasePaymentContractService purchasePaymentContractService;
+    private PurchaseContractViewService purchaseContractViewService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -84,7 +91,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                 QueryWrapper<OtherWarehouse> QwOtherWarehouse= new QueryWrapper<>();
                 QwOtherWarehouse.eq("id",otherInOuts.get(i).getOtherWarehouseId()).eq("goods_name",otherInOuts.get(i).getInOutGoodsName());
                 OtherWarehouse otherWarehouse=otherWarehouseMapper.selectOne(QwOtherWarehouse);
-                if(purchaseContract.getGoodsUnit().equals("吨")){
+                if("吨".equals(purchaseContract.getGoodsUnit())){
                     otherWarehouse.setGoodsCount(otherWarehouse.getGoodsCount().subtract(UnitUtils.TtoG(otherInOuts.get(i).getInOutGoodsCount())));
                 }else{
                     otherWarehouse.setGoodsCount(otherWarehouse.getGoodsCount().subtract(otherInOuts.get(i).getInOutGoodsCount()));
@@ -133,13 +140,13 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     @Override
     public int addNewPurchaseContract(PurchaseContract purchaseContract) {
         System.out.println("谁操作了方法"+SecurityUtils.getUsername());
-        purchaseContract.setSupplierNo(String.valueOf(purchaseContract.getCustomerEnterpriseName()));
+        purchaseContract.setSupplierNo(purchaseContract.getCustomerEnterpriseName());
         purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount());
         String contractPhotos=ImageUtils.getDBString(purchaseContract.getContractPhotoArray());
         if(contractPhotos!=""){
             purchaseContract.setContractPhoto(contractPhotos);
         }
-        if(purchaseContract.getGoodsUnit().equals("吨")){
+        if("吨".equals(purchaseContract.getGoodsUnit())){
             purchaseContract.setGoodsUnitPrice(UnitUtils.GtoT(purchaseContract.getGoodsUnitPrice()));
         }else{
             purchaseContract.setGoodsUnitPrice(purchaseContract.getGoodsUnitPrice());
@@ -147,7 +154,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
         for(int i=0;i<purchaseContract.getInboundData().size();i++){
 //            当不是自家仓库时，即外商仓库
 //            修改，不存在自家仓库的情况，只能从外商入
-            if(purchaseContract.getInboundData().get(i).getFactoryName().equals("自家仓库")!=true){
+            if("自家仓库".equals(purchaseContract.getInboundData().get(i).getFactoryName())!=true){
 //                查询是否存在对应外商仓库，且存储着对应物品
                 QueryWrapper<OtherWarehouse> qw= new QueryWrapper<>();
                 qw.eq("factory_name",purchaseContract.getInboundData().get(i).getFactoryName()).eq("goods_name",purchaseContract.getGoodsName());
@@ -158,7 +165,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     otherWarehouse.setFactoryName(purchaseContract.getInboundData().get(i).getFactoryName());
                     otherWarehouse.setGoodsName(purchaseContract.getGoodsName());
 //                    判断单位是否是斤
-                    if(purchaseContract.getGoodsUnit().equals("吨")){
+                    if("吨".equals(purchaseContract.getGoodsUnit())){
                         otherWarehouse.setGoodsCount(UnitUtils.TtoG(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
                     }else{
                         otherWarehouse.setGoodsCount(purchaseContract.getInboundData().get(i).getInboundGoodsCount());
@@ -181,7 +188,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     }
                 }else {
 //                    如果存在对应库存信息，则判断单位后，更新库存量，并存储入库流水单
-                    if(purchaseContract.getGoodsUnit().equals("吨")){
+                    if("吨".equals(purchaseContract.getGoodsUnit())){
                         tempOtherWarehouse.setGoodsCount(tempOtherWarehouse.getGoodsCount().add(UnitUtils.TtoG(purchaseContract.getInboundData().get(i).getInboundGoodsCount())));
                     }else{
                         tempOtherWarehouse.setGoodsCount(tempOtherWarehouse.getGoodsCount().add(purchaseContract.getInboundData().get(i).getInboundGoodsCount()));
@@ -292,6 +299,85 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
             inboundDetailInfo.setCurrentGoodsCount(inboundDetailInfo.getInOutGoodsCount().subtract(currentGoodsCount));
         }
         return inboundDetailInfos;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int handleImportPurchaseContractModel(ImportPurchaseContractModel importPurchaseContractModel) {
+        PurchaseContract purchaseContract=new PurchaseContract();
+//        采购合同号
+        if(importPurchaseContractModel.getPurchaseContractNo()==null){
+            return 0;
+        }else{
+//            检验是否重复
+            if(purchaseContractViewService.checkPurchaseContractNo(importPurchaseContractModel.getPurchaseContractNo())){
+                return 0;
+            }else{
+                purchaseContract.setPurchaseContractNo(importPurchaseContractModel.getPurchaseContractNo());
+            }
+        }
+//        供货方公司名
+        if(importPurchaseContractModel.getCustomerEnterpriseName()!=null){
+            Integer flag=customerService.checkCustomerCompanyName(importPurchaseContractModel.getCustomerEnterpriseName());
+//            检查是否存在供货公司（客户）记录
+            if(flag==0){
+                Customer customer=new Customer();
+                customer.setCustomerEnterpriseName(importPurchaseContractModel.getCustomerEnterpriseName());
+                customerService.addNewCustomer(customer);
+                purchaseContract.setCustomerEnterpriseName(customer.getId());
+            }else{
+                purchaseContract.setCustomerEnterpriseName(flag);
+            }
+        }
+        if(importPurchaseContractModel.getOwnCompanyName()!=null){
+            purchaseContract.setOwnCompanyName(importPurchaseContractModel.getOwnCompanyName());
+        }
+        if(importPurchaseContractModel.getSqueezeSeason()!=null){
+            purchaseContract.setSqueezeSeason(importPurchaseContractModel.getSqueezeSeason());
+        }
+        if(importPurchaseContractModel.getInboundTime()!=null){
+            purchaseContract.setInboundTime(importPurchaseContractModel.getInboundTime());
+        }
+        if(importPurchaseContractModel.getGoodsName()!=null){
+            purchaseContract.setGoodsName(importPurchaseContractModel.getGoodsName());
+        }
+        if(importPurchaseContractModel.getGoodsCount()!=null){
+            purchaseContract.setGoodsCount(importPurchaseContractModel.getGoodsCount());
+        }
+        if(importPurchaseContractModel.getGoodsUnit()!=null){
+            purchaseContract.setGoodsUnit(importPurchaseContractModel.getGoodsUnit());
+        }
+        if(importPurchaseContractModel.getGoodsUnitPrice()!=null){
+            purchaseContract.setGoodsUnitPrice(importPurchaseContractModel.getGoodsUnitPrice());
+        }
+        if(importPurchaseContractModel.getPaymentAmount()!=null){
+            purchaseContract.setPaymentAmount(importPurchaseContractModel.getPaymentAmount());
+        }
+
+        try {
+            List<InboundBean> inboundBeans=new ArrayList<>();
+            for(int i=1;i<=20;i++){
+                Method nameMethod = importPurchaseContractModel.getClass().getMethod("getFactoryName"+i);
+                Method countMethod = importPurchaseContractModel.getClass().getMethod("getInboundGoodsCount"+i);
+                if(nameMethod.invoke(importPurchaseContractModel)!=null&&countMethod.invoke(importPurchaseContractModel)!=null){
+                    InboundBean inboundBean=new InboundBean();
+                    inboundBean.setFactoryName(String.valueOf(nameMethod.invoke(importPurchaseContractModel)));
+                    inboundBean.setInboundGoodsCount((BigDecimal) countMethod.invoke(importPurchaseContractModel));
+                    inboundBeans.add(inboundBean);
+                }else{
+                    break;
+                }
+            }
+            purchaseContract.setInboundData(inboundBeans);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return addNewPurchaseContract(purchaseContract);
     }
 }
 

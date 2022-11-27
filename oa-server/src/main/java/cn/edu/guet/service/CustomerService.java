@@ -16,4 +16,5 @@ public interface CustomerService extends IService<Customer> {
     int addNewCustomer(Customer customer);
     int updateCustomer(Customer customer);
     int deleteOneCustomer(int id);
+    Integer checkCustomerCompanyName(String customerCompanyName);
 }
