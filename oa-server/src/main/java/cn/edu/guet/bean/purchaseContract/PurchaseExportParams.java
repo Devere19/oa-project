@@ -8,7 +8,7 @@ import java.sql.Date;
  * @author 陶祎祎
  */
 @Data
-public class PurchaseExportModel {
+public class PurchaseExportParams {
     private String searchWord;
 
     private boolean showPigeonhole;

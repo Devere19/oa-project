@@ -38,7 +38,7 @@ public class PurchaseContract implements Serializable {
     /**
      * 供货商ID(客户表ID)
      */
-    private String supplierNo;
+    private Integer supplierNo;
 
     /**
      * 己方公司名

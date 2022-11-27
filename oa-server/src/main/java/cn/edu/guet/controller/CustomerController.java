@@ -1,6 +1,5 @@
 package cn.edu.guet.controller;
 
-import cn.edu.guet.bean.OfficeExpense;
 import cn.edu.guet.bean.customer.Customer;
 import cn.edu.guet.bean.customer.SelectCustomer;
 import cn.edu.guet.http.HttpResult;
@@ -60,5 +59,10 @@ public class CustomerController {
     @RequestMapping("/updateCustomer")
     public HttpResult updateCustomer(@RequestBody Customer customer){
         return ResultUtils.success("更新成功",customerService.updateCustomer(customer));
+    }
+
+    @RequestMapping("/checkCustomerCompanyName")
+    public HttpResult checkCustomerCompanyName(String customerCompanyName){
+        return ResultUtils.success("获取成功",customerService.checkCustomerCompanyName(customerCompanyName));
     }
 }

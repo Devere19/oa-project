@@ -43,7 +43,8 @@ public class ImageUtils {
      * 将图片url拼接成一个字符串，以逗号分隔,
      */
     public static String getDBString(List<String> contractPhotoArray){
-        if(contractPhotoArray.size()==0){
+//        顺序不可替换，惰性匹配特性
+        if(contractPhotoArray==null||contractPhotoArray.size()==0){
             return "";
         }
         String urlString=contractPhotoArray.get(0);

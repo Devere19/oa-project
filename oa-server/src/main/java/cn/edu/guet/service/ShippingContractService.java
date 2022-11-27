@@ -18,6 +18,7 @@ public interface ShippingContractService extends IService<ShippingContract> {
     Page<ShippingContract> searchShippingContract(int currentPage, int pageSize,String searchWord);
     int addNewShippingContract(ShippingContract shippingContract);
     int deleteOneShippingContract(int id);
+    ShippingContract getOneShippingContract(int id);
     Boolean checkContainerNo(String containerNo);
 
     //    出纳

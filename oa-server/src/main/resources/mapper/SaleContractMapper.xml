@@ -38,4 +38,66 @@
             <result column="last_update_by" property="lastUpdateBy" />
         </association>
     </resultMap>
+
+    <select id="getTotalDayIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id AND revenue_time between #{startDate} and #{endDate}
+        ORDER BY revenue_time
+    </select>
+
+    <select id="getTotalMonthIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id
+        HAVING date_format(revenue_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y-%m')
+    </select>
+
+    <select id="getTotalSeasonIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id
+        HAVING CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time)))
+    </select>
+
+    <select id="getTotalYearIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id
+        HAVING date_format(revenue_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y')
+    </select>
+
+    <select id="getCompanyDayIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id AND revenue_time between #{startDate} and #{endDate} AND own_company_name=#{company}
+        ORDER BY revenue_time
+    </select>
+
+    <select id="getCompanyMonthIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id AND own_company_name=#{company}
+        HAVING date_format(revenue_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y-%m')
+    </select>
+
+    <select id="getCompanySeasonIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id AND own_company_name=#{company}
+        HAVING CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time)))
+    </select>
+
+    <select id="getCompanyYearIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
+        SELECT sc.*, c.customer_enterprise_name
+        FROM sale_contract sc,customer c
+        WHERE sc.sale_customer_id=c.id AND own_company_name=#{company}
+        HAVING date_format(revenue_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y')
+    </select>
 </mapper>

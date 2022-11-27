@@ -24,9 +24,16 @@
                             placeholder="密码">
                         </el-input>
                     </el-form-item>
-                    <div class="flx-row">
-                        <el-checkbox v-model="loginForm.checked" label="记住密码" size="large" />
-                    </div>
+                    <el-row class="flx-row">
+                        <el-col :span="20">
+                            <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="large" />
+                        </el-col>
+                        <el-col class="flx-col" :span="4" @click="forgetPassword">
+                            忘记密码?
+                        </el-col>
+                    </el-row>
+                    <!-- <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="large" />
+                        <span>忘记密码？</span> -->
                 </el-form>
 
                 <div class="login-btn">
@@ -74,6 +81,10 @@ const loginRules = reactive<FormRules>({
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
 
+onMounted(() => {
+    getCookie()
+})
+
 const login = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate(async (valid, fields) => {
@@ -119,10 +130,6 @@ const resetForm = (formEl1: FormInstance | undefined) => {
     formEl1.resetFields()
 }
 
-// const getGMTString=(date :Date)=>{
-
-// }
-
 const setCookie = (userId: string, password: string, days: any) => {
     let date = new Date() // 获取时间
     date.setTime(date.getTime() + 24 * 60 * 60 * 1000 * days) // 保存的天数
@@ -149,9 +156,14 @@ const getCookie = () => {
     }
 }
 
-onMounted(() => {
-    getCookie()
-})
+const forgetPassword = () => {
+    ElMessage({
+        message: '该功能暂未开发！',
+        type: 'error',
+        duration: 4000
+    })
+}
+
 </script>
   
 <style scoped lang="scss">
@@ -196,7 +208,7 @@ onMounted(() => {
 
         .login-form {
             width: 400px;
-            height: 460px;
+            height: 500px;
             padding: 10px 40px 35px 40px;
             border-radius: 10px;
             -webkit-box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
@@ -210,7 +222,7 @@ onMounted(() => {
 
                 .login-icon {
                     margin-top: 10px;
-                    width: 150px;
+                    width: 200px;
                     // height: 52px;
                 }
 
@@ -219,22 +231,29 @@ onMounted(() => {
                     font-size: 32px;
                     padding-left: 5px;
                     margin-top: 10px;
+                    margin-bottom: 20px;
                     white-space: nowrap;
                     color: #2d51e6;
                 }
             }
 
             .flx-row {
-                display: flex;
-                justify-content: center;
+                font-size: 14px;
+                color: #2d51e6;
+
+                .flx-col {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
             }
 
             .login-btn {
                 margin-top: 15px;
                 padding-bottom: 20px;
                 display: flex;
-                justify-content: center;
-                // justify-content: space-between;
+                // justify-content: center;
+                justify-content: space-between;
                 width: 100%;
                 white-space: nowrap;
 

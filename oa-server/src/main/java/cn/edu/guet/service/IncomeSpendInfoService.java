@@ -1,9 +1,10 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.IncomeSpendDetail;
+import cn.edu.guet.bean.SpendDetailView;
 import cn.edu.guet.bean.TotalIncomeSpendView;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -14,4 +15,5 @@ import java.util.List;
 public interface IncomeSpendInfoService extends IService<TotalIncomeSpendView> {
     List getChartIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate);
     List getNumberIncomeSpendData(String dataType, String dataCompany);
+    IncomeSpendDetail getDetailIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate);
 }

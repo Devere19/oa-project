@@ -464,7 +464,7 @@
                         付款金额：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.paymentCount == null ? "0" : ShippingContractDetail.financeStaff }}
+                        {{ ShippingContractDetail.paymentCount == null ? "0" : ShippingContractDetail.paymentCount }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">

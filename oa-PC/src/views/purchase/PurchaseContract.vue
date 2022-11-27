@@ -20,6 +20,12 @@
       <!-- <el-button v-show="firstSelection?.[0] != null" class="moreDeleteButton" type="danger"
         @click="openMoreDeleteDialog">批量删除
       </el-button> -->
+      <el-upload class="moreDeleteButton" name="file"
+        action="http://localhost:9000/purchaseContract/purchaseImportExcel" :on-error="uploadFalse"
+        :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload" accept=".xlsx,.xls"
+        :show-file-list="false">
+        <el-button :icon="Upload" type="primary">批量导入</el-button>
+      </el-upload>
       <el-button class="moreDeleteButton" :icon="Download" type="success" @click="exportExcel">导出
       </el-button>
       <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
@@ -348,7 +354,7 @@
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElTable, ElMessage, ElMessageBox, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Delete, Search, MoreFilled, Hide, View, Money, Download } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Hide, View, Money, Upload, Download } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
@@ -972,6 +978,30 @@ const changeOwnFlag = () => {
   }
 }
 
+const uploadFalse = () => {
+  ElMessage({
+    message: '上传文件失败！',
+    type: 'error',
+    duration: 4000
+  })
+}
+
+const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  changeLoadingFalse();
+  if (response.code == 200) {
+    ElMessage({
+      message: '批量插入采购单成功！',
+      type: 'success',
+    })
+  } else {
+    ElMessage({
+      message: '系统出错，批量插入采购单失败！',
+      type: 'error',
+      duration: 4000
+    })
+  }
+}
+
 </script>
 
 <style scoped>
@@ -997,9 +1027,9 @@ const changeOwnFlag = () => {
   /* margin: 1% 15% 1% 0%;
   align-self: center;
   width: 68% */
-  margin: 0% 15% 0% 1%;
+  margin: 0% 5% 0% 5%;
   align-self: center;
-  width: 70%
+  width: 100%
     /* margin: 1% 15%;
   align-self: center;
   width: 70% */

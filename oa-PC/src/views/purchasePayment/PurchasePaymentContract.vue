@@ -259,7 +259,7 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ purchasePaymentContractDetail.cashier == null ? "暂无" :
-                                purchasePaymentContractDetail.financeStaff
+                                purchasePaymentContractDetail.cashier
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">

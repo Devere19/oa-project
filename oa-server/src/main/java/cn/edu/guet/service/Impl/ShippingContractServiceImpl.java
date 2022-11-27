@@ -168,6 +168,17 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     }
 
     @Override
+    public ShippingContract getOneShippingContract(int id) {
+        ShippingContract shippingContract=shippingContractMapper.selectById(id);
+
+        QueryWrapper<ShippingStateView> stateQw = new QueryWrapper<>();
+        stateQw.eq("shipping_contract_no", shippingContract.getShippingContractNo()).orderByAsc("nick_name");
+        shippingContract.setShippingDirector(shippingStateInfoMapper.selectList(stateQw));
+
+        return shippingContract;
+    }
+
+    @Override
     public Boolean checkContainerNo(String containerNo) {
         List<ShippingContract> shippingContracts = shippingContractMapper.checkContainerNo(containerNo);
         return shippingContracts.size() != 0;

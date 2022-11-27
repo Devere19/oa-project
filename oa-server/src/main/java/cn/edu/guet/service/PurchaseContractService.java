@@ -1,5 +1,6 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import com.alibaba.fastjson.JSONArray;
@@ -18,4 +19,5 @@ public interface PurchaseContractService extends IService<PurchaseContract> {
     int setPurchaseContractPigeonhole(int id,int pigeonhole);
     int addNewPurchaseContract(PurchaseContract purchaseContract);
     List<InboundDetailInfo> getPurchaseDetail(String purchaseContractNo,String goodsName);
+    int handleImportPurchaseContractModel(ImportPurchaseContractModel importPurchaseContractModel);
 }

@@ -1,6 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.customer.Customer;
+import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import cn.edu.guet.mapper.CustomerMapper;
 import cn.edu.guet.service.CustomerService;
 import cn.edu.guet.util.SecurityUtils;
@@ -9,6 +10,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author Devere19
@@ -62,5 +65,17 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Override
     public int deleteOneCustomer(int id) {
         return customerMapper.deleteById(id);
+    }
+
+    @Override
+    public Integer checkCustomerCompanyName(String customerCompanyName) {
+        QueryWrapper<Customer> qw = new QueryWrapper<>();
+        qw.eq("customer_enterprise_name", customerCompanyName);
+        Customer customer = customerMapper.selectOne(qw);
+        if(customer==null){
+            return 0;
+        }else{
+            return customer.getId();
+        }
     }
 }

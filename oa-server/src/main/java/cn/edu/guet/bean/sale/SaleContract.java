@@ -35,6 +35,9 @@ public class SaleContract {
     private String saleContractNo;
     //客户表id
     private String saleCustomerId;
+    //销售方公司名
+    @TableField(exist = false)
+    private String customerEnterpriseName;
     //己方公司名
     private String ownCompanyName;
     //销售货物名称
