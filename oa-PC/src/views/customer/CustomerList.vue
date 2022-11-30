@@ -349,9 +349,15 @@ const oneDeleteCustomer = () => {
             getTableData();
             oneDeleteDialogFlag.value = false
         }
-        else {
+        else if (res.data == 0) {
             ElMessage({
                 message: '删除客户信息失败！',
+                type: 'error',
+                duration: 4000
+            })
+        } else if (res.data == -1) {
+            ElMessage({
+                message: '该客户已有相关采购单或销售单记录，无法删除！',
                 type: 'error',
                 duration: 4000
             })
