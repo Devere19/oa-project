@@ -1,8 +1,13 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.customer.Customer;
+import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
+import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.CustomerMapper;
+import cn.edu.guet.mapper.PurchaseContractMapper;
+import cn.edu.guet.mapper.SaleContractMapper;
 import cn.edu.guet.service.CustomerService;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -23,6 +28,12 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Autowired
     private CustomerMapper customerMapper;
+
+    @Autowired
+    private PurchaseContractMapper purchaseContractMapper;
+
+    @Autowired
+    private SaleContractMapper saleContractMapper;
 
     @Override
     public Page<Customer> getCustomerData(int currentPage, int pageSize) {
@@ -64,7 +75,23 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public int deleteOneCustomer(int id) {
-        return customerMapper.deleteById(id);
+        int result=-1;
+
+        QueryWrapper<PurchaseContract> purchaseContractQueryWrapper= new QueryWrapper<>();
+        purchaseContractQueryWrapper.eq("supplier_no",id);
+        List<PurchaseContract> purchaseContractList=purchaseContractMapper.selectList(purchaseContractQueryWrapper);
+
+        if(purchaseContractList.isEmpty()){
+            QueryWrapper<SaleContract> saleContractQueryWrapper= new QueryWrapper<>();
+            saleContractQueryWrapper.eq("sale_customer_id",id);
+            List<SaleContract> saleContractList=saleContractMapper.selectList(saleContractQueryWrapper);
+
+            if(saleContractList.isEmpty()){
+                result=customerMapper.deleteById(id);
+            }
+        }
+
+        return result;
     }
 
     @Override

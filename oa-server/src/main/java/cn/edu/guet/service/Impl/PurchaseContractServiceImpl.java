@@ -354,6 +354,8 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
             purchaseContract.setPaymentAmount(importPurchaseContractModel.getPaymentAmount());
         }
 
+        purchaseContract.setUnpaidAmount(BigDecimal.valueOf(0));
+
         try {
             List<InboundBean> inboundBeans=new ArrayList<>();
             for(int i=1;i<=20;i++){

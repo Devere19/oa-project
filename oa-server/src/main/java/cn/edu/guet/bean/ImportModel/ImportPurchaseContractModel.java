@@ -77,6 +77,48 @@ public class ImportPurchaseContractModel {
     @ExcelProperty(value = "采购总金额")
     private BigDecimal paymentAmount;
 
+//    /**
+//     * 已付款金额
+//     */
+//    @ExcelProperty(value = "已付款金额")
+//    private BigDecimal paymentCount;
+//
+//    /**
+//     * 付款时间
+//     */
+//    @ExcelProperty(value = "付款时间")
+//    private Date paymentTime;
+//
+//    /**
+//     * 出纳名称
+//     */
+//    @ExcelProperty(value = "出纳名称")
+//    private String cashier;
+//
+//    /**
+//     * 财务名称
+//     */
+//    @ExcelProperty(value = "财务名称")
+//    private String financeStaff;
+//
+//    /**
+//     * 董事会1
+//     */
+//    @ExcelProperty(value = "董事会1")
+//    private String director1;
+//
+//    /**
+//     * 董事会2
+//     */
+//    @ExcelProperty(value = "董事会2")
+//    private String director2;
+//
+//    /**
+//     * 董事会3
+//     */
+//    @ExcelProperty(value = "董事会3")
+//    private String director3;
+
     /**
      * 入库厂名1
      */
