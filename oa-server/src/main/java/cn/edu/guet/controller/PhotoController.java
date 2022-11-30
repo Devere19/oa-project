@@ -38,8 +38,17 @@ public class PhotoController {
             tempFile = File.createTempFile(fileName.substring(0, fileName.lastIndexOf(".")), prefix);
             file.transferTo(tempFile);
 
+//            服务器使用--
+            File upload = new File("/static/images/");
+            if(!upload.exists()) {
+                upload.mkdirs();
+            }
+
+            imagePath=new FileOutputStream(upload.getAbsolutePath()+"/" + uuid + ".jpg");
+//            服务器使用--
+
 //            创建本地图片文件
-            imagePath = new FileOutputStream("static\\images\\" + uuid + ".jpg");
+//            imagePath = new FileOutputStream("static\\images\\" + uuid + ".jpg");
             fileInputStream = new FileInputStream(tempFile);
             // 将照片从二进制转换为jpg
             // 读取字节流
@@ -65,7 +74,8 @@ public class PhotoController {
                 e.printStackTrace();
             }
         }
-        return ResultUtils.success("修改成功","http://localhost:9000/static/images/" + uuid + ".jpg");
+//        return ResultUtils.success("修改成功","http://localhost:9000/static/images/" + uuid + ".jpg");
+        return ResultUtils.success("修改成功","http://120.77.28.123:9000/static/images/" + uuid + ".jpg");
     }
 
     @RequestMapping("/deletePhoto")
