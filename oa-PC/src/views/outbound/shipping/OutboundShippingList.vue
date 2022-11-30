@@ -242,7 +242,7 @@
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+                        <el-upload v-model:file-list="PhotoData" action="http://120.77.28.123:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
                             :on-success="handlePhotoSuccess">
                             <el-icon>
