@@ -1,4 +1,4 @@
-package cn.edu.guet.bean.sale.controller;
+package cn.edu.guet.controller;
 
 import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;

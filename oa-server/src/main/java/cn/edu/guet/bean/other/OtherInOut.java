@@ -53,9 +53,14 @@ public class OtherInOut implements Serializable {
     private String inOutGoodsUnit;
 
     /**
-     * 采购货物单价
+     * 出入库单价（采购货物单价）
      */
     private BigDecimal inOutGoodsUnitPrice;
+
+    /**
+     * 出入库日期
+     */
+    private Date inOutTime;
 
     /**
      * 创建时间
@@ -99,6 +104,7 @@ public class OtherInOut implements Serializable {
             && (this.getInOutGoodsName() == null ? other.getInOutGoodsName() == null : this.getInOutGoodsName().equals(other.getInOutGoodsName()))
             && (this.getInOutGoodsCount() == null ? other.getInOutGoodsCount() == null : this.getInOutGoodsCount().equals(other.getInOutGoodsCount()))
             && (this.getInOutGoodsUnit() == null ? other.getInOutGoodsUnit() == null : this.getInOutGoodsUnit().equals(other.getInOutGoodsUnit()))
+            && (this.getInOutTime() == null ? other.getInOutTime() == null : this.getInOutTime().equals(other.getInOutTime()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCreateBy() == null ? other.getCreateBy() == null : this.getCreateBy().equals(other.getCreateBy()))
             && (this.getLastUpdateTime() == null ? other.getLastUpdateTime() == null : this.getLastUpdateTime().equals(other.getLastUpdateTime()))
@@ -116,6 +122,7 @@ public class OtherInOut implements Serializable {
         result = prime * result + ((getInOutGoodsName() == null) ? 0 : getInOutGoodsName().hashCode());
         result = prime * result + ((getInOutGoodsCount() == null) ? 0 : getInOutGoodsCount().hashCode());
         result = prime * result + ((getInOutGoodsUnit() == null) ? 0 : getInOutGoodsUnit().hashCode());
+        result = prime * result + ((getInOutTime() == null) ? 0 : getInOutTime().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getCreateBy() == null) ? 0 : getCreateBy().hashCode());
         result = prime * result + ((getLastUpdateTime() == null) ? 0 : getLastUpdateTime().hashCode());
@@ -136,6 +143,7 @@ public class OtherInOut implements Serializable {
         sb.append(", inOutGoodsName=").append(inOutGoodsName);
         sb.append(", inOutGoodsCount=").append(inOutGoodsCount);
         sb.append(", inOutGoodsUnit=").append(inOutGoodsUnit);
+        sb.append(", inOutTime=").append(inOutTime);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", lastUpdateTime=").append(lastUpdateTime);

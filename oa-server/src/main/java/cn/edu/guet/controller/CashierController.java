@@ -1,4 +1,4 @@
-package cn.edu.guet.bean.sale.controller;
+package cn.edu.guet.controller;
 
 import cn.edu.guet.bean.LogisticsPaymentContract;
 import cn.edu.guet.bean.OfficeExpense;

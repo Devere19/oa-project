@@ -9,11 +9,11 @@
     </select>
 
     <select id="getPurchasePriceTrend" resultType="cn.edu.guet.bean.PurchasePriceTrend">
-        SELECT inbound_time, AVG(goods_unit_price) avg_price
-        FROM purchase_contract
-        WHERE goods_name=#{goodsName} and inbound_time between  #{startDate}  and #{endDate}
-        GROUP BY inbound_time
-        ORDER BY inbound_time
+        SELECT in_out_time inboundTime, AVG(in_out_goods_unit_price) avg_price
+        FROM other_in_out
+        WHERE in_out_goods_name=#{goodsName} and in_out_time between  #{startDate}  and #{endDate}
+        GROUP BY in_out_time
+        ORDER BY in_out_time
     </select>
 
     <select id="getSalePriceTrend" resultType="cn.edu.guet.bean.SalePriceTrend">

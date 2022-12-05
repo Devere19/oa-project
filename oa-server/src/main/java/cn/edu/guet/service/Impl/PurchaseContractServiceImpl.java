@@ -182,6 +182,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                         } else {
                             otherInOut.setInOutGoodsUnitPrice(purchaseContract.getInboundData().get(i).getGoodsUnitPrice());
                         }
+                        otherInOut.setInOutTime(purchaseContract.getInboundTime());
                         otherInOut.setCreateBy(SecurityUtils.getUsername());
                         otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
                         otherInOutMapper.insert(otherInOut);
@@ -207,6 +208,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
                     } else {
                         otherInOut.setInOutGoodsUnitPrice(purchaseContract.getInboundData().get(i).getGoodsUnitPrice());
                     }
+                    otherInOut.setInOutTime(purchaseContract.getInboundTime());
                     otherInOut.setCreateBy(SecurityUtils.getUsername());
                     otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
                     otherInOutMapper.insert(otherInOut);
