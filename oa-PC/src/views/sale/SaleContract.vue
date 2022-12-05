@@ -133,7 +133,7 @@ const exportOutBtn = async () => {
   let res = await exportApi(exportListParm)
   if (res && res.code == 200) {
     const abtn = document.createElement("a");
-    abtn.href = "http://localhost:9000/api/saleContract/exportExcel"
+    abtn.href = "http://120.77.28.123:9000/api/saleContract/exportExcel"
     abtn.click();
   }
 }

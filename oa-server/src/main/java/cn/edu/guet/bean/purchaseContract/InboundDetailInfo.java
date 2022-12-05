@@ -1,8 +1,6 @@
 package cn.edu.guet.bean.purchaseContract;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,7 +22,7 @@ public class InboundDetailInfo implements Serializable {
     private String purchaseContractNo;
 
     /**
-     * 出库厂名
+     * 入库厂名
      */
     private String factoryName;
 
@@ -35,19 +33,24 @@ public class InboundDetailInfo implements Serializable {
     private BigDecimal currentGoodsCount;
 
     /**
-     * 出库货物名称
+     * 入库货物名称
      */
     private String inOutGoodsName;
 
     /**
-     * 出库货物数量
+     * 入库货物数量
      */
     private BigDecimal inOutGoodsCount;
 
     /**
-     * 出库货物单位
+     * 入库货物单位
      */
     private String goodsUnit;
+
+    /**
+     * 入库货物单价
+     */
+    private BigDecimal goodsUnitPrice;
 
     /**
      * 详情对象
@@ -76,6 +79,7 @@ public class InboundDetailInfo implements Serializable {
             && (this.getInOutGoodsName() == null ? other.getInOutGoodsName() == null : this.getInOutGoodsName().equals(other.getInOutGoodsName()))
             && (this.getInOutGoodsCount() == null ? other.getInOutGoodsCount() == null : this.getInOutGoodsCount().equals(other.getInOutGoodsCount()))
             && (this.getGoodsUnit() == null ? other.getGoodsUnit() == null : this.getGoodsUnit().equals(other.getGoodsUnit()))
+            && (this.getGoodsUnitPrice() == null ? other.getGoodsUnitPrice() == null : this.getGoodsUnitPrice().equals(other.getGoodsUnitPrice()))
             && (this.getOutboundDetailInfos() == null ? other.getOutboundDetailInfos() == null : this.getOutboundDetailInfos().equals(other.getOutboundDetailInfos()));
     }
 
@@ -89,6 +93,7 @@ public class InboundDetailInfo implements Serializable {
         result = prime * result + ((getInOutGoodsName() == null) ? 0 : getInOutGoodsName().hashCode());
         result = prime * result + ((getInOutGoodsCount() == null) ? 0 : getInOutGoodsCount().hashCode());
         result = prime * result + ((getGoodsUnit() == null) ? 0 : getGoodsUnit().hashCode());
+        result = prime * result + ((getGoodsUnitPrice() == null) ? 0 : getGoodsUnitPrice().hashCode());
         result = prime * result + ((getOutboundDetailInfos() == null) ? 0 : getOutboundDetailInfos().hashCode());
         return result;
     }
@@ -105,6 +110,7 @@ public class InboundDetailInfo implements Serializable {
         sb.append(", inOutGoodsName=").append(inOutGoodsName);
         sb.append(", inOutGoodsCount=").append(inOutGoodsCount);
         sb.append(", goodsUnit=").append(goodsUnit);
+        sb.append(", goodsUnitPrice=").append(goodsUnitPrice);
         sb.append(", outboundDetailInfos=").append(outboundDetailInfos);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

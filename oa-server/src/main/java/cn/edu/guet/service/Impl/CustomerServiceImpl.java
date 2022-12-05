@@ -29,12 +29,6 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     @Autowired
     private CustomerMapper customerMapper;
 
-    @Autowired
-    private PurchaseContractMapper purchaseContractMapper;
-
-    @Autowired
-    private SaleContractMapper saleContractMapper;
-
     @Override
     public Page<Customer> getCustomerData(int currentPage, int pageSize) {
         QueryWrapper<Customer> qw= new QueryWrapper<>();
@@ -75,23 +69,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
     @Override
     public int deleteOneCustomer(int id) {
-        int result=-1;
-
-        QueryWrapper<PurchaseContract> purchaseContractQueryWrapper= new QueryWrapper<>();
-        purchaseContractQueryWrapper.eq("supplier_no",id);
-        List<PurchaseContract> purchaseContractList=purchaseContractMapper.selectList(purchaseContractQueryWrapper);
-
-        if(purchaseContractList.isEmpty()){
-            QueryWrapper<SaleContract> saleContractQueryWrapper= new QueryWrapper<>();
-            saleContractQueryWrapper.eq("sale_customer_id",id);
-            List<SaleContract> saleContractList=saleContractMapper.selectList(saleContractQueryWrapper);
-
-            if(saleContractList.isEmpty()){
-                result=customerMapper.deleteById(id);
-            }
-        }
-
-        return result;
+        return customerMapper.deleteById(id);
     }
 
     @Override

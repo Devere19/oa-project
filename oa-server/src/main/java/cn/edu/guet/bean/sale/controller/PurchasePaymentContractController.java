@@ -1,9 +1,9 @@
-package cn.edu.guet.controller;
+package cn.edu.guet.bean.sale.controller;
 
 import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
-import cn.edu.guet.service.PurchaseContractViewService;
+import cn.edu.guet.service.PurchaseContractService;
 import cn.edu.guet.service.PurchasePaymentContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class PurchasePaymentContractController {
     private PurchasePaymentContractService purchasePaymentContractService;
 
     @Autowired
-    private PurchaseContractViewService purchaseContractViewService;
+    private PurchaseContractService purchaseContractService;
 
 
     //    获取采购付款单数据
@@ -46,7 +46,7 @@ public class PurchasePaymentContractController {
 
     @RequestMapping("/checkPurchaseContractNo")
     public HttpResult checkPurchaseContractNo(String purchaseContractNo){
-        return ResultUtils.success("获取成功",purchaseContractViewService.checkPurchaseContractNo(purchaseContractNo));
+        return ResultUtils.success("获取成功",purchaseContractService.checkPurchaseContractNo(purchaseContractNo));
     }
 
 

@@ -91,7 +91,7 @@ import { exportApi } from '@/api/logistics';
 import { ExportListParm } from '@/api/logistics/LogisticsModel';
 import { reactive } from 'vue';
 //表格相关属性
-const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero ,sizeChange,currentChange} = useTable()
+const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero, sizeChange, currentChange } = useTable()
 
 //物流单相关属性
 const { changePigeonhole, deleteBtn, addRef, addBtn } = useLogistics(refresh)
@@ -111,14 +111,14 @@ const exportOutBtn = async () => {
   let res = await exportApi(exportListParm)
   if (res && res.code == 200) {
     const abtn = document.createElement("a");
-    abtn.href = "http://localhost:9000/api/logistics/exportExcel"
+    abtn.href = "http://120.77.28.123:9000/api/logistics/exportExcel"
     abtn.click();
   }
 }
 
 const exportListParm = reactive<ExportListParm>({
-  logisticsContractNo:'',
-  saleContractNo:'',
+  logisticsContractNo: '',
+  saleContractNo: '',
   squeezeSeason: '',
   startTime: '',
   endTime: '',

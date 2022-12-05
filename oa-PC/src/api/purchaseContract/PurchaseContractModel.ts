@@ -7,7 +7,6 @@ export type moreDeleteModel = {
 export type purchaseContractModel = {
     id: any
     purchaseContractNo: string
-    supplierNo: string
     customerEnterpriseName: string
     ownCompanyName: string
     squeezeSeason: string
@@ -15,7 +14,6 @@ export type purchaseContractModel = {
     goodsName: string
     goodsCount: any
     goodsUnit: string
-    goodsUnitPrice: any
     paymentAmount: any
     contractPhotoArray: any
     createTime: string
@@ -25,6 +23,7 @@ export type purchaseContractModel = {
 export type inboundDataModel = {
     factoryName: string
     inboundGoodsCount: string
+    goodsUnitPrice: string
 }
 
 export type PurchaseExportModel = {

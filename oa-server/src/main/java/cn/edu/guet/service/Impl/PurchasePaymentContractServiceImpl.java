@@ -134,10 +134,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteOnePurchasePaymentContract(int id) {
-        PurchasePaymentContract purchasePaymentContract = purchasePaymentContractMapper.selectById(id);
 //        删除相关审核记录
         QueryWrapper<PurchaseDirectorState> directorStateQw = new QueryWrapper<>();
-        directorStateQw.eq("purchase_payment_contract_id", purchasePaymentContract.getId());
+        directorStateQw.eq("purchase_payment_contract_id", id);
         purchaseDirectorStateMapper.delete(directorStateQw);
 
         return purchasePaymentContractMapper.deleteById(id);

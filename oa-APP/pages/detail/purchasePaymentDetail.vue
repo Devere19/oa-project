@@ -11,7 +11,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">采购合同编号：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.purchaseContractNo}}</view>
 					</uni-col>
 				</uni-row>
@@ -19,7 +19,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">供货方公司名：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.customerEnterpriseName}}</view>
 					</uni-col>
 				</uni-row>
@@ -27,7 +27,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">己方公司名：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.ownCompanyName}}</view>
 					</uni-col>
 				</uni-row>
@@ -35,7 +35,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">榨季：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.squeezeSeason}}</view>
 					</uni-col>
 				</uni-row>
@@ -43,7 +43,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">入库时间：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.inboundTime}}</view>
 					</uni-col>
 				</uni-row>
@@ -51,7 +51,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">采购货物名称：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.goodsName}}</view>
 					</uni-col>
 				</uni-row>
@@ -59,7 +59,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">采购货物总量：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.goodsCount}}</view>
 					</uni-col>
 				</uni-row>
@@ -67,7 +67,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">采购货物单位：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.goodsUnit}}</view>
 					</uni-col>
 				</uni-row>
@@ -75,7 +75,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">采购总价：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.paymentAmount}}</view>
 					</uni-col>
 				</uni-row>
@@ -83,7 +83,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">本次付款金额：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.paymentCount}}</view>
 					</uni-col>
 				</uni-row>
@@ -165,7 +165,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">付款金额：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.paymentCount}}</view>
 					</uni-col>
 				</uni-row>
@@ -173,7 +173,7 @@
 					<uni-col :span="7" :offset="2">
 						<view class="headLine">付款时间：</view>
 					</uni-col>
-					<uni-col :span="14">
+					<uni-col :span="15">
 						<view class="contractContent">{{purchasePaymentContract.paymentTime}}</view>
 					</uni-col>
 				</uni-row>
@@ -213,7 +213,23 @@
 					userId: '',
 					nickName: '',
 				},
-				purchasePaymentContract: null,
+				purchasePaymentContract: {
+					purchaseContractNo:null,
+					customerEnterpriseName:null,
+					ownCompanyName:null,
+					squeezeSeason:null,
+					inboundTime:null,
+					goodsName:null,
+					goodsCount:null,
+					goodsUnit:null,
+					paymentAmount:null,
+					paymentCount:null,
+					financeStaff:null,
+					purchasePaymentDirector:null,
+					cashier:null,
+					paymentTime:null,
+					paymentPhoto:null,
+				},
 				showPassFlag: '',
 				changeStateFlag:false,
 			}

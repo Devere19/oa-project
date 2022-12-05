@@ -125,7 +125,17 @@
 					userId: '',
 					nickName: '',
 				},
-				officeExpense: null,
+				officeExpense: {
+					itemsList:null,
+					expenses:null,
+					time:null,
+					paymentCount:null,
+					financeStaff:null,
+					officeDirector:null,
+					cashier:null,
+					paymentTime:null,
+					paymentPhoto:null,
+				},
 				showPassFlag: '',
 				changeStateFlag:false,
 			}
