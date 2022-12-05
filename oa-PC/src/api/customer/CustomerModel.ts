@@ -6,7 +6,9 @@ export type CustomerType = {
 export type SelectCustomer = {
   list: CustomerType[]
 }
-
+export type SelectOwnCompany = {
+  list: CustomerType[]
+}
 export type customerModel = {
   id: any
   customerEnterpriseName: string

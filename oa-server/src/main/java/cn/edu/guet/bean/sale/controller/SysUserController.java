@@ -1,4 +1,4 @@
-package cn.edu.guet.controller;
+package cn.edu.guet.bean.sale.controller;
 
 import cn.edu.guet.bean.PageParm;
 import cn.edu.guet.bean.SysRole;

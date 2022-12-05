@@ -26,6 +26,11 @@ public class InboundBean{
      */
     private BigDecimal inboundGoodsCount;
 
+    /**
+     * 采购货物单价*
+     */
+    private BigDecimal goodsUnitPrice;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -35,12 +40,12 @@ public class InboundBean{
             return false;
         }
         InboundBean that = (InboundBean) o;
-        return Objects.equals(factoryName, that.factoryName) && Objects.equals(inboundGoodsCount, that.inboundGoodsCount);
+        return Objects.equals(factoryName, that.factoryName) && Objects.equals(inboundGoodsCount, that.inboundGoodsCount) && Objects.equals(goodsUnitPrice, that.goodsUnitPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(factoryName, inboundGoodsCount);
+        return Objects.hash(factoryName, inboundGoodsCount,goodsUnitPrice);
     }
 
     @Override
@@ -48,6 +53,7 @@ public class InboundBean{
         return "InboundBean{" +
                 "factoryName='" + factoryName + '\'' +
                 ", inboundGoodsCount=" + inboundGoodsCount +
+                ", goodsUnitPrice=" + goodsUnitPrice +
                 '}';
     }
 }

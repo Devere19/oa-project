@@ -30,15 +30,9 @@ public class PurchaseContract implements Serializable {
     private String purchaseContractNo;
 
     /**
-     * 公司名称
+     * 供货商公司名称
      */
-    @TableField(exist = false)
-    private Integer customerEnterpriseName;
-
-    /**
-     * 供货商ID(客户表ID)
-     */
-    private Integer supplierNo;
+    private String customerEnterpriseName;
 
     /**
      * 己方公司名
@@ -75,11 +69,6 @@ public class PurchaseContract implements Serializable {
      */
     @TableField(exist = false)
     private List<InboundBean> inboundData;
-
-    /**
-     * 采购货物单价
-     */
-    private BigDecimal goodsUnitPrice;
 
     /**
      * 采购总金额
@@ -145,7 +134,6 @@ public class PurchaseContract implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getPurchaseContractNo() == null ? other.getPurchaseContractNo() == null : this.getPurchaseContractNo().equals(other.getPurchaseContractNo()))
             && (this.getCustomerEnterpriseName() == null ? other.getCustomerEnterpriseName() == null : this.getCustomerEnterpriseName().equals(other.getCustomerEnterpriseName()))
-            && (this.getSupplierNo() == null ? other.getSupplierNo() == null : this.getSupplierNo().equals(other.getSupplierNo()))
             && (this.getOwnCompanyName() == null ? other.getOwnCompanyName() == null : this.getOwnCompanyName().equals(other.getOwnCompanyName()))
             && (this.getSqueezeSeason() == null ? other.getSqueezeSeason() == null : this.getSqueezeSeason().equals(other.getSqueezeSeason()))
             && (this.getInboundTime() == null ? other.getInboundTime() == null : this.getInboundTime().equals(other.getInboundTime()))
@@ -153,7 +141,6 @@ public class PurchaseContract implements Serializable {
             && (this.getGoodsCount() == null ? other.getGoodsCount() == null : this.getGoodsCount().equals(other.getGoodsCount()))
             && (this.getGoodsUnit() == null ? other.getGoodsUnit() == null : this.getGoodsUnit().equals(other.getGoodsUnit()))
             && (this.getInboundData() == null ? other.getInboundData() == null : this.getInboundData().equals(other.getInboundData()))
-            && (this.getGoodsUnitPrice() == null ? other.getGoodsUnitPrice() == null : this.getGoodsUnitPrice().equals(other.getGoodsUnitPrice()))
             && (this.getPaymentAmount() == null ? other.getPaymentAmount() == null : this.getPaymentAmount().equals(other.getPaymentAmount()))
             && (this.getUnpaidAmount() == null ? other.getUnpaidAmount() == null : this.getUnpaidAmount().equals(other.getUnpaidAmount()))
             && (this.getContractPhoto() == null ? other.getContractPhoto() == null : this.getContractPhoto().equals(other.getContractPhoto()))
@@ -172,7 +159,6 @@ public class PurchaseContract implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getPurchaseContractNo() == null) ? 0 : getPurchaseContractNo().hashCode());
         result = prime * result + ((getCustomerEnterpriseName() == null) ? 0 : getCustomerEnterpriseName().hashCode());
-        result = prime * result + ((getSupplierNo() == null) ? 0 : getSupplierNo().hashCode());
         result = prime * result + ((getOwnCompanyName() == null) ? 0 : getOwnCompanyName().hashCode());
         result = prime * result + ((getSqueezeSeason() == null) ? 0 : getSqueezeSeason().hashCode());
         result = prime * result + ((getInboundTime() == null) ? 0 : getInboundTime().hashCode());
@@ -180,7 +166,6 @@ public class PurchaseContract implements Serializable {
         result = prime * result + ((getGoodsCount() == null) ? 0 : getGoodsCount().hashCode());
         result = prime * result + ((getGoodsUnit() == null) ? 0 : getGoodsUnit().hashCode());
         result = prime * result + ((getInboundData() == null) ? 0 : getInboundData().hashCode());
-        result = prime * result + ((getGoodsUnitPrice() == null) ? 0 : getGoodsUnitPrice().hashCode());
         result = prime * result + ((getPaymentAmount() == null) ? 0 : getPaymentAmount().hashCode());
         result = prime * result + ((getUnpaidAmount() == null) ? 0 : getUnpaidAmount().hashCode());
         result = prime * result + ((getContractPhoto() == null) ? 0 : getContractPhoto().hashCode());
@@ -202,7 +187,6 @@ public class PurchaseContract implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", purchaseContractNo=").append(purchaseContractNo);
         sb.append(", customerEnterpriseName=").append(customerEnterpriseName);
-        sb.append(", supplierNo=").append(supplierNo);
         sb.append(", ownCompanyName=").append(ownCompanyName);
         sb.append(", squeezeSeason=").append(squeezeSeason);
         sb.append(", inboundTime=").append(inboundTime);
@@ -210,7 +194,6 @@ public class PurchaseContract implements Serializable {
         sb.append(", goodsCount=").append(goodsCount);
         sb.append(", goodsUnit=").append(goodsUnit);
         sb.append(", inboundData=").append(inboundData);
-        sb.append(", goodsUnitPrice=").append(goodsUnitPrice);
         sb.append(", paymentAmount=").append(paymentAmount);
         sb.append(", unpaidAmount=").append(unpaidAmount);
         sb.append(", contractPhoto=").append(contractPhoto);

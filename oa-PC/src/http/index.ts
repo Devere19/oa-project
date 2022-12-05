@@ -5,6 +5,7 @@ import { ElMessage } from 'element-plus';
 //axios配置
 const config = {
   baseURL: 'http://localhost:9000',
+  // baseURL: 'http://120.77.28.123:9000',
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },

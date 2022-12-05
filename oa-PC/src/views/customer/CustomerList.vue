@@ -112,26 +112,13 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="oneDeleteDialogFlag" title="提示" width="30%" draggable center>
-            <span>
-                您确定要删除该条客户信息吗
-            </span>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="oneDeleteCustomer">
-                        确定
-                    </el-button>
-                    <el-button @click="oneDeleteDialogFlag = false">取消</el-button>
-                </span>
-            </template>
-        </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { ElTable, ElMessage } from 'element-plus'
+import { ElTable, ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Search, MoreFilled } from "@element-plus/icons-vue";
 import { conversionDateTime, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
@@ -148,7 +135,6 @@ const background = ref(true)
 const firstTableData = ref<customerModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
-const oneDeleteDialogFlag = ref(false)
 const chooseCustomerId = ref(0)
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
@@ -332,8 +318,17 @@ const handleCustomerData = async (formEl1: FormInstance | undefined) => {
 
 // 打开单个删除提示窗口
 const openOneDeleteDialog = (index: number, row: customerModel) => {
-    chooseCustomerId.value = row.id;
-    oneDeleteDialogFlag.value = true
+    ElMessageBox.confirm(
+        '您确定要删除该条客户信息吗?',
+        {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            title: '系统提示'
+        }
+    ).then(() => {
+        chooseCustomerId.value = row.id;
+        oneDeleteCustomer();
+    });
 }
 
 // 发送单个删除请求
@@ -347,7 +342,6 @@ const oneDeleteCustomer = () => {
                 type: 'success',
             })
             getTableData();
-            oneDeleteDialogFlag.value = false
         }
         else if (res.data == 0) {
             ElMessage({

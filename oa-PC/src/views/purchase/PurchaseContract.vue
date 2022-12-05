@@ -53,7 +53,6 @@
       <el-table-column property="goodsName" align="center" label="采购货物名称" />
       <el-table-column property="goodsCount" align="center" label="采购货物数量" />
       <el-table-column property="goodsUnit" align="center" label="采购货物单位" />
-      <el-table-column property="goodsUnitPrice" align="center" label="采购货物单价(斤)" />
       <el-table-column property="paymentAmount" align="center" label="采购总价" />
       <el-table-column property="unpaidAmount" align="center" label="未结清金额" />
       <el-table-column align="center" label="合同照片" width="130">
@@ -109,9 +108,8 @@
           </el-form-item>
           <el-form-item label="己方公司名" prop="ownCompanyName">
             <el-select v-model="NewPurchaseContractData.ownCompanyName" placeholder="下拉选择" size="large">
-              <el-option label="广西永湘物流有限公司" value="广西永湘物流有限公司"></el-option>
-              <el-option label="广西南宁锦泰行工贸有限公司" value="广西南宁锦泰行工贸有限公司"></el-option>
-              <el-option label="广西丰沣顺国际物流有限公司" value="广西丰沣顺国际物流有限公司"></el-option>
+              <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label"
+                :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="榨季" prop="squeezeSeason">
@@ -145,14 +143,15 @@
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
             { required: true, trigger: ['change'] }]">
               <el-input v-model="item.inboundGoodsCount" size="large" />
+            </el-form-item>
+            <el-form-item :prop="'inboundData.' + index + '.goodsUnitPrice'" label="采购单价" :rules="[
+            { required: true, trigger: ['change'] }]">
+              <el-input v-model="item.goodsUnitPrice" size="large" />
               <el-button v-show="index != 0" @click.prevent="removeInboundItem(item)">删除</el-button>
             </el-form-item>
           </div>
           <el-form-item label="">
             <el-button type="warning" icon="Plus" @click="addInboundItem">添加入库单</el-button>
-          </el-form-item>
-          <el-form-item label="采购货物单价" prop="goodsUnitPrice">
-            <el-input v-model="NewPurchaseContractData.goodsUnitPrice" placeholder="仅需填写所选重量单位的采购单价" size="large" />
           </el-form-item>
           <el-form-item label="采购总价" prop="paymentAmount">
             <el-input v-model="NewPurchaseContractData.paymentAmount" size="large" />
@@ -193,7 +192,7 @@
     <el-dialog v-model="previewImageFlag">
       <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
     </el-dialog>
-    <el-dialog v-model="moreDetailDialogFlag" title="采购单详情" width="75%" draggable center
+    <el-dialog v-model="moreDetailDialogFlag" title="采购单详情" width="80%" draggable center
       :before-close="closeMoreDetailDialog">
       <div>
         <el-row justify="center">
@@ -218,13 +217,19 @@
             {{ PurchaseContractDetail.ownCompanyName }}
           </el-col>
           <el-col :span="4" class="moreDetailTitle">
+            榨季：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.squeezeSeason }}
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="4" class="moreDetailTitle">
             采购货物名称：
           </el-col>
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.goodsName }}
           </el-col>
-        </el-row>
-        <el-row justify="center">
           <el-col :span="4" class="moreDetailTitle">
             采购货物数量：
           </el-col>
@@ -237,14 +242,14 @@
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.goodsUnit }}
           </el-col>
-          <el-col :span="4" class="moreDetailTitle">
-            采购货物单价(斤)：
-          </el-col>
-          <el-col :span="4" class="moreDetailContent">
-            {{ PurchaseContractDetail.goodsUnitPrice }}
-          </el-col>
         </el-row>
         <el-row justify="center">
+          <el-col :span="4" class="moreDetailTitle">
+            入库时间：
+          </el-col>
+          <el-col :span="4" class="moreDetailContent">
+            {{ PurchaseContractDetail.inboundTime }}
+          </el-col>
           <el-col :span="4" class="moreDetailTitle">
             采购总价：
           </el-col>
@@ -257,20 +262,8 @@
           <el-col :span="4" class="moreDetailContent">
             {{ PurchaseContractDetail.unpaidAmount }}
           </el-col>
-          <el-col :span="4" class="moreDetailTitle">
-            榨季：
-          </el-col>
-          <el-col :span="4" class="moreDetailContent">
-            {{ PurchaseContractDetail.squeezeSeason }}
-          </el-col>
         </el-row>
         <el-row>
-          <el-col :span="4" class="moreDetailTitle">
-            入库时间：
-          </el-col>
-          <el-col :span="4" class="moreDetailContent">
-            {{ PurchaseContractDetail.inboundTime }}
-          </el-col>
           <el-col :span="4" class="moreDetailTitle">
             创建者：
           </el-col>
@@ -294,6 +287,7 @@
               <el-table-column property="inOutGoodsCount" align="center" label="入库数量" />
               <el-table-column property="currentGoodsCount" align="center" label="当前库存量" />
               <el-table-column property="goodsUnit" align="center" label="重量单位" />
+              <el-table-column property="goodsUnitPrice" align="center" label="入库单价(斤)" />
               <el-table-column property="outboundDetailInfos" align="center" label="出库详情" fixed="right">
                 <template #default="scope">
                   <el-button :icon="MoreFilled" size="default" type="primary" @click="moreOutboundDetail(scope.row)">
@@ -358,7 +352,8 @@ import { Delete, Search, MoreFilled, Hide, View, Money, Upload, Download } from 
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
-import { SelectCustomer } from "@/api/customer/CustomerModel"
+import { getOwnCompanySelectApi } from "@/api/ownCompany/index"
+import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel"
 import { purchaseContractModel, inboundDataModel, PurchaseExportModel } from '@/api/purchaseContract/PurchaseContractModel';
 import {
   getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi,
@@ -406,7 +401,6 @@ const firstSelection = ref<purchaseContractModel[]>([])
 const NewPurchaseContractData = reactive({
   id: '',
   purchaseContractNo: '',
-  supplierNo: '',
   customerEnterpriseName: '',
   ownCompanyName: '',
   squeezeSeason: '',
@@ -417,10 +411,10 @@ const NewPurchaseContractData = reactive({
   inboundData: reactive<inboundDataModel[]>([
     {
       factoryName: '',
-      inboundGoodsCount: ''
+      inboundGoodsCount: '',
+      goodsUnitPrice: '',
     }
   ]),
-  goodsUnitPrice: '',
   paymentAmount: '',
   contractPhotoArray: reactive<string[]>([]),
   createTime: '',
@@ -437,7 +431,6 @@ const PurchaseContractDetail = reactive({
   goodsName: '',
   goodsCount: '',
   goodsUnit: '',
-  goodsUnitPrice: '',
   paymentAmount: '',
   unpaidAmount: '',
   createTime: '',
@@ -490,9 +483,6 @@ const firstRules = reactive<FormRules>({
   goodsUnit: [
     { required: true, trigger: ['change'] }
   ],
-  goodsUnitPrice: [
-    { required: true, trigger: ['change'] }
-  ],
   paymentAmount: [
     { required: true, trigger: ['change'] }
   ],
@@ -512,8 +502,13 @@ const disabledDate = (time: Date) => {
   return time.getTime() > Date.now()
 }
 
-//定义客户列表数据  label存公司名称  value存客户表id
+//定义客户列表数据  label和value都存公司名称
 const customerData = reactive<SelectCustomer>({
+  list: []
+})
+
+//定义己方公司列表数据  label和value都存公司名称
+const ownCompanyData = reactive<SelectOwnCompany>({
   list: []
 })
 
@@ -526,6 +521,9 @@ onMounted(() => {
   loginUserName.value = userNickNameStore.user.nickName;
   getSelectApi().then(res => {
     customerData.list = res.data;
+  })
+  getOwnCompanySelectApi().then(res => {
+    ownCompanyData.list = res.data;
   })
 })
 
@@ -659,7 +657,8 @@ const sendNewPurchaseContract = async (formEl1: FormInstance | undefined) => {
               NewPurchaseContractData.contractPhotoArray = [];
               NewPurchaseContractData.inboundData = [{
                 factoryName: '',
-                inboundGoodsCount: ''
+                inboundGoodsCount: '',
+                goodsUnitPrice: '',
               }]
             }
             else {
@@ -746,7 +745,8 @@ const closeAddDialog = () => {
   NewPurchaseContractData.inboundData = [
     {
       factoryName: '',
-      inboundGoodsCount: ''
+      inboundGoodsCount: '',
+      goodsUnitPrice: ''
     }
   ];
   PhotoData.value = [];
@@ -786,7 +786,6 @@ const openMordDetailDialog = async (row: any) => {
   PurchaseContractDetail.goodsName = row.goodsName
   PurchaseContractDetail.goodsCount = row.goodsCount
   PurchaseContractDetail.goodsUnit = row.goodsUnit
-  PurchaseContractDetail.goodsUnitPrice = row.goodsUnitPrice
   PurchaseContractDetail.paymentAmount = row.paymentAmount
   PurchaseContractDetail.unpaidAmount = row.unpaidAmount
   PurchaseContractDetail.createTime = timeConversion(row.createTime)
@@ -921,6 +920,7 @@ const addInboundItem = () => {
   NewPurchaseContractData.inboundData.push({
     factoryName: '',
     inboundGoodsCount: '',
+    goodsUnitPrice: ''
   })
 }
 

@@ -1,7 +1,7 @@
-package cn.edu.guet.controller;
+package cn.edu.guet.bean.sale.controller;
 
 import cn.edu.guet.bean.customer.Customer;
-import cn.edu.guet.bean.customer.SelectCustomer;
+import cn.edu.guet.bean.customer.SelectModel;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.CustomerService;
@@ -24,14 +24,14 @@ public class CustomerController {
 
     @GetMapping("/getSelect")
     public HttpResult getSelect(){
-        List<SelectCustomer> selectCustomerList = new ArrayList<>();
+        List<SelectModel> selectModelList = new ArrayList<>();
         for (Customer customer : customerService.list()) {
-            SelectCustomer selectCustomer = new SelectCustomer();
-            selectCustomer.setLabel(customer.getCustomerEnterpriseName());
-            selectCustomer.setValue(String.valueOf(customer.getId()));
-            selectCustomerList.add(selectCustomer);
+            SelectModel selectModel = new SelectModel();
+            selectModel.setLabel(customer.getCustomerEnterpriseName());
+            selectModel.setValue(customer.getCustomerEnterpriseName());
+            selectModelList.add(selectModel);
         }
-        return ResultUtils.success("查询成功",selectCustomerList);
+        return ResultUtils.success("查询成功",selectModelList);
     }
 
     //    获取客户数据

@@ -8,7 +8,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
-public class SelectCustomer {
+public class SelectModel {
     private String label;
     private String value;
 }

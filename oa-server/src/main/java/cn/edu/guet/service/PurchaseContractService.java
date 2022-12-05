@@ -1,11 +1,15 @@
 package cn.edu.guet.service;
 
 import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
+import cn.edu.guet.bean.purchaseContract.ExportOutPurchaseContract;
 import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
+import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -20,4 +24,10 @@ public interface PurchaseContractService extends IService<PurchaseContract> {
     int addNewPurchaseContract(PurchaseContract purchaseContract);
     List<InboundDetailInfo> getPurchaseDetail(String purchaseContractNo,String goodsName);
     int handleImportPurchaseContractModel(ImportPurchaseContractModel importPurchaseContractModel);
+
+    Page<PurchaseContract> getTPurchaseContractData(int currentPage, int pageSize);
+    Page<PurchaseContract> getFPurchaseContractData(int currentPage, int pageSize);
+    Page<PurchaseContract> searchPurchaseContract(int currentPage, int pageSize, String searchWord, boolean showPigeonhole, Date startDate, Date endDate);
+    List<ExportOutPurchaseContract> purchaseExportExcel(String searchWord, boolean showPigeonhole, Date startDate, Date endDate);
+    Boolean checkPurchaseContractNo(String purchaseContractNo);
 }

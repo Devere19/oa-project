@@ -1,4 +1,4 @@
-package cn.edu.guet.controller;
+package cn.edu.guet.bean.sale.controller;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
