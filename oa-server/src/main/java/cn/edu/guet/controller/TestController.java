@@ -1,4 +1,4 @@
-package cn.edu.guet.bean.sale.controller;
+package cn.edu.guet.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -298,6 +298,21 @@ const routes: Array<RouteRecordRaw> = [
       },
     }]
   },
+  {
+    path: '/ownCompanyList',
+    component: Layout,
+    redirect: '/ownCompanyList',
+    children: [{
+      path: '/ownCompanyList',
+      component: () => import('@/views/ownCompany/OwnCompanyList.vue'),
+      name: 'ownCompanyList',
+      meta: {
+        title: '公司管理',
+        icon: 'Management',
+        roles: ['sys:ownCompanyList'],
+      },
+    }]
+  },
 ]
 
 const router = createRouter({
