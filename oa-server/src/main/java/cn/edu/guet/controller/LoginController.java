@@ -38,14 +38,14 @@ public class LoginController {
         SysUser user = sysUserService.findByName(username);
         // 账号不存在、密码错误
         if (user == null) {
-            return ResultUtils.error("账号不存在");
+            return ResultUtils.success("账号不存在",0);
         }
         if (!PasswordUtils.matches(user.getSalt(), password, user.getPassword())) {
-            return ResultUtils.error("密码不正确");
+            return ResultUtils.success("密码不正确",0);
         }
         // 账号锁定
         if (user.getStatus().equals("离职")) {
-            return ResultUtils.error("改员工已离职,请联系管理员");
+            return ResultUtils.success("改员工已离职,请联系管理员",0);
         }
         // 系统登录认证
         JwtAuthenticationToken token = SecurityUtils.login(request, username, password, authenticationManager);

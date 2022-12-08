@@ -43,6 +43,11 @@ public class LogisticsPaymentContractController {
         return ResultUtils.success("新增成功",logisticsPaymentContractService.addNewLogisticsPaymentContract(logisticsPaymentContract));
     }
 
+    @RequestMapping("/updateLogisticsPaymentContract")
+    public HttpResult updateLogisticsPaymentContract(@RequestBody LogisticsPaymentContract logisticsPaymentContract){
+        return ResultUtils.success("修改成功",logisticsPaymentContractService.updateLogisticsPaymentContract(logisticsPaymentContract));
+    }
+
     @RequestMapping("/checkLogisticsContractNo")
     public HttpResult checkLogisticsContractNo(String logisticsContractNo){
         return ResultUtils.success("获取成功",logisticsContractService.checkLogisticsContractNo(logisticsContractNo));

@@ -29,6 +29,12 @@ export const addNewPurchasePaymentContractApi = (purchasePaymentContract: purcha
         purchasePaymentContract)
 }
 
+//修改采购付款单
+export const updatePurchasePaymentContractApi = (purchasePaymentContract: purchasePaymentContractModel) => {
+    return http.post("purchasePaymentContract/updatePurchasePaymentContract",
+        purchasePaymentContract)
+}
+
 //验证采购合同编号
 export const checkPurchaseContractNoApi = (purchaseContractNo: string) => {
     return http.get("purchasePaymentContract/checkPurchaseContractNo", {
@@ -37,17 +43,17 @@ export const checkPurchaseContractNoApi = (purchaseContractNo: string) => {
 }
 
 //财务审批通过
-export const changeFinanceState = (id: number,financeStaff:string) => {
+export const changeFinanceState = (id: number, financeStaff: string) => {
     return http.get("purchasePaymentContract/changeFinanceState", {
         id: id,
-        financeStaff:financeStaff
+        financeStaff: financeStaff
     })
 }
 
 //董事会审批通过
-export const changeDirectorState = (purchasePaymentContractId:number,userId:string) => {
+export const changeDirectorState = (purchasePaymentContractId: number, userId: string) => {
     return http.get("purchasePaymentContract/changeDirectorState", {
         purchasePaymentContractId: purchasePaymentContractId,
-        userId:userId
+        userId: userId
     })
 }

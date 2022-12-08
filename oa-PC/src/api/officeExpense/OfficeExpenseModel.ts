@@ -4,7 +4,8 @@ export type officeExpenseModel = {
     itemsList: string,
     expenses: any,
     time: string,
-    createBy: string
+    createBy: string,
+    lastUpdateBy: string
 }
 
 export type officeExpenseDirectorModel = {

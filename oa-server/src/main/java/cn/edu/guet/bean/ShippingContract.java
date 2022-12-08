@@ -29,6 +29,14 @@ public class ShippingContract implements Serializable {
      */
     private String shippingContractNo;
 
+
+    /**
+     * 旧海运单合同编号
+     * 前端传输，更新海运单所用
+     */
+    @TableField(exist = false)
+    private String oldShippingContractNo;
+
     /**
      * 物流单合同编号
      */
@@ -122,6 +130,13 @@ public class ShippingContract implements Serializable {
     private List<String> contractPhotoArray;
 
     /**
+     * 更新海运单所用，标记是否只修改了图片
+     * 1代表只改了图片 0则反之
+     */
+    @TableField(exist = false)
+    private Integer onlyUpdatePhoto;
+
+    /**
      * 财务名称
      */
     private String financeStaff;
@@ -201,6 +216,7 @@ public class ShippingContract implements Serializable {
         ShippingContract other = (ShippingContract) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getShippingContractNo() == null ? other.getShippingContractNo() == null : this.getShippingContractNo().equals(other.getShippingContractNo()))
+            && (this.getOldShippingContractNo() == null ? other.getOldShippingContractNo() == null : this.getOldShippingContractNo().equals(other.getOldShippingContractNo()))
             && (this.getLogisticsContractNo() == null ? other.getLogisticsContractNo() == null : this.getLogisticsContractNo().equals(other.getLogisticsContractNo()))
             && (this.getPrincipal() == null ? other.getPrincipal() == null : this.getPrincipal().equals(other.getPrincipal()))
             && (this.getPackingTime() == null ? other.getPackingTime() == null : this.getPackingTime().equals(other.getPackingTime()))
@@ -239,6 +255,7 @@ public class ShippingContract implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getShippingContractNo() == null) ? 0 : getShippingContractNo().hashCode());
+        result = prime * result + ((getOldShippingContractNo() == null) ? 0 : getOldShippingContractNo().hashCode());
         result = prime * result + ((getLogisticsContractNo() == null) ? 0 : getLogisticsContractNo().hashCode());
         result = prime * result + ((getPrincipal() == null) ? 0 : getPrincipal().hashCode());
         result = prime * result + ((getPackingTime() == null) ? 0 : getPackingTime().hashCode());
@@ -280,6 +297,7 @@ public class ShippingContract implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", shippingContractNo=").append(shippingContractNo);
+        sb.append(", oldShippingContractNo=").append(oldShippingContractNo);
         sb.append(", logisticsContractNo=").append(logisticsContractNo);
         sb.append(", principal=").append(principal);
         sb.append(", packingTime=").append(packingTime);

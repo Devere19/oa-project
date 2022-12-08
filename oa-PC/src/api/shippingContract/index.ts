@@ -29,6 +29,12 @@ export const addNewShippingContractApi = (shippingContract: shippingContractMode
         shippingContract)
 }
 
+//新增海运单
+export const updateShippingContractApi = (shippingContract: shippingContractModel) => {
+    return http.post("shippingContract/updateShippingContract",
+        shippingContract)
+}
+
 //验证海运单集装箱号
 export const checkContainerNoApi = (containerNo: string) => {
     return http.get("shippingContract/checkContainerNo", {
@@ -37,17 +43,17 @@ export const checkContainerNoApi = (containerNo: string) => {
 }
 
 //财务审批通过
-export const changeFinanceState = (shippingContractNo: string,financeStaff:string) => {
+export const changeFinanceState = (shippingContractNo: string, financeStaff: string) => {
     return http.get("shippingContract/changeFinanceState", {
         shippingContractNo: shippingContractNo,
-        financeStaff:financeStaff
+        financeStaff: financeStaff
     })
 }
 
 //董事会审批通过
-export const changeDirectorState = (shippingContractNo:number,userId:string) => {
+export const changeDirectorState = (shippingContractNo: number, userId: string) => {
     return http.get("shippingContract/changeDirectorState", {
         shippingContractNo: shippingContractNo,
-        userId:userId
+        userId: userId
     })
 }

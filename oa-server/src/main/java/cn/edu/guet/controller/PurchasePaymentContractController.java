@@ -44,6 +44,11 @@ public class PurchasePaymentContractController {
         return ResultUtils.success("新增成功",purchasePaymentContractService.addNewPurchasePaymentContract(purchasePaymentContract));
     }
 
+    @RequestMapping("/updatePurchasePaymentContract")
+    public HttpResult updatePurchasePaymentContract(@RequestBody PurchasePaymentContract purchasePaymentContract){
+        return ResultUtils.success("修改成功",purchasePaymentContractService.updatePurchasePaymentContract(purchasePaymentContract));
+    }
+
     @RequestMapping("/checkPurchaseContractNo")
     public HttpResult checkPurchaseContractNo(String purchaseContractNo){
         return ResultUtils.success("获取成功",purchaseContractService.checkPurchaseContractNo(purchaseContractNo));

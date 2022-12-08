@@ -3,6 +3,7 @@
 export type shippingContractModel = {
     id: any,
     shippingContractNo: string,
+    oldShippingContractNo: string,
     logisticsContractNo: string,
     principal: string,
     packingTime: string,
@@ -20,6 +21,7 @@ export type shippingContractModel = {
     destinationPortPrice: any,
     expenses: any,
     contractPhotoArray: any,
+    onlyUpdatePhoto: any,
     createBy: string,
 }
 

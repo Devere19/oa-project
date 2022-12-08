@@ -1,11 +1,9 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
-import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.IncomeSpendInfoService;
-import cn.edu.guet.service.SaleContractService;
 import cn.edu.guet.util.ImageUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

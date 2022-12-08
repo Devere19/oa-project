@@ -75,6 +75,26 @@ public class LogisticsContract implements Serializable {
     private String pigeonhole;
 
     /**
+     * 是否存在相关付款单 0表示无 1表示有
+     */
+    private Integer relationPaymentExistState;
+
+    /**
+     * 相关付款单是否已审核 0表示未审核 1表示已审核
+     */
+    private Integer relationPaymentAuditState;
+
+    /**
+     * 是否存在相关海运单 0表示无 1表示有
+     */
+    private Integer relationShippingExistState;
+
+    /**
+     * 相关海运单是否已审核 0表示未审核 1表示已审核
+     */
+    private Integer relationShippingAuditState;
+
+    /**
      * 创建时间
      */
     private Date createTime;

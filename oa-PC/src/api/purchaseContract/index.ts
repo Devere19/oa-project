@@ -58,6 +58,18 @@ export const addNewPurchaseContractApi = (purchaseContract: purchaseContractMode
         purchaseContract)
 }
 
+//获取采购单入库情况
+export const getPurchaseContractInboundDataApi = (purchaseContractNo: string) => {
+    return http.get("purchaseContract/getPurchaseContractInboundData",
+        { purchaseContractNo: purchaseContractNo })
+}
+
+//修改采购单
+export const updatePurchaseContractApi = (purchaseContract: purchaseContractModel) => {
+    return http.post("purchaseContract/updatePurchaseContract",
+        purchaseContract)
+}
+
 // 获取采购单详情
 export const getPurchaseDetailApi = (purchaseContractNo: string, goodsName: string) => {
     console.log(goodsName);

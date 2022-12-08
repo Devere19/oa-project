@@ -1,10 +1,8 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
-import cn.edu.guet.mapper.DirectorMapper;
-import cn.edu.guet.mapper.ShippingContractMapper;
-import cn.edu.guet.mapper.ShippingDirectorStateMapper;
-import cn.edu.guet.mapper.ShippingStateInfoMapper;
+import cn.edu.guet.bean.logisticsContract.LogisticsContract;
+import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.ShippingContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
@@ -42,6 +40,8 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Autowired
     private DirectorMapper directorMapper;
 
+    @Autowired
+    private LogisticsContractMapper logisticsContractMapper;
 
     @Override
     public Page<ShippingContract> getshippingContractData(int currentPage, int pageSize) {
@@ -127,29 +127,64 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int addNewShippingContract(ShippingContract shippingContract) {
+    public int addNewShippingContract(ShippingContract shippingContract,ShippingContract oldShippingContract,int flag) {
         if (ImageUtils.getDBString(shippingContract.getContractPhotoArray()) != "") {
             shippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
         }
-        shippingContract.setCreateBy(SecurityUtils.getUsername());
+        if(flag==1){
+            shippingContract.setFinanceStaff(oldShippingContract.getFinanceStaff());
+            shippingContract.setFinanceState(oldShippingContract.getFinanceState());
+            shippingContract.setCashier(oldShippingContract.getCashier());
+            shippingContract.setPaymentCount(oldShippingContract.getPaymentCount());
+            shippingContract.setPaymentTime(oldShippingContract.getPaymentTime());
+            shippingContract.setPaymentPhoto(oldShippingContract.getPaymentPhoto());
+            shippingContract.setCreateTime(oldShippingContract.getCreateTime());
+            shippingContract.setCreateBy(oldShippingContract.getCreateBy());
+        }else{
+            shippingContract.setCreateBy(SecurityUtils.getUsername());
+        }
         shippingContract.setLastUpdateBy(SecurityUtils.getUsername());
         int result = shippingContractMapper.insert(shippingContract);
 
         if (result == 1) {
-            //        查询出董事会的ID
-            QueryWrapper<Director> directorQw = new QueryWrapper<>();
-            directorQw.orderByAsc("nick_name").last("limit 3");
-            List<Director> directors = directorMapper.selectList(directorQw);
+//            为0，则新增
+            if(flag==0){
+                //        查询出董事会的ID
+                QueryWrapper<Director> directorQw = new QueryWrapper<>();
+                directorQw.orderByAsc("nick_name").last("limit 3");
+                List<Director> directors = directorMapper.selectList(directorQw);
 
 //        循环添加海运董事审核记录
-            for (Director director : directors) {
-                ShippingDirectorState shippingDirectorState = new ShippingDirectorState();
-                shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
-                shippingDirectorState.setUserId(Math.toIntExact(director.getId()));
-                shippingDirectorState.setCreateBy(SecurityUtils.getUsername());
-                shippingDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
-                shippingDirectorStateMapper.insert(shippingDirectorState);
+                for (Director director : directors) {
+                    ShippingDirectorState shippingDirectorState = new ShippingDirectorState();
+                    shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
+                    shippingDirectorState.setUserId(Math.toIntExact(director.getId()));
+                    shippingDirectorState.setCreateBy(SecurityUtils.getUsername());
+                    shippingDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
+                    shippingDirectorStateMapper.insert(shippingDirectorState);
+                }
+            }else if(flag==1){
+//                不为0，则更新
+                if(shippingContract.getShippingContractNo().equals(oldShippingContract.getShippingContractNo())==false){
+//                    比较海运单号是否改变，若未改变则无需进行审批记录的修改
+                    QueryWrapper<ShippingDirectorState> SDSQw = new QueryWrapper<>();
+                    SDSQw.eq("shipping_contract_no",oldShippingContract.getShippingContractNo());
+                    List<ShippingDirectorState> shippingDirectorStateList = shippingDirectorStateMapper.selectList(SDSQw);
+
+                    for(int i=0;i<shippingDirectorStateList.size();i++){
+                        ShippingDirectorState shippingDirectorState=shippingDirectorStateList.get(i);
+                        shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
+                        shippingDirectorStateMapper.updateById(shippingDirectorState);
+                    }
+                }
             }
+
+            //            获取物流单,修改存在物流付款单标记
+            QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+            qw.eq("logistics_contract_no", shippingContract.getLogisticsContractNo());
+            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+            logisticsContract.setRelationShippingExistState(1);
+            logisticsContractMapper.updateById(logisticsContract);
         }
 
         return result;
@@ -157,14 +192,67 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int deleteOneShippingContract(int id) {
+    public int updateShippingContract(ShippingContract shippingContract) {
+        int result=0;
+
+        QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
+        qw.eq("shipping_contract_no", shippingContract.getOldShippingContractNo());
+        ShippingContract oldShippingContract=shippingContractMapper.selectOne(qw);
+
+//        只修改了图片
+        if(shippingContract.getOnlyUpdatePhoto()==1){
+            if (ImageUtils.getDBString(shippingContract.getContractPhotoArray()) != "") {
+                oldShippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
+            }else{
+                oldShippingContract.setContractPhoto(null);
+            }
+            result=shippingContractMapper.updateById(oldShippingContract);
+        }else{
+            //        0代表是删除，1代表是更新，所以此次选择1，则不删除原图片和审批记录
+            if(deleteOneShippingContract(shippingContract.getId(),1)==1){
+                //        0代表是新增，1代表是更新，所以此次选择1，则更新原审批记录
+                result=addNewShippingContract(shippingContract,oldShippingContract,1);
+            }
+        }
+        return result;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int deleteOneShippingContract(int id,int flag) {
         ShippingContract shippingContract = shippingContractMapper.selectById(id);
-//        删除相关审核记录
-        QueryWrapper<ShippingDirectorState> directorStateQw = new QueryWrapper<>();
-        directorStateQw.eq("shipping_contract_no", shippingContract.getShippingContractNo());
-        shippingDirectorStateMapper.delete(directorStateQw);
-        ImageUtils.deleteImages(shippingContract.getContractPhoto());
-        return shippingContractMapper.deleteById(id);
+
+        if(flag==0){
+            //        删除相关审核记录
+            QueryWrapper<ShippingDirectorState> directorStateQw = new QueryWrapper<>();
+            directorStateQw.eq("shipping_contract_no", shippingContract.getShippingContractNo());
+            shippingDirectorStateMapper.delete(directorStateQw);
+
+            ImageUtils.deleteImages(shippingContract.getContractPhoto());
+        }
+
+        String logisticsContractNo=shippingContract.getLogisticsContractNo();
+
+        int result=shippingContractMapper.deleteById(id);
+
+        if(result==1){
+//            查询是否存在其他海运单
+            QueryWrapper<ShippingContract> SCQw = new QueryWrapper<>();
+            SCQw.eq("logistics_contract_no",logisticsContractNo);
+            List<ShippingContract> shippingContractList=shippingContractMapper.selectList(SCQw);
+
+//            若不存在则修改物流单字段
+            if(shippingContractList.isEmpty()==true){
+                //            获取物流单
+                QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+                qw.eq("logistics_contract_no", logisticsContractNo);
+                LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+                logisticsContract.setRelationShippingExistState(0);
+                logisticsContractMapper.updateById(logisticsContract);
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -502,9 +590,22 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int changeFinanceState(String shippingContractNo, String financeStaff) {
-        UpdateWrapper<ShippingContract> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("shipping_contract_no", shippingContractNo).set("finance_state", 1).set("finance_staff", financeStaff);
-        return shippingContractMapper.update(null, updateWrapper);
+        QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
+        qw.eq("shipping_contract_no", shippingContractNo);
+        ShippingContract shippingContract=shippingContractMapper.selectOne(qw);
+        shippingContract.setFinanceStaff(financeStaff);
+        shippingContract.setFinanceState(1);
+
+        int result=shippingContractMapper.updateById(shippingContract);
+
+        if(result==1){
+            QueryWrapper<LogisticsContract> LCqw = new QueryWrapper<>();
+            LCqw.eq("logistics_contract_no", shippingContract.getLogisticsContractNo());
+            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(LCqw);
+            logisticsContract.setRelationShippingAuditState(1);
+            logisticsContractMapper.updateById(logisticsContract);
+        }
+        return result;
     }
 
     @Transactional(rollbackFor = Exception.class)

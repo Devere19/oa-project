@@ -1,10 +1,6 @@
 package cn.edu.guet.service;
 
-import cn.edu.guet.bean.PurchasePaymentContract;
-import cn.edu.guet.bean.PurchasePaymentContractView;
 import cn.edu.guet.bean.ShippingContract;
-import cn.edu.guet.bean.purchaseContract.PurchaseContract;
-import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,8 +12,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ShippingContractService extends IService<ShippingContract> {
     Page<ShippingContract> getshippingContractData(int currentPage, int pageSize);
     Page<ShippingContract> searchShippingContract(int currentPage, int pageSize,String searchWord);
-    int addNewShippingContract(ShippingContract shippingContract);
-    int deleteOneShippingContract(int id);
+    int addNewShippingContract(ShippingContract shippingContract,ShippingContract oldShippingContract,int flag);
+    int updateShippingContract(ShippingContract shippingContract);
+    int deleteOneShippingContract(int id,int flag);
     ShippingContract getOneShippingContract(int id);
     Boolean checkContainerNo(String containerNo);
 

@@ -29,18 +29,24 @@ export const addNewOfficeExpenseApi = (officeExpense: officeExpenseModel) => {
         officeExpense)
 }
 
+//修改办公经费单
+export const updateOfficeExpenseApi = (officeExpense: officeExpenseModel) => {
+    return http.post("officeExpense/updateOfficeExpense",
+        officeExpense)
+}
+
 //财务审批通过
-export const changeFinanceState = (id: number,financeStaff:string) => {
+export const changeFinanceState = (id: number, financeStaff: string) => {
     return http.get("officeExpense/changeFinanceState", {
         id: id,
-        financeStaff:financeStaff
+        financeStaff: financeStaff
     })
 }
 
 //董事会审批通过
-export const changeDirectorState = (officeExpenseId:number,userId:string) => {
+export const changeDirectorState = (officeExpenseId: number, userId: string) => {
     return http.get("officeExpense/changeDirectorState", {
         officeExpenseId: officeExpenseId,
-        userId:userId
+        userId: userId
     })
 }
