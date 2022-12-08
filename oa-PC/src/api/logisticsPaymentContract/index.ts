@@ -29,6 +29,12 @@ export const addNewLogisticsPaymentContractApi = (logisticsPaymentContract: logi
         logisticsPaymentContract)
 }
 
+//新增采购付款单
+export const updateLogisticsPaymentContractApi = (logisticsPaymentContract: logisticsPaymentContractModel) => {
+    return http.post("logisticsPaymentContract/updateLogisticsPaymentContract",
+        logisticsPaymentContract)
+}
+
 //验证采购合同编号
 export const checkLogisticsContractNoApi = (logisticsContractNo: string) => {
     return http.get("logisticsPaymentContract/checkLogisticsContractNo", {
@@ -37,17 +43,17 @@ export const checkLogisticsContractNoApi = (logisticsContractNo: string) => {
 }
 
 //财务审批通过
-export const changeFinanceState = (id: number,financeStaff:string) => {
+export const changeFinanceState = (id: number, financeStaff: string) => {
     return http.get("logisticsPaymentContract/changeFinanceState", {
         id: id,
-        financeStaff:financeStaff
+        financeStaff: financeStaff
     })
 }
 
 //董事会审批通过
-export const changeDirectorState = (logisticsPaymentContractId:number,userId:string) => {
+export const changeDirectorState = (logisticsPaymentContractId: number, userId: string) => {
     return http.get("logisticsPaymentContract/changeDirectorState", {
         logisticsPaymentContractId: logisticsPaymentContractId,
-        userId:userId
+        userId: userId
     })
 }

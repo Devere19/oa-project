@@ -127,19 +127,57 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
                 purchaseDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                 purchaseDirectorStateMapper.insert(purchaseDirectorState);
             }
+
+            //            获取采购单,修改存在采购付款单标记
+            QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
+            qw.eq("purchase_contract_no", purchasePaymentContract.getPurchaseContractNo());
+            PurchaseContract purchaseContract=purchaseContractMapper.selectOne(qw);
+            purchaseContract.setRelationPaymentExistState(1);
+            purchaseContractMapper.updateById(purchaseContract);
         }
         return result;
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int deleteOnePurchasePaymentContract(int id) {
-//        删除相关审核记录
-        QueryWrapper<PurchaseDirectorState> directorStateQw = new QueryWrapper<>();
-        directorStateQw.eq("purchase_payment_contract_id", id);
-        purchaseDirectorStateMapper.delete(directorStateQw);
+    public int updatePurchasePaymentContract(PurchasePaymentContract purchasePaymentContract) {
+        PurchasePaymentContract oldPurchasePaymentContract=purchasePaymentContractMapper.selectById(purchasePaymentContract.getId());
+        oldPurchasePaymentContract.setPurchaseContractNo(purchasePaymentContract.getPurchaseContractNo());
+        oldPurchasePaymentContract.setPaymentCount(purchasePaymentContract.getPaymentCount());
+        oldPurchasePaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
+        return purchasePaymentContractMapper.updateById(oldPurchasePaymentContract);
+    }
 
-        return purchasePaymentContractMapper.deleteById(id);
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int deleteOnePurchasePaymentContract(int id) {
+        String purchaseContractNo=purchasePaymentContractMapper.selectById(id).getPurchaseContractNo();
+
+        int result=purchasePaymentContractMapper.deleteById(id);
+
+        if(result==1){
+            //        删除相关审核记录
+            QueryWrapper<PurchaseDirectorState> directorStateQw = new QueryWrapper<>();
+            directorStateQw.eq("purchase_payment_contract_id", id);
+            purchaseDirectorStateMapper.delete(directorStateQw);
+
+//            查询是否存在其他采购付款单
+            QueryWrapper<PurchasePaymentContract> PPCQw = new QueryWrapper<>();
+            PPCQw.eq("purchase_contract_no",purchaseContractNo);
+            List<PurchasePaymentContract> purchasePaymentContractList=purchasePaymentContractMapper.selectList(PPCQw);
+
+//            若不存在则修改采购单字段
+            if(purchasePaymentContractList.isEmpty()==true){
+                //            获取采购单
+                QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
+                qw.eq("purchase_contract_no", purchaseContractNo);
+                PurchaseContract purchaseContract=purchaseContractMapper.selectOne(qw);
+                purchaseContract.setRelationPaymentExistState(0);
+                purchaseContractMapper.updateById(purchaseContract);
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -263,7 +301,18 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     public int changeFinanceState(int id, String financeStaff) {
         UpdateWrapper<PurchasePaymentContract> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id).set("finance_state", 1).set("finance_staff", financeStaff);
-        return purchasePaymentContractMapper.update(null, updateWrapper);
+
+        int result=purchasePaymentContractMapper.update(null, updateWrapper);
+
+        if(result==1){
+            QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
+            qw.eq("purchase_contract_no", purchasePaymentContractMapper.selectById(id).getPurchaseContractNo());
+            PurchaseContract purchaseContract=purchaseContractMapper.selectOne(qw);
+            purchaseContract.setRelationPaymentAuditState(1);
+            purchaseContractMapper.updateById(purchaseContract);
+        }
+
+        return result;
     }
 
     @Transactional(rollbackFor = Exception.class)

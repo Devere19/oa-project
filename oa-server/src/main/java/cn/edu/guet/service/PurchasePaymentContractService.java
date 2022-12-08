@@ -18,6 +18,7 @@ public interface PurchasePaymentContractService extends IService<PurchasePayment
     Page<PurchasePaymentContractView> getPurchasePaymentContractData(int currentPage, int pageSize);
     Page<PurchasePaymentContractView> searchPurchasePaymentContract(int currentPage, int pageSize,String searchWord);
     int addNewPurchasePaymentContract(PurchasePaymentContract purchasePaymentContract);
+    int updatePurchasePaymentContract(PurchasePaymentContract purchasePaymentContract);
     int deleteOnePurchasePaymentContract(int id);
     PurchasePaymentContractView getOnePurchasePaymentContract(int id);
 

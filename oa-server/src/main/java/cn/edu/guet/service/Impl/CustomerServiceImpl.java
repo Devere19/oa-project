@@ -1,13 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.customer.Customer;
-import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
-import cn.edu.guet.bean.purchaseContract.PurchaseContract;
-import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
-import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.CustomerMapper;
-import cn.edu.guet.mapper.PurchaseContractMapper;
-import cn.edu.guet.mapper.SaleContractMapper;
 import cn.edu.guet.service.CustomerService;
 import cn.edu.guet.util.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,8 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author Devere19
@@ -49,6 +42,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addNewCustomer(Customer customer) {
         customer.setCreateBy(SecurityUtils.getUsername());
@@ -56,6 +50,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         return customerMapper.insert(customer);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateCustomer(Customer customer) {
         Customer data =customerMapper.selectById(customer.getId());
@@ -67,6 +62,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         return customerMapper.updateById(data);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteOneCustomer(int id) {
         return customerMapper.deleteById(id);

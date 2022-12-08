@@ -12,19 +12,19 @@ import java.io.File;
  */
 @Configuration
 public class ResourceConfig {
-    @Bean
-    public WebMvcConfigurer webMvcConfigurer(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                //            在服务器上用这个
-                File upload = new File("/static/");
-                if(!upload.exists()) {
-                    upload.mkdirs();
-                }
-                System.out.println(upload.getAbsolutePath());
-                registry.addResourceHandler("/static/**").addResourceLocations("file:/static/");
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcConfigurer webMvcConfigurer(){
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//                //            在服务器上用这个
+//                File upload = new File("/static/");
+//                if(!upload.exists()) {
+//                    upload.mkdirs();
+//                }
+//                System.out.println(upload.getAbsolutePath());
+//                registry.addResourceHandler("/static/**").addResourceLocations("file:/static/");
+//            }
+//        };
+//    }
 }

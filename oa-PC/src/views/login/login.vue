@@ -90,31 +90,36 @@ const login = async (formEl1: FormInstance | undefined) => {
     await formEl1.validate(async (valid, fields) => {
         if (valid) {
             loading.value = true
-            let res = await loginApi(loginForm)
-            if (res && res.code == 200) {
-                if (loginForm.checked) {
-                    let password = Base64.encode(loginForm.password) // base64加密
-                    setCookie(loginForm.username, password, 7)
+            loginApi(loginForm).then(async res => {
+                if (res && res.data != 0) {
+                    if (loginForm.checked) {
+                        let password = Base64.encode(loginForm.password) // base64加密
+                        setCookie(loginForm.username, password, 7)
+                    } else {
+                        setCookie('', '', -1)
+                    }
+                    sessionStorage.setItem('token', res.data.token)
+                    // 跳转到页面之前要调用后台的菜单接口，获取当前用户的菜单
+                    // 再次发请求，但是发请求之前，要带上token
+                    let navTree = await findNavTreeApi(loginForm.username)
+                    console.log("用户菜单", navTree.data)
+                    store.setNaveTree(navTree.data)
+                    let perms = await getPermissions(loginForm.username)
+                    console.log("用户权限", perms.data)
+                    permStore.setPerms(perms.data)
+                    //获取登录人的信息 登陆成功通过username返回user信息
+                    let user = await getNickNameApi(loginForm.username)
+                    console.log("获取用户信息", user.data)
+                    userNickNameStore.setUser(user.data)
+                    loading.value = false;
+                    router.push('/index');
                 } else {
-                    setCookie('', '', -1)
+                    loading.value = false;
+                    ElMessage.error(res.msg);
+                    router.push('/');
                 }
-                sessionStorage.setItem('token', res.data.token)
-                // 跳转到页面之前要调用后台的菜单接口，获取当前用户的菜单
-                // 再次发请求，但是发请求之前，要带上token
-                let navTree = await findNavTreeApi(loginForm.username)
-                console.log("用户菜单", navTree.data)
-                store.setNaveTree(navTree.data)
-                let perms = await getPermissions(loginForm.username)
-                console.log("用户权限", perms.data)
-                permStore.setPerms(perms.data)
-                //获取登录人的信息 登陆成功通过username返回user信息
-                let user = await getNickNameApi(loginForm.username)
-                console.log("获取用户信息", user.data)
-                userNickNameStore.setUser(user.data)
-                router.push('/index');
-            } else {
-                router.push('/');
-            }
+            })
+            // let res = await loginApi(loginForm)
         } else {
             ElMessage({
                 message: '请输入账号密码！',

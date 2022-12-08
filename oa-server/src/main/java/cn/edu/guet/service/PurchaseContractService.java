@@ -2,9 +2,9 @@ package cn.edu.guet.service;
 
 import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.purchaseContract.ExportOutPurchaseContract;
+import cn.edu.guet.bean.purchaseContract.InboundBean;
 import cn.edu.guet.bean.purchaseContract.InboundDetailInfo;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
-import cn.edu.guet.bean.purchaseContract.PurchaseContractView;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,10 +18,12 @@ import java.util.List;
 * @createDate 2022-10-31 18:18:23
 */
 public interface PurchaseContractService extends IService<PurchaseContract> {
-    int deleteOnePurchaseContract(int id);
+    int deleteOnePurchaseContract(int id,int flag);
     int deleteMorePurchaseContract(JSONArray ids);
     int setPurchaseContractPigeonhole(int id,int pigeonhole);
-    int addNewPurchaseContract(PurchaseContract purchaseContract);
+    int addNewPurchaseContract(PurchaseContract purchaseContract,PurchaseContract oldPurchaseContract,int flag);
+    List<InboundBean> getPurchaseContractInboundData(String purchaseContractNo);
+    int updatePurchaseContract(PurchaseContract purchaseContract);
     List<InboundDetailInfo> getPurchaseDetail(String purchaseContractNo,String goodsName);
     int handleImportPurchaseContractModel(ImportPurchaseContractModel importPurchaseContractModel);
 

@@ -20,7 +20,7 @@
             <el-table-column label="物流合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.logisticsContractNo }}</template>
             </el-table-column>
-            <el-table-column property="saleContractNo" align="center" label="销售合同编号" />
+            <el-table-column property="saleContractNo" align="center" label="销售合同编号" width="120" />
             <el-table-column property="freight" align="center" label="运费总价" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
@@ -58,7 +58,7 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="290" fixed="right">
+            <el-table-column align="center" label="操作" width="390" fixed="right">
                 <template #default="scope">
                     <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
                         :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
@@ -67,7 +67,10 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :disabled="scope.row.paymentTime != null" :icon="Delete" size="default" type="danger"
+                    <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+                        :disabled="scope.row.financeStaff != null">修改
+                    </el-button>
+                    <el-button :disabled="scope.row.financeStaff != null" :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
                         删除</el-button>
                 </template>
@@ -109,6 +112,39 @@
                         确定
                     </el-button>
                     <el-button @click="closeAddDialog">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="updateDialogFlag" title="修改物流付款单" width="40%" draggable center
+            :before-close="closeUpdateDialog">
+            <ul ref="updateDialogTop" style="overflow: auto;height:120px;padding: 0;">
+                <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="120px"
+                    :model="UpdateLogisticsPaymentContractData" style="max-width: 98%">
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <!-- 验证物流合同号是否存在 -->
+                            <el-form-item label="物流合同编号" prop="logisticsContractNo">
+                                <el-input v-model="UpdateLogisticsPaymentContractData.logisticsContractNo" size="large"
+                                    :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
+                                    @change="checkLogisticsContractNo" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <el-form-item label="本次付款金额" prop="paymentCount">
+                                <el-input v-model="UpdateLogisticsPaymentContractData.paymentCount" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </ul>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="updateLogisticsPaymentContract(secondFormRef)">
+                        确定
+                    </el-button>
+                    <el-button @click="closeUpdateDialog">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -287,13 +323,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, CloseBold, EditPen } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { logisticsPaymentContractModel, logisticsPaymentDirectorModel } from '@/api/logisticsPaymentContract/LogisticsPaymentContractModel'
-import { getLogisticsPaymentContractDataApi, searchLogisticsPaymentContractApi, checkLogisticsContractNoApi, addNewLogisticsPaymentContractApi, deleteOneLogisticsPaymentContractApi, changeDirectorState, changeFinanceState } from '@/api/logisticsPaymentContract'
+import { getLogisticsPaymentContractDataApi, searchLogisticsPaymentContractApi, checkLogisticsContractNoApi, addNewLogisticsPaymentContractApi, updateLogisticsPaymentContractApi, deleteOneLogisticsPaymentContractApi, changeDirectorState, changeFinanceState } from '@/api/logisticsPaymentContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -305,13 +341,16 @@ const background = ref(true)
 const firstTableData = ref<logisticsPaymentContractModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
+const updateDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
 const chooseLogisticsPaymentContractNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
+const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
+const updateDialogTop = ref<any>()
 const contractExistFlag = ref(false)
 
 const loginUserName = ref("")
@@ -322,6 +361,14 @@ const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
 // 新增物流付款单
 const NewLogisticsPaymentContractData = reactive({
+    id: '',
+    logisticsContractNo: '',
+    paymentCount: '',
+    createBy: ''
+})
+
+// 修改物流付款单
+const UpdateLogisticsPaymentContractData = reactive({
     id: '',
     logisticsContractNo: '',
     paymentCount: '',
@@ -425,6 +472,7 @@ const JudgmentRepeated = (row: any) => {
     return true;
 }
 
+
 // 获取物流付款单数据
 const getTableData = () => {
     changeLoadingTrue();
@@ -498,10 +546,51 @@ const sendNewLogisticsPaymentContract = async (formEl1: FormInstance | undefined
                             type: 'success',
                         })
                         getTableData();
-                        addDialogFlag.value = false;
-                        contractExistFlag.value = false;
-                        ReturnTop();
-                        firstFormRef.value?.resetFields();
+                        closeAddDialog();
+                    }
+                    else {
+                        ElMessage({
+                            message: '新增物流付款单失败！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    }
+                })
+            } else {
+                ElMessage({
+                    message: '不存在相应物流合同，请检查！',
+                    type: 'error',
+                    duration: 4000
+                })
+            }
+        } else {
+            ElMessage({
+                message: '表单验证未通过，请检查！',
+                type: 'error',
+                duration: 4000
+            })
+        }
+    })
+}
+
+// 发送新增物流付款单请求
+const updateLogisticsPaymentContract = async (formEl1: FormInstance | undefined) => {
+    if (!formEl1) return
+    await formEl1.validate((valid, fields) => {
+        if (valid) {
+            if (contractExistFlag.value == true) {
+                changeLoadingTrue();
+                UpdateLogisticsPaymentContractData.createBy = loginUserName.value;
+                console.log(UpdateLogisticsPaymentContractData);
+                updateLogisticsPaymentContractApi(UpdateLogisticsPaymentContractData).then(res => {
+                    changeLoadingFalse();
+                    if (res.data == 1) {
+                        ElMessage({
+                            message: '修改物流付款单成功！',
+                            type: 'success',
+                        })
+                        getTableData();
+                        closeUpdateDialog();
                     }
                     else {
                         ElMessage({
@@ -554,6 +643,18 @@ const closeMoreDetailDialog = () => {
     moreDetailDialogFlag.value = false;
 }
 
+// 打开采购付款单修改窗口
+const openUpdateDialog = async (row: any) => {
+    updateDialogFlag.value = true;
+    contractExistFlag.value = true;
+    // 赋值必须要在窗口显示后，否则会被认定为初始值
+    nextTick(() => {
+        UpdateLogisticsPaymentContractData.id = row.id
+        UpdateLogisticsPaymentContractData.logisticsContractNo = row.logisticsContractNo
+        UpdateLogisticsPaymentContractData.paymentCount = row.paymentCount
+    })
+}
+
 // 打开单个删除提示窗口
 const openOneDeleteDialog = (index: number, row: logisticsPaymentContractModel) => {
     ElMessageBox.confirm(
@@ -604,14 +705,27 @@ const changeLoadingFalse = () => {
 // 关闭新增窗口
 const closeAddDialog = () => {
     addDialogFlag.value = false;
-    ReturnTop();
+    AddReturnTop();
     firstFormRef.value?.resetFields();
     contractExistFlag.value = false;
 }
 
 // 新增窗口滑动回最顶端
-const ReturnTop = () => {
+const AddReturnTop = () => {
     addDialogTop.value.scrollTop = 0;
+}
+
+// 关闭修改窗口
+const closeUpdateDialog = () => {
+    updateDialogFlag.value = false;
+    UpdateReturnTop();
+    secondFormRef.value?.resetFields();
+    contractExistFlag.value = false;
+}
+
+// 修改窗口滑动回最顶端
+const UpdateReturnTop = () => {
+    updateDialogTop.value.scrollTop = 0;
 }
 
 </script>

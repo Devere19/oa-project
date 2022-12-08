@@ -16,6 +16,7 @@ public interface OfficeExpenseService extends IService<OfficeExpense> {
     Page<OfficeExpense> getOfficeExpenseData(int currentPage, int pageSize);
     Page<OfficeExpense> searchOfficeExpense(int currentPage, int pageSize,String searchWord);
     int addNewOfficeExpense(OfficeExpense officeExpense);
+    int updateOfficeExpense(OfficeExpense officeExpense);
     int deleteOneOfficeExpense(int id);
 
     //    出纳

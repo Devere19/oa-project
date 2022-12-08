@@ -32,12 +32,17 @@ public class ShippingContractController {
     @DeleteMapping("/deleteOneShippingContract/{id}")
     public HttpResult deleteOneShippingContract(@PathVariable("id") Integer id){
         System.out.println("所要删除的ID为"+id);
-        return ResultUtils.success("删除成功",shippingContractService.deleteOneShippingContract(id));
+        return ResultUtils.success("删除成功",shippingContractService.deleteOneShippingContract(id,0));
     }
 
     @RequestMapping("/addNewShippingContract")
     public HttpResult addNewShippingContract(@RequestBody ShippingContract shippingContract){
-        return ResultUtils.success("新增成功",shippingContractService.addNewShippingContract(shippingContract));
+        return ResultUtils.success("新增成功",shippingContractService.addNewShippingContract(shippingContract,null,0));
+    }
+
+    @RequestMapping("/updateShippingContract")
+    public HttpResult updateShippingContract(@RequestBody ShippingContract shippingContract){
+        return ResultUtils.success("修改成功",shippingContractService.updateShippingContract(shippingContract));
     }
 
     @RequestMapping("/checkContainerNo")

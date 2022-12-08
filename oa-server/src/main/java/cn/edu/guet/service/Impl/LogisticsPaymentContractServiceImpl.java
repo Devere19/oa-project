@@ -1,7 +1,10 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.logisticsContract.LogisticsContract;
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.mapper.*;
+import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsPaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
@@ -41,6 +44,9 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 
     @Autowired
     private DirectorMapper directorMapper;
+
+    @Autowired
+    private LogisticsContractMapper logisticsContractMapper;
 
     @Override
     public Page<LogisticsPaymentContractView> getLogisticsPaymentContractData(int currentPage, int pageSize) {
@@ -124,6 +130,13 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 logisticsDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                 logisticsDirectorStateMapper.insert(logisticsDirectorState);
             }
+
+            //            获取物流单,修改存在物流付款单标记
+            QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+            qw.eq("logistics_contract_no", logisticsPaymentContract.getLogisticsContractNo());
+            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+            logisticsContract.setRelationPaymentExistState(1);
+            logisticsContractMapper.updateById(logisticsContract);
         }
 
         return result;
@@ -131,14 +144,44 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int deleteOneLogisticsPaymentContract(int id) {
-        LogisticsPaymentContract logisticsPaymentContract = logisticsPaymentContractMapper.selectById(id);
-//        删除相关审核记录
-        QueryWrapper<LogisticsDirectorState> directorStateQw = new QueryWrapper<>();
-        directorStateQw.eq("logistics_payment_contract_id", logisticsPaymentContract.getId());
-        logisticsDirectorStateMapper.delete(directorStateQw);
+    public int updateLogisticsPaymentContract(LogisticsPaymentContract logisticsPaymentContract) {
+        LogisticsPaymentContract oldLogisticsPaymentContract=logisticsPaymentContractMapper.selectById(logisticsPaymentContract.getId());
+        oldLogisticsPaymentContract.setLogisticsContractNo(logisticsPaymentContract.getLogisticsContractNo());
+        oldLogisticsPaymentContract.setPaymentCount(logisticsPaymentContract.getPaymentCount());
+        oldLogisticsPaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
+        return logisticsPaymentContractMapper.updateById(oldLogisticsPaymentContract);
+    }
 
-        return logisticsPaymentContractMapper.deleteById(id);
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int deleteOneLogisticsPaymentContract(int id) {
+        String logisticsContractNo=logisticsPaymentContractMapper.selectById(id).getLogisticsContractNo();
+
+        int result=logisticsPaymentContractMapper.deleteById(id);
+
+        if(result==1){
+            //        删除相关审核记录
+            QueryWrapper<LogisticsDirectorState> directorStateQw = new QueryWrapper<>();
+            directorStateQw.eq("logistics_payment_contract_id", id);
+            logisticsDirectorStateMapper.delete(directorStateQw);
+
+//            查询是否存在其他物流付款单
+            QueryWrapper<LogisticsPaymentContract> LPCQw = new QueryWrapper<>();
+            LPCQw.eq("logistics_contract_no",logisticsContractNo);
+            List<LogisticsPaymentContract> logisticsPaymentContractList=logisticsPaymentContractMapper.selectList(LPCQw);
+
+//            若不存在则修改物流单字段
+            if(logisticsPaymentContractList.isEmpty()==true){
+                //            获取物流单
+                QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+                qw.eq("logistics_contract_no", logisticsContractNo);
+                LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+                logisticsContract.setRelationPaymentExistState(0);
+                logisticsContractMapper.updateById(logisticsContract);
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -410,7 +453,18 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     public int changeFinanceState(int id, String financeStaff) {
         UpdateWrapper<LogisticsPaymentContract> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id).set("finance_state", 1).set("finance_staff", financeStaff);
-        return logisticsPaymentContractMapper.update(null, updateWrapper);
+
+        int result=logisticsPaymentContractMapper.update(null, updateWrapper);
+
+        if(result==1){
+            QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+            qw.eq("logistics_contract_no", logisticsPaymentContractMapper.selectById(id).getLogisticsContractNo());
+            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+            logisticsContract.setRelationPaymentAuditState(1);
+            logisticsContractMapper.updateById(logisticsContract);
+        }
+
+        return result;
     }
 
     @Transactional(rollbackFor = Exception.class)

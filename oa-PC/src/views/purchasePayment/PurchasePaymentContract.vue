@@ -22,7 +22,7 @@
             </el-table-column>
             <el-table-column property="paymentAmount" align="center" label="采购总价" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
-            <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" />
+            <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
             <el-table-column property="inboundTime" :formatter="conversionDate" align="center" label="入库时间"
@@ -59,7 +59,7 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="290" fixed="right">
+            <el-table-column align="center" label="操作" width="390" fixed="right">
                 <template #default="scope">
                     <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
                         :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
@@ -68,7 +68,13 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :disabled="scope.row.paymentTime != null" :icon="Delete" size="default" type="danger"
+                    <!-- <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+                        :disabled="scope.row.cashier != null ? true : (scope.row.financeStaff != null ? true : directorState(scope.row.purchasePaymentDirector))">修改
+                    </el-button> -->
+                    <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+                        :disabled="scope.row.financeStaff != null">修改
+                    </el-button>
+                    <el-button :disabled="scope.row.financeStaff != null" :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
                         删除</el-button>
                 </template>
@@ -110,6 +116,39 @@
                         确定
                     </el-button>
                     <el-button @click="closeAddDialog">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="updateDialogFlag" title="修改采购付款单" width="40%" draggable center
+            :before-close="closeUpdateDialog">
+            <ul ref="updateDialogTop" style="overflow: auto;height:120px;padding: 0;">
+                <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="120px"
+                    :model="UpdatePurchasePaymentContractData" style="max-width: 98%">
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <!-- 验证采购合同号是否存在 -->
+                            <el-form-item label="采购合同编号" prop="purchaseContractNo">
+                                <el-input v-model="UpdatePurchasePaymentContractData.purchaseContractNo" size="large"
+                                    :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
+                                    @change="checkPurchaseContractNo" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <el-form-item label="本次付款金额" prop="paymentCount">
+                                <el-input v-model="UpdatePurchasePaymentContractData.paymentCount" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </ul>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="updatePurchasePaymentContract(secondFormRef)">
+                        确定
+                    </el-button>
+                    <el-button @click="closeUpdateDialog">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -294,13 +333,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted, markRaw } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, CloseBold, EditPen } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { purchasePaymentContractModel, purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/PurchasePaymentContractModel'
-import { getPurchasePaymentContractDataApi, searchPurchasePaymentContractApi, checkPurchaseContractNoApi, addNewPurchasePaymentContractApi, deleteOnePurchasePaymentContractApi, changeFinanceState, changeDirectorState } from '@/api/purchasePaymentContract'
+import { getPurchasePaymentContractDataApi, searchPurchasePaymentContractApi, checkPurchaseContractNoApi, addNewPurchasePaymentContractApi, updatePurchasePaymentContractApi, deleteOnePurchasePaymentContractApi, changeFinanceState, changeDirectorState } from '@/api/purchasePaymentContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -312,13 +351,16 @@ const background = ref(true)
 const firstTableData = ref<purchasePaymentContractModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
+const updateDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
 const choosePurchasePaymentContractNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
+const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
+const updateDialogTop = ref<any>()
 const contractExistFlag = ref(false)
 
 const loginUserName = ref("")
@@ -329,6 +371,14 @@ const firstTableRef = ref<InstanceType<typeof ElTable>>()
 
 // 新增采购付款单
 const NewPurchasePaymentContractData = reactive({
+    id: '',
+    purchaseContractNo: '',
+    paymentCount: '',
+    createBy: ''
+})
+
+// 修改采购付款单
+const UpdatePurchasePaymentContractData = reactive({
     id: '',
     purchaseContractNo: '',
     paymentCount: '',
@@ -433,6 +483,16 @@ const JudgmentRepeated = (row: any) => {
     return true;
 }
 
+// 获取董事会是否已审批
+// const directorState = (director: any) => {
+//     for (let i = 0; i < director.length; i++) {
+//         if (director[i].state == 1) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 // 获取采购付款单数据
 const getTableData = () => {
     changeLoadingTrue();
@@ -505,14 +565,54 @@ const sendNewPurchasePaymentContract = async (formEl1: FormInstance | undefined)
                             type: 'success',
                         })
                         getTableData();
-                        addDialogFlag.value = false;
-                        contractExistFlag.value = false;
-                        ReturnTop();
-                        firstFormRef.value?.resetFields();
+                        closeAddDialog();
                     }
                     else {
                         ElMessage({
                             message: '新增采购付款单失败！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    }
+                })
+            } else {
+                ElMessage({
+                    message: '不存在相应采购合同，请检查！',
+                    type: 'error',
+                    duration: 4000
+                })
+            }
+        } else {
+            ElMessage({
+                message: '表单验证未通过，请检查！',
+                type: 'error',
+                duration: 4000
+            })
+        }
+    })
+}
+
+// 发送修改采购付款单请求
+const updatePurchasePaymentContract = async (formEl1: FormInstance | undefined) => {
+    if (!formEl1) return
+    await formEl1.validate((valid, fields) => {
+        if (valid) {
+            if (contractExistFlag.value == true) {
+                changeLoadingTrue();
+                console.log(UpdatePurchasePaymentContractData);
+                updatePurchasePaymentContractApi(UpdatePurchasePaymentContractData).then(res => {
+                    changeLoadingFalse();
+                    if (res.data == 1) {
+                        ElMessage({
+                            message: '修改采购付款单成功！',
+                            type: 'success',
+                        })
+                        getTableData();
+                        closeUpdateDialog();
+                    }
+                    else {
+                        ElMessage({
+                            message: '修改采购付款单失败！',
                             type: 'error',
                             duration: 4000
                         })
@@ -562,6 +662,18 @@ const openMordDetailDialog = async (row: any) => {
 
 const closeMoreDetailDialog = () => {
     moreDetailDialogFlag.value = false;
+}
+
+// 打开采购付款单修改窗口
+const openUpdateDialog = async (row: any) => {
+    updateDialogFlag.value = true;
+    contractExistFlag.value = true;
+    // 赋值必须要在窗口显示后，否则会被认定为初始值
+    nextTick(() => {
+        UpdatePurchasePaymentContractData.id = row.id
+        UpdatePurchasePaymentContractData.purchaseContractNo = row.purchaseContractNo
+        UpdatePurchasePaymentContractData.paymentCount = row.paymentCount
+    })
 }
 
 // 打开单个删除提示窗口
@@ -614,14 +726,27 @@ const changeLoadingFalse = () => {
 // 关闭新增窗口
 const closeAddDialog = () => {
     addDialogFlag.value = false;
-    ReturnTop();
+    AddReturnTop();
     firstFormRef.value?.resetFields();
     contractExistFlag.value = false;
 }
 
 // 新增窗口滑动回最顶端
-const ReturnTop = () => {
+const AddReturnTop = () => {
     addDialogTop.value.scrollTop = 0;
+}
+
+// 关闭修改窗口
+const closeUpdateDialog = () => {
+    updateDialogFlag.value = false;
+    UpdateReturnTop();
+    secondFormRef.value?.resetFields();
+    contractExistFlag.value = false;
+}
+
+// 修改窗口滑动回最顶端
+const UpdateReturnTop = () => {
+    updateDialogTop.value.scrollTop = 0;
 }
 
 </script>

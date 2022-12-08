@@ -89,7 +89,7 @@ public class PurchaseContractController {
     @DeleteMapping("/deleteOnePurchaseContract/{id}")
     public HttpResult deleteOnePurchaseContract(@PathVariable("id") Integer id){
         System.out.println("所要删除的ID为"+id);
-        return ResultUtils.success("删除成功",purchaseContractService.deleteOnePurchaseContract(id));
+        return ResultUtils.success("删除成功",purchaseContractService.deleteOnePurchaseContract(id,0));
     }
 
     @RequestMapping("/deleteMorePurchaseContract")
@@ -104,7 +104,17 @@ public class PurchaseContractController {
 
     @RequestMapping("/addNewPurchaseContract")
     public HttpResult addNewPurchaseContract(@RequestBody PurchaseContract purchaseContract){
-        return ResultUtils.success("新增成功",purchaseContractService.addNewPurchaseContract(purchaseContract));
+        return ResultUtils.success("新增成功",purchaseContractService.addNewPurchaseContract(purchaseContract,null,0));
+    }
+
+    @RequestMapping("/getPurchaseContractInboundData")
+    public HttpResult getPurchaseContractInboundData(String purchaseContractNo){
+        return ResultUtils.success("获取成功",purchaseContractService.getPurchaseContractInboundData(purchaseContractNo));
+    }
+
+    @RequestMapping("/updatePurchaseContract")
+    public HttpResult updatePurchaseContract(@RequestBody PurchaseContract purchaseContract){
+        return ResultUtils.success("新增成功",purchaseContractService.updatePurchaseContract(purchaseContract));
     }
 
 //    获取详情数据

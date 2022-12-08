@@ -103,7 +103,7 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="290" fixed="right">
+            <el-table-column align="center" label="操作" width="390" fixed="right">
                 <template #default="scope">
                     <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
                         :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
@@ -112,7 +112,10 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :disabled="scope.row.paymentCount != null" :icon="Delete" size="default" type="danger"
+                    <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+                        :disabled="(scope.row.financeStaff != null ? (scope.row.contractPhoto == null ? false : true) : false)">修改
+                    </el-button>
+                    <el-button :disabled="scope.row.financeStaff != null" :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
                         删除</el-button>
                 </template>
@@ -242,9 +245,9 @@
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="PhotoData" action="http://120.77.28.123:9000/addContractPhoto"
-                            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
-                            :on-success="handlePhotoSuccess">
+                        <el-upload v-model:file-list="AddPhotoData" action="http://localhost:9000/addContractPhoto"
+                            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="addHandleRemove"
+                            :on-success="addHandlePhotoSuccess">
                             <el-icon>
                                 <Plus />
                             </el-icon>
@@ -258,6 +261,158 @@
                         确定
                     </el-button>
                     <el-button @click="closeAddDialog">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="updateDialogFlag" title="修改海运单" width="50%" draggable center
+            :before-close="closeUpdateDialog">
+            <ul ref="updateDialogTop" style="overflow: auto;height:600px">
+                <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="180px"
+                    :model="UpdateShippingContractData" style="max-width: 98%">
+                    <!-- <el-form label-position="right" label-width="180px" :model="NewShippingContractData"
+          style="max-width: 65%;height:600px"> -->
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="海运合同编号" prop="shippingContractNo">
+                                <el-input v-model="UpdateShippingContractData.shippingContractNo" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="物流合同编号" prop="logisticsContractNo">
+                                <el-input v-model="UpdateShippingContractData.logisticsContractNo" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="委托方" prop="principal">
+                                <el-input v-model="UpdateShippingContractData.principal" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="装箱日期" prop="packingTime">
+                                <el-date-picker type="date" placeholder="请选择装箱日期"
+                                    v-model="UpdateShippingContractData.packingTime" :disabledDate="disabledDate"
+                                    style="width: 100%;" value-format="YYYY-MM-DD" size="large"
+                                    :disabled="updateFlag"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="装箱地点" prop="packingLocation">
+                                <el-input v-model="UpdateShippingContractData.packingLocation" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="卸货工厂" prop="unpackingFactory">
+                                <el-input v-model="UpdateShippingContractData.unpackingFactory" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <!--30天内只能出现一次  -->
+                            <el-form-item label="集装箱号" prop="containerNo">
+                                <el-input v-model="UpdateShippingContractData.containerNo" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="铅封号" prop="sealNo">
+                                <el-input v-model="UpdateShippingContractData.sealNo" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="理货员" prop="tallyClerk">
+                                <el-input v-model="UpdateShippingContractData.tallyClerk" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="理货费用" prop="tallyClerkPrice">
+                                <el-input v-model="UpdateShippingContractData.tallyClerkPrice" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="起运承运车队" prop="departureFleet">
+                                <el-input v-model="UpdateShippingContractData.departureFleet" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="起运车队费用" prop="departurePrice">
+                                <el-input v-model="UpdateShippingContractData.departurePrice" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="承运船公司" prop="carrierCompanyName">
+                                <el-input v-model="UpdateShippingContractData.carrierCompanyName" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="承运船费用" prop="carrierCompanyPrice">
+                                <el-input v-model="UpdateShippingContractData.carrierCompanyPrice" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="目的港承运车队" prop="destinationPortFleet">
+                                <el-input v-model="UpdateShippingContractData.destinationPortFleet" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="目的港车队费用" prop="destinationPortPrice">
+                                <el-input v-model="UpdateShippingContractData.destinationPortPrice" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="总费用" prop="expenses">
+                                <el-input v-model="UpdateShippingContractData.expenses" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                        </el-col>
+                    </el-row>
+                    <el-form-item label="合同照片">
+                        <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+                            list-type="picture-card" :on-preview="handlePictureCardPreview"
+                            :on-remove="updateHandleRemove" :on-success="updateHandlePhotoSuccess">
+                            <el-icon>
+                                <Plus />
+                            </el-icon>
+                        </el-upload>
+                    </el-form-item>
+                </el-form>
+            </ul>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="updateShippingContract(secondFormRef)">
+                        确定
+                    </el-button>
+                    <el-button @click="closeUpdateDialog">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -504,14 +659,14 @@
 </template>
   
 <script lang="ts" setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, CloseBold } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, CloseBold, EditPen } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
-import { getShippingContractDataApi, searchShippingContractApi, checkContainerNoApi, addNewShippingContractApi, deleteOneShippingContractApi, changeDirectorState, changeFinanceState } from '@/api/shippingContract'
+import { getShippingContractDataApi, searchShippingContractApi, checkContainerNoApi, addNewShippingContractApi, updateShippingContractApi, deleteOneShippingContractApi, changeDirectorState, changeFinanceState } from '@/api/shippingContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -523,14 +678,20 @@ const background = ref(true)
 const firstTableData = ref<shippingContractModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
+const updateDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
+const updateFlag = ref(true)
 const chooseShippingContractNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
-const PhotoData = ref<UploadUserFile[]>([])
+const AddPhotoData = ref<UploadUserFile[]>([])
+const UpdatePhotoData = ref<UploadUserFile[]>([])
+const preDeletePhoto = ref<string[]>([])
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
+const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
+const updateDialogTop = ref<any>()
 const containerSameFlag = ref(true)
 
 const loginUserName = ref("")
@@ -543,6 +704,7 @@ const firstTableRef = ref<InstanceType<typeof ElTable>>()
 const NewShippingContractData = reactive({
     id: '',
     shippingContractNo: '',
+    oldShippingContractNo: '',
     logisticsContractNo: '',
     principal: '',
     packingTime: '',
@@ -560,6 +722,33 @@ const NewShippingContractData = reactive({
     destinationPortPrice: '',
     expenses: 0,
     contractPhotoArray: reactive<string[]>([]),
+    onlyUpdatePhoto: '',
+    createBy: '',
+})
+
+// 修改
+const UpdateShippingContractData = reactive({
+    id: '',
+    shippingContractNo: '',
+    oldShippingContractNo: '',
+    logisticsContractNo: '',
+    principal: '',
+    packingTime: '',
+    packingLocation: '',
+    unpackingFactory: '',
+    containerNo: '',
+    sealNo: '',
+    tallyClerk: '',
+    tallyClerkPrice: '',
+    departureFleet: '',
+    departurePrice: '',
+    carrierCompanyName: '',
+    carrierCompanyPrice: '',
+    destinationPortFleet: '',
+    destinationPortPrice: '',
+    expenses: 0,
+    contractPhotoArray: reactive<string[]>([]),
+    onlyUpdatePhoto: 0,
     createBy: '',
 })
 
@@ -598,6 +787,12 @@ const ShippingContractDetail = reactive({
 NewShippingContractData.expenses = computed(() => {
     const temp = Number(NewShippingContractData.tallyClerkPrice) + Number(NewShippingContractData.departurePrice)
         + Number(NewShippingContractData.carrierCompanyPrice) + Number(NewShippingContractData.destinationPortPrice)
+    return temp
+});
+
+UpdateShippingContractData.expenses = computed(() => {
+    const temp = Number(UpdateShippingContractData.tallyClerkPrice) + Number(UpdateShippingContractData.departurePrice)
+        + Number(UpdateShippingContractData.carrierCompanyPrice) + Number(UpdateShippingContractData.destinationPortPrice)
     return temp
 });
 
@@ -762,9 +957,62 @@ const returnAllData = () => {
     returnAll.value = false
 }
 
-// 打开新增采购单窗口
+// 打开新增海运单窗口
 const openAddDialog = () => {
     addDialogFlag.value = true
+}
+
+// 打开修改海运单窗口
+const openUpdateDialog = (row: any) => {
+    console.log(row.contractPhotoArray);
+    if (row.contractPhoto == null) {
+        if (row.financeStaff == null) {
+            updateFlag.value = false;
+        } else {
+            updateFlag.value = true;
+        }
+    } else {
+        updateFlag.value = false;
+    }
+    updateDialogFlag.value = true;
+    for (let i = 0; i < row.contractPhotoArray.length; i++) {
+        // 当一张图片都没上传是长度为1，但内容为null，因此需要进行判断
+        if (row.contractPhotoArray[i] != null) {
+            UpdatePhotoData.value.push({
+                name: i + '',
+                url: row.contractPhotoArray[i],
+            });
+        }
+    }
+    // 赋值必须要在窗口显示后，否则会被认定为初始值
+    nextTick(() => {
+        UpdateShippingContractData.id = row.id
+        UpdateShippingContractData.shippingContractNo = row.shippingContractNo
+        UpdateShippingContractData.oldShippingContractNo = row.shippingContractNo
+        UpdateShippingContractData.logisticsContractNo = row.logisticsContractNo
+        UpdateShippingContractData.principal = row.principal
+        UpdateShippingContractData.packingTime = dateConversion(row.packingTime)
+        UpdateShippingContractData.packingLocation = row.packingLocation
+        UpdateShippingContractData.unpackingFactory = row.unpackingFactory
+        UpdateShippingContractData.containerNo = row.containerNo
+        UpdateShippingContractData.sealNo = row.sealNo
+        UpdateShippingContractData.tallyClerk = row.tallyClerk
+        UpdateShippingContractData.tallyClerkPrice = row.tallyClerkPrice
+        UpdateShippingContractData.departureFleet = row.departureFleet
+        UpdateShippingContractData.departurePrice = row.departurePrice
+        UpdateShippingContractData.carrierCompanyName = row.carrierCompanyName
+        UpdateShippingContractData.carrierCompanyPrice = row.carrierCompanyPrice
+        UpdateShippingContractData.destinationPortFleet = row.destinationPortFleet
+        UpdateShippingContractData.destinationPortPrice = row.destinationPortPrice
+        UpdateShippingContractData.contractPhotoArray = row.contractPhotoArray
+        // 当一张图片都没上传是长度为1，但内容为null，不将null清除则会后续传输时会带上null，出现错误
+        if (row.contractPhotoArray[0] == null) {
+            UpdateShippingContractData.contractPhotoArray.splice(0, 1);
+        }
+        console.log(UpdateShippingContractData.contractPhotoArray);
+        UpdateShippingContractData.createBy = row.createBy
+        UpdateShippingContractData.expenses = row.expenses
+    })
 }
 
 const checkContainerNo = (e: any) => {
@@ -798,9 +1046,9 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
                         getTableData();
                         addDialogFlag.value = false;
                         containerSameFlag.value = true;
-                        ReturnTop();
+                        AddReturnTop();
                         firstFormRef.value?.resetFields();
-                        PhotoData.value = [];
+                        AddPhotoData.value = [];
                         NewShippingContractData.contractPhotoArray = [];
                     }
                     else {
@@ -819,6 +1067,59 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
                     duration: 4000
                 })
             }
+        } else {
+            ElMessage({
+                message: '表单验证未通过，请检查！',
+                type: 'error',
+                duration: 4000
+            })
+        }
+    })
+}
+
+// 发送修改海运单请求
+const updateShippingContract = async (formEl1: FormInstance | undefined) => {
+    if (!formEl1) return
+    await formEl1.validate((valid, fields) => {
+        if (valid) {
+            changeLoadingTrue();
+            UpdateShippingContractData.createBy = loginUserName.value;
+            console.log(UpdateShippingContractData);
+            for (let i = 0; i < preDeletePhoto.value.length; i++) {
+                // 删除修改的照片
+                deletePhotoApi(preDeletePhoto.value[i]);
+                UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(preDeletePhoto.value[i]), 1);
+                console.log("删除修改照片" + i);
+            }
+            if (updateFlag.value == true) {
+                UpdateShippingContractData.onlyUpdatePhoto = 1;
+            } else {
+                UpdateShippingContractData.onlyUpdatePhoto = 0;
+            }
+            updateShippingContractApi(UpdateShippingContractData).then(res => {
+                if (res.data == 1) {
+                    changeLoadingFalse();
+                    ElMessage({
+                        message: '修改海运单成功！',
+                        type: 'success',
+                    })
+                    getTableData();
+                    updateDialogFlag.value = false;
+                    containerSameFlag.value = true;
+                    UpdateReturnTop();
+                    secondFormRef.value?.resetFields();
+                    UpdatePhotoData.value = [];
+                    preDeletePhoto.value = [];
+                }
+                else {
+                    changeLoadingFalse();
+                    ElMessage({
+                        message: '修改海运单失败！',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
+            })
         } else {
             ElMessage({
                 message: '表单验证未通过，请检查！',
@@ -903,15 +1204,6 @@ const oneDeletePurchaseContract = () => {
 }
 
 
-
-// 照片移除后发送请求后台删除照片
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-    console.log(uploadFile, uploadFiles);
-    NewShippingContractData.contractPhotoArray.splice(NewShippingContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
-    console.log("移出照片数据组");
-    deletePhotoApi(uploadFile.response.data);
-}
-
 // 处理照片预览
 const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
     dialogImageUrl.value = uploadFile.url!
@@ -920,11 +1212,42 @@ const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
 }
 
 // 上传照片成功后加入数组
-const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+const addHandlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
     if (response.code == 200) {
         NewShippingContractData.contractPhotoArray.push(response.data);
         console.log(NewShippingContractData.contractPhotoArray);
         console.log("加入照片数据组");
+    }
+}
+
+// 更新窗口上传照片成功后加入数组
+const updateHandlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    if (response.code == 200) {
+        UpdateShippingContractData.contractPhotoArray.push(response.data);
+        console.log(UpdateShippingContractData.contractPhotoArray);
+        console.log("加入照片数据组");
+    }
+}
+
+// 照片移除后发送请求后台删除照片
+const addHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles);
+    NewShippingContractData.contractPhotoArray.splice(NewShippingContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
+    console.log("移出照片数据组");
+    deletePhotoApi(uploadFile.response.data);
+}
+
+// 更新窗口照片移除后发送请求后台删除照片
+const updateHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+    console.log(uploadFile, uploadFiles);
+    if (UpdateShippingContractData.contractPhotoArray.indexOf(uploadFile.url!) == -1) {
+        UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
+        console.log("移出照片数据组");
+        deletePhotoApi(uploadFile.response.data);
+        console.log("删除已上传照片");
+    } else {
+        preDeletePhoto.value.push(uploadFile.url!);
+        console.log("加入预删除照片组");
     }
 }
 
@@ -941,10 +1264,10 @@ const changeLoadingFalse = () => {
 // 关闭新增窗口
 const closeAddDialog = () => {
     addDialogFlag.value = false;
-    ReturnTop();
+    AddReturnTop();
     firstFormRef.value?.resetFields();
     containerSameFlag.value = true;
-    PhotoData.value = [];
+    AddPhotoData.value = [];
     if (NewShippingContractData.contractPhotoArray.length != 0) {
         NewShippingContractData.contractPhotoArray.map((item) => {
             deletePhotoApi(item);
@@ -953,9 +1276,23 @@ const closeAddDialog = () => {
     }
 }
 
+// 关闭修改海运单窗口
+const closeUpdateDialog = () => {
+    updateDialogFlag.value = false;
+    UpdateReturnTop();
+    secondFormRef.value?.resetFields();
+    UpdatePhotoData.value = [];
+    preDeletePhoto.value = [];
+}
+
 // 新增窗口滑动回最顶端
-const ReturnTop = () => {
+const AddReturnTop = () => {
     addDialogTop.value.scrollTop = 0;
+}
+
+// 修改窗口滑动回最顶端
+const UpdateReturnTop = () => {
+    updateDialogTop.value.scrollTop = 0;
 }
 
 </script>

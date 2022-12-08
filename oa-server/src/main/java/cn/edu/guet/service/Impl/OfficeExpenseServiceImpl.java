@@ -126,6 +126,17 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    public int updateOfficeExpense(OfficeExpense officeExpense) {
+        OfficeExpense oldOfficeExpense=officeExpenseMapper.selectById(officeExpense.getId());
+        oldOfficeExpense.setItemsList(officeExpense.getItemsList());
+        oldOfficeExpense.setExpenses(officeExpense.getExpenses());
+        oldOfficeExpense.setTime(officeExpense.getTime());
+        oldOfficeExpense.setLastUpdateBy(SecurityUtils.getUsername());
+        return officeExpenseMapper.updateById(oldOfficeExpense);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public int deleteOneOfficeExpense(int id) {
         OfficeExpense officeExpense=officeExpenseMapper.selectById(id);
 

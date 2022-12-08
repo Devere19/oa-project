@@ -54,7 +54,7 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="290" fixed="right">
+            <el-table-column align="center" label="操作" width="390" fixed="right">
                 <template #default="scope">
                     <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
                         :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
@@ -63,7 +63,10 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :disabled="scope.row.paymentTime != null" :icon="Delete" size="default" type="danger"
+                    <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+                        :disabled="scope.row.financeStaff != null">修改
+                    </el-button>
+                    <el-button :disabled="scope.row.financeStaff != null" :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
                         删除</el-button>
                 </template>
@@ -113,6 +116,47 @@
                         确定
                     </el-button>
                     <el-button @click="closeAddDialog">取消</el-button>
+                </span>
+            </template>
+        </el-dialog>
+        <el-dialog v-model="updateDialogFlag" title="修改办公经费单" width="40%" draggable center
+            :before-close="closeUpdateDialog">
+            <ul ref="updateDialogTop" style="overflow: auto;height:170px;padding: 0;">
+                <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="120px"
+                    :model="UpdateOfficeExpenseData" style="max-width: 98%">
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <el-form-item label="日期" prop="time">
+                                <el-date-picker type="date" placeholder="下拉选择" v-model="UpdateOfficeExpenseData.time"
+                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM-DD"
+                                    size="large">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <el-form-item label="支出项目清单" prop="itemsList">
+                                <el-input v-model="UpdateOfficeExpenseData.itemsList" type="textarea" autosize
+                                    size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row justify="center">
+                        <el-col :span="16">
+                            <el-form-item label="支出金额总计" prop="expenses">
+                                <el-input v-model="UpdateOfficeExpenseData.expenses" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </ul>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="updateOfficeExpense(secondFormRef)">
+                        确定
+                    </el-button>
+                    <el-button @click="closeUpdateDialog">取消</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -251,13 +295,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, EditPen } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
-import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, deleteOneOfficeExpenseApi, changeDirectorState, changeFinanceState } from '@/api/officeExpense'
+import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, updateOfficeExpenseApi, deleteOneOfficeExpenseApi, changeDirectorState, changeFinanceState } from '@/api/officeExpense'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -269,13 +313,16 @@ const background = ref(true)
 const firstTableData = ref<officeExpenseModel[]>([])
 const returnAll = ref(false)
 const addDialogFlag = ref(false)
+const updateDialogFlag = ref(false)
 const moreDetailDialogFlag = ref(false)
 const chooseOfficeExpenseNo = ref(0)
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 const loading = ref(false)
 const firstFormRef = ref<FormInstance>()
+const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
+const updateDialogTop = ref<any>()
 
 const loginUserName = ref("")
 const loginUserRole = ref("")
@@ -290,6 +337,17 @@ const NewOfficeExpenseData = reactive({
     expenses: '',
     time: '',
     createBy: '',
+    lastUpdateBy: '',
+})
+
+// 修改办公经费
+const UpdateOfficeExpenseData = reactive({
+    id: '',
+    itemsList: '',
+    expenses: '',
+    time: '',
+    createBy: '',
+    lastUpdateBy: '',
 })
 
 // 详情
@@ -378,7 +436,7 @@ const changeState = (row: any) => {
 //判断董事会审批是否重复
 const JudgmentRepeated = (row: any) => {
     console.log(userNickNameStore.user.roleNames)
-    for (var i = 0; i < row.officeDirector.length; i++) {
+    for (let i = 0; i < row.officeDirector.length; i++) {
         if (row.officeDirector[i].userId == userNickNameStore.user.id) {
             if (row.officeDirector[i].state == null) {
                 return false;
@@ -450,9 +508,7 @@ const sendNewOfficeExpense = async (formEl1: FormInstance | undefined) => {
                         type: 'success',
                     })
                     getTableData();
-                    addDialogFlag.value = false;
-                    ReturnTop();
-                    firstFormRef.value?.resetFields();
+                    closeAddDialog();
                 }
                 else {
                     ElMessage({
@@ -490,6 +546,54 @@ const openMordDetailDialog = async (row: any) => {
 
 const closeMoreDetailDialog = () => {
     moreDetailDialogFlag.value = false;
+}
+
+// 打开办公经费单修改窗口
+const openUpdateDialog = async (row: any) => {
+    updateDialogFlag.value = true;
+    // 赋值必须要在窗口显示后，否则会被认定为初始值
+    nextTick(() => {
+        UpdateOfficeExpenseData.id = row.id
+        UpdateOfficeExpenseData.itemsList = row.itemsList
+        UpdateOfficeExpenseData.expenses = row.expenses
+        UpdateOfficeExpenseData.time = dateConversion(row.time)
+    })
+}
+
+// 发送修改办公经费单请求
+const updateOfficeExpense = async (formEl1: FormInstance | undefined) => {
+    if (!formEl1) return
+    await formEl1.validate((valid, fields) => {
+        if (valid) {
+            changeLoadingTrue();
+            UpdateOfficeExpenseData.lastUpdateBy = loginUserName.value;
+            console.log(UpdateOfficeExpenseData);
+            updateOfficeExpenseApi(UpdateOfficeExpenseData).then(res => {
+                changeLoadingFalse();
+                if (res.data == 1) {
+                    ElMessage({
+                        message: '修改办公经费单成功！',
+                        type: 'success',
+                    })
+                    getTableData();
+                    closeUpdateDialog();
+                }
+                else {
+                    ElMessage({
+                        message: '修改办公经费单失败！',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
+            })
+        } else {
+            ElMessage({
+                message: '表单验证未通过，请检查！',
+                type: 'error',
+                duration: 4000
+            })
+        }
+    })
 }
 
 // 打开单个删除提示窗口
@@ -542,13 +646,25 @@ const changeLoadingFalse = () => {
 // 关闭新增窗口
 const closeAddDialog = () => {
     addDialogFlag.value = false;
-    ReturnTop();
+    AddReturnTop();
     firstFormRef.value?.resetFields();
 }
 
+// 关闭修改窗口
+const closeUpdateDialog = () => {
+    updateDialogFlag.value = false;
+    UpdateReturnTop();
+    secondFormRef.value?.resetFields();
+}
+
 // 新增窗口滑动回最顶端
-const ReturnTop = () => {
+const AddReturnTop = () => {
     addDialogTop.value.scrollTop = 0;
+}
+
+// 修改窗口滑动回最顶端
+const UpdateReturnTop = () => {
+    updateDialogTop.value.scrollTop = 0;
 }
 
 </script>

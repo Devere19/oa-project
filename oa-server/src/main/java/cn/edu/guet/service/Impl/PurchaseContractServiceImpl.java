@@ -1,7 +1,9 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
+import cn.edu.guet.bean.PurchaseDirectorState;
 import cn.edu.guet.bean.PurchasePaymentContract;
+import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.customer.Customer;
 import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
@@ -69,15 +71,22 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
     private PurchasePaymentContractMapper purchasePaymentContractMapper;
 
     @Autowired
-    private CustomerService customerService;
+    private PurchaseDirectorStateMapper purchaseDirectorStateMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int deleteOnePurchaseContract(int id) {
+    public int deleteOnePurchaseContract(int id,int flag) {
         PurchaseContract purchaseContract = purchaseContractMapper.selectById(id);
 //        删未审核完成的采购付款单
         QueryWrapper<PurchasePaymentContract> QwPPC = new QueryWrapper<>();
         QwPPC.eq("purchase_contract_no", purchaseContract.getPurchaseContractNo());
+        List<PurchasePaymentContract> purchasePaymentContractList=purchasePaymentContractMapper.selectList(QwPPC);
+        for(PurchasePaymentContract purchasePaymentContract:purchasePaymentContractList){
+            //        删除相关审核记录
+            QueryWrapper<PurchaseDirectorState> directorStateQw = new QueryWrapper<>();
+            directorStateQw.eq("purchase_payment_contract_id", id);
+            purchaseDirectorStateMapper.delete(directorStateQw);
+        }
         purchasePaymentContractMapper.delete(QwPPC);
 
 //        删库存和入库记录
@@ -111,7 +120,9 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
 //                ownInOutMapper.deleteById(ownInOuts.get(i).getId());
 //            }
 //        }
-        ImageUtils.deleteImages(purchaseContractMapper.selectById(id).getContractPhoto());
+        if(flag==0){
+            ImageUtils.deleteImages(purchaseContractMapper.selectById(id).getContractPhoto());
+        }
         return purchaseContractMapper.deleteById(id);
     }
 
@@ -139,9 +150,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int addNewPurchaseContract(PurchaseContract purchaseContract) {
-        System.out.println("谁操作了方法" + SecurityUtils.getUsername());
-        purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount());
+    public int addNewPurchaseContract(PurchaseContract purchaseContract,PurchaseContract oldPurchaseContract,int flag) {
         String contractPhotos = ImageUtils.getDBString(purchaseContract.getContractPhotoArray());
         if (contractPhotos != "") {
             purchaseContract.setContractPhoto(contractPhotos);
@@ -250,9 +259,71 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
 //                }
             }
         }
-        purchaseContract.setCreateBy(SecurityUtils.getUsername());
+        if(flag==1){
+            purchaseContract.setUnpaidAmount(oldPurchaseContract.getPaymentAmount());
+            purchaseContract.setCreateTime(oldPurchaseContract.getCreateTime());
+            purchaseContract.setCreateBy(oldPurchaseContract.getCreateBy());
+        }else{
+            purchaseContract.setUnpaidAmount(purchaseContract.getPaymentAmount());
+            purchaseContract.setCreateBy(SecurityUtils.getUsername());
+        }
         purchaseContract.setLastUpdateBy(SecurityUtils.getUsername());
         return purchaseContractMapper.insert(purchaseContract);
+    }
+
+    @Override
+    public List<InboundBean> getPurchaseContractInboundData(String purchaseContractNo) {
+        List<InboundBean> inboundData=new ArrayList<>();
+
+        QueryWrapper<OtherInOut> QwOtherInOut = new QueryWrapper<>();
+        QwOtherInOut.eq("in_out_contract_no", purchaseContractNo);
+        List<OtherInOut> otherInOuts = otherInOutMapper.selectList(QwOtherInOut);
+        if (otherInOuts.size() != 0) {
+            for (int i = 0; i < otherInOuts.size(); i++) {
+                QueryWrapper<OtherWarehouse> QwOtherWarehouse = new QueryWrapper<>();
+                QwOtherWarehouse.eq("id", otherInOuts.get(i).getOtherWarehouseId()).eq("goods_name", otherInOuts.get(i).getInOutGoodsName());
+                OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(QwOtherWarehouse);
+
+                InboundBean inboundBean=new InboundBean();
+                inboundBean.setFactoryName(otherWarehouse.getFactoryName());
+                inboundBean.setInboundGoodsCount(otherInOuts.get(i).getInOutGoodsCount());
+                if ("吨".equals(otherInOuts.get(i).getInOutGoodsUnit())) {
+                    inboundBean.setGoodsUnitPrice((UnitUtils.TtoG(otherInOuts.get(i).getInOutGoodsUnitPrice())));
+                } else {
+                    inboundBean.setGoodsUnitPrice(otherInOuts.get(i).getInOutGoodsUnitPrice());
+                }
+
+                inboundData.add(inboundBean);
+            }
+        }
+        return inboundData;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int updatePurchaseContract(PurchaseContract purchaseContract) {
+        int result=0;
+
+        QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
+        qw.eq("purchase_contract_no", purchaseContract.getOldPurchaseContractNo());
+        PurchaseContract oldPurchaseContract=purchaseContractMapper.selectOne(qw);
+
+        if(purchaseContract.getOnlyUpdatePhoto()==1){
+//            只修改了图片
+            if (ImageUtils.getDBString(purchaseContract.getContractPhotoArray()) != "") {
+                oldPurchaseContract.setContractPhoto(ImageUtils.getDBString(purchaseContract.getContractPhotoArray()));
+            }else{
+                oldPurchaseContract.setContractPhoto(null);
+            }
+            result=purchaseContractMapper.updateById(oldPurchaseContract);
+        }else{
+            //        0代表是删除，1代表是更新，所以此次选择1，则不删除原图片
+            if(deleteOnePurchaseContract(purchaseContract.getId(),1)==1){
+//                0代表是新增，1代表是更新，所以此次选择1，则需更改创建者和创建时间
+                result=addNewPurchaseContract(purchaseContract,oldPurchaseContract,1);
+            }
+        }
+        return result;
     }
 
     /**
@@ -377,7 +448,7 @@ public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMap
             e.printStackTrace();
         }
 
-        return addNewPurchaseContract(purchaseContract);
+        return addNewPurchaseContract(purchaseContract,null,0);
     }
 
 
