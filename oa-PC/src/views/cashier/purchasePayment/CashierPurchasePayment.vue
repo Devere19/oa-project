@@ -11,7 +11,7 @@
             </el-button>
         </div>
         <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            border="true" highlight-current-row>
+            :border="true" highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="采购合同编号" align="center" width="120">
@@ -45,12 +45,13 @@
                     {{ scope.row.purchasePaymentDirector[2].state == null ? "未处理" : "已通过✔" }}
                 </template>
             </el-table-column>
-            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间" />
+            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间"
+                width="105" />
             <el-table-column align="center" label="付款流水截图" width="130">
                 <template #default="scope">
                     <el-image style="width: 100px; height: 100px"
                         :src="scope.row.paymentPhoto == '' ? null : scope.row.paymentPhoto"
-                        :preview-src-list="scope.row.paymentPhotoArray" fit="cover" preview-teleported="true" />
+                        :preview-src-list="scope.row.paymentPhotoArray" fit="cover" :preview-teleported="true" />
                 </template>
             </el-table-column>
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
@@ -75,7 +76,7 @@
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="previewImageFlag">
-            <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
+            <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" :preview-teleported="true" />
         </el-dialog>
         <el-dialog v-model="moreDetailDialogFlag" title="采购付款单详情" width="50%" draggable center
             :before-close="closeMoreDetailDialog">

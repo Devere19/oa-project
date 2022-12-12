@@ -88,6 +88,21 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
+    path: '/processContract',
+    component: Layout,
+    redirect: '/processContract',
+    children: [{
+      path: '/processContract',
+      component: () => import('@/views/process/ProcessContract.vue'),
+      name: 'processContract',
+      meta: {
+        title: '加工单',
+        icon: 'Box',
+        roles: ['sys:processContract'],
+      },
+    }]
+  },
+  {
     path: '/cashier',
     name: 'cashier',
     component: Layout,
@@ -105,6 +120,16 @@ const routes: Array<RouteRecordRaw> = [
           title: '采购付款单',
           icon: 'Money',
           roles: ['sys:cashierPurchasePayment'],
+        },
+      },
+      {
+        path: '/cashier/cashierProcessPayment',
+        name: 'cashierProcessPayment',
+        component: () => import('@/views/cashier/processPayment/CashierProcessPayment.vue'),
+        meta: {
+          title: '加工付款单',
+          icon: 'Money',
+          roles: ['sys:cashierProcessPayment'],
         },
       },
       {
@@ -265,6 +290,21 @@ const routes: Array<RouteRecordRaw> = [
         title: '采购付款单',
         icon: 'Document',
         roles: ['sys:purchasePaymentContract'],
+      },
+    }]
+  },
+  {
+    path: '/processPaymentContract',
+    component: Layout,
+    redirect: '/processPaymentContract',
+    children: [{
+      path: '/processPaymentContract',
+      component: () => import('@/views/processPayment/ProcessPaymentContract.vue'),
+      name: 'processPaymentContract',
+      meta: {
+        title: '加工付款单',
+        icon: 'Document',
+        roles: ['sys:processPaymentContract'],
       },
     }]
   },

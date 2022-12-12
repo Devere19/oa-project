@@ -14,7 +14,7 @@
             </el-button>
         </div>
         <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            border="true" highlight-current-row>
+            :border="true" highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column property="itemsList" align="center" label="支出项目清单" />
@@ -48,7 +48,7 @@
                 <template #default="scope">
                     <el-image style="width: 100px; height: 100px"
                         :src="scope.row.paymentPhoto == '' ? null : scope.row.paymentPhoto"
-                        :preview-src-list="scope.row.paymentPhotoArray" fit="cover" preview-teleported="true" />
+                        :preview-src-list="scope.row.paymentPhotoArray" fit="cover" :preview-teleported="true" />
                 </template>
             </el-table-column>
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
@@ -63,7 +63,7 @@
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
-                    <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+                    <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="scope.row.financeStaff != null">修改
                     </el-button>
                     <el-button :disabled="scope.row.financeStaff != null" :icon="Delete" size="default" type="danger"
@@ -161,7 +161,7 @@
             </template>
         </el-dialog>
         <el-dialog v-model="previewImageFlag">
-            <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
+            <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" :preview-teleported="true" />
         </el-dialog>
         <el-dialog v-model="moreDetailDialogFlag" title="办公经费单详情" width="55%" draggable center
             :before-close="closeMoreDetailDialog">
@@ -297,7 +297,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, EditPen } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, Edit } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'

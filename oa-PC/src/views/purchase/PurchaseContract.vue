@@ -31,14 +31,12 @@
       <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
       </el-button>
     </div>
-    <el-row justify="center">
-      <el-col span="24">
-        <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange" :disabled-date="disabledDate"
-          unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
-          @change="changeDay" style="margin: 1% 0% 2% 0%;" />
-      </el-col>
-    </el-row>
-    <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" border="true"
+    <div align="center">
+      <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange" :disabled-date="disabledDate"
+        unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
+        @change="changeDay" style="margin: 1% 0% 2% 0%;" />
+    </div>
+    <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
       highlight-current-row @selection-change="handleSelectionChange">
       <!-- 暂时隐藏批量删除功能 -->
       <!-- <el-table-column type="selection" align="center" width="50%" /> -->
@@ -59,7 +57,7 @@
         <template #default="scope">
           <el-image style="width: 100px; height: 100px"
             :src="scope.row.contractPhoto == '' ? null : scope.row.contractPhoto"
-            :preview-src-list="scope.row.contractPhotoArray" fit="cover" preview-teleported="true" />
+            :preview-src-list="scope.row.contractPhotoArray" fit="cover" :preview-teleported="true" />
         </template>
       </el-table-column>
       <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
@@ -78,7 +76,7 @@
                   1 ?
                   "归档" : "还原"
             }}</el-button>
-          <el-button :icon="EditPen" size="default" type="info" @click="openUpdateDialog(scope.row)"
+          <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
               :disabled="!getUpdateDisabled(scope.row)">
@@ -275,7 +273,7 @@
       </template>
     </el-dialog>
     <el-dialog v-model="previewImageFlag">
-      <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" preview-teleported="true" />
+      <el-image w-full="false" :src="dialogImageUrl" alt="Preview Image" :preview-teleported="true" />
     </el-dialog>
     <el-dialog v-model="moreDetailDialogFlag" title="采购单详情" width="80%" draggable center
       :before-close="closeMoreDetailDialog">
@@ -367,7 +365,7 @@
         <el-row justify="center">
           <el-col :span="10">
             <el-table ref="secondTableRef" class="contractDetailTable" :data="secondTableData" style="width: 99%;"
-              border="true" highlight-current-row>
+              :border="true" highlight-current-row>
               <el-table-column property="factoryName" align="center" label="厂名" />
               <el-table-column property="inOutGoodsCount" align="center" label="入库数量" />
               <el-table-column property="currentGoodsCount" align="center" label="当前库存量" width="110" />
@@ -384,7 +382,7 @@
           </el-col>
           <el-col :span="14">
             <el-table ref="thirdTableRef" class="contractDetailTable" :data="thirdTableData" style="width: 99%;"
-              border="true" highlight-current-row>
+              :border="true" highlight-current-row>
               <el-table-column property="saleContractNo" align="center" width="120" label="销售合同编号" />
               <el-table-column property="totalWeight" align="center" label="出库总量" />
               <el-table-column property="logisticsContractNo" align="center" width="120" label="运输合同编号" />
@@ -433,7 +431,7 @@
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, ElMessageBox, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Delete, Search, MoreFilled, Hide, View, Money, Upload, Download, EditPen } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Hide, View, Money, Upload, Download, Edit } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
