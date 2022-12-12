@@ -1,9 +1,6 @@
 package cn.edu.guet.controller;
 
-import cn.edu.guet.bean.LogisticsPaymentContract;
-import cn.edu.guet.bean.OfficeExpense;
-import cn.edu.guet.bean.PurchasePaymentContract;
-import cn.edu.guet.bean.ShippingContract;
+import cn.edu.guet.bean.*;
 import cn.edu.guet.bean.cashier.sale.SaleModel;
 import cn.edu.guet.bean.sale.ListParm;
 import cn.edu.guet.http.HttpResult;
@@ -36,6 +33,9 @@ public class CashierController {
     @Autowired
     private OfficeExpenseService officeExpenseService;
 
+    @Autowired
+    private ProcessPaymentContractService processPaymentContractService;
+
     //    获取出纳的采购付款单数据
     @RequestMapping("/getCashierPurchasePayment")
     public HttpResult getCashierPurchasePayment(int current, int page){
@@ -52,6 +52,24 @@ public class CashierController {
     @RequestMapping("/uploadCashierPurchasePayment")
     public HttpResult uploadCashierPurchasePayment(@RequestBody PurchasePaymentContract purchasePaymentContract){
         return ResultUtils.success("上传成功",purchasePaymentContractService.uploadCashierPurchasePayment(purchasePaymentContract));
+    }
+
+    //    获取出纳的加工付款单数据
+    @RequestMapping("/getCashierProcessPayment")
+    public HttpResult getCashierProcessPayment(int current, int page){
+        return ResultUtils.success("查询成功",processPaymentContractService.getCashierProcessPayment(current,page));
+    }
+
+    //    出纳查询加工付款单数据
+    @RequestMapping("/searchCashierProcessPayment")
+    public HttpResult searchCashierProcessPayment(int current,int page,String searchWord){
+        return ResultUtils.success("查询成功",processPaymentContractService.searchCashierProcessPayment(current,page,searchWord));
+    }
+
+    //    出纳完善加工付款单数据
+    @RequestMapping("/uploadCashierProcessPayment")
+    public HttpResult uploadCashierProcessPayment(@RequestBody ProcessPaymentContract processPaymentContract){
+        return ResultUtils.success("上传成功",processPaymentContractService.uploadCashierProcessPayment(processPaymentContract));
     }
 
     //    获取出纳的物流付款单数据
