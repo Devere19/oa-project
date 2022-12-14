@@ -97,7 +97,7 @@
                             <el-form-item label="采购合同编号" prop="purchaseContractNo">
                                 <el-input v-model="NewPurchasePaymentContractData.purchaseContractNo" size="large"
                                     :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
-                                    @change="checkPurchaseContractNo" />
+                                    @input="checkPurchaseContractNo" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -130,7 +130,7 @@
                             <el-form-item label="采购合同编号" prop="purchaseContractNo">
                                 <el-input v-model="UpdatePurchasePaymentContractData.purchaseContractNo" size="large"
                                     :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
-                                    @change="checkPurchaseContractNo" />
+                                    @input="checkPurchaseContractNo" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -543,6 +543,13 @@ const checkPurchaseContractNo = (e: any) => {
             ElMessage({
                 message: '所填采购合同编号不存在，请检查！',
                 type: 'error',
+                grouping: true,
+                duration: 1000
+            })
+        } else {
+            ElMessage({
+                message: '验证合法！',
+                type: 'success',
             })
         }
     })

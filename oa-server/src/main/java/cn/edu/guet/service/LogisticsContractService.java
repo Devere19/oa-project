@@ -48,7 +48,19 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      */
     void add(LogisticsContract logisticsContract);
 
+    /**
+     * 检查物流合同单号是否存在*
+     * @param logisticsContractNo
+     * @return
+     */
     Boolean checkLogisticsContractNo(String logisticsContractNo);
+
+    /**
+     * 检查物流合同单号是否存在*
+     * @param logisticsContractNo
+     * @return
+     */
+    int shippingCheckLogisticsContractNo(String logisticsContractNo);
 
     /**
      * 删除，同时删除对应的物流详情和对应的自家舱和和外商仓库的出入库记录和库存

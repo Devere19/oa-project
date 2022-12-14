@@ -30,13 +30,7 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
     private TotalIncomeSpendInfoMapper totalIncomeSpendInfoMapper;
 
     @Autowired
-    private YxIncomeSpendInfoMapper yxIncomeSpendInfoMapper;
-
-    @Autowired
-    private JtIncomeSpendInfoMapper jtIncomeSpendInfoMapper;
-
-    @Autowired
-    private FfsIncomeSpendInfoMapper ffsIncomeSpendInfoMapper;
+    private PartIncomeSpendInfoMapper partIncomeSpendInfoMapper;
 
     @Autowired
     private SpendDetailInfoMapper spendDetailInfoMapper;
@@ -66,46 +60,64 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
                     return totalIncomeSpendInfoMapper.getTotalYearIncomeSpendData(startDate,endDate);
                 }
             }else if("1".equals(dataCompany)){
+//                广西永湘贸易有限责任公司
                 if(timeType==0){
-//                    获取永湘日
-                    return yxIncomeSpendInfoMapper.getYxDayIncomeSpendData(startDate, endDate);
+//                    获取日
+                    return partIncomeSpendInfoMapper.getFirstDayIncomeSpendData(startDate, endDate);
                 }else if(timeType==1){
-//                    获取永湘月
-                    return yxIncomeSpendInfoMapper.getYxMonthIncomeSpendData(startDate, endDate);
+//                    获取月
+                    return partIncomeSpendInfoMapper.getFirstMonthIncomeSpendData(startDate, endDate);
                 }else if(timeType==2){
-//                    获取永湘季
-                    return yxIncomeSpendInfoMapper.getYxSeasonIncomeSpendData(startDate, endDate);
+//                    获取季
+                    return partIncomeSpendInfoMapper.getFirstSeasonIncomeSpendData(startDate, endDate);
                 }else if(timeType==3){
-//                    获取永湘年
-                    return yxIncomeSpendInfoMapper.getYxYearIncomeSpendData(startDate, endDate);
+//                    获取年
+                    return partIncomeSpendInfoMapper.getFirstYearIncomeSpendData(startDate, endDate);
                 }
             }else if("2".equals(dataCompany)){
+//                广西永湘物流有限公司
                 if(timeType==0){
-//                    获取锦泰日
-                    return jtIncomeSpendInfoMapper.getJtDayIncomeSpendData(startDate, endDate);
+//                    获取日
+                    return partIncomeSpendInfoMapper.getSecondDayIncomeSpendData(startDate, endDate);
                 }else if(timeType==1){
-//                    获取锦泰月
-                    return jtIncomeSpendInfoMapper.getJtMonthIncomeSpendData(startDate, endDate);
+//                    获取月
+                    return partIncomeSpendInfoMapper.getSecondMonthIncomeSpendData(startDate, endDate);
                 }else if(timeType==2){
-//                    获取锦泰季
-                    return jtIncomeSpendInfoMapper.getJtSeasonIncomeSpendData(startDate, endDate);
+//                    获取季
+                    return partIncomeSpendInfoMapper.getSecondSeasonIncomeSpendData(startDate, endDate);
                 }else if(timeType==3){
-//                    获取锦泰年
-                    return jtIncomeSpendInfoMapper.getJtYearIncomeSpendData(startDate, endDate);
+//                    获取年
+                    return partIncomeSpendInfoMapper.getSecondYearIncomeSpendData(startDate, endDate);
                 }
             }else if("3".equals(dataCompany)){
+//                广西丰沣顺国际物流有限公司
                 if(timeType==0){
-//                    获取丰沣顺日
-                    return ffsIncomeSpendInfoMapper.getFfsDayIncomeSpendData(startDate, endDate);
+//                    获取日
+                    return partIncomeSpendInfoMapper.getThirdDayIncomeSpendData(startDate, endDate);
                 }else if(timeType==1){
-//                    获取丰沣顺月
-                    return ffsIncomeSpendInfoMapper.getFfsMonthIncomeSpendData(startDate, endDate);
+//                    获取月
+                    return partIncomeSpendInfoMapper.getThirdMonthIncomeSpendData(startDate, endDate);
                 }else if(timeType==2){
-//                    获取丰沣顺季
-                    return ffsIncomeSpendInfoMapper.getFfsSeasonIncomeSpendData(startDate, endDate);
+//                    获取季
+                    return partIncomeSpendInfoMapper.getThirdSeasonIncomeSpendData(startDate, endDate);
                 }else if(timeType==3){
-//                    获取丰沣顺年
-                    return ffsIncomeSpendInfoMapper.getFfsYearIncomeSpendData(startDate, endDate);
+//                    获取年
+                    return partIncomeSpendInfoMapper.getThirdYearIncomeSpendData(startDate, endDate);
+                }
+            }else if("4".equals(dataCompany)){
+//                广西众润贸易有限责任公司
+                if(timeType==0){
+//                    获取日
+                    return partIncomeSpendInfoMapper.getFourthDayIncomeSpendData(startDate, endDate);
+                }else if(timeType==1){
+//                    获取月
+                    return partIncomeSpendInfoMapper.getFourthMonthIncomeSpendData(startDate, endDate);
+                }else if(timeType==2){
+//                    获取季
+                    return partIncomeSpendInfoMapper.getFourthSeasonIncomeSpendData(startDate, endDate);
+                }else if(timeType==3){
+//                    获取年
+                    return partIncomeSpendInfoMapper.getFourthYearIncomeSpendData(startDate, endDate);
                 }
             }
 //            办公经费
@@ -143,7 +155,7 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
             currentSeason=currentYear+ "-2";
         }else if(month<10){
             currentSeason=currentYear+ "-3";
-        }else if(month<12){
+        }else if(month<13){
             currentSeason=currentYear+ "-4";
         }
 
@@ -157,24 +169,31 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
                 return numberTotal;
             }else if("1".equals(dataCompany)){
                 List numberYx=new ArrayList<>();
-                numberYx.add(yxIncomeSpendInfoMapper.getYxDayIncomeSpendData(currentDay, currentDay));
-                numberYx.add(yxIncomeSpendInfoMapper.getYxMonthIncomeSpendData(currentMonth, currentMonth));
-                numberYx.add(yxIncomeSpendInfoMapper.getYxSeasonIncomeSpendData(currentSeason, currentSeason));
-                numberYx.add(yxIncomeSpendInfoMapper.getYxYearIncomeSpendData(currentYear, currentYear));
+                numberYx.add(partIncomeSpendInfoMapper.getFirstDayIncomeSpendData(currentDay, currentDay));
+                numberYx.add(partIncomeSpendInfoMapper.getFirstMonthIncomeSpendData(currentMonth, currentMonth));
+                numberYx.add(partIncomeSpendInfoMapper.getFirstSeasonIncomeSpendData(currentSeason, currentSeason));
+                numberYx.add(partIncomeSpendInfoMapper.getFirstYearIncomeSpendData(currentYear, currentYear));
                 return numberYx;
             }else if("2".equals(dataCompany)){
                 List numberJt=new ArrayList<>();
-                numberJt.add(jtIncomeSpendInfoMapper.getJtDayIncomeSpendData(currentDay, currentDay));
-                numberJt.add(jtIncomeSpendInfoMapper.getJtMonthIncomeSpendData(currentMonth, currentMonth));
-                numberJt.add(jtIncomeSpendInfoMapper.getJtSeasonIncomeSpendData(currentSeason, currentSeason));
-                numberJt.add(jtIncomeSpendInfoMapper.getJtYearIncomeSpendData(currentYear, currentYear));
+                numberJt.add(partIncomeSpendInfoMapper.getSecondDayIncomeSpendData(currentDay, currentDay));
+                numberJt.add(partIncomeSpendInfoMapper.getSecondMonthIncomeSpendData(currentMonth, currentMonth));
+                numberJt.add(partIncomeSpendInfoMapper.getSecondSeasonIncomeSpendData(currentSeason, currentSeason));
+                numberJt.add(partIncomeSpendInfoMapper.getSecondYearIncomeSpendData(currentYear, currentYear));
                 return numberJt;
             }else if("3".equals(dataCompany)){
                 List numberFfs=new ArrayList<>();
-                numberFfs.add(ffsIncomeSpendInfoMapper.getFfsDayIncomeSpendData(currentDay, currentDay));
-                numberFfs.add(ffsIncomeSpendInfoMapper.getFfsMonthIncomeSpendData(currentMonth, currentMonth));
-                numberFfs.add(ffsIncomeSpendInfoMapper.getFfsSeasonIncomeSpendData(currentSeason, currentSeason));
-                numberFfs.add(ffsIncomeSpendInfoMapper.getFfsYearIncomeSpendData(currentYear, currentYear));
+                numberFfs.add(partIncomeSpendInfoMapper.getThirdDayIncomeSpendData(currentDay, currentDay));
+                numberFfs.add(partIncomeSpendInfoMapper.getThirdMonthIncomeSpendData(currentMonth, currentMonth));
+                numberFfs.add(partIncomeSpendInfoMapper.getThirdSeasonIncomeSpendData(currentSeason, currentSeason));
+                numberFfs.add(partIncomeSpendInfoMapper.getThirdYearIncomeSpendData(currentYear, currentYear));
+                return numberFfs;
+            }else if("4".equals(dataCompany)){
+                List numberFfs=new ArrayList<>();
+                numberFfs.add(partIncomeSpendInfoMapper.getFourthDayIncomeSpendData(currentDay, currentDay));
+                numberFfs.add(partIncomeSpendInfoMapper.getFourthMonthIncomeSpendData(currentMonth, currentMonth));
+                numberFfs.add(partIncomeSpendInfoMapper.getFourthSeasonIncomeSpendData(currentSeason, currentSeason));
+                numberFfs.add(partIncomeSpendInfoMapper.getFourthYearIncomeSpendData(currentYear, currentYear));
                 return numberFfs;
             }
         }else if("1".equals(dataType)){
@@ -191,7 +210,7 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
     @Override
     public IncomeSpendDetail getDetailIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate) {
         IncomeSpendDetail incomeSpendDetail=new IncomeSpendDetail();
-        String[] companyList={"总体","广西永湘物流有限公司","广西南宁锦泰行工贸有限公司","广西丰沣顺国际物流有限公司"};
+        String[] companyList={"总体","广西永湘贸易有限责任公司","广西永湘物流有限公司","广西丰沣顺国际物流有限公司","广西众润贸易有限责任公司"};
         if("0".equals(dataType)){
 //            整体业务
             if("0".equals(dataCompany)){
@@ -212,7 +231,7 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
                     incomeSpendDetail.setIncomeDetail(handleIncomeImages(saleContractMapper.getTotalYearIncomeData(startDate,endDate)));
                     incomeSpendDetail.setSpendDetail(handleSpendImages(spendDetailInfoMapper.getTotalYearSpendData(startDate,endDate)));
                 }
-            }else if("1".equals(dataCompany)||"2".equals(dataCompany)||"3".equals(dataCompany)){
+            }else if("1".equals(dataCompany)||"2".equals(dataCompany)||"3".equals(dataCompany)||"4".equals(dataCompany)){
                 if(timeType==0){
 //                    获取子公司日细则
                     incomeSpendDetail.setIncomeDetail(handleIncomeImages(saleContractMapper.getCompanyDayIncomeData(companyList[Integer.parseInt(dataCompany)],startDate, endDate)));

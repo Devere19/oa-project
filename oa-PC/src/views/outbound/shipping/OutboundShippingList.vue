@@ -142,7 +142,9 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="物流合同编号" prop="logisticsContractNo">
-                                <el-input v-model="NewShippingContractData.logisticsContractNo" size="large" />
+                                <el-input v-model="NewShippingContractData.logisticsContractNo" size="large"
+                                    :suffix-icon="logisticsContractNoFlag ? 'Select' : 'CloseBold'"
+                                    @input="checkLogisticsContractNo" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -178,7 +180,7 @@
                             <el-form-item label="集装箱号" prop="containerNo">
                                 <el-input v-model="NewShippingContractData.containerNo" size="large"
                                     :suffix-icon="containerSameFlag ? 'CloseBold' : 'Select'"
-                                    @change="checkContainerNo" />
+                                    @input="checkContainerNo" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -281,7 +283,8 @@
                         <el-col :span="12">
                             <el-form-item label="物流合同编号" prop="logisticsContractNo">
                                 <el-input v-model="UpdateShippingContractData.logisticsContractNo" size="large"
-                                    :disabled="updateFlag" />
+                                    :suffix-icon="logisticsContractNoFlag ? 'Select' : 'CloseBold'"
+                                    @input="checkLogisticsContractNo" :disabled="updateFlag" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -666,7 +669,7 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
-import { getShippingContractDataApi, searchShippingContractApi, checkContainerNoApi, addNewShippingContractApi, updateShippingContractApi, deleteOneShippingContractApi, changeDirectorState, changeFinanceState } from '@/api/shippingContract'
+import { getShippingContractDataApi, searchShippingContractApi, shippingCheckLogisticsContractNoApi, checkContainerNoApi, addNewShippingContractApi, updateShippingContractApi, deleteOneShippingContractApi, changeDirectorState, changeFinanceState } from '@/api/shippingContract'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 
@@ -693,6 +696,8 @@ const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const updateDialogTop = ref<any>()
 const containerSameFlag = ref(true)
+const logisticsContractNoFlag = ref(false)
+const logisticsNoResult = ref()
 
 const loginUserName = ref("")
 const loginUserRole = ref("")
@@ -974,6 +979,7 @@ const openUpdateDialog = (row: any) => {
     } else {
         updateFlag.value = false;
     }
+    logisticsContractNoFlag.value = true;
     updateDialogFlag.value = true;
     for (let i = 0; i < row.contractPhotoArray.length; i++) {
         // 当一张图片都没上传是长度为1，但内容为null，因此需要进行判断
@@ -1015,6 +1021,37 @@ const openUpdateDialog = (row: any) => {
     })
 }
 
+// 验证物流合同是否存在
+const checkLogisticsContractNo = (e: any) => {
+    shippingCheckLogisticsContractNoApi(e).then(res => {
+        logisticsNoResult.value = res.data;
+        if (res.data == 0) {
+            logisticsContractNoFlag.value = true;
+            ElMessage({
+                message: '验证合法！',
+                type: 'success',
+            })
+        } else {
+            logisticsContractNoFlag.value = false;
+            if (res.data == 1) {
+                ElMessage({
+                    message: '所填物流合同编号不存在，请检查！',
+                    type: 'error',
+                    grouping: true,
+                    duration: 1000
+                })
+            } else if (res.data == 2) {
+                ElMessage({
+                    message: '对应的物流合同属于加工单，不合法，请检查！',
+                    type: 'error',
+                    grouping: true,
+                    duration: 1000
+                })
+            }
+        }
+    })
+}
+
 const checkContainerNo = (e: any) => {
     checkContainerNoApi(e).then(res => {
         containerSameFlag.value = res.data
@@ -1022,6 +1059,13 @@ const checkContainerNo = (e: any) => {
             ElMessage({
                 message: '集装箱号在30天内已重复，请检查！',
                 type: 'error',
+                grouping: true,
+                duration: 4000
+            })
+        } else {
+            ElMessage({
+                message: '验证合法！',
+                type: 'success',
             })
         }
     })
@@ -1032,40 +1076,58 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
-            if (containerSameFlag.value == false) {
-                changeLoadingTrue();
-                NewShippingContractData.createBy = loginUserName.value;
-                console.log(NewShippingContractData);
-                addNewShippingContractApi(NewShippingContractData).then(res => {
-                    if (res.data == 1) {
-                        changeLoadingFalse();
-                        ElMessage({
-                            message: '新增海运单成功！',
-                            type: 'success',
-                        })
-                        getTableData();
-                        addDialogFlag.value = false;
-                        containerSameFlag.value = true;
-                        AddReturnTop();
-                        firstFormRef.value?.resetFields();
-                        AddPhotoData.value = [];
-                        NewShippingContractData.contractPhotoArray = [];
-                    }
-                    else {
-                        changeLoadingFalse();
-                        ElMessage({
-                            message: '新增海运单失败！',
-                            type: 'error',
-                            duration: 4000
-                        })
-                    }
-                })
+            if (logisticsContractNoFlag.value != false) {
+                if (containerSameFlag.value == false) {
+                    changeLoadingTrue();
+                    NewShippingContractData.createBy = loginUserName.value;
+                    console.log(NewShippingContractData);
+                    addNewShippingContractApi(NewShippingContractData).then(res => {
+                        if (res.data == 1) {
+                            changeLoadingFalse();
+                            ElMessage({
+                                message: '新增海运单成功！',
+                                type: 'success',
+                            })
+                            getTableData();
+                            addDialogFlag.value = false;
+                            containerSameFlag.value = true;
+                            logisticsContractNoFlag.value = false;
+                            AddReturnTop();
+                            firstFormRef.value?.resetFields();
+                            AddPhotoData.value = [];
+                            NewShippingContractData.contractPhotoArray = [];
+                        }
+                        else {
+                            changeLoadingFalse();
+                            ElMessage({
+                                message: '新增海运单失败！',
+                                type: 'error',
+                                duration: 4000
+                            })
+                        }
+                    })
+                } else {
+                    ElMessage({
+                        message: '集装箱号在30天内已重复，请检查！',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
             } else {
-                ElMessage({
-                    message: '集装箱号在30天内已重复，请检查！',
-                    type: 'error',
-                    duration: 4000
-                })
+                if (logisticsNoResult.value == 1) {
+                    ElMessage({
+                        message: '所填物流合同编号不存在，请检查！',
+                        type: 'error',
+                        duration: 4000
+
+                    })
+                } else if (logisticsNoResult.value == 2) {
+                    ElMessage({
+                        message: '对应的物流合同属于加工单，不合法，请检查！',
+                        type: 'error',
+                        duration: 4000
+                    })
+                }
             }
         } else {
             ElMessage({
@@ -1082,44 +1144,62 @@ const updateShippingContract = async (formEl1: FormInstance | undefined) => {
     if (!formEl1) return
     await formEl1.validate((valid, fields) => {
         if (valid) {
-            changeLoadingTrue();
-            UpdateShippingContractData.createBy = loginUserName.value;
-            console.log(UpdateShippingContractData);
-            for (let i = 0; i < preDeletePhoto.value.length; i++) {
-                // 删除修改的照片
-                deletePhotoApi(preDeletePhoto.value[i]);
-                UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(preDeletePhoto.value[i]), 1);
-                console.log("删除修改照片" + i);
-            }
-            if (updateFlag.value == true) {
-                UpdateShippingContractData.onlyUpdatePhoto = 1;
-            } else {
-                UpdateShippingContractData.onlyUpdatePhoto = 0;
-            }
-            updateShippingContractApi(UpdateShippingContractData).then(res => {
-                if (res.data == 1) {
-                    changeLoadingFalse();
-                    ElMessage({
-                        message: '修改海运单成功！',
-                        type: 'success',
-                    })
-                    getTableData();
-                    updateDialogFlag.value = false;
-                    containerSameFlag.value = true;
-                    UpdateReturnTop();
-                    secondFormRef.value?.resetFields();
-                    UpdatePhotoData.value = [];
-                    preDeletePhoto.value = [];
+            if (logisticsContractNoFlag.value != false) {
+                changeLoadingTrue();
+                UpdateShippingContractData.createBy = loginUserName.value;
+                console.log(UpdateShippingContractData);
+                for (let i = 0; i < preDeletePhoto.value.length; i++) {
+                    // 删除修改的照片
+                    deletePhotoApi(preDeletePhoto.value[i]);
+                    UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(preDeletePhoto.value[i]), 1);
+                    console.log("删除修改照片" + i);
                 }
-                else {
-                    changeLoadingFalse();
+                if (updateFlag.value == true) {
+                    UpdateShippingContractData.onlyUpdatePhoto = 1;
+                } else {
+                    UpdateShippingContractData.onlyUpdatePhoto = 0;
+                }
+                updateShippingContractApi(UpdateShippingContractData).then(res => {
+                    if (res.data == 1) {
+                        changeLoadingFalse();
+                        ElMessage({
+                            message: '修改海运单成功！',
+                            type: 'success',
+                        })
+                        getTableData();
+                        updateDialogFlag.value = false;
+                        containerSameFlag.value = true;
+                        logisticsContractNoFlag.value = false;
+                        UpdateReturnTop();
+                        secondFormRef.value?.resetFields();
+                        UpdatePhotoData.value = [];
+                        preDeletePhoto.value = [];
+                    }
+                    else {
+                        changeLoadingFalse();
+                        ElMessage({
+                            message: '修改海运单失败！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    }
+                })
+            } else {
+                if (logisticsNoResult.value == 1) {
                     ElMessage({
-                        message: '修改海运单失败！',
+                        message: '所填物流合同编号不存在，请检查！',
+                        type: 'error',
+                        duration: 4000
+
+                    })
+                } else if (logisticsNoResult.value == 2) {
+                    ElMessage({
+                        message: '对应的物流合同属于加工单，不合法，请检查！',
                         type: 'error',
                         duration: 4000
                     })
                 }
-            })
+            }
         } else {
             ElMessage({
                 message: '表单验证未通过，请检查！',
@@ -1267,6 +1347,7 @@ const closeAddDialog = () => {
     AddReturnTop();
     firstFormRef.value?.resetFields();
     containerSameFlag.value = true;
+    logisticsContractNoFlag.value = false;
     AddPhotoData.value = [];
     if (NewShippingContractData.contractPhotoArray.length != 0) {
         NewShippingContractData.contractPhotoArray.map((item) => {
@@ -1280,6 +1361,7 @@ const closeAddDialog = () => {
 const closeUpdateDialog = () => {
     updateDialogFlag.value = false;
     UpdateReturnTop();
+    logisticsContractNoFlag.value = false;
     secondFormRef.value?.resetFields();
     UpdatePhotoData.value = [];
     preDeletePhoto.value = [];

@@ -7,18 +7,23 @@
                         <el-form-item label="类型:">
                             <el-select v-model="dataType" placeholder="下拉选择" size="large" @change="changeType">
                                 <el-option label="整体业务" value="0"></el-option>
-                                <el-option v-show="dataCompany != '1' && dataCompany != '2' && dataCompany != '3'"
-                                    label="办公经费" value="1"></el-option>
+                                <el-option v-show="dataCompany == '0' || dataCompany == undefined" label="办公经费"
+                                    value="1"></el-option>
+                                <!-- <el-option v-show="dataCompany != '1' && dataCompany != '2' && dataCompany != '3'"
+                                    label="办公经费" value="1"></el-option> -->
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="公司:">
                             <el-select v-model="dataCompany" placeholder="下拉选择" size="large" @change="changeCompany">
-                                <el-option label="总体" value="0"></el-option>
+                                <el-option v-for="item in ownCompanyData"
+                                    v-show="item.label != '总体' ? (dataType != '1' ? true : false) : true"
+                                    :key="item.value" :label="item.label" :value="item.value" />
+                                <!-- <el-option label="总体" value="0"></el-option>
                                 <el-option v-show="dataType != '1'" label="广西永湘物流有限公司" value="1"></el-option>
                                 <el-option v-show="dataType != '1'" label="广西南宁锦泰行工贸有限公司" value="2"></el-option>
-                                <el-option v-show="dataType != '1'" label="广西丰沣顺国际物流有限公司" value="3"></el-option>
+                                <el-option v-show="dataType != '1'" label="广西丰沣顺国际物流有限公司" value="3"></el-option> -->
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -636,7 +641,7 @@
             </el-row>
             <el-row justify="center">
                 <el-col :span="6" class="moreDetailTitle">
-                    销售合同编号：
+                    加工/销售合同编号：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.saleContractNo }}
@@ -1220,6 +1225,24 @@ let thirdChartObject: echarts.ECharts | null = null;
 const fourthChartRef = ref<HTMLElement>();
 let fourthChartObject: echarts.ECharts | null = null;
 
+const ownCompanyData = reactive([
+    {
+        label: '总体',
+        value: '0'
+    }, {
+        label: '广西永湘贸易有限责任公司',
+        value: '1'
+    }, {
+        label: '广西永湘物流有限公司',
+        value: '2'
+    }, {
+        label: '广西丰沣顺国际物流有限公司',
+        value: '3'
+    }, {
+        label: '广西众润贸易有限责任公司',
+        value: '4'
+    }])
+
 const numberData = reactive<{
     income: string,
     spend: string
@@ -1746,15 +1769,7 @@ const getDayData = () => {
                 }
             })
             // 设置图表标题
-            if (dataCompany.value == "0") {
-                firstOption.title.text = "总体日收入支出折线图";
-            } else if (dataCompany.value == "1") {
-                firstOption.title.text = "广西永湘物流有限公司日收入支出折线图";
-            } else if (dataCompany.value == "2") {
-                firstOption.title.text = "广西南宁锦泰行工贸有限公司日收入支出折线图";
-            } else if (dataCompany.value == "3") {
-                firstOption.title.text = "广西丰沣顺国际物流有限公司日收入支出折线图";
-            }
+            firstOption.title.text = ownCompanyData[Number(dataCompany.value)].label + "日收入支出折线图";
             firstChartObject!.setOption(firstOption);
         }
     })
@@ -1797,15 +1812,7 @@ const getMonthData = () => {
                 }
             })
             // 设置图表标题
-            if (dataCompany.value == "0") {
-                secondOption.title.text = "总体月收入支出折线图";
-            } else if (dataCompany.value == "1") {
-                secondOption.title.text = "广西永湘物流有限公司月收入支出折线图";
-            } else if (dataCompany.value == "2") {
-                secondOption.title.text = "广西南宁锦泰行工贸有限公司月收入支出折线图";
-            } else if (dataCompany.value == "3") {
-                secondOption.title.text = "广西丰沣顺国际物流有限公司月收入支出折线图";
-            }
+            secondOption.title.text = ownCompanyData[Number(dataCompany.value)].label + "月收入支出折线图";
             secondChartObject!.setOption(secondOption);
         }
     })
@@ -1942,15 +1949,7 @@ const getSeasonData = () => {
                 }
             })
             // 设置图表标题
-            if (dataCompany.value == "0") {
-                thirdOption.title.text = "总体季收入支出折线图";
-            } else if (dataCompany.value == "1") {
-                thirdOption.title.text = "广西永湘物流有限公司季收入支出折线图";
-            } else if (dataCompany.value == "2") {
-                thirdOption.title.text = "广西南宁锦泰行工贸有限公司季收入支出折线图";
-            } else if (dataCompany.value == "3") {
-                thirdOption.title.text = "广西丰沣顺国际物流有限公司季收入支出折线图";
-            }
+            thirdOption.title.text = ownCompanyData[Number(dataCompany.value)].label + "季收入支出折线图";
             thirdChartObject!.setOption(thirdOption);
         }
     })
@@ -2017,15 +2016,7 @@ const getYearData = () => {
                 }
             })
             // 设置图表标题
-            if (dataCompany.value == "0") {
-                fourthOption.title.text = "总体年收入支出折线图";
-            } else if (dataCompany.value == "1") {
-                fourthOption.title.text = "广西永湘物流有限公司年收入支出折线图";
-            } else if (dataCompany.value == "2") {
-                fourthOption.title.text = "广西南宁锦泰行工贸有限公司年收入支出折线图";
-            } else if (dataCompany.value == "3") {
-                fourthOption.title.text = "广西丰沣顺国际物流有限公司年收入支出折线图";
-            }
+            fourthOption.title.text = ownCompanyData[Number(dataCompany.value)].label + "年收入支出折线图";
             fourthChartObject!.setOption(fourthOption);
         }
     })
