@@ -4,6 +4,7 @@ import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
+import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.ShippingContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class ShippingContractController {
 
     @Autowired
     private ShippingContractService shippingContractService;
+
+    @Autowired
+    private LogisticsContractService logisticsContractService;
 
     //    获取海运单数据
     @RequestMapping("/getshippingContractData")
@@ -43,6 +47,11 @@ public class ShippingContractController {
     @RequestMapping("/updateShippingContract")
     public HttpResult updateShippingContract(@RequestBody ShippingContract shippingContract){
         return ResultUtils.success("修改成功",shippingContractService.updateShippingContract(shippingContract));
+    }
+
+    @RequestMapping("/shippingCheckLogisticsContractNo")
+    public HttpResult shippingCheckLogisticsContractNo(String logisticsContractNo){
+        return ResultUtils.success("获取成功",logisticsContractService.shippingCheckLogisticsContractNo(logisticsContractNo));
     }
 
     @RequestMapping("/checkContainerNo")

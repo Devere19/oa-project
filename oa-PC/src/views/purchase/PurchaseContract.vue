@@ -383,7 +383,7 @@
           <el-col :span="14">
             <el-table ref="thirdTableRef" class="contractDetailTable" :data="thirdTableData" style="width: 99%;"
               :border="true" highlight-current-row>
-              <el-table-column property="saleContractNo" align="center" width="120" label="销售合同编号" />
+              <el-table-column property="saleContractNo" align="center" width="120" label="加工/销售合同编号" />
               <el-table-column property="totalWeight" align="center" label="出库总量" />
               <el-table-column property="logisticsContractNo" align="center" width="120" label="运输合同编号" />
               <el-table-column property="licensePlateNumber" align="center" label="车牌" />

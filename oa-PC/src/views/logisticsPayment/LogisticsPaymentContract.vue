@@ -20,7 +20,7 @@
             <el-table-column label="物流合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.logisticsContractNo }}</template>
             </el-table-column>
-            <el-table-column property="saleContractNo" align="center" label="销售合同编号" width="120" />
+            <el-table-column property="saleContractNo" align="center" label="加工/销售合同编号" width="150" />
             <el-table-column property="freight" align="center" label="运费总价" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
@@ -93,7 +93,7 @@
                             <el-form-item label="物流合同编号" prop="logisticsContractNo">
                                 <el-input v-model="NewLogisticsPaymentContractData.logisticsContractNo" size="large"
                                     :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
-                                    @change="checkLogisticsContractNo" />
+                                    @input="checkLogisticsContractNo" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -126,7 +126,7 @@
                             <el-form-item label="物流合同编号" prop="logisticsContractNo">
                                 <el-input v-model="UpdateLogisticsPaymentContractData.logisticsContractNo" size="large"
                                     :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'"
-                                    @change="checkLogisticsContractNo" />
+                                    @input="checkLogisticsContractNo" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -164,7 +164,7 @@
                 </el-row>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
-                        销售合同编号：
+                        加工/销售合同编号：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.saleContractNo }}
@@ -415,7 +415,7 @@ onMounted(() => {
     loginUserId.value = userNickNameStore.user.id
 })
 
-//审批通过，根据身份修改采购付款单响应审核状态
+//审批通过，根据身份修改物流付款单响应审核状态
 const changeState = (row: any) => {
     if (loginUserRole.value == '财务') {
         ElMessageBox.confirm(
@@ -524,6 +524,13 @@ const checkLogisticsContractNo = (e: any) => {
             ElMessage({
                 message: '所填物流合同编号不存在，请检查！',
                 type: 'error',
+                grouping: true,
+                duration: 1000
+            })
+        } else {
+            ElMessage({
+                message: '验证合法！',
+                type: 'success',
             })
         }
     })
@@ -643,7 +650,7 @@ const closeMoreDetailDialog = () => {
     moreDetailDialogFlag.value = false;
 }
 
-// 打开采购付款单修改窗口
+// 打开物流付款单修改窗口
 const openUpdateDialog = async (row: any) => {
     updateDialogFlag.value = true;
     contractExistFlag.value = true;

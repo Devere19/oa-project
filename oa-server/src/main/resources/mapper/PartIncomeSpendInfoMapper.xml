@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.PartIncomeSpendInfoMapper">
+
+<!--    公司一，广西永湘贸易有限责任公司-->
+    <select id="getFirstDayIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT i_date legend, income, spend
+        FROM first_company_income_spend_info
+        WHERE i_date between  #{startDate}  and #{endDate}
+        ORDER BY i_date
+    </select>
+
+    <select id="getFirstMonthIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y-%m') legend, SUM(income) income,SUM(spend) spend
+        FROM first_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getFirstSeasonIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT CONCAT(YEAR(i_date),CONCAT('-',QUARTER(i_date))) legend,
+               SUM(income) income, SUM(spend) spend
+        FROM first_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getFirstYearIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y') legend, SUM(income) income,SUM(spend) spend
+        FROM first_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+<!--    公司二，广西永湘物流有限公司-->
+    <select id="getSecondDayIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT i_date legend, income, spend
+        FROM second_company_income_spend_info
+        WHERE i_date between  #{startDate}  and #{endDate}
+        ORDER BY i_date
+    </select>
+
+    <select id="getSecondMonthIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y-%m') legend, SUM(income) income,SUM(spend) spend
+        FROM second_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getSecondSeasonIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT CONCAT(YEAR(i_date),CONCAT('-',QUARTER(i_date))) legend,
+               SUM(income) income, SUM(spend) spend
+        FROM second_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getSecondYearIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y') legend, SUM(income) income,SUM(spend) spend
+        FROM second_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+<!--    公司三，广西丰沣顺国际物流有限公司-->
+    <select id="getThirdDayIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT i_date legend, income, spend
+        FROM third_company_income_spend_info
+        WHERE i_date between  #{startDate}  and #{endDate}
+        ORDER BY i_date
+    </select>
+
+    <select id="getThirdMonthIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y-%m') legend, SUM(income) income,SUM(spend) spend
+        FROM third_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getThirdSeasonIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT CONCAT(YEAR(i_date),CONCAT('-',QUARTER(i_date))) legend,
+               SUM(income) income, SUM(spend) spend
+        FROM third_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getThirdYearIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y') legend, SUM(income) income,SUM(spend) spend
+        FROM third_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+<!--    公司四，广西众润贸易有限责任公司-->
+    <select id="getFourthDayIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT i_date legend, income, spend
+        FROM fourth_company_income_spend_info
+        WHERE i_date between  #{startDate}  and #{endDate}
+        ORDER BY i_date
+    </select>
+
+    <select id="getFourthMonthIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y-%m') legend, SUM(income) income,SUM(spend) spend
+        FROM fourth_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getFourthSeasonIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT CONCAT(YEAR(i_date),CONCAT('-',QUARTER(i_date))) legend,
+               SUM(income) income, SUM(spend) spend
+        FROM fourth_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+
+    <select id="getFourthYearIncomeSpendData" resultType="cn.edu.guet.bean.TotalIncomeSpendView">
+        SELECT date_format(i_date, '%Y') legend, SUM(income) income,SUM(spend) spend
+        FROM fourth_company_income_spend_info
+        GROUP BY legend
+        HAVING legend BETWEEN #{startDate}  and #{endDate}
+        ORDER BY legend
+    </select>
+</mapper>

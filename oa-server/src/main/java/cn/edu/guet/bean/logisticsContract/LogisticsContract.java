@@ -114,6 +114,10 @@ public class LogisticsContract implements Serializable {
      */
     private String lastUpdateBy;
 
+    /**
+     * 上级类型 0代表加工单 1代表销售单
+     */
+    private Integer upperType;
 
     /**
      * 物流详情表集合

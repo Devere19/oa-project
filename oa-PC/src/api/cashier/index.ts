@@ -1,6 +1,6 @@
 import http from "@/http";
 import { ListParm } from "@/api/sale/SaleModel";
-import { purchasePaymentModel, logisticsPaymentModel, shippingPaymentModel, officeExpenseModel } from "./CashierModel";
+import { purchasePaymentModel, processPaymentModel, logisticsPaymentModel, shippingPaymentModel, officeExpenseModel } from "./CashierModel";
 import { SaleModel } from '@/api/cashier/CashierModel'
 
 
@@ -25,6 +25,29 @@ export const searchCashierPurchasePaymentApi = (currentPage: number, pageSize: n
 export const uploadCashierPurchasePaymentApi = (purchasePaymentContract: purchasePaymentModel) => {
     return http.post("cashier/uploadCashierPurchasePayment",
         purchasePaymentContract)
+}
+
+//分页获取加工付款单
+export const getCashierProcessPaymentApi = (currentPage: number, pageSize: number) => {
+    return http.get("cashier/getCashierProcessPayment", {
+        current: currentPage,
+        page: pageSize,
+    })
+}
+
+// 分页查询加工付款单
+export const searchCashierProcessPaymentApi = (currentPage: number, pageSize: number, searchWord: string) => {
+    return http.get("cashier/searchCashierProcessPayment", {
+        current: currentPage,
+        page: pageSize,
+        searchWord: searchWord,
+    })
+}
+
+//上传加工付款单的付款数据
+export const uploadCashierProcessPaymentApi = (processPaymentContract: processPaymentModel) => {
+    return http.post("cashier/uploadCashierProcessPayment",
+        processPaymentContract)
 }
 
 //分页获取物流付款单

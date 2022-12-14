@@ -370,6 +370,21 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         return !logisticsContracts.isEmpty();
     }
 
+    @Override
+    public int shippingCheckLogisticsContractNo(String logisticsContractNo) {
+        QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+        qw.eq("logistics_contract_no", logisticsContractNo).orderByDesc("create_time");
+        List<LogisticsContract> logisticsContracts = logisticsContractMapper.selectList(qw);
+        if(logisticsContracts.isEmpty()){
+            return 1;
+        }else{
+            if(logisticsContracts.get(0).getUpperType()==0){
+                return 2;
+            }
+        }
+        return 0;
+    }
+
     /**
      * @param id 物流单id
      * @return
