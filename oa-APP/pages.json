@@ -59,6 +59,23 @@
 			}
 		},
 		{
+			"path": "pages/audit/processPayment",
+			"style": {
+				"navigationBarTitleText": "加工付款单",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/audit/sale",
 			"style": {
 				"navigationBarTitleText": "销售单",
@@ -161,6 +178,23 @@
 			}
 		},
 		{
+			"path": "pages/search/searchProcessPayment",
+			"style": {
+				"navigationBarTitleText": "加工付款单搜索结果",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
 			"path": "pages/search/searchLogisticsPayment",
 			"style": {
 				"navigationBarTitleText": "物流付款单搜索结果",
@@ -232,6 +266,23 @@
 			"path": "pages/detail/purchasePaymentDetail",
 			"style": {
 				"navigationBarTitleText": "采购付款单详情",
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"text":"\ue662",
+								"fontSize": "50rpx",
+								"float": "right",
+								"fontSrc": "/static/uniicons.ttf"
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/detail/processPaymentDetail",
+			"style": {
+				"navigationBarTitleText": "加工付款单详情",
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{

@@ -15,7 +15,7 @@
 						<image class="uni-card__header-avatar-image" :src="thumbnail" mode="aspectFit" />
 					</view>
 					<view class="uni-card__header-content">
-						<text class="uni-card__header-content-title uni-ellipsis" :style="{'color':title=='海运单'?'#ff557f':title=='销售单'?'#55aaff':title=='办公经费单'?'#55aa00':title=='物流单'||title=='物流付款单'?'#ff5500':'#0081ff'}">{{ title }}</text>
+						<text class="uni-card__header-content-title uni-ellipsis" :style="{'color':title=='海运单'?'#ff557f':title=='加工单'||title=='加工付款单'?'#ff007f':title=='销售单'?'#55aaff':title=='办公经费单'?'#55aa00':title=='物流单'||title=='物流付款单'?'#ff5500':'#0081ff'}">{{ title }}</text>
 						<text v-if="title&&subTitle"
 							class="uni-card__header-content-subtitle uni-ellipsis">{{ subTitle }}</text>
 					</view>

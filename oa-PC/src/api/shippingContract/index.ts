@@ -35,6 +35,13 @@ export const updateShippingContractApi = (shippingContract: shippingContractMode
         shippingContract)
 }
 
+//检查海运单物流合同编号
+export const shippingCheckLogisticsContractNoApi = (logisticsContractNo: string) => {
+    return http.get("shippingContract/shippingCheckLogisticsContractNo", {
+        logisticsContractNo: logisticsContractNo,
+    })
+}
+
 //验证海运单集装箱号
 export const checkContainerNoApi = (containerNo: string) => {
     return http.get("shippingContract/checkContainerNo", {

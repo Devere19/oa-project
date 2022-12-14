@@ -106,12 +106,13 @@
 			},
 			login(res){
 				uni.request({
-					url: 'http://120.77.28.123:9000/login',
+					url: 'http://localhost:9000/login',
+					// url: 'http://120.77.28.123:9000/login',
 					method: "POST",
 					data: JSON.stringify(res),
 				}).then(
 					result => {
-						if (result[1].data.code == 200) {
+						if (result[1].data.data != 0) {
 							// 存储token
 							uni.setStorage({
 								key: 'token',
@@ -176,9 +177,9 @@
 							// 		}
 							// 	});
 							// };
-						} else if (result.code == 500) {
+						} else {
 							uni.showModal({
-								content: '用户名或密码不正确，请检查',
+								content: result[1].data.msg+'，请检查',
 								showCancel: false
 							});
 						}
