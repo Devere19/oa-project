@@ -297,7 +297,7 @@
 				nowDate: '',
 				currentSeason:0,
 				seasonList:["第一季度","第二季度","第三季度","第四季度"],
-				companyList: ["总体", "广西永湘物流有限公司", "广西南宁锦泰行工贸有限公司", "广西丰沣顺国际物流有限公司"],
+				companyList: ["总体", "广西永湘贸易有限责任公司", "广西永湘物流有限公司", "广西丰沣顺国际物流有限公司", "广西众润贸易有限责任公司"],
 				choosedDay:'',
 				choosedMonth:'',
 				choosedSYear:'',

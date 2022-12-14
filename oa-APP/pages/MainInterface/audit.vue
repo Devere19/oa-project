@@ -38,6 +38,26 @@
 					</uni-list>
 				</view>
 			</uni-card>
+			<uni-card :isFull="true" padding="0" title="加工付款单" extra="更多>" :style="'margin-top:15rpx'" @tap="toProcessPayment">
+			<!-- 当没有以下部分内容时，需要padding="0"这个属性，有的话，再去掉，否则排版不够美观 -->
+				<!-- 				<uni-grid :column="3" :highlight="true" :showBorder="false" :square="false" @change="purchaseCardClick">
+					<uni-grid-item v-for="(item, index) in purchaseCount" :index="index">
+						<view class="numberCardItem">
+							<view class="numberCardItemBorder"
+								:style="{'border-right':index<2?'#8799a3 solid 1rpx':'0rpx'}">
+								<text class="count">{{item.count}}</text>
+								<text class="tips">{{item.tips}}</text>
+							</view>
+						</view>
+					</uni-grid-item>
+				</uni-grid> -->
+				<view>
+					<uni-list v-for="(item,index) in processPaymentList" :key="item.id">
+						<uni-list-item :title="item.goodsName" :rightText="'￥'+item.paymentCount" link=""
+							@tap="toDetail('processPayment',item.id)" showArrow></uni-list-item>
+					</uni-list>
+				</view>
+			</uni-card>
 <!-- 			<uni-card :isFull="true" padding="0" title="销售单" extra="更多>" :style="'margin-top:15rpx'" @tap="toSale">
 				<view>
 					<uni-list v-for="(item,index) in purchaseList">
@@ -120,6 +140,7 @@
 					nickName: '',
 				},
 				purchasePaymentList:[],
+				processPaymentList:[],
 				logisticsPaymentList:[],
 				shippingList:[],
 				officeExpenseList:[],
@@ -182,6 +203,27 @@
 					if(res.code==200){
 						this.purchasePaymentList=res.data.records;
 						console.log(this.purchasePaymentList);
+					}
+				},
+				err=>{
+					uni.showModal({
+						content: "请求服务失败",
+						showCancel: false
+					})
+				})
+				// 获取加工付款单的信息
+				this.$request({
+					url: '/processPaymentContract/getDirectorPPC',
+					data: {
+						current: 1,
+						page: 5,
+						userId: this.user.userId,
+						type: 0
+					}
+				}).then(res=>{
+					if(res.code==200){
+						this.processPaymentList=res.data.records;
+						console.log(this.processPaymentList);
 					}
 				},
 				err=>{
@@ -322,10 +364,17 @@
 					})
 				}
 			},
+			toProcessPayment(e) {
+				if (e == "extra") {
+					uni.navigateTo({
+						url: "/pages/audit/processPayment"
+					})
+				}
+			},
 			toSale(e) {
 				if (e == "extra") {
 					uni.navigateTo({
-						url: "/pages/audit//sale"
+						url: "/pages/audit/sale"
 					})
 				}
 			},
@@ -367,6 +416,11 @@
 					uni.navigateTo({
 						// 普通参数传输
 						url: '/pages/detail/purchasePaymentDetail?contractId=' + contractNo
+					})
+				} else if (type == "processPayment") {
+					uni.navigateTo({
+						// 普通参数传输
+						url: '/pages/detail/processPaymentDetail?contractId=' + contractNo
 					})
 				} else if (type == "sale") {
 					uni.navigateTo({

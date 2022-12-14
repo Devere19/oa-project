@@ -5,7 +5,8 @@ const request = (params) => {
 		mask: true
 	})
 	return new Promise(function(resolve, reject) {
-		const baseUrl = 'http://120.77.28.123:9000';
+		const baseUrl = 'http://localhost:9000';
+		// const baseUrl = 'http://120.77.28.123:9000';
 		let token_value='';
 		const token = uni.getStorageSync('token');
 		if(token!=null){

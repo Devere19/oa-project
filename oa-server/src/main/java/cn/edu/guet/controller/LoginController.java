@@ -45,7 +45,7 @@ public class LoginController {
         }
         // 账号锁定
         if (user.getStatus().equals("离职")) {
-            return ResultUtils.success("改员工已离职,请联系管理员",0);
+            return ResultUtils.success("该员工已离职,请联系管理员",0);
         }
         // 系统登录认证
         JwtAuthenticationToken token = SecurityUtils.login(request, username, password, authenticationManager);
