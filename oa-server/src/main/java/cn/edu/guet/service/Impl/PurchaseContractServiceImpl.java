@@ -3,18 +3,12 @@ package cn.edu.guet.service.Impl;
 import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.PurchaseDirectorState;
 import cn.edu.guet.bean.PurchasePaymentContract;
-import cn.edu.guet.bean.ShippingContract;
-import cn.edu.guet.bean.customer.Customer;
 import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
-
-import cn.edu.guet.bean.own.OwnInOut;
 import cn.edu.guet.bean.own.OwnWarehouse;
 import cn.edu.guet.bean.purchaseContract.*;
 import cn.edu.guet.mapper.*;
-import cn.edu.guet.service.CustomerService;
 import cn.edu.guet.service.PurchaseContractService;
-import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
 import cn.edu.guet.util.UnitUtils;
@@ -41,7 +35,7 @@ import java.util.List;
  * @createDate 2022-10-31 18:18:23
  */
 @Service
-public class PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMapper, PurchaseContract>
+public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMapper, PurchaseContract>
         implements PurchaseContractService {
 
     @Autowired

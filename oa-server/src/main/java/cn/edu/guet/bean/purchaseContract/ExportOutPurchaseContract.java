@@ -65,12 +65,6 @@ public class ExportOutPurchaseContract {
     private String goodsUnit;
 
     /**
-     * 采购货物单价
-     */
-    @Excel(name = "采购货物单价")
-    private BigDecimal goodsUnitPrice;
-
-    /**
      * 采购总金额
      */
     @Excel(name = "采购总金额")

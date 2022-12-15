@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.PurchasePaymentContractInfoMapper">
+
+    <!--    导出-->
+    <!--    导出-->
+    <!--    导出-->
+    <select id="getPurchaseExportDayData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        WHERE payment_time between #{startDate} and #{endDate}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getPurchaseExportMonthData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y-%m')
+    </select>
+
+    <select id="getPurchaseExportSeasonData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
+    </select>
+
+    <select id="getPurchaseExportYearData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y')
+    </select>
+
+    <select id="getPurchaseExportCompanyDayData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        WHERE payment_time between #{startDate} and #{endDate} AND own_company_name=#{company}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getPurchaseExportCompanyMonthData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        WHERE own_company_name=#{company}
+        HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y-%m')
+    </select>
+
+    <select id="getPurchaseExportCompanySeasonData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        WHERE own_company_name=#{company}
+        HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
+    </select>
+
+    <select id="getPurchaseExportCompanyYearData" resultType="cn.edu.guet.bean.exportModel.ExportPurchasePaymentModel">
+        SELECT
+            id,purchase_contract_no,customer_enterprise_name,own_company_name,payment_count,payment_time,finance_staff,cashier
+        FROM purchase_payment_contract_info
+        WHERE own_company_name=#{company}
+        HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y')
+    </select>
+</mapper>

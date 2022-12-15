@@ -203,30 +203,35 @@
     <el-dialog v-model="detialDialogFlag" width="70%" top="5vh" draggable center :before-close="closeDetailDialog">
         <ul style="overflow: auto;height:750px;padding: 0;">
             <div class="detailContent">
-                <div v-show="dayPickerFlag">
-                    <el-date-picker v-model="detailDay" type="date" value-format="YYYY-MM-DD"
-                        :disabled-date="disabledDate" placeholder="选择日期" size="large" @change="changeDetailDay" />
-                </div>
-                <div v-show="monthPickerFlag">
-                    <el-date-picker v-model="detailMonth" type="month" value-format="YYYY-MM"
-                        :disabled-date="disabledDate" placeholder="选择月份" size="large" @change="changeDetailMonth" />
-                </div>
-                <div v-show="seasonPickerFlag">
-                    <div class="rowCenterGroup">
-                        <el-date-picker v-model="detailSYear" type="year" value-format="YYYY"
-                            :disabled-date="disabledDate" placeholder="选择年份" size="large" @change="changeDetailSYear" />
-                        <el-select v-model="detailSSeason" placeholder="选择季度" size="large"
-                            @change="changeDetailSSeason">
-                            <el-option label="第一季度" value="1"></el-option>
-                            <el-option label="第二季度" value="2"></el-option>
-                            <el-option label="第三季度" value="3"></el-option>
-                            <el-option label="第四季度" value="4"></el-option>
-                        </el-select>
+                <div class="headerGroup">
+                    <div v-show="dayPickerFlag" class="pickerGroup">
+                        <el-date-picker v-model="detailDay" type="date" value-format="YYYY-MM-DD"
+                            :disabled-date="disabledDate" placeholder="选择日期" size="large" @change="changeDetailDay" />
                     </div>
-                </div>
-                <div v-show="yearPickerFlag">
-                    <el-date-picker v-model="detailYear" type="year" value-format="YYYY" :disabled-date="disabledDate"
-                        placeholder="选择年份" size="large" @change="changeDetailYear" />
+                    <div v-show="monthPickerFlag" class="pickerGroup">
+                        <el-date-picker v-model="detailMonth" type="month" value-format="YYYY-MM"
+                            :disabled-date="disabledDate" placeholder="选择月份" size="large" @change="changeDetailMonth" />
+                    </div>
+                    <div v-show="seasonPickerFlag" class="pickerGroup">
+                        <div class="rowCenterGroup">
+                            <el-date-picker v-model="detailSYear" type="year" value-format="YYYY"
+                                :disabled-date="disabledDate" placeholder="选择年份" size="large"
+                                @change="changeDetailSYear" />
+                            <el-select v-model="detailSSeason" placeholder="选择季度" size="large"
+                                @change="changeDetailSSeason">
+                                <el-option label="第一季度" value="1"></el-option>
+                                <el-option label="第二季度" value="2"></el-option>
+                                <el-option label="第三季度" value="3"></el-option>
+                                <el-option label="第四季度" value="4"></el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <div v-show="yearPickerFlag" class="pickerGroup">
+                        <el-date-picker v-model="detailYear" type="year" value-format="YYYY"
+                            :disabled-date="disabledDate" placeholder="选择年份" size="large" @change="changeDetailYear" />
+                    </div>
+                    <el-button class="exportButton" :icon="Download" type="success" @click="exportExcel">导出
+                    </el-button>
                 </div>
                 <el-row v-show="dataType == '0'" class="detailRow">
                     <el-col>
@@ -252,7 +257,7 @@
                         <template #default="scope">
                             <el-image style="width: 80px; height: 80px"
                                 :src="scope.row.revenuePhoto == '' ? null : scope.row.revenuePhoto"
-                                :preview-src-list="scope.row.revenuePhotoList" fit="cover" preview-teleported="true" />
+                                :preview-src-list="scope.row.revenuePhotoList" fit="cover" :preview-teleported="true" />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" align="center" width="120">
@@ -282,13 +287,14 @@
                         <template #default="scope">
                             <el-image style="width: 80px; height: 80px"
                                 :src="scope.row.paymentPhoto == '' ? null : scope.row.paymentPhoto"
-                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover" preview-teleported="true" />
+                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover"
+                                :preview-teleported="true" />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" align="center" width="120">
                         <template #default="scope">
                             <el-button type="primary" :icon="MoreFilled" size="default"
-                                @click="scope.row.type == '采购付款单' ? openPurchaseDetail(scope.row) : scope.row.type == '物流付款单' ? openLogisticsDetail(scope.row) : openShippingDetail(scope.row)">
+                                @click="scope.row.type == '采购付款单' ? openPurchaseDetail(scope.row) : scope.row.type == '加工付款单' ? openProcessDetail(scope.row) : scope.row.type == '物流付款单' ? openLogisticsDetail(scope.row) : openShippingDetail(scope.row)">
                                 详情
                             </el-button>
                         </template>
@@ -306,7 +312,8 @@
                         <template #default="scope">
                             <el-image style="width: 100px; height: 100px"
                                 :src="scope.row.paymentPhoto == '' ? null : scope.row.paymentPhoto"
-                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover" preview-teleported="true" />
+                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover"
+                                :preview-teleported="true" />
                         </template>
                     </el-table-column>
                     <el-table-column align="center" label="操作" width="130" fixed="right">
@@ -624,6 +631,160 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.createTime }}
+                </el-col>
+            </el-row>
+        </div>
+    </el-dialog>
+    <el-dialog v-model="processDialogFlag" title="加工付款单详情" width="55%" draggable center
+        :before-close="closeProcessDetail">
+        <div>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    加工合同编号：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processContractNo }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    付款月份：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.paymentMonth }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle" style="color: rgb(42, 183, 243);">
+                    总费用金额：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent" style="color: rgb(42, 183, 243);">
+                    {{ processPaymentContractDetail.paymentCount }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    加工方公司名：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.customerEnterpriseName }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    己方公司名：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.ownCompanyName }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    加工单价(元/吨)：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.paymentMonthPriceT }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    加工总量(吨)：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.goodsCount }}
+                </el-col>
+            </el-row>
+        </div>
+        <el-divider />
+        <div>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    财务名称：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
+                            processPaymentContractDetail.financeStaff
+                    }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    财务审核状态：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.financeState == null ? "未处理" : "已通过✔" }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    董事1名称：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processPaymentDirector[0].nickName }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    董事1审核状态：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processPaymentDirector[0].state == null ? "未处理" : "已通过✔" }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    董事2名称：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processPaymentDirector[1].nickName }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    董事2审核状态：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processPaymentDirector[1].state == null ? "未处理" : "已通过✔" }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    董事3名称：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processPaymentDirector[2].nickName }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    董事3审核状态：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.processPaymentDirector[2].state == null ? "未处理" : "已通过✔" }}
+                </el-col>
+            </el-row>
+        </div>
+        <el-divider />
+        <div>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    出纳名称：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.cashier == null ? "暂无" :
+                            processPaymentContractDetail.cashier
+                    }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    付款时间：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.paymentTime == null ? "未知" :
+                            processPaymentContractDetail.paymentTime
+                    }}
+                </el-col>
+            </el-row>
+        </div>
+        <el-divider />
+        <div>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    创建者：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.createBy }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    创建时间：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ processPaymentContractDetail.createTime }}
                 </el-col>
             </el-row>
         </div>
@@ -1157,13 +1318,18 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElTable, ElMessage } from 'element-plus'
-import { MoreFilled } from "@element-plus/icons-vue";
+import { MoreFilled, Download } from "@element-plus/icons-vue";
 import { conversionDate, dateConversion, timeConversion } from "@/utils/timeFormat"
 import { purchasePaymentDirectorModel } from '@/api/purchasePaymentContract/PurchasePaymentContractModel'
 import { logisticsPaymentDirectorModel } from '@/api/logisticsPaymentContract/LogisticsPaymentContractModel'
 import { shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
 import { officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
-import { getChartIncomeSpendDataApi, getNumberIncomeSpendDataApi, getDetailIncomeSpendDataApi, getOnePurchasePaymentContractApi, getOneLogisticsPaymentContractApi, getOneShippingContractApi } from '@/api/reportAnalysis'
+import { IncomeSpendExportModel } from '@/api/reportAnalysis/ReportAnalysisModel';
+import {
+    getChartIncomeSpendDataApi, getNumberIncomeSpendDataApi, getDetailIncomeSpendDataApi,
+    getOnePurchasePaymentContractApi, getOneProcessPaymentContractApi, getOneLogisticsPaymentContractApi, getOneShippingContractApi,
+    sendExportParmApi
+} from '@/api/reportAnalysis'
 import echarts from "@/utils/echartsUtil";
 // 引入柱状图图表，图表后缀都为 Chart
 import { LineChart } from "echarts/charts";
@@ -1204,6 +1370,7 @@ const detailYear = ref<Date>();
 // 详情窗口
 const saleDialogFlag = ref(false)
 const purchaseDialogFlag = ref(false)
+const processDialogFlag = ref(false)
 const logisticsDialogFlag = ref(false)
 const shippingDialogFlag = ref(false)
 const officeDialogFlag = ref(false)
@@ -1560,6 +1727,26 @@ const purchasePaymentContractDetail = reactive({
     createBy: '',
 })
 
+// 加工付款单详情
+const processPaymentContractDetail = reactive({
+    id: '',
+    processContractNo: '',
+    paymentMonth: '',
+    paymentMonthPriceT: '',
+    goodsCount: '',
+    paymentCount: '',
+    customerEnterpriseName: '',
+    ownCompanyName: '',
+    financeStaff: '',
+    financeState: '',
+    processPaymentDirector: reactive<processPaymentDirectorModel[]>([]),
+    cashier: '',
+    paymentTime: '',
+    paymentPhotoArray: reactive<string[]>([]),
+    createTime: '',
+    createBy: '',
+})
+
 // 物流付款单详情
 const logisticsPaymentContractDetail = reactive({
     id: '',
@@ -1628,6 +1815,13 @@ const officeExpenseDetail = reactive({
     paymentPhotoArray: reactive<string[]>([]),
     createTime: '',
     createBy: '',
+})
+
+const exportListParm = reactive<IncomeSpendExportModel>({
+    dataType: '',
+    dataCompany: '',
+    timeType: 0,
+    chooseDate: '',
 })
 
 const disabledDate = (time: Date) => {
@@ -2134,6 +2328,10 @@ const getSeason = (time: number) => {
 
 const getDetailData = (timeType: any, startDate: any) => {
     changeLoadingTrue();
+    exportListParm.dataType = dataType.value;
+    exportListParm.dataCompany = dataCompany.value;
+    exportListParm.timeType = timeType;
+    exportListParm.chooseDate = startDate;
     getDetailIncomeSpendDataApi(dataType.value, dataCompany.value, timeType, startDate, startDate).then(res => {
         changeLoadingFalse();
         if (res.code == 200) {
@@ -2232,7 +2430,7 @@ const closeSaleDetail = () => {
     saleDialogFlag.value = false
 }
 
-// 打开采购单窗口
+// 打开采购付款单窗口
 const openPurchaseDetail = (row: any) => {
     changeLoadingTrue();
     getOnePurchasePaymentContractApi(row.id).then(res => {
@@ -2261,9 +2459,40 @@ const openPurchaseDetail = (row: any) => {
     })
 }
 
-// 关闭采购单窗口
+// 关闭采购付款单窗口
 const closePurchaseDetail = () => {
     purchaseDialogFlag.value = false
+}
+
+// 打开加工付款单窗口
+const openProcessDetail = (row: any) => {
+    changeLoadingTrue();
+    getOneProcessPaymentContractApi(row.id).then(res => {
+        changeLoadingFalse();
+        if (res.code == 200) {
+            processPaymentContractDetail.processContractNo = res.data.processContractNo
+            processPaymentContractDetail.paymentMonth = res.data.paymentMonth
+            processPaymentContractDetail.paymentMonthPriceT = res.data.paymentMonthPriceT
+            processPaymentContractDetail.goodsCount = res.data.goodsCount
+            processPaymentContractDetail.paymentCount = res.data.paymentCount
+            processPaymentContractDetail.customerEnterpriseName = res.data.customerEnterpriseName
+            processPaymentContractDetail.ownCompanyName = res.data.ownCompanyName
+            processPaymentContractDetail.financeStaff = res.data.financeStaff
+            processPaymentContractDetail.financeState = res.data.financeState
+            processPaymentContractDetail.processPaymentDirector = res.data.processPaymentDirector
+            processPaymentContractDetail.cashier = res.data.cashier
+            processPaymentContractDetail.paymentTime = dateConversion(res.data.paymentTime)
+            processPaymentContractDetail.paymentPhotoArray = res.data.paymentPhotoArray
+            processPaymentContractDetail.createTime = timeConversion(res.data.createTime)
+            processPaymentContractDetail.createBy = res.data.createBy
+            processDialogFlag.value = true
+        }
+    })
+}
+
+// 关闭加工付款单窗口
+const closeProcessDetail = () => {
+    processDialogFlag.value = false
 }
 
 // 打开物流单窗口
@@ -2363,6 +2592,19 @@ const closeOfficeDetail = () => {
     officeDialogFlag.value = false
 }
 
+//导出表格
+const exportExcel = () => {
+    sendExportParmApi(exportListParm).then(res => {
+        if (res.code == 200) {
+            console.log("传递成功");
+            console.log(res.data);
+            const abtn = document.createElement("a");
+            abtn.href = "http://localhost:9000/finance/incomeSpendExportExcel"
+            abtn.click();
+        }
+    })
+}
+
 </script>
 
 <style scoped>
@@ -2448,6 +2690,26 @@ const closeOfficeDetail = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.headerGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.pickerGroup {
+    margin-left: 40%;
+    align-self: center;
+    width: 100%;
+}
+
+.exportButton {
+    align-self: center;
+    display: flex;
+    float: right;
+    margin-right: 5%;
 }
 
 .detailRow {

@@ -3,31 +3,38 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.guet.mapper.OfficeExpenseMapper">
+    <!--    导出-->
+    <!--    导出-->
+    <!--    导出-->
+    <select id="getOfficeExpenseExportDayData" resultType="cn.edu.guet.bean.exportModel.ExportOfficeExpenseModel">
+        SELECT
+            id,items_list,expenses,payment_count,payment_time,finance_staff,cashier
+        FROM office_expense
+        WHERE payment_time between #{startDate} and #{endDate}
+        ORDER BY payment_time
+    </select>
 
-    <resultMap id="BaseResultMap" type="cn.edu.guet.bean.OfficeExpense">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="itemsList" column="items_list" jdbcType="VARCHAR"/>
-            <result property="expenses" column="expenses" jdbcType="DECIMAL"/>
-            <result property="time" column="time" jdbcType="DATE"/>
-            <result property="financeStaff" column="finance_staff" jdbcType="VARCHAR"/>
-            <result property="financeState" column="finance_state" jdbcType="INTEGER"/>
-            <result property="cashier" column="cashier" jdbcType="VARCHAR"/>
-            <result property="paymentCount" column="payment_count" jdbcType="DECIMAL"/>
-            <result property="paymentTime" column="payment_time" jdbcType="DATE"/>
-            <result property="paymentPhoto" column="payment_photo" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
-            <result property="lastUpdateTime" column="last_update_time" jdbcType="TIMESTAMP"/>
-            <result property="lastUpdateBy" column="last_update_by" jdbcType="VARCHAR"/>
-    </resultMap>
+    <select id="getOfficeExpenseExportMonthData" resultType="cn.edu.guet.bean.exportModel.ExportOfficeExpenseModel">
+        SELECT
+            id,items_list,expenses,payment_count,payment_time,finance_staff,cashier
+        FROM office_expense
+        HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y-%m')
+    </select>
 
-    <sql id="Base_Column_List">
-        id,items_list,expenses,
-        time,finance_staff,finance_state,
-        cashier,payment_count,payment_time,
-        payment_photo,create_time,create_by,
-        last_update_time,last_update_by
-    </sql>
+    <select id="getOfficeExpenseExportSeasonData" resultType="cn.edu.guet.bean.exportModel.ExportOfficeExpenseModel">
+        SELECT
+            id,items_list,expenses,payment_count,payment_time,finance_staff,cashier
+        FROM office_expense
+        HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
+    </select>
 
-
+    <select id="getOfficeExpenseExportYearData" resultType="cn.edu.guet.bean.exportModel.ExportOfficeExpenseModel">
+        SELECT
+            id,items_list,expenses,payment_count,payment_time,finance_staff,cashier
+        FROM office_expense
+        HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y')
+    </select>
 </mapper>

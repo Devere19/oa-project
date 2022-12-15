@@ -1,6 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.exportModel.*;
 import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.IncomeSpendInfoService;
@@ -40,6 +41,21 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
 
     @Autowired
     private OfficeStateInfoMapper officeStateInfoMapper;
+
+    @Autowired
+    private PurchasePaymentContractInfoMapper purchasePaymentContractInfoMapper;
+
+    @Autowired
+    private ProcessPaymentContractInfoMapper processPaymentContractInfoMapper;
+
+    @Autowired
+    private LogisticsPaymentContractInfoMapper logisticsPaymentContractInfoMapper;
+
+    @Autowired
+    private ShippingContractMapper shippingContractMapper;
+
+    @Autowired
+    private OfficeExpenseMapper officeExpenseMapper;
 
     @Override
     public List getChartIncomeSpendData(String dataType, String dataCompany, int timeType, String startDate, String endDate) {
@@ -325,6 +341,156 @@ public class IncomeSpendInfoServiceImpl extends ServiceImpl<TotalIncomeSpendInfo
         }
         return officeList;
     }
+
+    @Override
+    public List<ExportSaleModel> getSaleData(String dataCompany, Integer timeType, String chooseDate) {
+        String[] companyList={"总体","广西永湘贸易有限责任公司","广西永湘物流有限公司","广西丰沣顺国际物流有限公司","广西众润贸易有限责任公司"};
+        if("0".equals(dataCompany)){
+            if(timeType==0){
+                return saleContractMapper.getSaleExportDayData(chooseDate,chooseDate);
+            }else if(timeType==1){
+                return saleContractMapper.getSaleExportMonthData(chooseDate,chooseDate);
+            }else if(timeType==2){
+                return saleContractMapper.getSaleExportSeasonData(chooseDate,chooseDate);
+            }else if(timeType==3){
+                return saleContractMapper.getSaleExportYearData(chooseDate,chooseDate);
+            }
+        }else{
+            if(timeType==0){
+                return saleContractMapper.getSaleExportCompanyDayData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==1){
+                return saleContractMapper.getSaleExportCompanyMonthData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==2){
+                return saleContractMapper.getSaleExportCompanySeasonData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==3){
+                return saleContractMapper.getSaleExportCompanyYearData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ExportPurchasePaymentModel> getPurchasePaymentData(String dataCompany, Integer timeType, String chooseDate) {
+        String[] companyList={"总体","广西永湘贸易有限责任公司","广西永湘物流有限公司","广西丰沣顺国际物流有限公司","广西众润贸易有限责任公司"};
+        if("0".equals(dataCompany)){
+            if(timeType==0){
+                return purchasePaymentContractInfoMapper.getPurchaseExportDayData(chooseDate,chooseDate);
+            }else if(timeType==1){
+                return purchasePaymentContractInfoMapper.getPurchaseExportMonthData(chooseDate,chooseDate);
+            }else if(timeType==2){
+                return purchasePaymentContractInfoMapper.getPurchaseExportSeasonData(chooseDate,chooseDate);
+            }else if(timeType==3){
+                return purchasePaymentContractInfoMapper.getPurchaseExportYearData(chooseDate,chooseDate);
+            }
+        }else{
+            if(timeType==0){
+                return purchasePaymentContractInfoMapper.getPurchaseExportCompanyDayData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==1){
+                return purchasePaymentContractInfoMapper.getPurchaseExportCompanyMonthData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==2){
+                return purchasePaymentContractInfoMapper.getPurchaseExportCompanySeasonData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==3){
+                return purchasePaymentContractInfoMapper.getPurchaseExportCompanyYearData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ExportProcessPaymentModel> getProcessPaymentData(String dataCompany, Integer timeType, String chooseDate) {
+        String[] companyList={"总体","广西永湘贸易有限责任公司","广西永湘物流有限公司","广西丰沣顺国际物流有限公司","广西众润贸易有限责任公司"};
+        if("0".equals(dataCompany)){
+            if(timeType==0){
+                return processPaymentContractInfoMapper.getProcessExportDayData(chooseDate,chooseDate);
+            }else if(timeType==1){
+                return processPaymentContractInfoMapper.getProcessExportMonthData(chooseDate,chooseDate);
+            }else if(timeType==2){
+                return processPaymentContractInfoMapper.getProcessExportSeasonData(chooseDate,chooseDate);
+            }else if(timeType==3){
+                return processPaymentContractInfoMapper.getProcessExportYearData(chooseDate,chooseDate);
+            }
+        }else{
+            if(timeType==0){
+                return processPaymentContractInfoMapper.getProcessExportCompanyDayData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==1){
+                return processPaymentContractInfoMapper.getProcessExportCompanyMonthData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==2){
+                return processPaymentContractInfoMapper.getProcessExportCompanySeasonData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==3){
+                return processPaymentContractInfoMapper.getProcessExportCompanyYearData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ExportLogisticsPaymentModel> getLogisticsPaymentData(String dataCompany, Integer timeType, String chooseDate) {
+        String[] companyList={"总体","广西永湘贸易有限责任公司","广西永湘物流有限公司","广西丰沣顺国际物流有限公司","广西众润贸易有限责任公司"};
+        if("0".equals(dataCompany)){
+            if(timeType==0){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportDayData(chooseDate,chooseDate);
+            }else if(timeType==1){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportMonthData(chooseDate,chooseDate);
+            }else if(timeType==2){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportSeasonData(chooseDate,chooseDate);
+            }else if(timeType==3){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportYearData(chooseDate,chooseDate);
+            }
+        }else{
+            if(timeType==0){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportCompanyDayData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==1){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportCompanyMonthData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==2){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportCompanySeasonData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==3){
+                return logisticsPaymentContractInfoMapper.getLogisticsExportCompanyYearData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ExportShippingModel> getShippingData(String dataCompany, Integer timeType, String chooseDate) {
+        String[] companyList={"总体","广西永湘贸易有限责任公司","广西永湘物流有限公司","广西丰沣顺国际物流有限公司","广西众润贸易有限责任公司"};
+        if("0".equals(dataCompany)){
+            if(timeType==0){
+                return shippingContractMapper.getShippingExportDayData(chooseDate,chooseDate);
+            }else if(timeType==1){
+                return shippingContractMapper.getShippingExportMonthData(chooseDate,chooseDate);
+            }else if(timeType==2){
+                return shippingContractMapper.getShippingExportSeasonData(chooseDate,chooseDate);
+            }else if(timeType==3){
+                return shippingContractMapper.getShippingExportYearData(chooseDate,chooseDate);
+            }
+        }else{
+            if(timeType==0){
+                return shippingContractMapper.getShippingExportCompanyDayData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==1){
+                return shippingContractMapper.getShippingExportCompanyMonthData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==2){
+                return shippingContractMapper.getShippingExportCompanySeasonData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }else if(timeType==3){
+                return shippingContractMapper.getShippingExportCompanyYearData(companyList[Integer.parseInt(dataCompany)],chooseDate,chooseDate);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ExportOfficeExpenseModel> getOfficeExpenseData(Integer timeType, String chooseDate) {
+        if(timeType==0){
+            return officeExpenseMapper.getOfficeExpenseExportDayData(chooseDate,chooseDate);
+        }else if(timeType==1){
+            return officeExpenseMapper.getOfficeExpenseExportMonthData(chooseDate,chooseDate);
+        }else if(timeType==2){
+            return officeExpenseMapper.getOfficeExpenseExportSeasonData(chooseDate,chooseDate);
+        }else if(timeType==3){
+            return officeExpenseMapper.getOfficeExpenseExportYearData(chooseDate,chooseDate);
+        }
+        return null;
+    }
+
 }
 
 
