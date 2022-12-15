@@ -1,4 +1,5 @@
 import http from "@/http";
+import { IncomeSpendExportModel } from "./ReportAnalysisModel";
 
 //获取图表收入支出数据
 export const getChartIncomeSpendDataApi = (dataType: string, dataCompany: string, timeType: number, startDate: any, endDate: any) => {
@@ -37,6 +38,13 @@ export const getOnePurchasePaymentContractApi = (id: number) => {
     })
 }
 
+// 获取加工付款单详情
+export const getOneProcessPaymentContractApi = (id: number) => {
+    return http.get("finance/getOneProcessPaymentContract", {
+        id: id
+    })
+}
+
 // 获取物流付款单详情
 export const getOneLogisticsPaymentContractApi = (id: number) => {
     return http.get("finance/getOneLogisticsPaymentContract", {
@@ -49,4 +57,9 @@ export const getOneShippingContractApi = (id: number) => {
     return http.get("finance/getOneShippingContract", {
         id: id
     })
+}
+
+//导出excel传递参数
+export const sendExportParmApi = (incomeSpendExportModel: IncomeSpendExportModel) => {
+    return http.post("/finance/sendExportParm", incomeSpendExportModel)
 }

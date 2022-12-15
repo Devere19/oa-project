@@ -74,6 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/saleContract/exportExcel").permitAll()
                 //放行物流单导出
                 .antMatchers("/api/logistics/exportExcel").permitAll()
+                //放行查看细则单导出
+                .antMatchers("/finance/incomeSpendExportExcel").permitAll()
 //                .antMatchers("/**").permitAll()
                 // 其他所有请求需要身份认证
                 .anyRequest().authenticated();

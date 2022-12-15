@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.guet.mapper.LogisticsPaymentContractInfoMapper">
+    <!--    导出-->
+    <!--    导出-->
+    <!--    导出-->
+    <select id="getLogisticsExportDayData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        WHERE payment_time between #{startDate} and #{endDate}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getLogisticsExportMonthData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y-%m')
+    </select>
+
+    <select id="getLogisticsExportSeasonData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
+    </select>
+
+    <select id="getLogisticsExportYearData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y')
+    </select>
+
+    <select id="getLogisticsExportCompanyDayData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        WHERE payment_time between #{startDate} and #{endDate} AND own_company_name=#{company}
+        ORDER BY payment_time
+    </select>
+
+    <select id="getLogisticsExportCompanyMonthData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        WHERE own_company_name=#{company}
+        HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y-%m')
+    </select>
+
+    <select id="getLogisticsExportCompanySeasonData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        WHERE own_company_name=#{company}
+        HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
+    </select>
+
+    <select id="getLogisticsExportCompanyYearData" resultType="cn.edu.guet.bean.exportModel.ExportLogisticsPaymentModel">
+        SELECT
+            id,logistics_contract_no,payment_count,payment_time,finance_staff,cashier
+        FROM logistics_payment_contract_info
+        WHERE own_company_name=#{company}
+        HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(payment_time, '%Y')
+    </select>
+</mapper>

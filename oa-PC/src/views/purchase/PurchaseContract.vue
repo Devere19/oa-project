@@ -712,7 +712,7 @@ const exportExcel = () => {
   sendExportParmApi(exportListParm).then(res => {
     if (res.code == 200) {
       const abtn = document.createElement("a");
-      abtn.href = "http://120.77.28.123:9000/purchaseContract/purchaseExportExcel"
+      abtn.href = "http://localhost:9000/purchaseContract/purchaseExportExcel"
       abtn.click();
     }
   })

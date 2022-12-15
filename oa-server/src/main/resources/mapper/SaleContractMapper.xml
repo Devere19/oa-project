@@ -40,63 +40,146 @@
     </resultMap>
 
     <select id="getTotalDayIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id AND revenue_time between #{startDate} and #{endDate}
+        SELECT sc.*
+        FROM sale_contract sc
+        WHERE revenue_time between #{startDate} and #{endDate}
         ORDER BY revenue_time
     </select>
 
     <select id="getTotalMonthIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id
+        SELECT sc.*
+        FROM sale_contract sc
         HAVING date_format(revenue_time, '%Y-%m') between #{startDate} and #{endDate}
         ORDER BY date_format(revenue_time, '%Y-%m')
     </select>
 
     <select id="getTotalSeasonIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id
+        SELECT sc.*
+        FROM sale_contract sc
         HAVING CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time))) between #{startDate} and #{endDate}
         ORDER BY CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time)))
     </select>
 
     <select id="getTotalYearIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id
+        SELECT sc.*
+        FROM sale_contract sc
         HAVING date_format(revenue_time, '%Y') between #{startDate} and #{endDate}
         ORDER BY date_format(revenue_time, '%Y')
     </select>
 
     <select id="getCompanyDayIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id AND revenue_time between #{startDate} and #{endDate} AND own_company_name=#{company}
+        SELECT sc.*
+        FROM sale_contract sc
+        WHERE revenue_time between #{startDate} and #{endDate} AND own_company_name=#{company}
         ORDER BY revenue_time
     </select>
 
     <select id="getCompanyMonthIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id AND own_company_name=#{company}
+        SELECT sc.*
+        FROM sale_contract sc
+        WHERE own_company_name=#{company}
         HAVING date_format(revenue_time, '%Y-%m') between #{startDate} and #{endDate}
         ORDER BY date_format(revenue_time, '%Y-%m')
     </select>
 
     <select id="getCompanySeasonIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id AND own_company_name=#{company}
+        SELECT sc.*
+        FROM sale_contract sc
+        WHERE own_company_name=#{company}
         HAVING CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time))) between #{startDate} and #{endDate}
         ORDER BY CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time)))
     </select>
 
     <select id="getCompanyYearIncomeData" resultType="cn.edu.guet.bean.sale.SaleContract">
-        SELECT sc.*, c.customer_enterprise_name
-        FROM sale_contract sc,customer c
-        WHERE sc.sale_customer_id=c.id AND own_company_name=#{company}
+        SELECT sc.*
+        FROM sale_contract sc
+        WHERE own_company_name=#{company}
+        HAVING date_format(revenue_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y')
+    </select>
+
+<!--    导出-->
+<!--    导出-->
+<!--    导出-->
+    <select id="getSaleExportDayData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+               sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+               revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+               goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        WHERE revenue_time between #{startDate} and #{endDate}
+        ORDER BY revenue_time
+    </select>
+
+    <select id="getSaleExportMonthData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        HAVING date_format(revenue_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y-%m')
+    </select>
+
+    <select id="getSaleExportSeasonData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        HAVING CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time)))
+    </select>
+
+    <select id="getSaleExportYearData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        HAVING date_format(revenue_time, '%Y') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y')
+    </select>
+
+    <select id="getSaleExportCompanyDayData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        WHERE revenue_time between #{startDate} and #{endDate} AND own_company_name=#{company}
+        ORDER BY revenue_time
+    </select>
+
+    <select id="getSaleExportCompanyMonthData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        WHERE own_company_name=#{company}
+        HAVING date_format(revenue_time, '%Y-%m') between #{startDate} and #{endDate}
+        ORDER BY date_format(revenue_time, '%Y-%m')
+    </select>
+
+    <select id="getSaleExportCompanySeasonData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        WHERE own_company_name=#{company}
+        HAVING CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time))) between #{startDate} and #{endDate}
+        ORDER BY CONCAT(YEAR(revenue_time),CONCAT('-',QUARTER(revenue_time)))
+    </select>
+
+    <select id="getSaleExportCompanyYearData" resultType="cn.edu.guet.bean.exportModel.ExportSaleModel">
+        SELECT
+            sale_contract_no,customer_enterprise_name,own_company_name,goods_total_price,revenue_amount,
+            revenue_time,revenue_by,squeeze_season,sale_contract_time,goods_name,goods_count,goods_unit,
+            goods_unit_price,payment_method,transport_method
+        FROM sale_contract
+        WHERE own_company_name=#{company}
         HAVING date_format(revenue_time, '%Y') between #{startDate} and #{endDate}
         ORDER BY date_format(revenue_time, '%Y')
     </select>
