@@ -21,7 +21,7 @@
         @click="openMoreDeleteDialog">批量删除
       </el-button> -->
       <el-upload class="moreDeleteButton" name="file"
-        action="http://120.77.28.123:9000/purchaseContract/purchaseImportExcel" :on-error="uploadFalse"
+        action="http://localhost:9000/purchaseContract/purchaseImportExcel" :on-error="uploadFalse"
         :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload" accept=".xlsx,.xls"
         :show-file-list="false">
         <el-button :icon="Upload" type="primary">批量导入</el-button>
@@ -1304,6 +1304,11 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
       message: '批量插入采购单成功！',
       type: 'success',
     })
+    if (showPigeonhole.value == false) {
+      getTTableData();
+    } else {
+      getFTableData();
+    }
   } else {
     ElMessage({
       message: '系统出错，批量插入采购单失败！',

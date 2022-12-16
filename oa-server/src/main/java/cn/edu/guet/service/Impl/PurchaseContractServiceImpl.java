@@ -422,10 +422,12 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
             for (int i = 1; i <= 20; i++) {
                 Method nameMethod = importPurchaseContractModel.getClass().getMethod("getFactoryName" + i);
                 Method countMethod = importPurchaseContractModel.getClass().getMethod("getInboundGoodsCount" + i);
+                Method unitPriceMethod = importPurchaseContractModel.getClass().getMethod("getInOutGoodsUnitPrice" + i);
                 if (nameMethod.invoke(importPurchaseContractModel) != null && countMethod.invoke(importPurchaseContractModel) != null) {
                     InboundBean inboundBean = new InboundBean();
                     inboundBean.setFactoryName(String.valueOf(nameMethod.invoke(importPurchaseContractModel)));
                     inboundBean.setInboundGoodsCount((BigDecimal) countMethod.invoke(importPurchaseContractModel));
+                    inboundBean.setGoodsUnitPrice((BigDecimal) unitPriceMethod.invoke(importPurchaseContractModel));
                     inboundBeans.add(inboundBean);
                 } else {
                     break;
