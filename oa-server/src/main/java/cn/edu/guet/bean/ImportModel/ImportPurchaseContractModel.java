@@ -66,12 +66,6 @@ public class ImportPurchaseContractModel {
     private String goodsUnit;
 
     /**
-     * 采购货物单价
-     */
-    @ExcelProperty(value = "采购货物单价")
-    private BigDecimal goodsUnitPrice;
-
-    /**
      * 采购总金额
      */
     @ExcelProperty(value = "采购总金额")
@@ -132,6 +126,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount1;
 
     /**
+     * 采购货物单价1
+     */
+    @ExcelProperty(value = "采购货物单价1")
+    private BigDecimal inOutGoodsUnitPrice1;
+
+    /**
      * 入库厂名2
      */
     @ExcelProperty(value = "入库厂名2")
@@ -142,6 +142,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量2")
     private BigDecimal inboundGoodsCount2;
+
+    /**
+     * 采购货物单价2
+     */
+    @ExcelProperty(value = "采购货物单价2")
+    private BigDecimal inOutGoodsUnitPrice2;
 
     /**
      * 入库厂名3
@@ -156,6 +162,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount3;
 
     /**
+     * 采购货物单价3
+     */
+    @ExcelProperty(value = "采购货物单价3")
+    private BigDecimal inOutGoodsUnitPrice3;
+
+    /**
      * 入库厂名4
      */
     @ExcelProperty(value = "入库厂名4")
@@ -166,6 +178,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量4")
     private BigDecimal inboundGoodsCount4;
+
+    /**
+     * 采购货物单价4
+     */
+    @ExcelProperty(value = "采购货物单价4")
+    private BigDecimal inOutGoodsUnitPrice4;
 
     /**
      * 入库厂名5
@@ -180,6 +198,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount5;
 
     /**
+     * 采购货物单价5
+     */
+    @ExcelProperty(value = "采购货物单价5")
+    private BigDecimal inOutGoodsUnitPrice5;
+
+    /**
      * 入库厂名6
      */
     @ExcelProperty(value = "入库厂名6")
@@ -190,6 +214,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量6")
     private BigDecimal inboundGoodsCount6;
+
+    /**
+     * 采购货物单价6
+     */
+    @ExcelProperty(value = "采购货物单价6")
+    private BigDecimal inOutGoodsUnitPrice6;
 
     /**
      * 入库厂名7
@@ -204,6 +234,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount7;
 
     /**
+     * 采购货物单价7
+     */
+    @ExcelProperty(value = "采购货物单价7")
+    private BigDecimal inOutGoodsUnitPrice7;
+
+    /**
      * 入库厂名8
      */
     @ExcelProperty(value = "入库厂名8")
@@ -214,6 +250,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量8")
     private BigDecimal inboundGoodsCount8;
+
+    /**
+     * 采购货物单价8
+     */
+    @ExcelProperty(value = "采购货物单价8")
+    private BigDecimal inOutGoodsUnitPrice8;
 
     /**
      * 入库厂名9
@@ -228,6 +270,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount9;
 
     /**
+     * 采购货物单价9
+     */
+    @ExcelProperty(value = "采购货物单价9")
+    private BigDecimal inOutGoodsUnitPrice9;
+
+    /**
      * 入库厂名10
      */
     @ExcelProperty(value = "入库厂名10")
@@ -238,6 +286,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量10")
     private BigDecimal inboundGoodsCount10;
+
+    /**
+     * 采购货物单价10
+     */
+    @ExcelProperty(value = "采购货物单价10")
+    private BigDecimal inOutGoodsUnitPrice10;
 
     /**
      * 入库厂名11
@@ -252,6 +306,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount11;
 
     /**
+     * 采购货物单价11
+     */
+    @ExcelProperty(value = "采购货物单价11")
+    private BigDecimal inOutGoodsUnitPrice11;
+
+    /**
      * 入库厂名12
      */
     @ExcelProperty(value = "入库厂名12")
@@ -262,6 +322,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量12")
     private BigDecimal inboundGoodsCount12;
+
+    /**
+     * 采购货物单价12
+     */
+    @ExcelProperty(value = "采购货物单价12")
+    private BigDecimal inOutGoodsUnitPrice12;
 
     /**
      * 入库厂名13
@@ -276,6 +342,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount13;
 
     /**
+     * 采购货物单价13
+     */
+    @ExcelProperty(value = "采购货物单价13")
+    private BigDecimal inOutGoodsUnitPrice13;
+
+    /**
      * 入库厂名14
      */
     @ExcelProperty(value = "入库厂名14")
@@ -286,6 +358,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量14")
     private BigDecimal inboundGoodsCount14;
+
+    /**
+     * 采购货物单价14
+     */
+    @ExcelProperty(value = "采购货物单价14")
+    private BigDecimal inOutGoodsUnitPrice14;
 
     /**
      * 入库厂名15
@@ -300,6 +378,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount15;
 
     /**
+     * 采购货物单价15
+     */
+    @ExcelProperty(value = "采购货物单价15")
+    private BigDecimal inOutGoodsUnitPrice15;
+
+    /**
      * 入库厂名16
      */
     @ExcelProperty(value = "入库厂名16")
@@ -310,6 +394,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量16")
     private BigDecimal inboundGoodsCount16;
+
+    /**
+     * 采购货物单价16
+     */
+    @ExcelProperty(value = "采购货物单价16")
+    private BigDecimal inOutGoodsUnitPrice16;
 
     /**
      * 入库厂名17
@@ -324,6 +414,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount17;
 
     /**
+     * 采购货物单价17
+     */
+    @ExcelProperty(value = "采购货物单价17")
+    private BigDecimal inOutGoodsUnitPrice17;
+
+    /**
      * 入库厂名18
      */
     @ExcelProperty(value = "入库厂名18")
@@ -334,6 +430,12 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量18")
     private BigDecimal inboundGoodsCount18;
+
+    /**
+     * 采购货物单价18
+     */
+    @ExcelProperty(value = "采购货物单价18")
+    private BigDecimal inOutGoodsUnitPrice18;
 
     /**
      * 入库厂名19
@@ -348,6 +450,12 @@ public class ImportPurchaseContractModel {
     private BigDecimal inboundGoodsCount19;
 
     /**
+     * 采购货物单价19
+     */
+    @ExcelProperty(value = "采购货物单价19")
+    private BigDecimal inOutGoodsUnitPrice19;
+
+    /**
      * 入库厂名20
      */
     @ExcelProperty(value = "入库厂名20")
@@ -358,4 +466,10 @@ public class ImportPurchaseContractModel {
      */
     @ExcelProperty(value = "入库数量20")
     private BigDecimal inboundGoodsCount20;
+
+    /**
+     * 采购货物单价20
+     */
+    @ExcelProperty(value = "采购货物单价20")
+    private BigDecimal inOutGoodsUnitPrice20;
 }
