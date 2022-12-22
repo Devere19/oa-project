@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author Liwei
@@ -50,8 +47,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         if (sysUser != null) {
             List<SysUserRole> userRoles = findUserRoles(sysUser.getId());
+            ArrayList<String> roleNameList = new ArrayList<>();
+            for (SysUserRole userRole : userRoles) {
+                QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
+                sysRoleQueryWrapper.lambda().eq(SysRole::getId,userRole.getRoleId());
+                SysRole sysRole = sysRoleMapper.selectOne(sysRoleQueryWrapper);
+                roleNameList.add(sysRole.getName());
+            }
             sysUser.setUserRoles(userRoles);
-            sysUser.setRoleNames(getRoleNames(userRoles));
+            sysUser.setRoleNames(roleNameList);
+            // sysUser.setRoleNames(getRoleNames(userRoles));
             return sysUser;
         }
         return null;
@@ -96,11 +101,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //先保存用户，然后保存用户对应的角色
         int insert = this.baseMapper.insert(sysUser);
         if (insert > 0) {
-            //保存用户的角色
+            //保存用户的角色  一个用户多个角色
             SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setRoleId(sysUser.getRoleId());
-            sysUserRole.setUserId(sysUser.getId());
-            sysUserRoleService.save(sysUserRole);
+            List<Long> roleIdList = sysUser.getRoleId();
+            for (Long roleId : roleIdList) {
+                sysUserRole.setRoleId(roleId);
+                sysUserRole.setUserId(sysUser.getId());
+                sysUserRoleService.save(sysUserRole);
+            }
         }
     }
 
@@ -116,9 +124,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             sysUserRoleService.remove(query);
             //再保存用户的角色
             SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setRoleId(sysUser.getRoleId());
-            sysUserRole.setUserId(sysUser.getId());
-            sysUserRoleService.save(sysUserRole);
+            List<Long> roleIdList = sysUser.getRoleId();
+            for (Long roleId : roleIdList) {
+                sysUserRole.setRoleId(roleId);
+                sysUserRole.setUserId(sysUser.getId());
+                sysUserRoleService.save(sysUserRole);
+            }
         }
     }
 

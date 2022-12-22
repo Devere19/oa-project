@@ -54,7 +54,10 @@
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="roleId" label="角色">
-              <el-select v-model="addModel.roleId" class="m-2" placeholder="请选择角色" size="default">
+              <!-- <el-select v-model="addModel.roleId" class="m-2" placeholder="请选择角色" size="default">
+                <el-option v-for="item in roleData.list" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select> -->
+              <el-select v-model="addModel.roleId" multiple placeholder="请选择角色" size="default">
                 <el-option v-for="item in roleData.list" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -104,8 +107,8 @@ const { dialog, onClose, onConfirm, onShow } = useDialog()
 
 //显示弹框
 const show = async (type: string, row?: AddUserModel) => {
-  roleId.value = "";
-  addModel.roleId = "";
+  roleId.value = [];
+  addModel.roleId = [];
   addModel.mobile = "";
   addModel.name = "";
   dialog.height = 300
@@ -139,7 +142,7 @@ defineExpose({
 const addModel = reactive<AddUserModel>({
   id: "",
   type: "",
-  roleId: "",
+  roleId: [],
   name: "",
   nickName: '',
   age: '',

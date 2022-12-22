@@ -25,6 +25,11 @@
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
         <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
         </el-button>
+        <el-upload class="moreDeleteButton" name="file"
+          action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
+          :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false">
+          <el-button :icon="Upload" type="primary">批量导入</el-button>
+        </el-upload>
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
       </el-form-item>
     </el-form>
@@ -81,7 +86,7 @@
 
 <script setup lang="ts">
 import useTable from '@/composables/logistics/useTable'
-import { Plus, Edit, Delete, Search, Close, MoreFilled, Hide, View, Money } from "@element-plus/icons-vue";
+import { Plus, Edit, Delete, Search, Close, MoreFilled, Hide, View, Money, Upload } from "@element-plus/icons-vue";
 import { conversionDate } from '@/utils/timeFormat'
 import useLogistics from '@/composables/logistics/useLogistics'
 import useDetail from '@/composables/logistics/useDetail';
@@ -90,6 +95,7 @@ import AddLogis from './AddLogis.vue';
 import { exportApi } from '@/api/logistics';
 import { ExportListParm } from '@/api/logistics/LogisticsModel';
 import { reactive } from 'vue';
+import { ElMessage, UploadProps } from 'element-plus';
 //表格相关属性
 const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero, sizeChange, currentChange } = useTable()
 
@@ -124,6 +130,28 @@ const exportListParm = reactive<ExportListParm>({
   endTime: '',
   isPigeonhole: '1'
 })
+const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  if (response.code == 200) {
+    ElMessage({
+      message: '批量插入采购单成功！',
+      type: 'success',
+    })
+  } else {
+    ElMessage({
+      message: '系统出错，批量插入采购单失败！',
+      type: 'error',
+      duration: 4000
+    })
+  }
+}
+
+const uploadFalse = () => {
+  ElMessage({
+    message: '上传文件失败！',
+    type: 'error',
+    duration: 4000
+  })
+}
 
 </script>
 

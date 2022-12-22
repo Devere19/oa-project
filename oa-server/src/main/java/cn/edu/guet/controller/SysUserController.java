@@ -18,7 +18,9 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户控制器
@@ -120,9 +122,14 @@ public class SysUserController {
         System.out.println(userId);
         QueryWrapper<SysUserRole> query = new QueryWrapper<>();
         query.lambda().eq(SysUserRole::getUserId, userId);
-        SysUserRole one = sysUserRoleService.getOne(query);
-
-        return ResultUtils.success("查询成功", one);
+        // SysUserRole one = sysUserRoleService.getOne(query);
+        List<SysUserRole> list = sysUserRoleService.list(query);
+        ArrayList<Long> roleList = new ArrayList<>();
+        for (SysUserRole sysUserRole : list) {
+            Long roleId = sysUserRole.getRoleId();
+            roleList.add(roleId);
+        }
+        return ResultUtils.success("查询成功", roleList);
     }
 
     //通过username获取user信息
@@ -135,12 +142,19 @@ public class SysUserController {
         //赋值roleId和roleName
         QueryWrapper<SysUserRole> sysUserRoleQueryWrapper = new QueryWrapper<>();
         sysUserRoleQueryWrapper.lambda().eq(SysUserRole::getUserId,sysUser.getId());
-        SysUserRole sysUserRole = sysUserRoleService.getOne(sysUserRoleQueryWrapper);
-        QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
-        sysRoleQueryWrapper.lambda().eq(SysRole::getId,sysUserRole.getRoleId());
-        SysRole sysRole = sysRoleService.getOne(sysRoleQueryWrapper);
-        sysUser.setRoleId(sysRole.getId());
-        sysUser.setRoleNames(sysRole.getName());
+        // SysUserRole sysUserRole = sysUserRoleService.getOne(sysUserRoleQueryWrapper);
+        List<SysUserRole> sysUserRoleList = sysUserRoleService.list(sysUserRoleQueryWrapper);
+        List<Long> roleIdList = new ArrayList<>();
+        List<String> roleNameList = new ArrayList<>();
+        for (SysUserRole sysUserRole : sysUserRoleList) {
+            QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
+            sysRoleQueryWrapper.lambda().eq(SysRole::getId,sysUserRole.getRoleId());
+            SysRole sysRole = sysRoleService.getOne(sysRoleQueryWrapper);
+            roleIdList.add(sysRole.getId());
+            roleNameList.add(sysRole.getName());
+        }
+        sysUser.setRoleId(roleIdList);
+        sysUser.setRoleNames(roleNameList);
         return ResultUtils.success("查询成功",sysUser);
     }
 

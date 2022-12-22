@@ -1,11 +1,12 @@
-import { getRoleApi,getSelectApi } from "@/api/user";
+import { getRoleApi, getSelectApi } from "@/api/user";
 import { SelectRole } from "@/api/user/UserModel";
 import { reactive, ref } from "vue";
 
 
 export default function useSelectRole() {
 
-  const roleId = ref('')
+  const roleId = ref([])
+  // const roleId = reactive([])
 
   //定义角色列表数据
   const roleData = reactive<SelectRole>({
@@ -22,10 +23,11 @@ export default function useSelectRole() {
 
   //根据用户id查询角色
   const getRole = async (userId: string) => {
-    roleId.value = ''
+    roleId.value = []
     let res = await getRoleApi(userId)
     if (res && res.code == 200 && res.data) {
-      roleId.value = res.data.roleId
+      console.log("根据用户id查询到的角色", res)
+      roleId.value = res.data
     }
   }
 

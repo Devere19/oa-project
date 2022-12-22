@@ -20,7 +20,7 @@ export type ListParm = {
 export type AddUserModel = {
   id: string,
   type: string,  //新增：0 编辑：1
-  roleId: string,
+  roleId: string[],
   name: string,
   nickName: string
   age:string,
