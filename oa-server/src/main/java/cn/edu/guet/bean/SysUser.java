@@ -40,10 +40,10 @@ public class SysUser extends BaseModel {
 
 	//表明roleId字段不属于sys_user表，需要排除
 	@TableField(exist = false)
-	private Long roleId;
+	private List<Long> roleId;
 	// 非数据库字段
 	@TableField(exist = false)
-    private String roleNames;
+    private List<String> roleNames;
     // 非数据库字段
 	@TableField(exist = false)
     private List<SysUserRole> userRoles = new ArrayList<>();

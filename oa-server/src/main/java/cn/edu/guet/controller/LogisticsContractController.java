@@ -3,6 +3,7 @@ package cn.edu.guet.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.logisticsContract.*;
 
 import cn.edu.guet.bean.sale.ExportOutSaleContract;
@@ -11,14 +12,18 @@ import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsDetailService;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.read.listener.PageReadListener;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -148,6 +153,12 @@ public class LogisticsContractController {
         } catch (Exception e) {
             workbook.close();
         }
+    }
+
+    @RequestMapping("/logisContractImportExcel")
+    public HttpResult purchaseImportExcel(@RequestBody MultipartFile file) throws IOException {
+
+        return ResultUtils.success("批量插入采购单成功");
     }
 
 

@@ -30,7 +30,7 @@ const avatar = ref('http://cdn.glypro19.com/oaassets/QQ%E5%9B%BE%E7%89%872022102
 
 <style scoped>
 h1 {
-  margin-left: 75%;
+  margin-left: 15%;
   margin-right: 20px;
 }
 

@@ -12,7 +12,7 @@ import lombok.Data;
 @TableName("sys_user_role")
 public class SysUserRole extends BaseModel {
 
-	private Long Id;
+	// private Long Id;
 
     private Long userId;
 
