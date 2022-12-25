@@ -579,6 +579,21 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         }
         return list;
     }
+
+    @Override
+    public void isHaveAnyLogistics(String saleContractNo) {
+        QueryWrapper<LogisticsContract> logisticsContractQueryWrapper = new QueryWrapper<>();
+        logisticsContractQueryWrapper.lambda().eq(LogisticsContract::getSaleContractNo,saleContractNo);
+        List<LogisticsContract> logisticsContracts = logisticsContractMapper.selectList(logisticsContractQueryWrapper);
+        if (logisticsContracts.size()==0){
+            //修改销售单的isHaveLogistics为0
+            QueryWrapper<SaleContract> query = new QueryWrapper<>();
+            query.lambda().eq(SaleContract::getSaleContractNo,saleContractNo);
+            SaleContract saleContract = saleContractMapper.selectOne(query);
+            saleContract.setIsHaveLogistics(0);
+            saleContractMapper.updateById(saleContract);
+        }
+    }
 }
 
 

@@ -21,7 +21,7 @@ export type ListParm = {
 export type AddSaleModel = {
   id: string,
   saleContractNo: string,
-  saleCustomerId: string,
+  customerEnterpriseName: string,
   ownCompanyName: string,
   goodsName: string,
   goodsCount: string,
@@ -40,6 +40,7 @@ export type AddSaleModel = {
   squeezeSeason: string,
   createBy: string,
   saleContractTime: string,
+  isHaveLogistics:string
 }
 
 //列表查询参数类型

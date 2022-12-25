@@ -12,6 +12,7 @@ import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsDetailService;
+import cn.edu.guet.service.SaleContractService;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -42,6 +43,9 @@ public class LogisticsContractController {
     @Resource
     private LogisticsContractService logisticsContractService;
 
+    @Resource
+    private SaleContractService saleContractService;
+
     /**
      * 获取归档位1的分页物流单数据
      *
@@ -68,68 +72,81 @@ public class LogisticsContractController {
 
     /**
      * 修改归档
+     *
      * @param id
      * @return
      */
     @PutMapping("/changePigeonhole")
-    public HttpResult changePigeonhole(@RequestBody Integer id){
+    public HttpResult changePigeonhole(@RequestBody Integer id) {
         logisticsContractService.changePigeonhole(id);
         return ResultUtils.success("修改成功");
     }
 
     /**
      * 删除物流单
+     *
      * @param id
      * @return
      */
     @DeleteMapping("/deleteById/{id}")
-    public HttpResult deleteById(@PathVariable("id") Integer id){
+    public HttpResult deleteById(@PathVariable("id") Integer id) {
+        LogisticsContract logisticsContract = logisticsContractService.getById(id);
         int result = logisticsContractService.delete(id);
-        if (result==1) {
+        if (result == 1) {
+            //判断是否还有和该物流单一样的销售合同的物流单，如果有的话，正常进行，如果没有，需要把销售单的isHaveLogistics修改为0
+            String saleContractNo = logisticsContract.getSaleContractNo();
+            logisticsContractService.isHaveAnyLogistics(saleContractNo);
             return ResultUtils.success("删除成功");
-        }else if (result==0){
+        } else if (result == 0) {
             return ResultUtils.error("已经有该物流的付款信息，无法删除");
-        }else {
+        } else {
             return ResultUtils.error("删除失败");
         }
     }
 
     /**
      * 根据物流单找到对应的物流详情
+     *
      * @param logisticsContractNo
      * @return
      */
     @GetMapping("/getDetailLogistics/{logisticsContractNo}")
-    public HttpResult getDetailLogistics(@PathVariable("logisticsContractNo") String logisticsContractNo){
-        List<LogisticsDetail> list=logisticsContractService.getDetailLogistics(logisticsContractNo);
-        return ResultUtils.success("查询成功",list);
+    public HttpResult getDetailLogistics(@PathVariable("logisticsContractNo") String logisticsContractNo) {
+        List<LogisticsDetail> list = logisticsContractService.getDetailLogistics(logisticsContractNo);
+        return ResultUtils.success("查询成功", list);
     }
 
     /**
      * 新增物流单和对应的物流详情
-     *
      */
     @PostMapping("/add")
-    public HttpResult add(@RequestBody LogisticsContract logisticsContract){
+    public HttpResult add(@RequestBody LogisticsContract logisticsContract) {
+        //判断是否有该销售单合同编号，如果有，修改该合同编号的isHaveLogistics字段为1 如果没有返回false
+        boolean result = saleContractService.editIsHaveLogistics(logisticsContract.getSaleContractNo());
+        if (!result) {
+            return ResultUtils.error("销售单合同不正确");
+        }
         logisticsContractService.add(logisticsContract);
         return ResultUtils.success("新增成功");
     }
 
     @PostMapping("/exportListParm")
-    public HttpResult ExportExcel(HttpServletRequest request,@RequestBody ExportListParm listParm) throws Exception {
-        request.getServletContext().setAttribute("listParm",listParm);
-        System.out.println("存进的全局属性："+listParm);
+    public HttpResult ExportExcel(HttpServletRequest request, @RequestBody ExportListParm listParm) throws Exception {
+        request.getServletContext().setAttribute("listParm", listParm);
+        System.out.println("存进的全局属性：" + listParm);
         return ResultUtils.success("传递参数成功");
     }
+
     /**
      * 导出为Excel表格
+     *
      * @param response
      * @throws Exception
      */
     @GetMapping("/exportExcel")
     public void ExportExcel(HttpServletResponse response, HttpServletRequest request) throws Exception {
         ExportListParm listParm = (ExportListParm) request.getServletContext().getAttribute("listParm");
-        System.out.println("拿到的全局数据:"+listParm);
+        System.out.println("拿到的全局数据:" + listParm);
         // 导出
         String fileName = "物流单.xlsx";
         ExportParams exportParams = new ExportParams();
@@ -160,9 +177,6 @@ public class LogisticsContractController {
 
         return ResultUtils.success("批量插入采购单成功");
     }
-
-
-
 
 
 }

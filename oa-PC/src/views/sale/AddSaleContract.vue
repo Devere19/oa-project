@@ -10,8 +10,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="saleCustomerId" label="销售公司">
-              <el-select v-model="addModel.saleCustomerId" class="m-2" placeholder="请选择销售公司" size="default">
+            <el-form-item prop="saleCustomerEnterpriseName" label="销售公司">
+              <el-select v-model="addModel.customerEnterpriseName" class="m-2" placeholder="请选择销售公司" size="default">
                 <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
                   :value="item.value" />
               </el-select>
@@ -117,12 +117,15 @@
 import SysDialog from "@/components/SysDialog.vue";
 import useDialog from '@/hooks/useDialog';
 import { AddSaleModel } from "@/api/sale/SaleModel"
-import { reactive, ref } from "vue";
+import { nextTick, reactive, ref } from "vue";
 import { SelectCustomer } from "@/api/customer/CustomerModel";
-import { getSelectApi, addSaleContractApi } from "@/api/sale/index";
+import { getSelectApi, addSaleContractApi, editSaleContractApi } from "@/api/sale/index";
 import { ElMessage, FormInstance, UploadFile, UploadFiles, UploadInstance, UploadProps, UploadUserFile } from "element-plus";
 import { add } from "lodash";
 import { deletePhotoApi } from "@/api/handlePhoto";
+import { EditType } from "@/type/BaseEnum";
+import useInstance from '@/hooks/useInstance';
+const { global } = useInstance()
 //弹框属性
 const { onClose, dialog, onConfirm, onShow } = useDialog()
 
@@ -130,12 +133,14 @@ const addFormRef = ref<FormInstance>()
 
 //show方法 
 const show = async () => {
-  dialog.title = "新增销售单"
-  dialog.height = 600
-  dialog.width = 800
   //清空照片
   addModel.contractPhotoList = []
   PhotoData.value = []
+  dialog.height = 600
+  dialog.width = 800
+  dialog.title = '新增销售单'
+
+  //清空照片
   let res = await getSelectApi()
   customerData.list = res.data
   onShow()
@@ -152,6 +157,7 @@ const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 
 const PhotoData = ref<UploadUserFile[]>([])
+
 // 照片移除后发送请求后台删除照片
 const handleRemove: UploadProps['onRemove'] = async (uploadFile: any, uploadFiles: any) => {
   console.log(uploadFile, uploadFiles);
@@ -181,8 +187,7 @@ const emits = defineEmits(['refresh'])
 
 //提交新增数据
 const commit = async () => {
-  addModel.createBy = "张三"
-  // console.log(addModel)
+  console.log("提交的数据:", addModel)
   let res = await addSaleContractApi(addModel)
   if (res && res.code == 200) {
     ElMessage.success(res.msg)
@@ -199,7 +204,7 @@ const commit = async () => {
 const addModel = reactive<AddSaleModel>({
   id: '',
   saleContractNo: '',
-  saleCustomerId: '',
+  customerEnterpriseName: '',
   ownCompanyName: '',
   goodsName: '',
   goodsCount: '',
@@ -218,6 +223,7 @@ const addModel = reactive<AddSaleModel>({
   squeezeSeason: '',
   createBy: '',
   saleContractTime: '',
+  isHaveLogistics: ''
 })
 
 

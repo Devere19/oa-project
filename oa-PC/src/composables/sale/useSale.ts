@@ -1,7 +1,9 @@
 import { changePigeonholeApi, deleteByIdApi } from "@/api/sale/index";
 import useInstance from "@/hooks/useInstance";
+import {AddSaleModel } from "@/api/sale/SaleModel";
 import { FuncList } from "@/type/baseType";
 import { ElMessage } from "element-plus";
+import { EditType } from "@/type/BaseEnum"
 import { ref } from "vue";
 
 export default function useSale(refresh: FuncList) {
@@ -40,6 +42,7 @@ export default function useSale(refresh: FuncList) {
   const addBtn = () => {
     addRef.value?.show()
   }
+
 
 
   return {

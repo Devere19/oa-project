@@ -76,4 +76,9 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      */
     List<ExportOutLogisticsContract> getExportList(ExportListParm listParm);
 
+    /**
+     *  //判断是否还有和该物流单一样的销售合同的物流单，如果有的话，正常进行，如果没有，需要把销售单的isHaveLogistics修改为0
+     * @param saleContractNo
+     */
+    void isHaveAnyLogistics(String saleContractNo);
 }
