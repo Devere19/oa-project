@@ -34,7 +34,7 @@ public class SaleContract {
     //销售单合同编号
     private String saleContractNo;
     //客户表id
-    private String saleCustomerId;
+    // private String saleCustomerId;
     //销售方公司名
     private String customerEnterpriseName;
     //己方公司名
@@ -84,7 +84,9 @@ public class SaleContract {
     //最新更新者名称
     private String lastUpdateBy;
     //客户，关联销售方公司
-    @TableField(exist = false)
-    private Customer customer;
+    // @TableField(exist = false)
+    // private Customer customer;
+    //是否存在相关出库物流单
+    private Integer isHaveLogistics;
 
 }

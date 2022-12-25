@@ -64,4 +64,18 @@ public interface SaleContractService extends IService<SaleContract> {
     int editCashierSale(SaleModel saleModel);
 
     List<ExportOutSaleContract> getExportList(ExportListParm listParm);
+
+    /**
+     * 判断是否有该销售合同 并且修改isHaveLogistics字段
+     * @param saleContractNo
+     * @return
+     */
+    boolean editIsHaveLogistics(String saleContractNo);
+
+    /**
+     * 修改销售单
+     * @param saleContract
+     * @return
+     */
+    boolean edit(SaleContract saleContract);
 }

@@ -25,11 +25,11 @@
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
         <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
         </el-button>
-        <el-upload class="moreDeleteButton" name="file"
+        <!-- <el-upload class="moreDeleteButton" name="file"
           action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
           :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false">
           <el-button :icon="Upload" type="primary">批量导入</el-button>
-        </el-upload>
+        </el-upload> -->
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
       </el-form-item>
     </el-form>

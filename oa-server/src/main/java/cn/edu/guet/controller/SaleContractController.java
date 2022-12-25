@@ -19,8 +19,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.coyote.Response;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -112,7 +114,7 @@ public class SaleContractController {
     }
 
     //新增销售单
-    @PostMapping("add")
+    @PostMapping("/add")
     public HttpResult add(@RequestBody SaleContract saleContract) {
         boolean result = saleContractService.add(saleContract);
         if (result) {
@@ -122,15 +124,29 @@ public class SaleContractController {
         }
     }
 
+    //修改销售单
+    @PutMapping("/edit")
+    public HttpResult edit(@RequestBody SaleContract saleContract) {
+        boolean result = saleContractService.edit(saleContract);
+        if (result) {
+            return ResultUtils.success("修改成功");
+        } else {
+            return ResultUtils.error("修改失败");
+        }
+    }
+
     /**
      * 获取当前销售单下的已出库量
      *
-     * @param saleContractNo
+     * @param id
      * @return
      */
-    @GetMapping("/getRemainingOutboundVolume/{saleContractNo}")
-    public HttpResult getRemainingOutboundVolume(@PathVariable("saleContractNo") String saleContractNo) {
-        BigDecimal result = saleContractService.getRemainingOutboundVolume(saleContractNo);
+    @GetMapping("/getRemainingOutboundVolume/{id}")
+    public HttpResult getRemainingOutboundVolume(@PathVariable("id") String id) {
+        QueryWrapper<SaleContract> query = new QueryWrapper<>();
+        query.lambda().eq(SaleContract::getId,id);
+        SaleContract saleContract = saleContractService.getOne(query);
+        BigDecimal result = saleContractService.getRemainingOutboundVolume(saleContract.getSaleContractNo());
         return ResultUtils.success("查询成功", result);
     }
 
@@ -138,13 +154,16 @@ public class SaleContractController {
     /**
      * 根据销售合同编号查到所有的物流详情表
      *
-     * @param saleContractNo
+     * @param id
      * @return
      */
-    @GetMapping("/getDetailSaleContract/{saleContractNo}")
-    public HttpResult getDetailSaleContract(@PathVariable("saleContractNo") String saleContractNo) {
+    @GetMapping("/getDetailSaleContract/{id}")
+    public HttpResult getDetailSaleContract(@PathVariable("id") String id) {
+        QueryWrapper<SaleContract> query = new QueryWrapper<>();
+        query.lambda().eq(SaleContract::getId,id);
+        SaleContract saleContract = saleContractService.getOne(query);
         //根据销售合同找到所有的物流单，再根据物流合同找到所有的物流详情表
-        return ResultUtils.success("查询成功", saleContractService.getDetailSaleContract(saleContractNo));
+        return ResultUtils.success("查询成功", saleContractService.getDetailSaleContract(saleContract.getSaleContractNo()));
     }
 
     @PostMapping("/exportListParm")

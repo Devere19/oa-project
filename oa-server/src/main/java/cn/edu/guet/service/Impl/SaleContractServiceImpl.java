@@ -67,10 +67,10 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         //销售方公司id
         if (StringUtils.isNotEmpty(listParm.getSaleCompanyName())) {
             //通过公司名称拿到客户表对应的id
-            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
-            Customer customer = customerMapper.selectOne(queryWrapper);
-            query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            // QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            query.lambda().like(SaleContract::getCustomerEnterpriseName, listParm.getSaleCompanyName());
+            // Customer customer = customerMapper.selectOne(queryWrapper);
+            // query.lambda().like(SaleContract::getCustomerEnterpriseName, customer.getId());
         }
         //货物名称
         if (StringUtils.isNotEmpty(listParm.getGoodsName())) {
@@ -81,15 +81,15 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
         //起止时间
-        if (listParm.getStartTime()!=null){
+        if (listParm.getStartTime() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(listParm.getStartTime());
-            query.lambda().ge(SaleContract::getSaleContractTime,format);
+            query.lambda().ge(SaleContract::getSaleContractTime, format);
         }
-        if (listParm.getEndTime()!=null){
+        if (listParm.getEndTime() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(listParm.getEndTime());
-            query.lambda().le(SaleContract::getSaleContractTime,format);
+            query.lambda().le(SaleContract::getSaleContractTime, format);
         }
 
 
@@ -100,9 +100,9 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
         for (SaleContract record : saleContractPage.getRecords()) {
-            String saleCustomerId = record.getSaleCustomerId();
-            Customer customer = customerMapper.selectById(saleCustomerId);
-            record.setCustomer(customer);
+            // String saleCustomerId = record.getSaleCustomerId();
+            // Customer customer = customerMapper.selectById(saleCustomerId);
+            // record.setCustomer(customer);
 
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
@@ -158,10 +158,11 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         //销售方公司id
         if (StringUtils.isNotEmpty(listParm.getSaleCompanyName())) {
             //通过公司名称拿到客户表对应的id
-            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
-            Customer customer = customerMapper.selectOne(queryWrapper);
-            query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            // QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            // queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
+            // Customer customer = customerMapper.selectOne(queryWrapper);
+            // query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            query.lambda().like(SaleContract::getCustomerEnterpriseName, listParm.getSaleCompanyName());
         }
         //货物名称
         if (StringUtils.isNotEmpty(listParm.getGoodsName())) {
@@ -172,15 +173,15 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
         //起止时间
-        if (listParm.getStartTime()!=null){
+        if (listParm.getStartTime() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(listParm.getStartTime());
-            query.lambda().ge(SaleContract::getSaleContractTime,format);
+            query.lambda().ge(SaleContract::getSaleContractTime, format);
         }
-        if (listParm.getEndTime()!=null){
+        if (listParm.getEndTime() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(listParm.getEndTime());
-            query.lambda().le(SaleContract::getSaleContractTime,format);
+            query.lambda().le(SaleContract::getSaleContractTime, format);
         }
         //查看归档为1的数据
         query.lambda().eq(SaleContract::getPigeonhole, 0);
@@ -189,9 +190,9 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
         for (SaleContract record : saleContractPage.getRecords()) {
-            String saleCustomerId = record.getSaleCustomerId();
-            Customer customer = customerMapper.selectById(saleCustomerId);
-            record.setCustomer(customer);
+            // String saleCustomerId = record.getSaleCustomerId();
+            // Customer customer = customerMapper.selectById(saleCustomerId);
+            // record.setCustomer(customer);
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             record.setContractPhotoList(Arrays.asList(contractPhoto));
@@ -244,6 +245,31 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
     }
 
     @Override
+    public boolean edit(SaleContract saleContract) {
+        if (saleContract.equals(null)) {
+            return false;
+        }
+        String contractPhotoStr = "";
+        if (saleContract.getContractPhotoList().size() > 0) {
+            for (String time : saleContract.getContractPhotoList()) {
+                contractPhotoStr += time + ",";
+            }
+            //赋值contractPhoto
+            saleContract.setContractPhoto(contractPhotoStr.substring(0, contractPhotoStr.length() - 1));
+        } else {
+            saleContract.setContractPhoto(contractPhotoStr);
+        }
+        saleContract.setPigeonhole("1");
+        saleContract.setLastUpdateBy(SecurityUtils.getUsername());
+        int i = this.baseMapper.updateById(saleContract);
+        if (i>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
     public BigDecimal getRemainingOutboundVolume(String saleContractNo) {
         //拿到所有物流单中销售单号是saleContract的
         QueryWrapper<LogisticsContract> query = new QueryWrapper<>();
@@ -288,10 +314,11 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         //销售方公司id
         if (StringUtils.isNotEmpty(listParm.getSaleCompanyName())) {
             //通过公司名称拿到客户表对应的id
-            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
-            Customer customer = customerMapper.selectOne(queryWrapper);
-            query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            // QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            // queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
+            // Customer customer = customerMapper.selectOne(queryWrapper);
+            // query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            query.lambda().like(SaleContract::getCustomerEnterpriseName, listParm.getSaleCompanyName());
         }
         //货物名称
         if (StringUtils.isNotEmpty(listParm.getGoodsName())) {
@@ -308,9 +335,9 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         Page<SaleContract> saleContractPage = saleContractMapper.selectPage(page, query);
         //给里面的每一个customer赋值  根据saleCustomerId获取customer
         for (SaleContract record : saleContractPage.getRecords()) {
-            String saleCustomerId = record.getSaleCustomerId();
-            Customer customer = customerMapper.selectById(saleCustomerId);
-            record.setCustomer(customer);
+            // String saleCustomerId = record.getSaleCustomerId();
+            // Customer customer = customerMapper.selectById(saleCustomerId);
+            // record.setCustomer(customer);
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             record.setContractPhotoList(Arrays.asList(contractPhoto));
@@ -361,10 +388,11 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         //销售方公司id
         if (StringUtils.isNotEmpty(listParm.getSaleCompanyName())) {
             //通过公司名称拿到客户表对应的id
-            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
-            Customer customer = customerMapper.selectOne(queryWrapper);
-            query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            // QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            // queryWrapper.lambda().like(Customer::getCustomerEnterpriseName, listParm.getSaleCompanyName());
+            // Customer customer = customerMapper.selectOne(queryWrapper);
+            // query.lambda().like(SaleContract::getSaleCustomerId, customer.getId());
+            query.lambda().like(SaleContract::getCustomerEnterpriseName, listParm.getSaleCompanyName());
         }
         //货物名称
         if (StringUtils.isNotEmpty(listParm.getGoodsName())) {
@@ -375,20 +403,20 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             query.lambda().like(SaleContract::getSqueezeSeason, listParm.getSqueezeSeason());
         }
         //起止时间
-        if (listParm.getStartTime()!=null){
+        if (listParm.getStartTime() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(listParm.getStartTime());
-            query.lambda().ge(SaleContract::getSaleContractTime,format);
+            query.lambda().ge(SaleContract::getSaleContractTime, format);
         }
-        if (listParm.getEndTime()!=null){
+        if (listParm.getEndTime() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(listParm.getEndTime());
-            query.lambda().le(SaleContract::getSaleContractTime,format);
+            query.lambda().le(SaleContract::getSaleContractTime, format);
         }
         //查看归档为1的数据
-        if (listParm.getIsPigeonhole().equals("1")){
+        if (listParm.getIsPigeonhole().equals("1")) {
             query.lambda().eq(SaleContract::getPigeonhole, 1);
-        }else {
+        } else {
             query.lambda().eq(SaleContract::getPigeonhole, 0);
         }
         query.orderByDesc("id");
@@ -397,10 +425,10 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         for (SaleContract saleContract : saleContracts) {
             ExportOutSaleContract exportOutSaleContract = new ExportOutSaleContract();
             exportOutSaleContract.setSaleContractNo(saleContract.getSaleContractNo());
-            QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
-            queryWrapper.lambda().eq(Customer::getId,saleContract.getSaleCustomerId());
-            Customer customer = customerMapper.selectOne(queryWrapper);
-            exportOutSaleContract.setCustomerFactory(customer.getCustomerEnterpriseName());
+            // QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+            // queryWrapper.lambda().eq(Customer::getId, saleContract.getSaleCustomerId());
+            // Customer customer = customerMapper.selectOne(queryWrapper);
+            exportOutSaleContract.setCustomerFactory(saleContract.getCustomerEnterpriseName());
             exportOutSaleContract.setOwnCompanyName(saleContract.getOwnCompanyName());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String format = sdf.format(saleContract.getSaleContractTime());
@@ -420,4 +448,20 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         }
         return list;
     }
+
+    @Override
+    public boolean editIsHaveLogistics(String saleContractNo) {
+        QueryWrapper<SaleContract> query = new QueryWrapper<>();
+        query.lambda().eq(SaleContract::getSaleContractNo,saleContractNo);
+        SaleContract saleContract = saleContractMapper.selectOne(query);
+        if (saleContract==null){
+            //没有该销售合同号
+            return false;
+        }else {
+            saleContract.setIsHaveLogistics(1);
+            saleContractMapper.updateById(saleContract);
+            return true;
+        }
+    }
+
 }
