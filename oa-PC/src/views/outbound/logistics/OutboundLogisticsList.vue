@@ -37,7 +37,7 @@
     <!-- 表格 -->
     <el-table :data="tableList.list" border stripe size="small" :height="tableHeight" table-layout="auto" :fit="true">
       <el-table-column prop="logisticsContractNo" label="物流单合同编号"></el-table-column>
-      <el-table-column prop="saleContractNo" label="销售单合同编号"></el-table-column>
+      <el-table-column prop="saleContractNo" label="销售/加工单合同编号"></el-table-column>
       <el-table-column prop="totalWeight" label="物流合同总重量"></el-table-column>
       <el-table-column prop="goodsUnit" label="货物单位"></el-table-column>
       <el-table-column prop="freight" label="运费"></el-table-column>

@@ -20,4 +20,6 @@ public interface ProcessContractService extends IService<ProcessContract> {
     Page<ProcessContract> getFProcessContractData(int currentPage, int pageSize);
     Page<ProcessContract> searchProcessContract(int currentPage, int pageSize, String searchWord, boolean showPigeonhole, Date startDate, Date endDate);
     Boolean checkProcessContractNo(String processContractNo);
+
+    boolean editRelationLogisticsExistState(String processContractNo);
 }

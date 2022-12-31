@@ -2,6 +2,7 @@ package cn.edu.guet.service.Impl;
 
 
 import cn.edu.guet.bean.LogisticsPaymentContract;
+import cn.edu.guet.bean.ProcessContract;
 import cn.edu.guet.bean.logisticsContract.*;
 import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
@@ -56,6 +57,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
     private OtherInOutMapper otherInOutMapper;
     @Resource
     private LogisticsPaymentContractMapper logisticsPaymentContractMapper;
+    @Resource
+    private ProcessContractMapper processContractMapper;
 
     @Override
     public IPage<LogisticsContract> getList(ListParm listParm) {
@@ -185,7 +188,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void add(LogisticsContract logisticsContract) {
         //新增物流单   然后新增物流详情单
         //图片字段处理
@@ -196,7 +199,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
         logisticsContractMapper.insert(logisticsContract);
         List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
-        //新增对应的物流详情但
+        //新增对应的物流详情单
         for (LogisticsDetail logisticsDetail : logisticsDetailList) {
             logisticsDetail.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
             logisticsDetail.setCreateBy(SecurityUtils.getUsername());
@@ -213,6 +216,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
         //货物名称
         String goodsName = purchaseContract.getGoodsName();
+
         //销售单合同是000   运往自家仓库的物流操作
         if (logisticsContract.getSaleContractNo().equals("000")) {
             System.out.println("00000");
@@ -390,9 +394,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int delete(Integer id) {
         //判断是否已经有物流付款单
+
         //先拿到该物流单和物流单合同号
         LogisticsContract logisticsContract = logisticsContractMapper.selectById(id);
         String logisticsContractNo = logisticsContract.getLogisticsContractNo();
@@ -593,6 +598,71 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             saleContract.setIsHaveLogistics(0);
             saleContractMapper.updateById(saleContract);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addProcessLogisticsContract(LogisticsContract logisticsContract) {
+        //加工单的物流单
+        //生成物流单
+        List<String> contractPhotoList = logisticsContract.getContractPhotoList();
+        logisticsContract.setContractPhoto(ImageUtils.getDBString(contractPhotoList));
+        logisticsContract.setPigeonhole("1");
+        logisticsContract.setCreateBy(SecurityUtils.getUsername());
+        logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
+        logisticsContractMapper.insert(logisticsContract);
+        List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
+        //新增对应的物流详情单
+        for (LogisticsDetail logisticsDetail : logisticsDetailList) {
+            logisticsDetail.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
+            logisticsDetail.setCreateBy(SecurityUtils.getUsername());
+            logisticsDetail.setLastUpdateBy(SecurityUtils.getUsername());
+            logisticsDetailMapper.insert(logisticsDetail);
+        }
+        //货物名称
+        QueryWrapper<ProcessContract> processContractQueryWrapper = new QueryWrapper<>();
+        processContractQueryWrapper.lambda().eq(ProcessContract::getProcessContractNo,logisticsContract.getSaleContractNo());
+        ProcessContract processContract = processContractMapper.selectOne(processContractQueryWrapper);
+        if (processContract==null){
+            return false;
+        }
+        String goodsName = processContract.getGoodsName();
+        for (LogisticsDetail logisticsDetail : logisticsDetailList) {
+            if (logisticsDetail.getPurchaseContractNo().equals("000")){
+                //自家仓库出货运往加工单的，减少自家仓库库存，  增加自家仓库出库记录
+                QueryWrapper<OwnWarehouse> ownWarehouseQueryWrapper = new QueryWrapper<>();
+                ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getGoodsName,goodsName);
+                ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getFactoryName,logisticsDetail.getGoodsFactory());
+
+
+
+            }
+        }
+
+
+        return false;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addLogisticsContract(LogisticsContract logisticsContract) {
+        if (logisticsContract.getSaleContractNo().equals("000")){
+            System.out.println("运往自家仓库的物流单");
+        }else{
+            System.out.println("正常销售情况");
+            for (LogisticsDetail logisticsDetail : logisticsContract.getLogisticsDetailList()) {
+                if (logisticsDetail.getUpperType()==0){
+                    System.out.println("销售单从加工单那里出货");
+                }else{
+                    if (logisticsDetail.getPurchaseContractNo().equals("000")){
+                        System.out.println("从自家仓库出货的正常销售情况");
+                    }else{
+                        System.out.println("从外商仓库出后的正常销售情况");
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
 

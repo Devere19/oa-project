@@ -96,7 +96,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void addUser(SysUser sysUser) {
         //先保存用户，然后保存用户对应的角色
         int insert = this.baseMapper.insert(sysUser);
@@ -134,7 +134,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteUser(Long userId) {
         int i = this.baseMapper.deleteById(userId);
         if (i > 0) {

@@ -6,15 +6,33 @@
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="logisticsContractNo" label="物流单合同编号" label-width='150px' label-position="right">
-              <el-input v-model="addModel.logisticsContractNo"></el-input>
+              <el-input v-model="addModel.logisticsContractNo" placeholder="自提请填写“000”"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="saleContractNo" label="销售单合同编号" label-width='150px' label-position="right">
+            <el-form-item prop="type" label="物流单类型" label-width='150px' label-position="right">
+              <el-radio-group v-model="addModel.upperType" class="ml-4">
+                <el-radio label="0" size="default">加工单</el-radio>
+                <el-radio label="1" size="default">销售单</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+        <el-row>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="saleContractNo" label="销售/加工单合同编号" label-width='150px' label-position="right">
               <el-input v-model="addModel.saleContractNo" placeholder="运往自家仓库请填写'000'"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="logisticsContractTime" label="物流单合同签订时间" label-width='150px' label-position="right">
+              <el-date-picker v-model="addModel.logisticsContractTime" type="date" format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD" placeholder="请选择合同时间" size="default" />
+            </el-form-item>
+          </el-col>
         </el-row>
+
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="totalWeight" label="物流合同总重量" label-width='150px' label-position="right">
@@ -37,16 +55,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="logisticsContractTime" label="物流单合同签订时间" label-width='150px' label-position="right">
-              <el-date-picker v-model="addModel.logisticsContractTime" type="date" format="YYYY-MM-DD"
-                value-format="YYYY-MM-DD" placeholder="请选择合同时间" size="default" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12" :offset="0">
             <el-form-item prop="squeezeSeason" label="榨季" label-width='150px' label-position="right">
-              <el-input v-model="addModel.squeezeSeason"></el-input>
+              <el-input v-model="addModel.squeezeSeason" size="default"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -74,20 +84,25 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
-              <el-form-item :prop="'logisticsDetailList.' + index + '.purchaseContractNo'" label="采购合同编号"
+              <el-form-item :prop="'logisticsDetailList.' + index + '.type'" label="物流详情单类型" label-width='150px'
+                label-position="right">
+                <el-radio-group v-model="item.upperType" class="ml-4">
+                  <el-radio label="1" size="default">采购单</el-radio>
+                  <el-radio label="0" size="default">加工单</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+
+
+          </el-row>
+          <el-row>
+            <el-col :span="12" :offset="0">
+              <el-form-item :prop="'logisticsDetailList.' + index + '.purchaseContractNo'" label="采购/加工合同编号"
                 label-width='150px' label-position="right">
                 <el-input v-model="item.purchaseContractNo" placeholder="若从自家仓库出货请填写'000'"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12" :offset="0">
-              <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
-                label-position="right">
-                <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'">
-                </el-input>
-              </el-form-item>
-            </el-col>
+
 
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.outboundTime'" label="出库日期" label-width='150px'
@@ -100,33 +115,33 @@
           </el-row>
           <el-row>
             <el-col :span="12" :offset="0">
+              <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
+                label-position="right">
+                <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.licensePlateNumber'" label="车牌号"
                 label-width='150px' label-position="right">
                 <el-input v-model="item.licensePlateNumber"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsWeight'" label="载货量" label-width='150px'
                 label-position="right">
                 <el-input v-model="item.goodsWeight"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsUnit'" label="货物单位" label-width='150px'
                 label-position="right">
-
                 <el-select v-model="item.goodsUnit" placeholder="请选择货物单位" size="default">
                   <el-option label="吨" value="吨"></el-option>
                   <el-option label="斤" value="斤"></el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12" :offset="0">
-              <el-form-item :prop="'logisticsDetailList.' + index + '.unloadingLocation'" label="卸货地点"
-                label-width='150px' label-position="right">
-                <el-input v-model="item.unloadingLocation"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -140,11 +155,25 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
+              <el-form-item :prop="'logisticsDetailList.' + index + '.unloadingLocation'" label="卸货地点"
+                label-width='150px' label-position="right">
+                <el-input v-model="item.unloadingLocation"></el-input>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col :span="12" :offset="0">
+              <el-form-item label="" label-width='150px' label-position="right">
+                <el-button type="warning" icon="Plus" @click="addLogisticsDetail">添加物流详情单</el-button>
+              </el-form-item>
+            </el-col> -->
+          </el-row>
+          <el-row>
+            <el-col :span="12" :offset="0">
               <el-form-item label="" label-width='150px' label-position="right">
                 <el-button type="warning" icon="Plus" @click="addLogisticsDetail">添加物流详情单</el-button>
               </el-form-item>
             </el-col>
           </el-row>
+
           <hr>
         </template>
       </el-form>
@@ -172,6 +201,7 @@ const getLogisticsDetailList = computed(() => {
 //新增物流单数据类型
 const addModel = reactive<AddLogisticsModel>({
   id: '',
+  upperType: '',  //0:加工单   1：销售单
   logisticsContractNo: '',
   saleContractNo: '',
   totalWeight: '',
@@ -185,6 +215,7 @@ const addModel = reactive<AddLogisticsModel>({
   logisticsDetailList: reactive<LogisticsDetailList[]>([
     {
       id: '',
+      upperType: '',   //0：加工单  1：采购单
       logisticsContractNo: '',
       purchaseContractNo: '',
       goodsFactory: '',

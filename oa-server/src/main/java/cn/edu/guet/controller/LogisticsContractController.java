@@ -12,6 +12,7 @@ import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsDetailService;
+import cn.edu.guet.service.ProcessContractService;
 import cn.edu.guet.service.SaleContractService;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
@@ -45,6 +46,9 @@ public class LogisticsContractController {
 
     @Resource
     private SaleContractService saleContractService;
+
+    @Resource
+    private ProcessContractService processContractService;
 
     /**
      * 获取归档位1的分页物流单数据
@@ -121,12 +125,37 @@ public class LogisticsContractController {
      */
     @PostMapping("/add")
     public HttpResult add(@RequestBody LogisticsContract logisticsContract) {
-        //判断是否有该销售单合同编号，如果有，修改该合同编号的isHaveLogistics字段为1 如果没有返回false
-        boolean result = saleContractService.editIsHaveLogistics(logisticsContract.getSaleContractNo());
-        if (!result) {
-            return ResultUtils.error("销售单合同不正确");
+        Integer contractType = logisticsContract.getUpperType();
+        if(contractType==0){
+            System.out.println("新增的是加工单类型的物流单");
+            //加工单
+            boolean result=logisticsContractService.addProcessLogisticsContract(logisticsContract);
+            if (!result){
+                return ResultUtils.error("新增失败");
+            }
+        }else{
+            System.out.println("新增的销售单/自家仓库类型的物流单");
+            boolean result=logisticsContractService.addLogisticsContract(logisticsContract);
+            if (!result){
+                return ResultUtils.error("新增失败");
+            }
         }
-        logisticsContractService.add(logisticsContract);
+        // if (contractType == 0) {
+        //     //加工单
+        //     //判断是否有该加工合同编号，如果有，修改该合同编号的relation_logistics_exist_state字段为1 如果没有返回false
+        //     boolean result = processContractService.editRelationLogisticsExistState(logisticsContract.getSaleContractNo());
+        //     if (!result) {
+        //         return ResultUtils.error("加工单合同不正确");
+        //     }
+        // } else {
+        //     //销售单
+        //     //判断是否有该销售单合同编号，如果有，修改该合同编号的isHaveLogistics字段为1 如果没有返回false
+        //     boolean result = saleContractService.editIsHaveLogistics(logisticsContract.getSaleContractNo());
+        //     if (!result) {
+        //         return ResultUtils.error("销售单合同不正确");
+        //     }
+        // }
+        // logisticsContractService.add(logisticsContract);
         return ResultUtils.success("新增成功");
     }
 

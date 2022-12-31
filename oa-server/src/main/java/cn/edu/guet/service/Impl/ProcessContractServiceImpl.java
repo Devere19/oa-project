@@ -228,6 +228,21 @@ public class ProcessContractServiceImpl extends ServiceImpl<ProcessContractMappe
         List<ProcessContract> processContracts = processContractMapper.selectList(qw);
         return !processContracts.isEmpty();
     }
+
+    @Override
+    public boolean editRelationLogisticsExistState(String processContractNo) {
+        QueryWrapper<ProcessContract> query = new QueryWrapper<>();
+        query.lambda().eq(ProcessContract::getProcessContractNo,processContractNo);
+        ProcessContract processContract = processContractMapper.selectOne(query);
+        if (null==processContract){
+            //没有该加工合同号
+            return false;
+        }else {
+            processContract.setRelationLogisticsExistState(1);
+            processContractMapper.updateById(processContract);
+            return true;
+        }
+    }
 }
 
 
