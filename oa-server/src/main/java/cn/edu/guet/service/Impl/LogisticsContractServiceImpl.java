@@ -627,19 +627,127 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             return false;
         }
         String goodsName = processContract.getGoodsName();
+
         for (LogisticsDetail logisticsDetail : logisticsDetailList) {
             if (logisticsDetail.getPurchaseContractNo().equals("000")){
-                //自家仓库出货运往加工单的，减少自家仓库库存，  增加自家仓库出库记录
+                //减少自家仓库库存表
                 QueryWrapper<OwnWarehouse> ownWarehouseQueryWrapper = new QueryWrapper<>();
-                ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getGoodsName,goodsName);
-                ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getFactoryName,logisticsDetail.getGoodsFactory());
-
-
-
+                ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getGoodsName, goodsName);
+                OwnWarehouse ownWarehouse = ownWarehouseMapper.selectOne(ownWarehouseQueryWrapper);
+                BigDecimal goodsCount = ownWarehouse.getGoodsCount();
+                //判断单位
+                if (logisticsDetail.getGoodsUnit().equals("吨")) {
+                    System.out.println("物流详情货物单位选择是的吨");
+                    ownWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight().multiply(BigDecimal.valueOf(2000))));
+                } else {
+                    System.out.println("流详情货物单位选择的是斤");
+                    ownWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
+                }
+                ownWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
+                ownWarehouseMapper.updateById(ownWarehouse);
+                //自家仓库出库记录
+                OwnInOut ownInOut = new OwnInOut();
+                ownInOut.setInOutType(0);
+                ownInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
+                ownInOut.setInOutGoodsName(goodsName);
+                ownInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
+                ownInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
+                ownInOut.setCreateBy(SecurityUtils.getUsername());
+                ownInOut.setLastUpdateBy(SecurityUtils.getUsername());
+                ownInOutMapper.insert(ownInOut);
+            }else{
+                //采购单是否有
+                QueryWrapper<PurchaseContract> purchaseContractQueryWrapper = new QueryWrapper<>();
+                purchaseContractQueryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo,logisticsDetail.getPurchaseContractNo());
+                PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
+                if (purchaseContract==null){
+                    return false;
+                }
+                //外商仓库库存表
+                QueryWrapper<OtherWarehouse> otherWarehouseQueryWrapper = new QueryWrapper<>();
+                otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
+                otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
+                OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+                if (otherWarehouse==null){
+                    return false;
+                }
+                BigDecimal goodsCount = otherWarehouse.getGoodsCount();
+                //判断单位
+                if (logisticsDetail.getGoodsUnit().equals("吨")) {
+                    System.out.println("物流详情货物单位选择是的吨");
+                    otherWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight().multiply(BigDecimal.valueOf(2000))));
+                } else {
+                    System.out.println("流详情货物单位选择的是斤");
+                    otherWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
+                }
+                otherWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
+                otherWarehouseMapper.updateById(otherWarehouse);
+                //外商仓库出库记录
+                Integer id = otherWarehouse.getId();
+                OtherInOut otherInOut = new OtherInOut();
+                otherInOut.setOtherWarehouseId(id);
+                otherInOut.setInOutType(0);
+                otherInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
+                otherInOut.setInOutGoodsName(goodsName);
+                otherInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
+                otherInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
+                otherInOut.setCreateBy(SecurityUtils.getUsername());
+                otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
+                otherInOutMapper.insert(otherInOut);
+                //通过采购单合同号  查看采购单是否有了物流单，维护采购单的relation_logistics_exist_state字段
+                purchaseContract.setRelationLogisticsExistState(1);
+                purchaseContractMapper.updateById(purchaseContract);
             }
+            //根据货物名称和加工厂名  新增加工厂名的库存和入库记录  根据厂名和货物名称判断是新增还是修改
+            String goodsFactory = logisticsDetail.getUnloadingLocation();
+            QueryWrapper<OtherWarehouse> otherWarehouseQueryWrapper = new QueryWrapper<>();
+            otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName,goodsName);
+            otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName,goodsFactory);
+            OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+            if (otherWarehouse==null){
+                //新增库存
+                OtherWarehouse addOtherWareHouse = new OtherWarehouse();
+                addOtherWareHouse.setFactoryName(goodsFactory);
+                addOtherWareHouse.setGoodsName(goodsName);
+                if (logisticsDetail.getGoodsUnit().equals("吨")) {
+                    System.out.println("新增的，并且选择是的吨");
+                    addOtherWareHouse.setGoodsCount(logisticsContract.getTotalWeight().multiply(BigDecimal.valueOf(2000)));
+                } else {
+                    System.out.println("新增的，并且选择是的斤");
+                    addOtherWareHouse.setGoodsCount(logisticsContract.getTotalWeight());
+                }
+                addOtherWareHouse.setCreateBy(SecurityUtils.getUsername());
+                addOtherWareHouse.setLastUpdateBy(SecurityUtils.getUsername());
+                otherWarehouseMapper.insert(addOtherWareHouse);
+            }else{
+                //更新库存
+                BigDecimal totalWeight = logisticsDetail.getGoodsWeight();
+                BigDecimal goodsCount = otherWarehouse.getGoodsCount();
+                //判断物流合同的单位是吨还是斤
+                if (logisticsDetail.getGoodsUnit().equals("吨")) {
+                    System.out.println("选择是的吨");
+                    otherWarehouse.setGoodsCount(goodsCount.add(totalWeight.multiply(BigDecimal.valueOf(2000))));
+                } else {
+                    System.out.println("选择的是斤");
+                    otherWarehouse.setGoodsCount(goodsCount.add(totalWeight));
+                }
+                otherWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
+                otherWarehouseMapper.updateById(otherWarehouse);
+            }
+            //新增入库记录
+            OtherWarehouse otherWarehouseRef = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+            Integer id = otherWarehouseRef.getId();
+            OtherInOut otherInOut = new OtherInOut();
+            otherInOut.setOtherWarehouseId(id);
+            otherInOut.setInOutType(1);
+            otherInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
+            otherInOut.setInOutGoodsName(goodsName);
+            otherInOut.setInOutGoodsCount(logisticsContract.getTotalWeight());
+            otherInOut.setInOutGoodsUnit(logisticsContract.getGoodsUnit());
+            otherInOut.setCreateBy(SecurityUtils.getUsername());
+            otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
+            otherInOutMapper.insert(otherInOut);
         }
-
-
         return false;
     }
 
