@@ -20,7 +20,6 @@
             <el-table-column label="加工合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.processContractNo }}</template>
             </el-table-column>
-            <el-table-column property="customerEnterpriseName" align="center" label="加工方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="paymentMonth" align="center" label="付款月份" width="100" />
             <el-table-column property="paymentMonthPriceT" align="center" label="加工单价(元/吨)" width="130" />
@@ -261,8 +260,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
-                                processPaymentContractDetail.financeStaff
-                        }}
+        processPaymentContractDetail.financeStaff
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -322,16 +321,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.cashier == null ? "暂无" :
-                                processPaymentContractDetail.cashier
-                        }}
+        processPaymentContractDetail.cashier
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.paymentTime == null ? "未知" :
-                                processPaymentContractDetail.paymentTime
-                        }}
+        processPaymentContractDetail.paymentTime
+}}
                     </el-col>
                 </el-row>
             </div>

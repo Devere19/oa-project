@@ -32,6 +32,7 @@
             <el-table-column label="加工合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.processContractNo }}</template>
             </el-table-column>
+            <el-table-column property="goodsName" align="center" label="货物名称" width="100" />
             <el-table-column property="customerEnterpriseName" align="center" label="加工方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="signTime" :formatter="conversionDate" align="center" label="合同签订时间"
@@ -58,10 +59,10 @@
                     <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
                         :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
                         @click="changePigeonhole(scope.row)">{{
-                                scope.row.pigeonhole ==
-                                    1 ?
-                                    "归档" : "还原"
-                        }}</el-button>
+        scope.row.pigeonhole ==
+            1 ?
+            "归档" : "还原"
+}}</el-button>
                     <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="getUpdateDisabled(scope.row)">
                         <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
@@ -89,6 +90,9 @@
                     :model="NewProcessContractData" style="max-width: 65%">
                     <el-form-item label="加工合同编号" prop="processContractNo">
                         <el-input v-model="NewProcessContractData.processContractNo" size="large" />
+                    </el-form-item>
+                    <el-form-item label="货物名称" prop="goodsName">
+                        <el-input v-model="NewProcessContractData.goodsName" size="large" />
                     </el-form-item>
                     <el-form-item label="加工方公司名" prop="customerEnterpriseName">
                         <el-select v-model="NewProcessContractData.customerEnterpriseName" placeholder="下拉选择"
@@ -142,6 +146,9 @@
                     <el-form-item label="加工合同编号" prop="processContractNo">
                         <el-input v-model="UpdateProcessContractData.processContractNo" size="large"
                             :disabled="updateFlag" />
+                    </el-form-item>
+                    <el-form-item label="货物名称" prop="goodsName">
+                        <el-input v-model="UpdateProcessContractData.goodsName" size="large" />
                     </el-form-item>
                     <el-form-item label="加工方公司名" prop="customerEnterpriseName">
                         <el-select v-model="UpdateProcessContractData.customerEnterpriseName" placeholder="下拉选择"
@@ -203,6 +210,14 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ ProcessContractDetail.processContractNo }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        加工货物名称：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ProcessContractDetail.goodsName }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         合同签订时间：
@@ -411,6 +426,7 @@ const firstSelection = ref<processContractModel[]>([])
 const NewProcessContractData = reactive({
     id: '',
     processContractNo: '',
+    goodsName: '',
     oldProcessContractNo: '',
     customerEnterpriseName: '',
     ownCompanyName: '',
@@ -425,6 +441,7 @@ const NewProcessContractData = reactive({
 const UpdateProcessContractData = reactive({
     id: '',
     processContractNo: '',
+    goodsName: '',
     oldProcessContractNo: '',
     customerEnterpriseName: '',
     ownCompanyName: '',
@@ -438,6 +455,7 @@ const UpdateProcessContractData = reactive({
 // 详情
 const ProcessContractDetail = reactive({
     processContractNo: '',
+    goodsName: '',
     customerEnterpriseName: '',
     ownCompanyName: '',
     signTime: '',
@@ -466,6 +484,9 @@ NewProcessPaymentContractData.paymentCount = computed(() => {
 //表单校验规则1
 const firstRules = reactive<FormRules>({
     processContractNo: [
+        { required: true, trigger: ['change'] }
+    ],
+    goodsName: [
         { required: true, trigger: ['change'] }
     ],
     customerEnterpriseName: [
@@ -664,6 +685,7 @@ const openUpdateDialog = (row: any) => {
     nextTick(() => {
         UpdateProcessContractData.id = row.id;
         UpdateProcessContractData.processContractNo = row.processContractNo
+        UpdateProcessContractData.goodsName = row.goodsName
         UpdateProcessContractData.oldProcessContractNo = row.processContractNo
         UpdateProcessContractData.customerEnterpriseName = row.customerEnterpriseName
         UpdateProcessContractData.ownCompanyName = row.ownCompanyName
@@ -874,6 +896,7 @@ const ReturnPaymentTop = () => {
 const openMordDetailDialog = async (row: any) => {
     moreDetailDialogFlag.value = true
     ProcessContractDetail.processContractNo = row.processContractNo
+    ProcessContractDetail.goodsName = row.goodsName
     ProcessContractDetail.customerEnterpriseName = row.customerEnterpriseName
     ProcessContractDetail.ownCompanyName = row.ownCompanyName
     ProcessContractDetail.signTime = dateConversion(row.inboundTime)

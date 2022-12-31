@@ -72,10 +72,10 @@
           </el-button>
           <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
             :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'" @click="changePigeonhole(scope.row)">{{
-                scope.row.pigeonhole ==
-                  1 ?
-                  "归档" : "还原"
-            }}</el-button>
+    scope.row.pigeonhole ==
+      1 ?
+      "归档" : "还原"
+}}</el-button>
           <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
@@ -142,15 +142,15 @@
               <el-tag size="large" hit>{{ "入库单" + (index + 1) }}</el-tag>
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.factoryName'" label="厂名" :rules="[
-            { required: true, trigger: ['change'] }]">
+  { required: true, trigger: ['change'] }]">
               <el-input v-model="item.factoryName" size="large" @change="changeOwnFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
-            { required: true, trigger: ['change'] }]">
+  { required: true, trigger: ['change'] }]">
               <el-input v-model="item.inboundGoodsCount" size="large" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.goodsUnitPrice'" label="采购单价" :rules="[
-            { required: true, trigger: ['change'] }]">
+  { required: true, trigger: ['change'] }]">
               <el-input v-model="item.goodsUnitPrice" size="large" />
               <el-button v-show="index != 0" @click.prevent="removeInboundItem(0, item)">删除</el-button>
             </el-form-item>
@@ -232,15 +232,15 @@
               <el-tag size="large" hit>{{ "入库单" + (index + 1) }}</el-tag>
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.factoryName'" label="厂名" :rules="[
-            { required: true, trigger: ['change'] }]">
+  { required: true, trigger: ['change'] }]">
               <el-input v-model="item.factoryName" size="large" @change="changeOwnFlag" :disabled="updateFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
-            { required: true, trigger: ['change'] }]">
+  { required: true, trigger: ['change'] }]">
               <el-input v-model="item.inboundGoodsCount" size="large" :disabled="updateFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.goodsUnitPrice'" label="采购单价" :rules="[
-            { required: true, trigger: ['change'] }]">
+  { required: true, trigger: ['change'] }]">
               <el-input v-model="item.goodsUnitPrice" size="large" :disabled="updateFlag" />
               <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)"
                 :disabled="updateFlag">删除</el-button>
