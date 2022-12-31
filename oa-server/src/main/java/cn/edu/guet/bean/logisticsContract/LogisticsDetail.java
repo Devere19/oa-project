@@ -87,6 +87,10 @@ public class LogisticsDetail implements Serializable {
      */
     private String lastUpdateBy;
 
+    /**
+     * 类型  0：加工单   1：采购单
+     */
+    private Integer upperType;
 
 
 }

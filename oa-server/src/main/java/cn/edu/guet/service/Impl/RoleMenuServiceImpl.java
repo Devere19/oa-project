@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, SysRoleMenu> implements RoleMenuService {
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveMenu(SaveMenuParm parm) {
         //先删除角色原来的权限

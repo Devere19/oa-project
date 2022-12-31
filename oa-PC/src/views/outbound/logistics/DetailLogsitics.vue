@@ -7,7 +7,7 @@
 
       <!-- 物流详情表格 -->
       <el-table :data="tableList.list" border stripe size="small" table-layout="auto" :fit="true" height="300px">
-        <el-table-column prop="purchaseContractNo" label="采购订单号"></el-table-column>
+        <el-table-column prop="purchaseContractNo" label="采购/加工订单号"></el-table-column>
         <el-table-column prop="goodsFactory" label="取货厂名"></el-table-column>
         <el-table-column prop="unloadingLocation" label="卸货地点"></el-table-column>
         <el-table-column prop="unitPrice" label="运输单价"></el-table-column>

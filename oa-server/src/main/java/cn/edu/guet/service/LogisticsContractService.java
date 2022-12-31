@@ -81,4 +81,18 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @param saleContractNo
      */
     void isHaveAnyLogistics(String saleContractNo);
+
+    /**
+     * 新增物流单是加工单类型
+     * @param logisticsContract
+     * @return
+     */
+    boolean addProcessLogisticsContract(LogisticsContract logisticsContract);
+
+    /**
+     * 新增物流单是销售单类型/运往自家仓库
+     * @param logisticsContract
+     * @return
+     */
+    boolean addLogisticsContract(LogisticsContract logisticsContract);
 }

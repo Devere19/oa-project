@@ -115,7 +115,7 @@ public class LogisticsContract implements Serializable {
     private String lastUpdateBy;
 
     /**
-     * 上级类型 0代表加工单 1代表销售单
+     * 上级类型 0代表加工单  1代表销售单
      */
     private Integer upperType;
 
@@ -124,6 +124,7 @@ public class LogisticsContract implements Serializable {
      */
     @TableField(exist = false)
     private List<LogisticsDetail> logisticsDetailList;
+
 
 
 

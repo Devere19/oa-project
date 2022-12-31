@@ -16,6 +16,7 @@ export type ListParm = {
 //物流详情
 export type LogisticsDetailList = {
   id: string,
+  upperType:string,  //0：加工单  1：采购单
   logisticsContractNo: string,
   purchaseContractNo: string,
   goodsFactory: string,
@@ -32,6 +33,7 @@ export type LogisticsDetailList = {
 //新增物流单数据类型
 export type AddLogisticsModel = {
   id: string,
+  upperType:string,  //0:加工单   1：销售单
   logisticsContractNo: string,
   saleContractNo: string,
   totalWeight: string,
