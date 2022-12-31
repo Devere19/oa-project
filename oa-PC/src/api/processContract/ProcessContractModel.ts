@@ -1,6 +1,7 @@
 export type processContractModel = {
     id: any
     processContractNo: string
+    goodsName: string
     oldProcessContractNo: string
     customerEnterpriseName: string
     ownCompanyName: string

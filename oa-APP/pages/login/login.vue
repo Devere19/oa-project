@@ -128,22 +128,28 @@
 								url: '/api/user/nickName/' + res.username,
 							}).then(userResult => {
 								if (userResult.code == 200) {
-									if(userResult.data.roleNames=="董事会"&&userResult.data.status=="在职"){
-										// 存储用户信息
-										uni.setStorage({
-											key: 'userInfo',
-											data: {
-												userId:userResult.data.id,
-												nickName: userResult.data.nickName,
-											},
-											success: function() {
-												console.log('记录当前登录用户信息');
-											}
-										});
-										uni.reLaunch({
-											url: '/pages/MainInterface/audit'
-										})
-									}else{
+									let loginFlag=false;
+									let roleNames=userResult.data.roleNames;
+									for(let i=0;i<roleNames.length;i++){
+										if(roleNames[i]=="董事会"&&userResult.data.status=="在职"){
+											loginFlag=true;
+											// 存储用户信息
+											uni.setStorage({
+												key: 'userInfo',
+												data: {
+													userId:userResult.data.id,
+													nickName: userResult.data.nickName,
+												},
+												success: function() {
+													console.log('记录当前登录用户信息');
+												}
+											});
+											uni.reLaunch({
+												url: '/pages/MainInterface/audit'
+											})
+										}
+									}
+									if(loginFlag==false){
 										uni.showModal({
 											content: '该账号无登录本系统的权限',
 											showCancel: false
