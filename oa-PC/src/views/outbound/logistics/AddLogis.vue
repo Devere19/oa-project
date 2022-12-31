@@ -233,6 +233,7 @@ const show = () => {
   dialog.title = "新增物流单"
   dialog.height = 650
   dialog.width = 800
+  addModel.upperType = ''
   addFormRef.value?.resetFields()
   addModel.logisticsDetailList = reactive([
     {
