@@ -24,8 +24,8 @@ export const deleteByIdApi = (id: number) => {
 }
 
 //根据物流合同编号查到所有的物流详情表
-export const getDetailLogistics = (logisticsContractNo: string) => {
-  return http.get(`/api/logistics/getDetailLogistics/${logisticsContractNo}`)
+export const getDetailLogistics = (id: string) => {
+  return http.get(`/api/logistics/getDetailLogistics/${id}`)
 }
 
 
@@ -38,4 +38,10 @@ export const addLogisticsApi = (parm: AddLogisticsModel) => {
 //导出excel传递参数
 export const exportApi = (listParm: ExportListParm) => {
   return http.post("/api/logistics/exportListParm", listParm)
+}
+
+//修改物流单
+export const updateLogisticsApi=(parm:AddLogisticsModel)=>{
+  return http.post("/api/logistics/edit", parm)
+
 }

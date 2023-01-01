@@ -26,7 +26,7 @@ export type LogisticsDetailList = {
   goodsUnit: string,
   unloadingLocation: string,
   unitPrice: string,
-  createBy: string
+  createBy: string,
 }
 
 
@@ -44,6 +44,10 @@ export type AddLogisticsModel = {
   logisticsContractTime: string,
   squeezeSeason: string,
   createBy: string,
+  relationPaymentExistState:string,
+  relationPaymentAuditState:string,
+  relationShippingExistState:string,
+  relationShippingAuditState:string,
   logisticsDetailList: LogisticsDetailList[]
 }
 

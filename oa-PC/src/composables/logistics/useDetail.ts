@@ -11,8 +11,8 @@ export default function useDetail() {
 
 
   //详情
-  const detailBtn = (logisticsContractNo: string, saleContractNo: string) => {
-    detailRef.value?.show(logisticsContractNo, saleContractNo)
+  const detailBtn = (id: string,logisticsContractNo:string ,saleContractNo: string) => {
+    detailRef.value?.show(id, logisticsContractNo,saleContractNo)
   }
 
 
