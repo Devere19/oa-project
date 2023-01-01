@@ -38,11 +38,11 @@ const tableList = reactive({
 
 
 //展示
-const show = async (logisticsContractNo: string, saleContractNo: string) => {
+const show = async (id: string,logisticsContractNo:string, saleContractNo: string) => {
   logisticsContractNumber.value = logisticsContractNo
   saleContractNumber.value = saleContractNo
   //获取当前物流单的物流信息详情
-  let res = await getDetailLogistics(logisticsContractNo)
+  let res = await getDetailLogistics(id)
   if (res && res.code == 200) {
     tableList.list = res.data
   }

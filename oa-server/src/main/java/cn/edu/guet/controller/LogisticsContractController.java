@@ -6,16 +6,15 @@ import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.logisticsContract.*;
 
+import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.bean.sale.ExportOutSaleContract;
 import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
-import cn.edu.guet.service.LogisticsContractService;
-import cn.edu.guet.service.LogisticsDetailService;
-import cn.edu.guet.service.ProcessContractService;
-import cn.edu.guet.service.SaleContractService;
+import cn.edu.guet.service.*;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,6 +48,9 @@ public class LogisticsContractController {
 
     @Resource
     private ProcessContractService processContractService;
+
+    @Resource
+    private PurchaseContractService purchaseContractService;
 
     /**
      * 获取归档位1的分页物流单数据
@@ -95,14 +97,20 @@ public class LogisticsContractController {
     @DeleteMapping("/deleteById/{id}")
     public HttpResult deleteById(@PathVariable("id") Integer id) {
         LogisticsContract logisticsContract = logisticsContractService.getById(id);
-        int result = logisticsContractService.delete(id);
-        if (result == 1) {
-            //判断是否还有和该物流单一样的销售合同的物流单，如果有的话，正常进行，如果没有，需要把销售单的isHaveLogistics修改为0
-            String saleContractNo = logisticsContract.getSaleContractNo();
-            logisticsContractService.isHaveAnyLogistics(saleContractNo);
+        boolean result = logisticsContractService.deleteById(id);
+        // int result = logisticsContractService.delete(id);
+        // if (result == 1) {
+        //     //判断是否还有和该物流单一样的销售合同的物流单，如果有的话，正常进行，如果没有，需要把销售单的isHaveLogistics修改为0
+        //     String saleContractNo = logisticsContract.getSaleContractNo();
+        //     logisticsContractService.isHaveAnyLogistics(saleContractNo);
+        //     return ResultUtils.success("删除成功");
+        // } else if (result == 0) {
+        //     return ResultUtils.error("已经有该物流的付款信息，无法删除");
+        // } else {
+        //     return ResultUtils.error("删除失败");
+        // }
+        if (result) {
             return ResultUtils.success("删除成功");
-        } else if (result == 0) {
-            return ResultUtils.error("已经有该物流的付款信息，无法删除");
         } else {
             return ResultUtils.error("删除失败");
         }
@@ -111,11 +119,15 @@ public class LogisticsContractController {
     /**
      * 根据物流单找到对应的物流详情
      *
-     * @param logisticsContractNo
+     * @param id
      * @return
      */
-    @GetMapping("/getDetailLogistics/{logisticsContractNo}")
-    public HttpResult getDetailLogistics(@PathVariable("logisticsContractNo") String logisticsContractNo) {
+    @GetMapping("/getDetailLogistics/{id}")
+    public HttpResult getDetailLogistics(@PathVariable("id") Integer id) {
+        QueryWrapper<LogisticsContract> logisticsContractQueryWrapper = new QueryWrapper<>();
+        logisticsContractQueryWrapper.lambda().eq(LogisticsContract::getId,id);
+        LogisticsContract one = logisticsContractService.getOne(logisticsContractQueryWrapper);
+        String logisticsContractNo = one.getLogisticsContractNo();
         List<LogisticsDetail> list = logisticsContractService.getDetailLogistics(logisticsContractNo);
         return ResultUtils.success("查询成功", list);
     }
@@ -126,17 +138,30 @@ public class LogisticsContractController {
     @PostMapping("/add")
     public HttpResult add(@RequestBody LogisticsContract logisticsContract) {
         Integer contractType = logisticsContract.getUpperType();
-        if(contractType==0){
+
+        if (contractType == 0) {
             System.out.println("新增的是加工单类型的物流单");
+            // boolean flag = processContractService.editRelationLogisticsExistState(logisticsContract.getSaleContractNo());
+            // if (!flag) {
+            //     return ResultUtils.success("加工单不正确");
+            // }
             //加工单
-            boolean result=logisticsContractService.addProcessLogisticsContract(logisticsContract);
-            if (!result){
+            boolean result = logisticsContractService.addProcessLogisticsContract(logisticsContract);
+            if (result) {
+                return ResultUtils.success("新增成功");
+            } else {
                 return ResultUtils.error("新增失败");
             }
-        }else{
+        } else {
+            // boolean flag = saleContractService.editIsHaveLogistics(logisticsContract.getSaleContractNo());
+            // if (!flag) {
+            //     return ResultUtils.error("销售单合同不正确");
+            // }
             System.out.println("新增的销售单/自家仓库类型的物流单");
-            boolean result=logisticsContractService.addLogisticsContract(logisticsContract);
-            if (!result){
+            boolean result = logisticsContractService.addLogisticsContract(logisticsContract);
+            if (result) {
+                return ResultUtils.success("新增成功");
+            } else {
                 return ResultUtils.error("新增失败");
             }
         }
@@ -156,7 +181,6 @@ public class LogisticsContractController {
         //     }
         // }
         // logisticsContractService.add(logisticsContract);
-        return ResultUtils.success("新增成功");
     }
 
     @PostMapping("/exportListParm")
@@ -205,6 +229,16 @@ public class LogisticsContractController {
     public HttpResult purchaseImportExcel(@RequestBody MultipartFile file) throws IOException {
 
         return ResultUtils.success("批量插入采购单成功");
+    }
+
+    @PostMapping("/edit")
+    public HttpResult updateLogistics(@RequestBody LogisticsContract logisticsContract){
+        boolean result=logisticsContractService.updateLogistics(logisticsContract);
+        if (result){
+            return ResultUtils.success("修改完成");
+        }else{
+            return ResultUtils.error("修改失败");
+        }
     }
 
 

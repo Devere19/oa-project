@@ -2,7 +2,7 @@
   <SysDialog :title="dialog.title" :height="dialog.height" :width="dialog.width" :visible="dialog.visible"
     @onClose="onClose" @onConfirm="commit">
     <template #content>
-      <el-form :model="addModel" ref="addFormRef" label-width="80px" size="default">
+      <el-form :model="addModel" ref="addFormRef" :rules="rules" label-width="80px" size="default">
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="saleContractNo" label="合同编号">
@@ -10,7 +10,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="saleCustomerEnterpriseName" label="销售公司">
+            <el-form-item prop="customerEnterpriseName" label="销售公司">
               <el-select v-model="addModel.customerEnterpriseName" class="m-2" placeholder="请选择销售公司" size="default">
                 <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
                   :value="item.value" />
@@ -125,6 +125,7 @@ import { add } from "lodash";
 import { deletePhotoApi } from "@/api/handlePhoto";
 import { EditType } from "@/type/BaseEnum";
 import useInstance from '@/hooks/useInstance';
+import OwnCompanyList from "../ownCompany/OwnCompanyList.vue";
 const { global } = useInstance()
 //弹框属性
 const { onClose, dialog, onConfirm, onShow } = useDialog()
@@ -187,17 +188,21 @@ const emits = defineEmits(['refresh'])
 
 //提交新增数据
 const commit = async () => {
-  console.log("提交的数据:", addModel)
-  let res = await addSaleContractApi(addModel)
-  if (res && res.code == 200) {
-    ElMessage.success(res.msg)
-    //刷新表格
-    emits('refresh')
-    onClose()
-  }
-  //清空照片
-  addModel.contractPhotoList = []
-  PhotoData.value = []
+  addFormRef.value?.validate(async (avlid) => {
+    if (avlid) {
+      // console.log("提交的数据:", addModel)
+      let res = await addSaleContractApi(addModel)
+      if (res && res.code == 200) {
+        ElMessage.success(res.msg)
+        //刷新表格
+        emits('refresh')
+        onClose()
+      }
+      //清空照片
+      addModel.contractPhotoList = []
+      PhotoData.value = []
+    }
+  })
 }
 
 //表单绑定的对象
@@ -226,6 +231,94 @@ const addModel = reactive<AddSaleModel>({
   isHaveLogistics: ''
 })
 
+//表单验证规则
+const rules = reactive({
+  saleContractNo: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入合同编号",
+    },
+  ],
+  customerEnterpriseName: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入销售公司名",
+    },
+  ],
+  ownCompanyName: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入己方公司名",
+    },
+  ],
+  goodsName: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物名称",
+    },
+  ],
+  goodsCount: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物数量",
+    },
+  ],
+  goodsUnit: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物单位",
+    },
+  ],
+  goodsUnitPrice: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物单价",
+    },
+  ],
+  goodsTotalPrice: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入销售总价",
+    },
+  ],
+  paymentMethod: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入结款方式",
+    },
+  ],
+  transportMethod: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入运输方式",
+    },
+  ],
+  squeezeSeason: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入榨季",
+    },
+  ],
+  saleContractTime: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入合同时间",
+    },
+  ],
+
+})
 
 
 //暴露出去给父组件调用

@@ -95,4 +95,18 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @return
      */
     boolean addLogisticsContract(LogisticsContract logisticsContract);
+
+    /**
+     * 删除物流单
+     * @param id
+     * @return
+     */
+    boolean deleteById(Integer id);
+
+    /**
+     * 更新物流单  先删除再新增
+     * @param logisticsContract
+     * @return
+     */
+    boolean updateLogistics(LogisticsContract logisticsContract);
 }

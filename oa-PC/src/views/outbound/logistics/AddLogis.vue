@@ -2,15 +2,15 @@
   <SysDialog :title="dialog.title" :height="dialog.height" :width="dialog.width" :visible="dialog.visible"
     @onClose="onClose" @onConfirm="commit">
     <template #content>
-      <el-form :model="addModel" ref="addFormRef" label-width="80px" size="default">
+      <el-form :model="addModel" ref="addFormRef" :rules="rules" label-width="80px" size="default">
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="logisticsContractNo" label="物流单合同编号" label-width='150px' label-position="right">
-              <el-input v-model="addModel.logisticsContractNo" placeholder="自提请填写“000”"></el-input>
+              <el-input v-model="addModel.logisticsContractNo" placeholder="自提请填写销售合同号"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="type" label="物流单类型" label-width='150px' label-position="right">
+            <el-form-item prop="upperType" label="物流单类型" label-width='150px' label-position="right">
               <el-radio-group v-model="addModel.upperType" class="ml-4">
                 <el-radio label="0" size="default">加工单</el-radio>
                 <el-radio label="1" size="default">销售单</el-radio>
@@ -21,7 +21,7 @@
         </el-row>
         <el-row>
           <el-col :span="12" :offset="0">
-            <el-form-item prop="saleContractNo" label="销售/加工单合同编号" label-width='150px' label-position="right">
+            <el-form-item prop="saleContractNo" label="销售/加工单合同号" label-width='150px' label-position="right">
               <el-input v-model="addModel.saleContractNo" placeholder="运往自家仓库请填写'000'"></el-input>
             </el-form-item>
           </el-col>
@@ -79,13 +79,15 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.logisticsContractNo'" label="物流单合同编号"
-                label-width='150px' label-position="right">
+                label-width='150px' label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="getLogisticsDetailList" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
-              <el-form-item :prop="'logisticsDetailList.' + index + '.type'" label="物流详情单类型" label-width='150px'
-                label-position="right">
+              <el-form-item :prop="'logisticsDetailList.' + index + '.upperType'" label="物流详情单类型" label-width='150px'
+                label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-radio-group v-model="item.upperType" class="ml-4">
                   <el-radio label="1" size="default">采购单</el-radio>
                   <el-radio label="0" size="default">加工单</el-radio>
@@ -98,7 +100,8 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.purchaseContractNo'" label="采购/加工合同编号"
-                label-width='150px' label-position="right">
+                label-width='150px' label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.purchaseContractNo" placeholder="若从自家仓库出货请填写'000'"></el-input>
               </el-form-item>
             </el-col>
@@ -106,7 +109,8 @@
 
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.outboundTime'" label="出库日期" label-width='150px'
-                label-position="right">
+                label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-date-picker v-model="item.outboundTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
                   placeholder="请选择出库日期" size="default" />
 
@@ -116,14 +120,16 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
-                label-position="right">
+                label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'">
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.licensePlateNumber'" label="车牌号"
-                label-width='150px' label-position="right">
+                label-width='150px' label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.licensePlateNumber"></el-input>
               </el-form-item>
             </el-col>
@@ -131,13 +137,15 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsWeight'" label="载货量" label-width='150px'
-                label-position="right">
+                label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.goodsWeight"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsUnit'" label="货物单位" label-width='150px'
-                label-position="right">
+                label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-select v-model="item.goodsUnit" placeholder="请选择货物单位" size="default">
                   <el-option label="吨" value="吨"></el-option>
                   <el-option label="斤" value="斤"></el-option>
@@ -148,7 +156,8 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
-                label-position="right">
+                label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.unitPrice"></el-input>
                 <el-button v-show="index != 0" @click.prevent="removeInboundItem(item)" type="danger"
                   style="margin-top: 5px;">删除</el-button>
@@ -156,7 +165,8 @@
             </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.unloadingLocation'" label="卸货地点"
-                label-width='150px' label-position="right">
+                label-width='150px' label-position="right" :rules="[
+  { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.unloadingLocation"></el-input>
               </el-form-item>
             </el-col>
@@ -203,6 +213,10 @@ const addModel = reactive<AddLogisticsModel>({
   id: '',
   upperType: '',  //0:加工单   1：销售单
   logisticsContractNo: '',
+  relationPaymentExistState: '',
+  relationPaymentAuditState: '',
+  relationShippingExistState: '',
+  relationShippingAuditState: '',
   saleContractNo: '',
   totalWeight: '',
   goodsUnit: '',
@@ -238,6 +252,7 @@ const show = () => {
   addModel.logisticsDetailList = reactive([
     {
       id: '',
+      upperType: '',
       logisticsContractNo: '',
       purchaseContractNo: '',
       goodsFactory: '',
@@ -260,24 +275,26 @@ const show = () => {
   onShow()
 }
 
-const isOwn = () => {
-
-}
 
 //提交
 const commit = async () => {
-  addModel.createBy = "李四"
-  // console.log(addModel)
-  let res = await addLogisticsApi(addModel)
-  if (res && res.code == 200) {
-    ElMessage.success(res.msg)
-    //刷新表格
-    emits('refresh')
-    onClose()
-  }
-  //清空照片
-  addModel.contractPhotoList = []
-  PhotoData.value = []
+  addFormRef.value?.validate(async (avlid) => {
+    if (avlid) {
+      addModel.createBy = "李四"
+      // console.log(addModel)
+      let res = await addLogisticsApi(addModel)
+      if (res && res.code == 200) {
+        ElMessage.success(res.msg)
+        //刷新表格
+        emits('refresh')
+        onClose()
+      }
+      //清空照片
+      addModel.contractPhotoList = []
+      PhotoData.value = []
+    }
+  })
+
 }
 
 
@@ -289,6 +306,7 @@ const emits = defineEmits(['refresh'])
 const addLogisticsDetail = () => {
   addModel.logisticsDetailList.push({
     id: '',
+    upperType: '',
     logisticsContractNo: '',
     purchaseContractNo: '',
     goodsFactory: '',
@@ -301,6 +319,66 @@ const addLogisticsDetail = () => {
     createBy: ''
   })
 }
+
+//表单验证规则
+const rules = reactive({
+  logisticsContractNo: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入物流单号",
+    },
+  ],
+  upperType: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请选择类型",
+    },
+  ],
+  saleContractNo: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入销售/加工单号",
+    },
+  ],
+  logisticsContractTime: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入物流单合同签订时间",
+    },
+  ],
+  totalWeight: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入物流合同总重量",
+    },
+  ],
+  goodsUnit: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物单位",
+    },
+  ],
+  freight: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入运费",
+    },
+  ],
+  squeezeSeason: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入榨季",
+    },
+  ],
+})
 
 // 删除物流详情单
 const removeInboundItem = (item: LogisticsDetailList) => {

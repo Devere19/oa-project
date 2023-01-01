@@ -72,20 +72,25 @@
         <template #default="scope">
           <el-button type="primary" :icon="MoreFilled" size="default" @click="detailBtn(scope.row)">详情
           </el-button>
-          <el-button :type="scope.row.pigeonhole == 1 ? 'info' : 'success'"
+          <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-                isPigeonhole ? "归档" :
-                  "取消归档"
-            }}
+    isPigeonhole ? "归档" :
+      "取消归档"
+}}
           </el-button>
-          <el-button type="primary" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
+          <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
               :disabled="!getUpdateDisabled(scope.row)">
               修改
             </el-tooltip>
           </el-button>
-          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">删除
+          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
+            :disabled="getDeleteDisabled(scope.row)">
+            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
+              :disabled="!getDeleteDisabled(scope.row)">
+              删除
+            </el-tooltip>
           </el-button>
         </template>
       </el-table-column>
@@ -108,7 +113,7 @@
     <el-dialog v-model="updateDialogFlag" :title="isEdit == false ? '补充合同照片' : '修改销售单'" width="50%" draggable center
       :before-close="closeUpdateDialog">
       <ul style="overflow: auto;height:600px">
-        <el-form :model="addModel" ref="thridFormRef" label-width="80px" size="default">
+        <el-form :model="addModel" ref="thridFormRef" :rules="rules" label-width="80px" size="default">
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item prop="saleContractNo" label="合同编号">
@@ -116,7 +121,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
-              <el-form-item prop="saleCustomerEnterpriseName" label="销售公司">
+              <el-form-item prop="customerEnterpriseName" label="销售公司">
                 <el-select v-model="addModel.customerEnterpriseName" class="m-2" placeholder="请选择销售公司" size="default"
                   :disabled="isEdit">
                   <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
@@ -406,24 +411,33 @@ const updateHandlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile
 
 
 const updateSaleContract = async (formEl1: FormInstance | undefined) => {
-  for (let i = 0; i < preDeletePhoto.value.length; i++) {
-    // 删除修改的照片
-    deletePhotoApi(preDeletePhoto.value[i]);
-    addModel.contractPhotoList.splice(addModel.contractPhotoList.indexOf(preDeletePhoto.value[i]), 1);
-    console.log("删除修改照片" + i);
-  }
-  let res = await editSaleContractApi(addModel)
-  if (res && res.code == 200) {
-    ElMessage({
-      message: '修改成功！',
-      type: 'success',
-    })
-    updateDialogFlag.value = false;
-    thridFormRef.value?.resetFields();
-    UpdatePhotoData.value = [];
-    preDeletePhoto.value = [];
-    refresh()
-  }
+  thridFormRef.value?.validate(async (avlid) => {
+    if (avlid) {
+      for (let i = 0; i < preDeletePhoto.value.length; i++) {
+        // 删除修改的照片
+        deletePhotoApi(preDeletePhoto.value[i]);
+        addModel.contractPhotoList.splice(addModel.contractPhotoList.indexOf(preDeletePhoto.value[i]), 1);
+        console.log("删除修改照片" + i);
+      }
+      let res = await editSaleContractApi(addModel)
+      if (res && res.code == 200) {
+        ElMessage({
+          message: '修改成功！',
+          type: 'success',
+        })
+        updateDialogFlag.value = false;
+        thridFormRef.value?.resetFields();
+        UpdatePhotoData.value = [];
+        preDeletePhoto.value = [];
+        refresh()
+      } else {
+        ElMessage({
+          message: '修改失败！',
+          type: 'error',
+        })
+      }
+    }
+  })
 }
 
 const getUpdateDisabled = (row: AddSaleModel) => {
@@ -441,6 +455,104 @@ const getUpdateDisabled = (row: AddSaleModel) => {
     return false;
   }
 }
+const getDeleteDisabled = (row: AddSaleModel) => {
+  if (row.isHaveLogistics == '1') {
+    console.log("已经存在了相关物流单，无法删除", row.saleContractNo, row.contractPhoto)
+    tipMessage.value = "存在相关的物流单，无法删除!"
+    return true;
+  } else {
+    return false
+  }
+}
+
+//表单验证规则
+const rules = reactive({
+  saleContractNo: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入合同编号",
+    },
+  ],
+  customerEnterpriseName: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入销售公司名",
+    },
+  ],
+  ownCompanyName: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入己方公司名",
+    },
+  ],
+  goodsName: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物名称",
+    },
+  ],
+  goodsCount: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物数量",
+    },
+  ],
+  goodsUnit: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物单位",
+    },
+  ],
+  goodsUnitPrice: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入货物单价",
+    },
+  ],
+  goodsTotalPrice: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入销售总价",
+    },
+  ],
+  paymentMethod: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入结款方式",
+    },
+  ],
+  transportMethod: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入运输方式",
+    },
+  ],
+  squeezeSeason: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入榨季",
+    },
+  ],
+  saleContractTime: [
+    {
+      required: true,
+      trigger: "change",
+      message: "请输入合同时间",
+    },
+  ],
+
+})
 
 
 

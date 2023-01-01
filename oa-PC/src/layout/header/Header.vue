@@ -2,7 +2,7 @@
   <h1>{{ user.userMessage.nickName }}</h1>
   <el-tooltip class="box-item" effect="dark" placement="bottom">
     <template #content>
-      <a href="#" class="tuichu">退出登录</a>
+      <a href="/" @click="removeSession" class="tuichu">退出登录</a>
     </template>
     <el-avatar size="large" shape="circle" :src="avatar" fit="fill">
     </el-avatar>
@@ -18,6 +18,9 @@ import { userStore } from '@/store/nickName'
 const user = reactive({
   userMessage: {}
 })
+const removeSession = () => {
+  sessionStorage.removeItem('token')
+}
 
 const userNickName = userStore()
 user.userMessage = userNickName.getUser
