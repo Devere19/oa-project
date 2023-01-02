@@ -108,8 +108,8 @@ public class CashierController {
         return ResultUtils.success("上传成功",shippingContractService.uploadCashierShipping(shippingContract));
     }
     //出纳查询销售单数据
-    @RequestMapping("/getCashierSaleContract")
-    public HttpResult getCashierSaleContract(ListParm listParm){
+    @PostMapping("/getCashierSaleContract")
+    public HttpResult getCashierSaleContract(@RequestBody ListParm listParm){
         return ResultUtils.success("查询成功",saleContractService.getCashierSaleContract(listParm));
     }
 
