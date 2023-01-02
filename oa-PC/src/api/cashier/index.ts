@@ -98,7 +98,7 @@ export const uploadCashierShippingApi = (shippingContract: shippingPaymentModel)
 
 //分页获取销售单
 export const getCashierSaleContractApi = (listParm: ListParm) => {
-    return http.get("cashier/getCashierSaleContract", listParm)
+    return http.post("cashier/getCashierSaleContract", listParm)
 }
 
 //上传销售单的付款数据

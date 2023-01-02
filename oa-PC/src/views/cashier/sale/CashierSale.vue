@@ -14,6 +14,14 @@
             <el-form-item label="">
                 <el-input v-model="listParm.squeezeSeason" placeholder="请输入榨季"></el-input>
             </el-form-item>
+            <el-form-item label="">
+                <el-date-picker v-model="listParm.startTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+                    placeholder="开始时间" style="width:120px" />
+            </el-form-item>
+            <el-form-item label="">
+                <el-date-picker v-model="listParm.endTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
+                    placeholder="截止时间" style="width:120px" />
+            </el-form-item>
             <el-form-item>
                 <el-button @click="searchBtn" :icon="Search">搜索</el-button>
                 <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
@@ -23,10 +31,10 @@
         <el-table :data="tableList.list" border stripe size="small" :height="tableHeight" table-layout="auto"
             :fit="true">
             <el-table-column prop="saleContractNo" label="销售单合同编号"></el-table-column>
-            <el-table-column label="销售方公司名">
-                <template #default="scope">
+            <el-table-column prop="customerEnterpriseName" label="销售方公司名">
+                <!-- <template #default="scope">
                     <span>{{ scope.row.customer.customerEnterpriseName }}</span>
-                </template>
+                </template> -->
             </el-table-column>
             <el-table-column prop="ownCompanyName" label="己方公司名"></el-table-column>
             <el-table-column prop="saleContractTime" label="合同签订时间" :formatter="conversionDate"></el-table-column>
@@ -62,7 +70,8 @@
                     <el-button type="primary" :icon="MoreFilled" size="default" @click="detailBtn(scope.row)">详情
                     </el-button>
 
-                    <el-button type="success" :icon="Upload" size="default" @click="editBtn(scope.row.id)">上传
+                    <el-button type="success" :icon="Upload" size="default" @click="editBtn(scope.row.id)"
+                        :disabled="scope.row.revenuePhoto != null">上传
                     </el-button>
 
                 </template>
