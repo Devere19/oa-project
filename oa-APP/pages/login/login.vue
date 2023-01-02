@@ -106,8 +106,8 @@
 			},
 			login(res){
 				uni.request({
-					url: 'http://localhost:9000/login',
-					// url: 'http://120.77.28.123:9000/login',
+					// url: 'http://localhost:9000/login',
+					url: 'http://120.77.28.123:9000/login',
 					method: "POST",
 					data: JSON.stringify(res),
 				}).then(

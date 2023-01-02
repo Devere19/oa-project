@@ -26,7 +26,7 @@
         <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
         </el-button>
         <!-- <el-upload class="moreDeleteButton" name="file"
-          action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
+          action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
           :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false">
           <el-button :icon="Upload" type="primary">批量导入</el-button>
         </el-upload> -->
@@ -94,8 +94,8 @@
 
     <!-- 修改物流单弹窗 -->
     <el-dialog v-model="updateDialogFlag" :title="isEdit == false ? '补充合同照片' : '修改销售单'" width="50%" draggable center
-     :before-close="closeUpdateDialog">
-      <el-form :model="addModel" ref="thridFormRef" label-width="80px" size="default" :rules="rules"> 
+      :before-close="closeUpdateDialog">
+      <el-form :model="addModel" ref="thridFormRef" label-width="80px" size="default" :rules="rules">
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="logisticsContractNo" label="物流单合同编号" label-width='150px' label-position="right">
@@ -155,7 +155,7 @@
         </el-row>
         <el-row>
           <el-form-item prop="contractPhotoList" label="合同照片" label-width='150px' label-position="right">
-            <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+            <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
               :on-success="updateHandlePhotoSuccess">
               <el-icon>

@@ -160,8 +160,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ purchasePaymentContractDetail.financeStaff == null ? "暂无" :
-                                purchasePaymentContractDetail.financeStaff
-                        }}
+        purchasePaymentContractDetail.financeStaff
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -221,16 +221,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ purchasePaymentContractDetail.cashier == null ? "暂无" :
-                                purchasePaymentContractDetail.cashier
-                        }}
+        purchasePaymentContractDetail.cashier
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ purchasePaymentContractDetail.paymentTime == null ? "未知" :
-                                purchasePaymentContractDetail.paymentTime
-                        }}
+        purchasePaymentContractDetail.paymentTime
+}}
                     </el-col>
                 </el-row>
             </div>
