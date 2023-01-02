@@ -172,8 +172,7 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.logisticsContractNo'" label="物流单合同编号"
-                label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                label-width='150px' label-position="right">
                 <el-input v-model="getLogisticsDetailList" disabled></el-input>
               </el-form-item>
             </el-col>
