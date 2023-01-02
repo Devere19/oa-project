@@ -48,9 +48,11 @@
       <el-table-column prop="goodsTotalPrice" label="销售合同总价钱"></el-table-column>
       <el-table-column prop="paymentMethod" label="结款方式"></el-table-column>
       <el-table-column prop="transportMethod" label="运输方式"></el-table-column>
-      <el-table-column prop="contractPhoto" label="销售合同照片">
+      <el-table-column label="销售合同照片">
         <template #default="scope">
-          <img style="width: 100px; height: 100px" :src="scope.row.contractPhoto" />
+          <el-image style="width: 100px; height: 100px"
+            :src="scope.row.contractPhoto == '' ? null : scope.row.contractPhoto"
+            :preview-src-list="scope.row.contractPhotoList" :initial-index="4" fit="cover" :preview-teleported="true" />
         </template>
       </el-table-column>
       <el-table-column prop="revenueTime" label="收款时间" :formatter="conversionDateNull"></el-table-column>
