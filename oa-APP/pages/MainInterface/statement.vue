@@ -520,9 +520,35 @@
 					if (res.code == 200) {
 						if(res.data[0]!=null){
 							if(res.data[0].spend!=null){
-								this.officeSpending=res.data[0].spend
+								if(timeType==0){
+									this.dayOfficeSpending=res.data[0].spend;
+								}else if(timeType==1){
+									this.monthOfficeSpending=res.data[0].spend;
+								}else if(timeType==2){
+									this.seasonOfficeSpending=res.data[0].spend;
+								}else if(timeType==3){
+									this.yearOfficeSpending=res.data[0].spend;
+								}
 							}else{
-								this.officeSpending=0
+								if(timeType==0){
+									this.dayOfficeSpending=0;
+								}else if(timeType==1){
+									this.monthOfficeSpending=0;
+								}else if(timeType==2){
+									this.seasonOfficeSpending=0;
+								}else if(timeType==3){
+									this.yearOfficeSpending=0;
+								}
+							}
+						}else{
+							if(timeType==0){
+								this.dayOfficeSpending=0;
+							}else if(timeType==1){
+								this.monthOfficeSpending=0;
+							}else if(timeType==2){
+								this.seasonOfficeSpending=0;
+							}else if(timeType==3){
+								this.yearOfficeSpending=0;
 							}
 						}
 					}
