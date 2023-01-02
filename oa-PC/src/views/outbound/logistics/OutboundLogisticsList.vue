@@ -75,15 +75,16 @@
               删除
             </el-tooltip>
           </el-button> -->
-          <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
+          <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
+            :disabled="getUpdateDisabled(scope.row)">
+            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
+              :disabled="!getUpdateDisabled(scope.row)">
               修改
             </el-tooltip>
           </el-button>
-          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
-              删除
-            </el-tooltip>
+          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
+            :disabled="(scope.row.relationShippingExistState == '1' || scope.row.relationPaymentExistState == '1')">
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -374,39 +375,80 @@ const uploadFalse = () => {
     duration: 4000
   })
 }
+const isEditFlag = ref<boolean>(false)
 
 //修改和删除diable操作
-const tipMessage = ref()
+const tipMessage = ref('')
 const getUpdateDisabled = (row: AddLogisticsModel) => {
+  console.log("调用一次", row.saleContractNo)
+  // if (row.relationShippingExistState == '1' && row.contractPhoto != null) {
+  //   isEditFlag.value = true
+  //   console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
+  //   tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
+  //   return true
+  // } else if (row.relationShippingExistState == '1' && row.contractPhoto != null) {
+  //   isEditFlag.value = true
+  //   console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
+  //   tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
+  //   return true
+  // } else {
+  //   tipMessage.value = ''
+  //   isEditFlag.value = false
+  //   return false
+  // }
+  // if (row.relationShippingExistState == '1') {
+  //   if (row.contractPhoto != null) {
+  //     console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
+  //     tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
+  //     return true;
+  //   }
+  // } else if (row.relationPaymentExistState == '1') {
+  //   if (row.contractPhoto != null) {
+  //     console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
+  //     tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
+  //     return true;
+  //   }
+  // }
+  // tipMessage.value = "可以修改"
+  // return false;
+
   if (row.relationShippingExistState == '1') {
     if (row.contractPhoto == null || row.contractPhoto == '') {
-      // console.log("有相关海运单但是没有合同照片", row.logisticsContractNo)
+      console.log("有相关海运单但是没有合同照片", row.logisticsContractNo)
+      // tipMessage.value = "可以修改"
       return false;
     } else {
-      // console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
+      console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
       tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
       return true;
     }
   } else if (row.relationPaymentExistState == '1') {
     if (row.contractPhoto == null || row.contractPhoto == '') {
-      // console.log("有相关物流付款单但是没有合同照片", row.logisticsContractNo, row.contractPhoto)
+      console.log("有相关物流付款单但是没有合同照片", row.logisticsContractNo, row.contractPhoto)
+      // tipMessage.value = "可以修改"
       return false;
     } else {
-      // console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
+      console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
       tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
       return true;
     }
   } else {
+    // tipMessage.value = "可以修改"
     return false;
   }
 }
+// const getUpdateDisabledTip = (row: AddLogisticsModel) => {
+//   console.log("再调用一次")
+//   let res = getUpdateDisabled(row)
+//   return !res
+// }
 const getDeleteDisabled = (row: AddLogisticsModel) => {
   if (row.relationShippingExistState == '1') {
     tipMessage.value = "存在相关的海运单，不允许删除!"
     return true;
   }
   if (row.relationPaymentExistState == '1') {
-    // console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
+    console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
     tipMessage.value = "存在相关的物流付款单，不允许删除!"
     return true;
   }
