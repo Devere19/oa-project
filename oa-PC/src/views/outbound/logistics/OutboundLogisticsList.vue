@@ -44,7 +44,7 @@
       <el-table-column prop="contractPhoto" label="物流合同照片">
         <template #default="scope">
           <el-image style="width: 100px; height: 100px" :src="scope.row.contractPhoto"
-            :preview-src-list="scope.row.contractPhotoList" :initial-index="4" fit="cover" :preview-teleported="true" />
+            :preview-src-list="scope.row.contractPhotoList" fit="cover" :preview-teleported="true" />
         </template>
       </el-table-column>
       <el-table-column prop="logisticsContractTime" label="物流单合同签订时间" :formatter="conversionDate"></el-table-column>

@@ -148,7 +148,7 @@
                             :disabled="updateFlag" />
                     </el-form-item>
                     <el-form-item label="货物名称" prop="goodsName">
-                        <el-input v-model="UpdateProcessContractData.goodsName" size="large" />
+                        <el-input v-model="UpdateProcessContractData.goodsName" size="large" :disabled="updateFlag" />
                     </el-form-item>
                     <el-form-item label="加工方公司名" prop="customerEnterpriseName">
                         <el-select v-model="UpdateProcessContractData.customerEnterpriseName" placeholder="下拉选择"
@@ -900,7 +900,7 @@ const openMordDetailDialog = async (row: any) => {
     ProcessContractDetail.goodsName = row.goodsName
     ProcessContractDetail.customerEnterpriseName = row.customerEnterpriseName
     ProcessContractDetail.ownCompanyName = row.ownCompanyName
-    ProcessContractDetail.signTime = dateConversion(row.inboundTime)
+    ProcessContractDetail.signTime = dateConversion(row.signTime)
     ProcessContractDetail.alcoholConversionFormula = row.alcoholConversionFormula
     ProcessContractDetail.concentratedSolutionConversionFormula = row.concentratedSolutionConversionFormula
     ProcessContractDetail.createTime = timeConversion(row.createTime)
