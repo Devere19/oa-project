@@ -57,7 +57,7 @@
             <el-table-column align="center" label="操作" width="390" fixed="right">
                 <template #default="scope">
                     <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
-                        :disabled="loginUserRole == '财务' ? (scope.row.financeState == null ? false : true) : (loginUserRole == '董事会' ? (scope.row.financeState == 1 ? JudgmentRepeated(scope.row) : true) : true)">
+                        :disabled="stateAvailable(scope.row)!">
                         通过
                     </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary"
@@ -199,8 +199,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.financeStaff == null ? "暂无" :
-                                officeExpenseDetail.financeStaff
-                        }}
+        officeExpenseDetail.financeStaff
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -260,16 +260,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.cashier == null ? "暂无" :
-                                officeExpenseDetail.financeStaff
-                        }}
+        officeExpenseDetail.financeStaff
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.paymentTime == null ? "未知" :
-                                officeExpenseDetail.paymentTime
-                        }}
+        officeExpenseDetail.paymentTime
+}}
                     </el-col>
                 </el-row>
             </div>
@@ -391,45 +391,69 @@ onMounted(() => {
     loginUserId.value = userNickNameStore.user.id
 })
 
+const stateAvailable = (row: any) => {
+    if (row.financeState == null) {
+        for (let i = 0; i < loginUserRole.value.length; i++) {
+            if (loginUserRole.value[i] == '财务') {
+                return false;
+            }
+        }
+    } else {
+        for (let i = 0; i < loginUserRole.value.length; i++) {
+            if (loginUserRole.value[i] == '董事会') {
+                return JudgmentRepeated(row);
+            }
+        }
+    }
+    return true;
+}
+
 //审批通过，根据身份修改采购付款单响应审核状态
 const changeState = (row: any) => {
-    if (loginUserRole.value == '财务') {
-        ElMessageBox.confirm(
-            '您确定要通过吗?',
-            {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                title: '系统提示'
-            }
-        ).then(() => {
-            changeFinanceState(row.id, loginUserName.value).then(res => {
-                ElMessage({
-                    message: "已通过",
-                    type: 'success',
-                    duration: 3000
+    if (row.financeState == null) {
+        for (let i = 0; i < loginUserRole.value.length; i++) {
+            if (loginUserRole.value[i] == '财务') {
+                ElMessageBox.confirm(
+                    '您确定要通过吗?',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        title: '系统提示'
+                    }
+                ).then(() => {
+                    changeFinanceState(row.id, loginUserName.value).then(res => {
+                        ElMessage({
+                            message: "已通过",
+                            type: 'success',
+                            duration: 3000
+                        })
+                        getTableData();
+                    });
                 })
-                getTableData();
-            });
-        })
-
-    } else if (loginUserRole.value == '董事会') {
-        ElMessageBox.confirm(
-            '您确定要通过吗?',
-            {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                title: '系统提示'
             }
-        ).then(() => {
-            changeDirectorState(row.id, loginUserId.value).then(res => {
-                ElMessage({
-                    message: "已通过",
-                    type: 'success',
-                    duration: 3000
+        }
+    } else {
+        for (let i = 0; i < loginUserRole.value.length; i++) {
+            if (loginUserRole.value[i] == '董事会') {
+                ElMessageBox.confirm(
+                    '您确定要通过吗?',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        title: '系统提示'
+                    }
+                ).then(() => {
+                    changeDirectorState(row.id, loginUserId.value).then(res => {
+                        ElMessage({
+                            message: "已通过",
+                            type: 'success',
+                            duration: 3000
+                        })
+                        getTableData();
+                    })
                 })
-                getTableData();
-            })
-        })
+            }
+        }
     }
 }
 
