@@ -134,9 +134,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item prop="ownCompanyName" label="己方公司">
                 <el-select v-model="addModel.ownCompanyName" placeholder="请选择己方公司" size="default" :disabled="isEdit">
-                  <el-option label="广西永湘物流有限公司" value="广西永湘物流有限公司"></el-option>
-                  <el-option label="广西南宁锦泰行工贸有限公司" value="广西南宁锦泰行工贸有限公司"></el-option>
-                  <el-option label="广西丰沣顺国际物流有限公司" value="广西丰沣顺国际物流有限公司"></el-option>
+                  <el-option v-for="item in roleData.list" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -249,8 +247,9 @@ import { AddSaleModel } from "@/api/sale/SaleModel";
 import { add } from "lodash";
 import { ElMessage, FormInstance, UploadProps, UploadUserFile } from "element-plus";
 import useInstance from '@/hooks/useInstance';
-import { SelectCustomer } from "@/api/customer/CustomerModel";
+import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel";
 import { deletePhotoApi } from "@/api/handlePhoto";
+import { getOwnCompanySelectApi } from "@/api/ownCompany";
 const { global } = useInstance()
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
@@ -302,9 +301,18 @@ const tipMessage = ref()
 const isEdit = ref<boolean>(false)
 
 
+//定义己方公司列表
+const roleData = reactive<SelectOwnCompany>({
+  list: []
+})
+
+
 onMounted(() => {
   getSelectApi().then(res => {
     customerData.list = res.data;
+  })
+  getOwnCompanySelectApi().then(res => {
+    roleData.list = res.data;
   })
 
 })
