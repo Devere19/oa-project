@@ -430,16 +430,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ saleContractDetail.revenueBy == null ? "暂无" :
-                            saleContractDetail.revenueBy
-                    }}
+        saleContractDetail.revenueBy
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     收款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ saleContractDetail.revenueTime == null ? "未知" :
-                            saleContractDetail.revenueTime
-                    }}
+        saleContractDetail.revenueTime
+}}
                 </el-col>
             </el-row>
         </div>
@@ -543,8 +543,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.financeStaff == null ? "暂无" :
-                            purchasePaymentContractDetail.financeStaff
-                    }}
+        purchasePaymentContractDetail.financeStaff
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -604,16 +604,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.cashier == null ? "暂无" :
-                            purchasePaymentContractDetail.cashier
-                    }}
+        purchasePaymentContractDetail.cashier
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.paymentTime == null ? "未知" :
-                            purchasePaymentContractDetail.paymentTime
-                    }}
+        purchasePaymentContractDetail.paymentTime
+}}
                 </el-col>
             </el-row>
         </div>
@@ -697,8 +697,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
-                            processPaymentContractDetail.financeStaff
-                    }}
+        processPaymentContractDetail.financeStaff
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -758,16 +758,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ processPaymentContractDetail.cashier == null ? "暂无" :
-                            processPaymentContractDetail.cashier
-                    }}
+        processPaymentContractDetail.cashier
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ processPaymentContractDetail.paymentTime == null ? "未知" :
-                            processPaymentContractDetail.paymentTime
-                    }}
+        processPaymentContractDetail.paymentTime
+}}
                 </el-col>
             </el-row>
         </div>
@@ -865,8 +865,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.financeStaff == null ? "暂无" :
-                            logisticsPaymentContractDetail.financeStaff
-                    }}
+        logisticsPaymentContractDetail.financeStaff
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -926,16 +926,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.cashier == null ? "暂无" :
-                            logisticsPaymentContractDetail.cashier
-                    }}
+        logisticsPaymentContractDetail.cashier
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.paymentTime == null ? "未知" :
-                            logisticsPaymentContractDetail.paymentTime
-                    }}
+        logisticsPaymentContractDetail.paymentTime
+}}
                 </el-col>
             </el-row>
         </div>
@@ -1221,8 +1221,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ officeExpenseDetail.financeStaff == null ? "暂无" :
-                            officeExpenseDetail.financeStaff
-                    }}
+        officeExpenseDetail.financeStaff
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -1282,16 +1282,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ officeExpenseDetail.cashier == null ? "暂无" :
-                            officeExpenseDetail.financeStaff
-                    }}
+        officeExpenseDetail.financeStaff
+}}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ officeExpenseDetail.paymentTime == null ? "未知" :
-                            officeExpenseDetail.paymentTime
-                    }}
+        officeExpenseDetail.paymentTime
+}}
                 </el-col>
             </el-row>
         </div>
@@ -2599,7 +2599,7 @@ const exportExcel = () => {
             console.log("传递成功");
             console.log(res.data);
             const abtn = document.createElement("a");
-            abtn.href = "http://localhost:9000/finance/incomeSpendExportExcel"
+            abtn.href = "http://120.77.28.123:9000/finance/incomeSpendExportExcel"
             abtn.click();
         }
     })

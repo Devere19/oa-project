@@ -210,7 +210,7 @@
           </el-row>
           <el-row>
             <el-form-item prop="contractPhotoList" label="合同照片">
-              <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+              <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
                 list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                 :on-success="updateHandlePhotoSuccess">
                 <el-icon>

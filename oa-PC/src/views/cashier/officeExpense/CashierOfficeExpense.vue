@@ -104,8 +104,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.financeStaff == null ? "暂无" :
-                                officeExpenseDetail.financeStaff
-                        }}
+        officeExpenseDetail.financeStaff
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -173,16 +173,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.cashier == null ? "暂无" :
-                                officeExpenseDetail.cashier
-                        }}
+        officeExpenseDetail.cashier
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.paymentTime == null ? "未知" :
-                                officeExpenseDetail.paymentTime
-                        }}
+        officeExpenseDetail.paymentTime
+}}
                     </el-col>
                 </el-row>
             </div>

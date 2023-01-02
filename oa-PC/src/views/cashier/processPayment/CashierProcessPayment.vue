@@ -136,8 +136,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
-                                processPaymentContractDetail.financeStaff
-                        }}
+        processPaymentContractDetail.financeStaff
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -197,16 +197,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.cashier == null ? "暂无" :
-                                processPaymentContractDetail.cashier
-                        }}
+        processPaymentContractDetail.cashier
+}}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.paymentTime == null ? "未知" :
-                                processPaymentContractDetail.paymentTime
-                        }}
+        processPaymentContractDetail.paymentTime
+}}
                     </el-col>
                 </el-row>
             </div>
@@ -247,7 +247,7 @@
                             style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="付款流水截图">
-                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+                        <el-upload v-model:file-list="PhotoData" action="http://120.77.28.123:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
                             :on-success="handlePhotoSuccess">
                             <el-icon>
