@@ -1080,6 +1080,12 @@
                 <el-col :span="6" class="moreDetailContent">
                     {{ ShippingContractDetail.expenses }}
                 </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    己方公司名：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ ShippingContractDetail.ownCompanyName }}
+                </el-col>
             </el-row>
         </div>
         <!-- <el-divider content-position="center">审核情况</el-divider> -->
@@ -1774,6 +1780,7 @@ const ShippingContractDetail = reactive({
     id: '',
     shippingContractNo: '',
     logisticsContractNo: '',
+    ownCompanyName: '',
     principal: '',
     packingTime: '',
     packingLocation: '',
@@ -2536,6 +2543,7 @@ const openShippingDetail = (row: any) => {
         if (res.code == 200) {
             ShippingContractDetail.shippingContractNo = res.data.shippingContractNo
             ShippingContractDetail.logisticsContractNo = res.data.logisticsContractNo
+            ShippingContractDetail.ownCompanyName = res.data.ownCompanyName
             ShippingContractDetail.principal = res.data.principal
             ShippingContractDetail.packingTime = dateConversion(res.data.packingTime)
             ShippingContractDetail.packingLocation = res.data.packingLocation
@@ -2599,7 +2607,8 @@ const exportExcel = () => {
             console.log("传递成功");
             console.log(res.data);
             const abtn = document.createElement("a");
-            abtn.href = "http://120.77.28.123:9000/finance/incomeSpendExportExcel"
+            // abtn.href = "http://120.77.28.123:9000/finance/incomeSpendExportExcel"
+            abtn.href = "http://localhost:9000/finance/incomeSpendExportExcel"
             abtn.click();
         }
     })

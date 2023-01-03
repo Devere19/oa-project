@@ -13,7 +13,7 @@
     <select id="getShippingExportDayData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
@@ -24,7 +24,7 @@
     <select id="getShippingExportMonthData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
@@ -35,7 +35,7 @@
     <select id="getShippingExportSeasonData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
@@ -46,7 +46,7 @@
     <select id="getShippingExportYearData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
@@ -57,32 +57,22 @@
     <select id="getShippingExportCompanyDayData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
-        FROM shipping_contract sc,(
-            SELECT shc.id,sac.own_company_name
-            FROM shipping_contract shc,logistics_contract lc,sale_contract sac
-            WHERE shc.logistics_contract_no=lc.logistics_contract_no
-              AND lc.sale_contract_no=sac.sale_contract_no
-        ) t
-        WHERE sc.id=t.id AND t.own_company_name=#{company} AND payment_time between #{startDate} and #{endDate}
+        FROM shipping_contract sc
+        WHERE sc.own_company_name=#{company} AND payment_time between #{startDate} and #{endDate}
         ORDER BY payment_time
     </select>
 
     <select id="getShippingExportCompanyMonthData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
-        FROM shipping_contract sc,(
-            SELECT shc.id,sac.own_company_name
-            FROM shipping_contract shc,logistics_contract lc,sale_contract sac
-            WHERE shc.logistics_contract_no=lc.logistics_contract_no
-              AND lc.sale_contract_no=sac.sale_contract_no
-        ) t
-        WHERE sc.id=t.id AND t.own_company_name=#{company}
+        FROM shipping_contract sc
+        WHERE sc.own_company_name=#{company}
         HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
         ORDER BY date_format(payment_time, '%Y-%m')
     </select>
@@ -90,16 +80,11 @@
     <select id="getShippingExportCompanySeasonData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
-        FROM shipping_contract sc,(
-            SELECT shc.id,sac.own_company_name
-            FROM shipping_contract shc,logistics_contract lc,sale_contract sac
-            WHERE shc.logistics_contract_no=lc.logistics_contract_no
-              AND lc.sale_contract_no=sac.sale_contract_no
-        ) t
-        WHERE sc.id=t.id AND t.own_company_name=#{company}
+        FROM shipping_contract sc
+        WHERE sc.own_company_name=#{company}
         HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
         ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
     </select>
@@ -107,16 +92,11 @@
     <select id="getShippingExportCompanyYearData" resultType="cn.edu.guet.bean.exportModel.ExportShippingModel">
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
-            finance_staff,cashier,principal,packing_time,packing_location,unpacking_factory,
+            finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
             container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
             carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
-        FROM shipping_contract sc,(
-            SELECT shc.id,sac.own_company_name
-            FROM shipping_contract shc,logistics_contract lc,sale_contract sac
-            WHERE shc.logistics_contract_no=lc.logistics_contract_no
-              AND lc.sale_contract_no=sac.sale_contract_no
-        ) t
-        WHERE sc.id=t.id AND t.own_company_name=#{company}
+        FROM shipping_contract sc
+        WHERE sc.own_company_name=#{company}
         HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
         ORDER BY date_format(payment_time, '%Y')
     </select>

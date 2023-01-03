@@ -60,6 +60,12 @@ public class ExportShippingModel {
     /**
      * 委托方
      */
+    @Excel(name = "己方公司名")
+    private String ownCompanyName;
+
+    /**
+     * 委托方
+     */
     @Excel(name = "委托方")
     private String principal;
 
