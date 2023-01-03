@@ -38,6 +38,8 @@
     <el-table :data="tableList.list" border stripe size="small" :height="tableHeight" table-layout="auto" :fit="true">
       <el-table-column prop="logisticsContractNo" label="物流单合同编号"></el-table-column>
       <el-table-column prop="saleContractNo" label="销售/加工单合同编号"></el-table-column>
+      <el-table-column prop="ownCompanyName" label="己方公司"></el-table-column>
+      <!-- <el-table-column prop="goodsName" label="货物名称"></el-table-column> -->
       <el-table-column prop="totalWeight" label="物流合同总重量"></el-table-column>
       <el-table-column prop="goodsUnit" label="货物单位"></el-table-column>
       <el-table-column prop="freight" label="运费"></el-table-column>
@@ -69,21 +71,15 @@
             </el-tooltip>
           </el-button>
           <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
-            :disabled="getDeleteDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-              :disabled="!getDeleteDisabled(scope.row)">
-              删除
-            </el-tooltip>
+            :disabled="(scope.row.relationShippingExistState == '1' || scope.row.relationPaymentExistState == '1')">
+            删除
           </el-button> -->
-          <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
-            :disabled="getUpdateDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-              :disabled="!getUpdateDisabled(scope.row)">
+          <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)">
+            <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
               修改
             </el-tooltip>
           </el-button>
-          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
-            :disabled="(scope.row.relationShippingExistState == '1' || scope.row.relationPaymentExistState == '1')">
+          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">
             删除
           </el-button>
         </template>
@@ -161,6 +157,18 @@
           <el-col :span="12" :offset="0">
             <el-form-item prop="squeezeSeason" label="榨季" label-width='150px' label-position="right" :disabled="isEdit">
               <el-input v-model="addModel.squeezeSeason" size="default" :disabled="isEdit"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="ownCompanyName" label="己方公司" label-width='150px' label-position="right">
+              <el-select v-model="addModel.ownCompanyName" placeholder="请选择己方公司" size="default">
+                <!-- <el-option label="广西永湘物流有限公司" value="广西永湘物流有限公司"></el-option>
+                <el-option label="广西南宁锦泰行工贸有限公司" value="广西南宁锦泰行工贸有限公司"></el-option>
+                <el-option label="广西丰沣顺国际物流有限公司" value="广西丰沣顺国际物流有限公司"></el-option> -->
+                <el-option v-for="item in roleData.list" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -315,10 +323,12 @@ import DetailLogsitics from './DetailLogsitics.vue';
 import AddLogis from './AddLogis.vue';
 import { exportApi, getDetailLogistics, updateLogisticsApi } from '@/api/logistics';
 import { AddLogisticsModel, ExportListParm, LogisticsDetailList } from '@/api/logistics/LogisticsModel';
-import { computed, nextTick, reactive, ref } from 'vue';
+import { computed, nextTick, onMounted, reactive, ref } from 'vue';
 import { ElMessage, FormInstance, UploadProps, UploadUserFile } from 'element-plus';
 import useInstance from '@/hooks/useInstance';
 import { deletePhotoApi } from '@/api/handlePhoto';
+import { SelectOwnCompany } from '@/api/customer/CustomerModel';
+import { getOwnCompanySelectApi } from '@/api/ownCompany';
 //表格相关属性
 const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero, sizeChange, currentChange } = useTable()
 
@@ -381,61 +391,16 @@ const isEditFlag = ref<boolean>(false)
 const tipMessage = ref('')
 const getUpdateDisabled = (row: AddLogisticsModel) => {
   console.log("调用一次", row.saleContractNo)
-  // if (row.relationShippingExistState == '1' && row.contractPhoto != null) {
-  //   isEditFlag.value = true
-  //   console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
-  //   tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
-  //   return true
-  // } else if (row.relationShippingExistState == '1' && row.contractPhoto != null) {
-  //   isEditFlag.value = true
-  //   console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
-  //   tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
-  //   return true
-  // } else {
-  //   tipMessage.value = ''
-  //   isEditFlag.value = false
-  //   return false
-  // }
-  // if (row.relationShippingExistState == '1') {
-  //   if (row.contractPhoto != null) {
-  //     console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
-  //     tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
-  //     return true;
-  //   }
-  // } else if (row.relationPaymentExistState == '1') {
-  //   if (row.contractPhoto != null) {
-  //     console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
-  //     tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
-  //     return true;
-  //   }
-  // }
-  // tipMessage.value = "可以修改"
-  // return false;
-
-  if (row.relationShippingExistState == '1') {
-    if (row.contractPhoto == null || row.contractPhoto == '') {
-      console.log("有相关海运单但是没有合同照片", row.logisticsContractNo)
-      // tipMessage.value = "可以修改"
-      return false;
-    } else {
-      console.log("有相关海运单，并且有了合同照片", row.logisticsContractNo)
+  if (row.contractPhoto != '') {
+    if (row.relationShippingExistState == '1') {
       tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
       return true;
-    }
-  } else if (row.relationPaymentExistState == '1') {
-    if (row.contractPhoto == null || row.contractPhoto == '') {
-      console.log("有相关物流付款单但是没有合同照片", row.logisticsContractNo, row.contractPhoto)
-      // tipMessage.value = "可以修改"
-      return false;
-    } else {
-      console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
+    } else if (row.relationPaymentExistState == '1') {
       tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
       return true;
     }
-  } else {
-    // tipMessage.value = "可以修改"
-    return false;
   }
+  return false;
 }
 // const getUpdateDisabledTip = (row: AddLogisticsModel) => {
 //   console.log("再调用一次")
@@ -455,11 +420,23 @@ const getDeleteDisabled = (row: AddLogisticsModel) => {
   return false
 }
 
+const roleData = reactive<SelectOwnCompany>({
+  list: []
+})
+
+onMounted(() => {
+  getOwnCompanySelectApi().then(res => {
+    roleData.list = res.data;
+  })
+})
+
 // 修改物流单
 const addModel = reactive<AddLogisticsModel>({
   id: '',
   upperType: '',  //0:加工单   1：销售单
   logisticsContractNo: '',
+  ownCompanyName: '',
+  goodsName: '',
   relationPaymentExistState: '',
   relationPaymentAuditState: '',
   relationShippingExistState: '',
