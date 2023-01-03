@@ -85,7 +85,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> searchShippingContract(int currentPage, int pageSize, String searchWord) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("principal", searchWord)
+        qw.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord).or().like("principal", searchWord)
                 .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord).or().like("container_no", searchWord)
                 .or().like("seal_no", searchWord).or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
                 .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord)
@@ -324,7 +324,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     public Page<ShippingContract> searchCashierShipping(int currentPage, int pageSize, String searchWord) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("shipping_contract_no", searchWord)
-                .or().like("logistics_contract_no", searchWord).or().like("principal", searchWord)
+                .or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord).or().like("principal", searchWord)
                 .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
                 .or().like("container_no", searchWord).or().like("seal_no", searchWord)
                 .or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
@@ -527,7 +527,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     public Page<ShippingContract> searchDirectorSC(int currentPage, int pageSize, String searchWord, int userId) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("shipping_contract_no", searchWord)
-                .or().like("logistics_contract_no", searchWord).or().like("principal", searchWord)
+                .or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord).or().like("principal", searchWord)
                 .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
                 .or().like("container_no", searchWord).or().like("seal_no", searchWord)
                 .or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)

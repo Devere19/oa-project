@@ -21,6 +21,7 @@
                 <template #default="scope">{{ scope.row.shippingContractNo }}</template>
             </el-table-column>
             <el-table-column property="logisticsContractNo" align="center" label="物流合同编号" width="120" />
+            <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="principal" align="center" label="委托方" />
             <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期"
                 width="105" />
@@ -244,6 +245,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
+                            <el-form-item label="己方公司名" prop="ownCompanyName">
+                                <el-select v-model="NewShippingContractData.ownCompanyName" placeholder="下拉选择"
+                                    size="large">
+                                    <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label"
+                                        :value="item.value" />
+                                </el-select>
+                            </el-form-item>
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
@@ -397,6 +405,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
+                            <el-form-item label="己方公司名" prop="ownCompanyName">
+                                <el-select v-model="UpdateShippingContractData.ownCompanyName" placeholder="下拉选择"
+                                    size="large" :disabled="updateFlag">
+                                    <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label"
+                                        :value="item.value" />
+                                </el-select>
+                            </el-form-item>
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
@@ -554,6 +569,12 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{ ShippingContractDetail.expenses }}
                     </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        己方公司名：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.ownCompanyName }}
+                    </el-col>
                 </el-row>
             </div>
             <!-- <el-divider content-position="center">审核情况</el-divider> -->
@@ -669,6 +690,7 @@ import { Delete, Search, MoreFilled, Select, CloseBold, Edit } from "@element-pl
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
+import { getOwnCompanySelectApi } from "@/api/ownCompany/index"
 import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
 import { getShippingContractDataApi, searchShippingContractApi, shippingCheckLogisticsContractNoApi, checkContainerNoApi, addNewShippingContractApi, updateShippingContractApi, deleteOneShippingContractApi, changeDirectorState, changeFinanceState } from '@/api/shippingContract'
 import { userStore } from '@/store/nickName'
@@ -712,6 +734,7 @@ const NewShippingContractData = reactive({
     shippingContractNo: '',
     oldShippingContractNo: '',
     logisticsContractNo: '',
+    ownCompanyName: '',
     principal: '',
     packingTime: '',
     packingLocation: '',
@@ -738,6 +761,7 @@ const UpdateShippingContractData = reactive({
     shippingContractNo: '',
     oldShippingContractNo: '',
     logisticsContractNo: '',
+    ownCompanyName: '',
     principal: '',
     packingTime: '',
     packingLocation: '',
@@ -763,6 +787,7 @@ const ShippingContractDetail = reactive({
     id: '',
     shippingContractNo: '',
     logisticsContractNo: '',
+    ownCompanyName: '',
     principal: '',
     packingTime: '',
     packingLocation: '',
@@ -809,6 +834,9 @@ const firstRules = reactive<FormRules>({
         { required: true, trigger: ['change'] }
     ],
     logisticsContractNo: [
+        { required: true, trigger: ['change'] }
+    ],
+    ownCompanyName: [
         { required: true, trigger: ['change'] }
     ],
     principal: [
@@ -862,11 +890,20 @@ const disabledDate = (time: Date) => {
     return time.getTime() > Date.now()
 }
 
+//定义己方公司列表数据  label和value都存公司名称
+const ownCompanyData = reactive<SelectOwnCompany>({
+    list: []
+})
+
 onMounted(() => {
     getTableData();
     loginUserName.value = userNickNameStore.user.nickName;
-    loginUserRole.value = userNickNameStore.user.roleNames
-    loginUserId.value = userNickNameStore.user.id
+    loginUserRole.value = userNickNameStore.user.roleNames;
+    loginUserId.value = userNickNameStore.user.id;
+
+    getOwnCompanySelectApi().then(res => {
+        ownCompanyData.list = res.data;
+    })
 })
 
 const stateAvailable = (row: any) => {
@@ -1021,6 +1058,7 @@ const openUpdateDialog = (row: any) => {
         UpdateShippingContractData.shippingContractNo = row.shippingContractNo
         UpdateShippingContractData.oldShippingContractNo = row.shippingContractNo
         UpdateShippingContractData.logisticsContractNo = row.logisticsContractNo
+        UpdateShippingContractData.ownCompanyName = row.ownCompanyName
         UpdateShippingContractData.principal = row.principal
         UpdateShippingContractData.packingTime = dateConversion(row.packingTime)
         UpdateShippingContractData.packingLocation = row.packingLocation
@@ -1239,6 +1277,7 @@ const updateShippingContract = async (formEl1: FormInstance | undefined) => {
 const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.shippingContractNo = row.shippingContractNo
     ShippingContractDetail.logisticsContractNo = row.logisticsContractNo
+    ShippingContractDetail.ownCompanyName = row.ownCompanyName
     ShippingContractDetail.principal = row.principal
     ShippingContractDetail.packingTime = dateConversion(row.packingTime)
     ShippingContractDetail.packingLocation = row.packingLocation

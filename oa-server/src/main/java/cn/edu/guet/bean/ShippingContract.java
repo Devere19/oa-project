@@ -43,6 +43,11 @@ public class ShippingContract implements Serializable {
     private String logisticsContractNo;
 
     /**
+     * 己方公司名
+     */
+    private String ownCompanyName;
+
+    /**
      * 委托方
      */
     private String principal;
@@ -218,6 +223,7 @@ public class ShippingContract implements Serializable {
             && (this.getShippingContractNo() == null ? other.getShippingContractNo() == null : this.getShippingContractNo().equals(other.getShippingContractNo()))
             && (this.getOldShippingContractNo() == null ? other.getOldShippingContractNo() == null : this.getOldShippingContractNo().equals(other.getOldShippingContractNo()))
             && (this.getLogisticsContractNo() == null ? other.getLogisticsContractNo() == null : this.getLogisticsContractNo().equals(other.getLogisticsContractNo()))
+            && (this.getOwnCompanyName() == null ? other.getOwnCompanyName() == null : this.getOwnCompanyName().equals(other.getOwnCompanyName()))
             && (this.getPrincipal() == null ? other.getPrincipal() == null : this.getPrincipal().equals(other.getPrincipal()))
             && (this.getPackingTime() == null ? other.getPackingTime() == null : this.getPackingTime().equals(other.getPackingTime()))
             && (this.getPackingLocation() == null ? other.getPackingLocation() == null : this.getPackingLocation().equals(other.getPackingLocation()))
@@ -257,6 +263,7 @@ public class ShippingContract implements Serializable {
         result = prime * result + ((getShippingContractNo() == null) ? 0 : getShippingContractNo().hashCode());
         result = prime * result + ((getOldShippingContractNo() == null) ? 0 : getOldShippingContractNo().hashCode());
         result = prime * result + ((getLogisticsContractNo() == null) ? 0 : getLogisticsContractNo().hashCode());
+        result = prime * result + ((getOwnCompanyName() == null) ? 0 : getOwnCompanyName().hashCode());
         result = prime * result + ((getPrincipal() == null) ? 0 : getPrincipal().hashCode());
         result = prime * result + ((getPackingTime() == null) ? 0 : getPackingTime().hashCode());
         result = prime * result + ((getPackingLocation() == null) ? 0 : getPackingLocation().hashCode());
@@ -299,6 +306,7 @@ public class ShippingContract implements Serializable {
         sb.append(", shippingContractNo=").append(shippingContractNo);
         sb.append(", oldShippingContractNo=").append(oldShippingContractNo);
         sb.append(", logisticsContractNo=").append(logisticsContractNo);
+        sb.append(", ownCompanyName=").append(ownCompanyName);
         sb.append(", principal=").append(principal);
         sb.append(", packingTime=").append(packingTime);
         sb.append(", packingLocation=").append(packingLocation);
