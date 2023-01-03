@@ -610,11 +610,19 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         // ProcessContract processContract1 = processContractMapper.selectOne(processContractQueryWrapper1);
         // processContract1.setRelationLogisticsExistState(1);
         // processContractMapper.updateById(processContract1);
+        //拿到加工单
+        QueryWrapper<ProcessContract> processContractQueryWrapper = new QueryWrapper<>();
+        processContractQueryWrapper.lambda().eq(ProcessContract::getProcessContractNo, logisticsContract.getSaleContractNo());
+        ProcessContract processContract = processContractMapper.selectOne(processContractQueryWrapper);
+        //货物名称
+        String goodsName = processContract.getGoodsName();
+
         //加工单的物流单
         //生成物流单
         List<String> contractPhotoList = logisticsContract.getContractPhotoList();
         logisticsContract.setContractPhoto(ImageUtils.getDBString(contractPhotoList));
         logisticsContract.setPigeonhole("1");
+        logisticsContract.setGoodsName(goodsName);
         logisticsContract.setCreateBy(SecurityUtils.getUsername());
         logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
         logisticsContractMapper.insert(logisticsContract);
@@ -627,13 +635,11 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             logisticsDetailMapper.insert(logisticsDetail);
         }
         //维护加工单的relation_logistics_exist_state
-        QueryWrapper<ProcessContract> processContractQueryWrapper = new QueryWrapper<>();
-        processContractQueryWrapper.lambda().eq(ProcessContract::getProcessContractNo, logisticsContract.getSaleContractNo());
-        ProcessContract processContract = processContractMapper.selectOne(processContractQueryWrapper);
+        // QueryWrapper<ProcessContract> processContractQueryWrapper = new QueryWrapper<>();
+        // processContractQueryWrapper.lambda().eq(ProcessContract::getProcessContractNo, logisticsContract.getSaleContractNo());
+        // ProcessContract processContract = processContractMapper.selectOne(processContractQueryWrapper);
         processContract.setRelationLogisticsExistState(1);
         processContractMapper.updateById(processContract);
-        //货物名称
-        String goodsName = processContract.getGoodsName();
 
         for (LogisticsDetail logisticsDetail : logisticsDetailList) {
             if (logisticsDetail.getPurchaseContractNo().equals("000")) {
@@ -761,21 +767,9 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
     @Transactional(rollbackFor = Exception.class)
     public boolean addLogisticsContract(LogisticsContract logisticsContract) {
         //销售单的物流单
-        //生成物流单
-        List<String> contractPhotoList = logisticsContract.getContractPhotoList();
-        logisticsContract.setContractPhoto(ImageUtils.getDBString(contractPhotoList));
-        logisticsContract.setPigeonhole("1");
-        logisticsContract.setCreateBy(SecurityUtils.getUsername());
-        logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
-        logisticsContractMapper.insert(logisticsContract);
+        //物流详情单
         List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
-        //新增对应的物流详情单
-        for (LogisticsDetail logisticsDetail : logisticsDetailList) {
-            logisticsDetail.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
-            logisticsDetail.setCreateBy(SecurityUtils.getUsername());
-            logisticsDetail.setLastUpdateBy(SecurityUtils.getUsername());
-            logisticsDetailMapper.insert(logisticsDetail);
-        }
+        //货物名称
         String goodsName = "";
         if (!logisticsContract.getSaleContractNo().equals("000")) {
             QueryWrapper<SaleContract> saleContractQueryWrapper = new QueryWrapper<>();
@@ -789,6 +783,25 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
             //货物名称
             goodsName = purchaseContract.getGoodsName();
+        }
+        if (StringUtils.isEmpty(goodsName)){
+            return false;
+        }
+
+        //生成物流单
+        List<String> contractPhotoList = logisticsContract.getContractPhotoList();
+        logisticsContract.setContractPhoto(ImageUtils.getDBString(contractPhotoList));
+        logisticsContract.setPigeonhole("1");
+        logisticsContract.setGoodsName(goodsName);
+        logisticsContract.setCreateBy(SecurityUtils.getUsername());
+        logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
+        logisticsContractMapper.insert(logisticsContract);
+        //新增对应的物流详情单
+        for (LogisticsDetail logisticsDetail : logisticsDetailList) {
+            logisticsDetail.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
+            logisticsDetail.setCreateBy(SecurityUtils.getUsername());
+            logisticsDetail.setLastUpdateBy(SecurityUtils.getUsername());
+            logisticsDetailMapper.insert(logisticsDetail);
         }
 
         //运往自家仓库的销售单

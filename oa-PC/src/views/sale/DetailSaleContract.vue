@@ -8,8 +8,8 @@
       <span class="title">己方公司名:</span>{{ detailTableList.ownCompanyName }}
       <span class="title">销售总量:</span>{{ detailTableList.goodsCount }}{{ detailTableList.goodsUnit }}<br />
       <span class="title">剩余出库量:</span>{{ detailTableList.goodsCount - remainingOutboundVolume }}{{
-          detailTableList.goodsUnit
-      }}<br />
+    detailTableList.goodsUnit
+}}<br />
       <span class="title" style="line-height: 50px;">出库详情:</span><br />
 
       <!-- 出库详情表格 -->

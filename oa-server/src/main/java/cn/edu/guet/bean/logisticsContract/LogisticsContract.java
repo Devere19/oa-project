@@ -33,6 +33,16 @@ public class LogisticsContract implements Serializable {
      * 销售单合同编号
      */
     private String saleContractNo;
+
+    /**
+     * 己方公司名称
+     */
+    private String ownCompanyName;
+
+    /**
+     * 货物名称
+     */
+    private String goodsName;
     /**
      * 销售单合同总重量
      */

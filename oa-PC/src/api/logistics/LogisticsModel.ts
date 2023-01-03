@@ -36,6 +36,8 @@ export type AddLogisticsModel = {
   upperType:string,  //0:加工单   1：销售单
   logisticsContractNo: string,
   saleContractNo: string,
+  ownCompanyName:string,
+  goodsName:string,
   totalWeight: string,
   goodsUnit: string,
   freight: string,

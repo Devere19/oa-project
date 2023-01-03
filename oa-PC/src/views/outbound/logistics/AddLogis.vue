@@ -32,7 +32,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row>
           <el-col :span="12" :offset="0">
             <el-form-item prop="totalWeight" label="物流合同总重量" label-width='150px' label-position="right">
@@ -57,6 +56,18 @@
           <el-col :span="12" :offset="0">
             <el-form-item prop="squeezeSeason" label="榨季" label-width='150px' label-position="right">
               <el-input v-model="addModel.squeezeSeason" size="default"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12" :offset="0">
+            <el-form-item prop="ownCompanyName" label="己方公司" label-width='150px' label-position="right">
+              <el-select v-model="addModel.ownCompanyName" placeholder="请选择己方公司" size="default">
+                <!-- <el-option label="广西永湘物流有限公司" value="广西永湘物流有限公司"></el-option>
+                <el-option label="广西南宁锦泰行工贸有限公司" value="广西南宁锦泰行工贸有限公司"></el-option>
+                <el-option label="广西丰沣顺国际物流有限公司" value="广西丰沣顺国际物流有限公司"></el-option> -->
+                <el-option v-for="item in roleData.list" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -194,17 +205,30 @@
 <script setup lang="ts">
 import SysDialog from '@/components/SysDialog.vue';
 import useDialog from '@/hooks/useDialog';
-import { computed, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { AddLogisticsModel, LogisticsDetailList } from '@/api/logistics/LogisticsModel'
 import { ElMessage, FormInstance, UploadProps, UploadUserFile } from 'element-plus';
 import { deletePhotoApi } from '@/api/handlePhoto';
 import { addLogisticsApi } from '@/api/logistics';
+import { getOwnCompanySelectApi } from '@/api/ownCompany';
+import { SelectOwnCompany } from '@/api/customer/CustomerModel';
 const { dialog, onShow, onClose, onConfirm } = useDialog()
 
 const addFormRef = ref<FormInstance>()
 
 const getLogisticsDetailList = computed(() => {
   return addModel.logisticsContractNo
+})
+
+//定义己方公司列表
+const roleData = reactive<SelectOwnCompany>({
+  list: []
+})
+
+onMounted(() => {
+  getOwnCompanySelectApi().then(res => {
+    roleData.list = res.data;
+  })
 })
 
 //新增物流单数据类型
@@ -217,6 +241,8 @@ const addModel = reactive<AddLogisticsModel>({
   relationShippingExistState: '',
   relationShippingAuditState: '',
   saleContractNo: '',
+  ownCompanyName: '',
+  goodsName: '',
   totalWeight: '',
   goodsUnit: '',
   freight: '',
@@ -415,6 +441,8 @@ const handlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
     // console.log("加入照片数据组");
   }
 }
+
+
 
 defineExpose({
   show
