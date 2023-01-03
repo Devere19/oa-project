@@ -262,9 +262,9 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
         saleContract.setPigeonhole("1");
         saleContract.setLastUpdateBy(SecurityUtils.getUsername());
         int i = this.baseMapper.updateById(saleContract);
-        if (i>0){
+        if (i > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -296,7 +296,9 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
             List<LogisticsDetail> logisticsDetails = logisticsDetailService.list(detailQueryWrapper);
             for (LogisticsDetail logisticsDetail : logisticsDetails) {
-                logisticsDetailList.add(logisticsDetail);
+                if (logisticsDetail.getUpperType() == 1) {
+                    logisticsDetailList.add(logisticsDetail);
+                }
             }
         }
         return logisticsDetailList;
@@ -464,12 +466,12 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
     @Override
     public boolean editIsHaveLogistics(String saleContractNo) {
         QueryWrapper<SaleContract> query = new QueryWrapper<>();
-        query.lambda().eq(SaleContract::getSaleContractNo,saleContractNo);
+        query.lambda().eq(SaleContract::getSaleContractNo, saleContractNo);
         SaleContract saleContract = saleContractMapper.selectOne(query);
-        if (saleContract==null){
+        if (saleContract == null) {
             //没有该销售合同号
             return false;
-        }else {
+        } else {
             saleContract.setIsHaveLogistics(1);
             saleContractMapper.updateById(saleContract);
             return true;
