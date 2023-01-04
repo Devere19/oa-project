@@ -23,7 +23,7 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示未归档数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
         </el-button>
         <!-- <el-upload class="moreDeleteButton" name="file"
           action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
@@ -52,16 +52,18 @@
       <el-table-column prop="logisticsContractTime" label="物流单合同签订时间" :formatter="conversionDate"></el-table-column>
       <el-table-column prop="squeezeSeason" label="榨季"></el-table-column>
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
-      <el-table-column fixed="right" label="操作" align="center" width="380">
+      <el-table-column fixed="right" label="操作" align="center" width="480">
         <template #default="scope">
           <el-button type="primary" size="default" :icon="MoreFilled"
             @click="detailBtn(scope.row.id, scope.row.logisticsContractNo, scope.row.saleContractNo)">详情
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-              isPigeonhole? "归档":
-                "取消归档"
-            }}
+    isPigeonhole ? "归档" :
+      "取消归档"
+}}
+          </el-button>
+          <el-button :icon="Money" size="default" type="success" @click="openPaymentDialog(scope.row)">付款
           </el-button>
           <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
@@ -102,8 +104,8 @@
     <AddLogis ref="addRef" @refresh="refresh"> </AddLogis>
 
     <!-- 修改物流单弹窗 -->
-    <el-dialog class="updateDialog" v-model="updateDialogFlag" :title="isEdit == false ? '补充合同照片' : '修改销售单'" width="50%"
-      :before-close="closeUpdateDialog">
+    <el-dialog class="updateDialog" v-model="updateDialogFlag" :title="isEdit == false ? '补充合同照片' : '修改物流单'" width="50%"
+      draggable center :before-close="closeUpdateDialog">
       <ul ref="updateDialogTop" style="overflow: auto;height:600px">
         <el-form :model="addModel" ref="thridFormRef" label-width="80px" size="default" :rules="rules">
           <el-row>
@@ -168,7 +170,7 @@
           <el-row>
             <el-col :span="12" :offset="0">
               <el-form-item prop="ownCompanyName" label="己方公司" label-width='150px' label-position="right">
-                <el-select v-model="addModel.ownCompanyName" placeholder="请选择己方公司" size="default">
+                <el-select v-model="addModel.ownCompanyName" placeholder="请选择己方公司" size="default" :disabled="isEdit">
                   <!-- <el-option label="广西永湘物流有限公司" value="广西永湘物流有限公司"></el-option>
                 <el-option label="广西南宁锦泰行工贸有限公司" value="广西南宁锦泰行工贸有限公司"></el-option>
                 <el-option label="广西丰沣顺国际物流有限公司" value="广西丰沣顺国际物流有限公司"></el-option> -->
@@ -316,6 +318,39 @@
         </span>
       </template>
     </el-dialog>
+    <!-- 物流付款单 -->
+    <el-dialog v-model="addDialogFlag" title="新增物流付款单" width="40%" draggable center :before-close="closeAddDialog">
+      <ul ref="addDialogTop" style="overflow: auto;height:120px;padding: 0;">
+        <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="120px"
+          :model="NewLogisticsPaymentContractData" style="max-width: 98%">
+          <el-row justify="center">
+            <el-col :span="16">
+              <!-- 验证物流合同号是否存在 -->
+              <el-form-item label="物流合同编号" prop="logisticsContractNo">
+                <el-input v-model="NewLogisticsPaymentContractData.logisticsContractNo" size="large"
+                  :suffix-icon="contractExistFlag ? 'Select' : 'CloseBold'" @input="checkLogisticsContractNo"
+                  disabled="false" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row justify="center">
+            <el-col :span="16">
+              <el-form-item label="本次付款金额" prop="paymentCount">
+                <el-input v-model="NewLogisticsPaymentContractData.paymentCount" size="large" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </ul>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="sendNewLogisticsPaymentContract(firstFormRef)">
+            确定
+          </el-button>
+          <el-button @click="closeAddDialog">取消</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </el-main>
 </template>
 
@@ -330,11 +365,14 @@ import AddLogis from './AddLogis.vue';
 import { exportApi, getDetailLogistics, updateLogisticsApi } from '@/api/logistics';
 import { AddLogisticsModel, ExportListParm, LogisticsDetailList } from '@/api/logistics/LogisticsModel';
 import { computed, nextTick, onMounted, reactive, ref } from 'vue';
-import { ElMessage, FormInstance, UploadProps, UploadUserFile } from 'element-plus';
+import { ElMessage, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus';
 import useInstance from '@/hooks/useInstance';
 import { deletePhotoApi } from '@/api/handlePhoto';
 import { SelectOwnCompany } from '@/api/customer/CustomerModel';
 import { getOwnCompanySelectApi } from '@/api/ownCompany';
+import { addNewLogisticsPaymentContractApi, checkLogisticsContractNoApi } from '@/api/logisticsPaymentContract';
+import { userStore } from '@/store/nickName'
+const userNickNameStore = userStore()
 //表格相关属性
 const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero, sizeChange, currentChange } = useTable()
 
@@ -343,6 +381,7 @@ const { changePigeonhole, deleteBtn, addRef, addBtn } = useLogistics(refresh)
 
 //详情相关属性
 const { detailBtn, detailRef } = useDetail()
+
 
 
 //导出表格
@@ -410,29 +449,15 @@ const getUpdateDisabled = (row: any) => {
   }
   return false;
 }
-// const getUpdateDisabledTip = (row: AddLogisticsModel) => {
-//   console.log("再调用一次")
-//   let res = getUpdateDisabled(row)
-//   return !res
-// }
-const getDeleteDisabled = (row: AddLogisticsModel) => {
-  if (row.relationShippingExistState == '1') {
-    tipMessage.value = "存在相关的海运单，不允许删除!"
-    return true;
-  }
-  if (row.relationPaymentExistState == '1') {
-    console.log("有相关物流付款单，并且有了合同照片", row.logisticsContractNo)
-    tipMessage.value = "存在相关的物流付款单，不允许删除!"
-    return true;
-  }
-  return false
-}
+
+
 
 const roleData = reactive<SelectOwnCompany>({
   list: []
 })
 
 onMounted(() => {
+  loginUserName.value = userNickNameStore.user.nickName;
   getOwnCompanySelectApi().then(res => {
     roleData.list = res.data;
   })
@@ -487,10 +512,106 @@ const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
 const updateDialogTop = ref<any>()
 
-// 修改采购单窗口滑动回最顶端
-const UpdateReturnTop = () => {
-  updateDialogTop.value.scrollTop = 0;
+
+
+
+//物流付款单
+const addDialogFlag = ref(false)
+const contractExistFlag = ref(false)
+const loginUserName = ref("")
+
+// 打开新增物流付款单窗口
+const firstFormRef = ref<FormInstance>()
+const openAddDialog = () => {
+  addDialogFlag.value = true
 }
+// 打开物流付款单修改窗口
+const openPaymentDialog = async (row: any) => {
+  addDialogFlag.value = true;
+  contractExistFlag.value = true;
+  NewLogisticsPaymentContractData.logisticsContractNo = row.logisticsContractNo
+
+}
+
+// 新增物流付款单
+const NewLogisticsPaymentContractData = reactive({
+  id: '',
+  logisticsContractNo: '',
+  paymentCount: '',
+  createBy: ''
+})
+
+// 关闭新增窗口
+const closeAddDialog = () => {
+  addDialogFlag.value = false;
+  firstFormRef.value?.resetFields();
+  contractExistFlag.value = false;
+}
+// 验证物流合同是否存在
+const checkLogisticsContractNo = (e: any) => {
+  checkLogisticsContractNoApi(e).then(res => {
+    contractExistFlag.value = res.data
+    if (res.data == false) {
+      ElMessage({
+        message: '所填物流合同编号不存在，请检查！',
+        type: 'error',
+        grouping: true,
+        duration: 1000
+      })
+    } else {
+      ElMessage({
+        message: '验证合法！',
+        type: 'success',
+      })
+    }
+  })
+}
+// 发送新增物流付款单请求
+const sendNewLogisticsPaymentContract = async (formEl1: FormInstance | undefined) => {
+  if (!formEl1) return
+  await formEl1.validate((valid, fields) => {
+    if (valid) {
+      if (contractExistFlag.value == true) {
+        NewLogisticsPaymentContractData.createBy = loginUserName.value;
+        console.log(NewLogisticsPaymentContractData);
+        addNewLogisticsPaymentContractApi(NewLogisticsPaymentContractData).then(res => {
+          if (res.data == 1) {
+            ElMessage({
+              message: '新增物流付款单成功！',
+              type: 'success',
+            })
+            refresh()
+            closeAddDialog();
+          }
+          else {
+            ElMessage({
+              message: '新增物流付款单失败！',
+              type: 'error',
+              duration: 4000
+            })
+          }
+        })
+      } else {
+        ElMessage({
+          message: '不存在相应物流合同，请检查！',
+          type: 'error',
+          duration: 4000
+        })
+      }
+    } else {
+      ElMessage({
+        message: '表单验证未通过，请检查！',
+        type: 'error',
+        duration: 4000
+      })
+    }
+  })
+}
+
+
+
+
+
 
 // 关闭修改采购单窗口
 const closeUpdateDialog = () => {
@@ -655,6 +776,16 @@ const updateLogistics = async (formEl1: FormInstance | undefined) => {
     }
   })
 }
+
+//表单校验规则
+const firstRules = reactive<FormRules>({
+  logisticsContractNo: [
+    { required: true, trigger: ['change'] }
+  ],
+  paymentCount: [
+    { required: true, trigger: ['change'] }
+  ],
+})
 
 //表单验证规则
 const rules = reactive({

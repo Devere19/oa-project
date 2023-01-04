@@ -1052,11 +1052,13 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         //先拿到该物流单和物流单合同号
         LogisticsContract logisticsContract = logisticsContractMapper.selectById(id);
         String logisticsContractNo = logisticsContract.getLogisticsContractNo();
+        System.out.println("删除的物流单");
 
         //根据物流单号拿到物流详情集合
         QueryWrapper<LogisticsDetail> detailQueryWrapper = new QueryWrapper<>();
         detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
         List<LogisticsDetail> logisticsDetails = logisticsDetailMapper.selectList(detailQueryWrapper);
+        System.out.println("删除的物流详情单:"+logisticsDetails);
 
         System.out.println("删除加工单");
         //货物名称
@@ -1235,11 +1237,13 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         //先拿到该物流单和物流单合同号
         LogisticsContract logisticsContract = logisticsContractMapper.selectById(id);
         String logisticsContractNo = logisticsContract.getLogisticsContractNo();
+        System.out.println("删除的物流单号"+logisticsContractNo);
 
         //根据物流单号拿到物流详情集合
         QueryWrapper<LogisticsDetail> detailQueryWrapper = new QueryWrapper<>();
         detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
         List<LogisticsDetail> logisticsDetails = logisticsDetailMapper.selectList(detailQueryWrapper);
+        System.out.println("删除的物流详情但："+logisticsDetails);
 
         System.out.println("删除销售单");
         //货物名称
@@ -1366,6 +1370,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                         ownInOutQueryWrapper.lambda().eq(OwnInOut::getInOutContractNo, logisticsContract.getLogisticsContractNo());
                         ownInOutQueryWrapper.lambda().eq(OwnInOut::getInOutGoodsName, goodsName);
                         ownInOutMapper.delete(ownInOutQueryWrapper);
+                        //删除物流详情单
+                        logisticsDetailMapper.deleteById(logisticsDetail.getId());
                     } else {
                         System.out.println("外商仓库出货的正常销售");
                         //修改库存
