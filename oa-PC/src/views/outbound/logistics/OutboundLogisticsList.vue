@@ -76,7 +76,9 @@
               修改
             </el-tooltip>
           </el-button> -->
-          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">
+          <el-button type="danger" :icon="Delete" size="default"
+            :disabled="(scope.row.relationPaymentExistState == 1 || scope.row.relationShippingExistState == 1)"
+            @click="deleteBtn(scope.row.id)">
             删除
           </el-button>
         </template>
