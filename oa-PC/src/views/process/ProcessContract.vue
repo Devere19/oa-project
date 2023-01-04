@@ -59,14 +59,14 @@
                     <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
                         :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
                         @click="changePigeonhole(scope.row)">{{
-        scope.row.pigeonhole ==
-            1 ?
-            "归档" : "还原"
-}}</el-button>
+                            scope.row.pigeonhole ==
+                                1 ?
+                                "归档" : "还原"
+                        }}</el-button>
                     <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="getUpdateDisabled(scope.row)">
                         <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-                            :disabled="!getUpdateDisabled(scope.row)">
+                            :disabled="!(scope.row.relationPaymentAuditState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationLogisticsExistState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationPaymentExistState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : false)))">
                             修改
                         </el-tooltip>
                     </el-button>
@@ -636,19 +636,21 @@ const returnAllData = () => {
 //     })
 // }
 
+// (scope.row.relationPaymentAuditState==1?(scope.row.contractPhoto!= null?true:false):(scope.row.relationLogisticsExistState==1?(scope.row.contractPhoto!= null?true:false):(scope.row.relationPaymentAuditState==1?(scope.row.contractPhoto!= null?true:false):false)))
+
 const getUpdateDisabled = (row: any) => {
     if (row.relationPaymentAuditState == 1) {
-        if (row.contractPhoto != null) {
+        if (row.contractPhoto != null && row.contractPhoto != '') {
             tipMessage.value = "存在已审核的相关加工付款单，不允许修改！"
             return true;
         }
     } else if (row.relationLogisticsExistState == 1) {
-        if (row.contractPhoto != null) {
+        if (row.contractPhoto != null && row.contractPhoto != '') {
             tipMessage.value = "存在相关的物流单，不允许修改！"
             return true;
         }
     } else if (row.relationPaymentExistState == 1) {
-        if (row.contractPhoto != null) {
+        if (row.contractPhoto != null && row.contractPhoto != '') {
             tipMessage.value = "存在未审核的相关加工付款单，请将其删除后重试！"
             return true;
         }
