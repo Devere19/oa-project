@@ -23,7 +23,7 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示未归档数据" }}
         </el-button>
         <!-- <el-upload class="moreDeleteButton" name="file"
           action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
@@ -59,13 +59,16 @@
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-    isPigeonhole ? "归档" :
-      "取消归档"
-}}
+              isPigeonhole? "归档":
+                "取消归档"
+            }}
           </el-button>
           <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
-            修改
+            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
+              :disabled="!(scope.row.relationShippingAuditState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationPaymentAuditState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationShippingExistState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationPaymentExistState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : false))))">
+              修改
+            </el-tooltip>
           </el-button>
           <!-- <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
             :disabled="(scope.row.relationShippingExistState == '1' || scope.row.relationPaymentExistState == '1')">
@@ -396,12 +399,12 @@ const getUpdateDisabled = (row: any) => {
   console.log("调用了一次")
   if (row.relationShippingExistState == 1) {
     if (row.contractPhoto != null && row.contractPhoto != '') {
-      tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
+      tipMessage.value = "存在未审核的相关海运单，请将其删除后重试！"
       return true;
     }
   } else if (row.relationPaymentExistState == 1) {
     if (row.contractPhoto != null && row.contractPhoto != '') {
-      tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
+      tipMessage.value = "存在未审核的相关物流付款单，请将其删除后重试！"
       return true;
     }
   }
