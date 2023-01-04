@@ -2607,8 +2607,7 @@ const exportExcel = () => {
             console.log("传递成功");
             console.log(res.data);
             const abtn = document.createElement("a");
-            // abtn.href = "http://120.77.28.123:9000/finance/incomeSpendExportExcel"
-            abtn.href = "http://localhost:9000/finance/incomeSpendExportExcel"
+            abtn.href = "http://120.77.28.123:9000/finance/incomeSpendExportExcel"
             abtn.click();
         }
     })

@@ -63,22 +63,19 @@
       "取消归档"
 }}
           </el-button>
-          <!-- <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
+          <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-              :disabled="!getUpdateDisabled(scope.row)">
-              修改
-            </el-tooltip>
+            修改
           </el-button>
-          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
+          <!-- <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
             :disabled="(scope.row.relationShippingExistState == '1' || scope.row.relationPaymentExistState == '1')">
             删除
           </el-button> -->
-          <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)">
+          <!-- <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
               修改
             </el-tooltip>
-          </el-button>
+          </el-button> -->
           <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">
             删除
           </el-button>
@@ -388,14 +385,15 @@ const uploadFalse = () => {
 const isEditFlag = ref<boolean>(false)
 
 //修改和删除diable操作
-const tipMessage = ref('')
-const getUpdateDisabled = (row: AddLogisticsModel) => {
-  console.log("调用一次", row.saleContractNo)
-  if (row.contractPhoto != '') {
-    if (row.relationShippingExistState == '1') {
+const tipMessage = ref()
+const getUpdateDisabled = (row: any) => {
+  if (row.relationShippingExistState == 1) {
+    if (row.contractPhoto != null && row.contractPhoto != '') {
       tipMessage.value = "存在相关的海运单，并且已经提交合同照片,不允许修改!"
       return true;
-    } else if (row.relationPaymentExistState == '1') {
+    }
+  } else if (row.relationPaymentExistState == 1) {
+    if (row.contractPhoto != null && row.contractPhoto != '') {
       tipMessage.value = "存在相关的物流付款单，并且已经提交合同照片,不允许修改!"
       return true;
     }

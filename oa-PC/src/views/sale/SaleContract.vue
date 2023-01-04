@@ -78,25 +78,25 @@
       "取消归档"
 }}
           </el-button>
-          <!-- <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
+          <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
               :disabled="!getUpdateDisabled(scope.row)">
               修改
             </el-tooltip>
           </el-button>
-          <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
+          <!-- <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
             :disabled="getDeleteDisabled(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
               :disabled="!getDeleteDisabled(scope.row)">
               删除
             </el-tooltip>
           </el-button> -->
-          <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)">
+          <!-- <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
               修改
             </el-tooltip>
-          </el-button>
+          </el-button> -->
           <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)">
             删除
           </el-button>
