@@ -296,9 +296,9 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
             detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
             List<LogisticsDetail> logisticsDetails = logisticsDetailService.list(detailQueryWrapper);
             for (LogisticsDetail logisticsDetail : logisticsDetails) {
-                if (logisticsDetail.getUpperType() == 1) {
+                // if (logisticsDetail.getUpperType() == 1) {
                     logisticsDetailList.add(logisticsDetail);
-                }
+                // }
             }
         }
         return logisticsDetailList;
