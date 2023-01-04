@@ -26,7 +26,7 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示未归档数据" }}
         </el-button>
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
       </el-form-item>
@@ -74,14 +74,14 @@
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-    isPigeonhole ? "归档" :
-      "取消归档"
-}}
+              isPigeonhole? "归档":
+                "取消归档"
+            }}
           </el-button>
           <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
             <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-              :disabled="!getUpdateDisabled(scope.row)">
+              :disabled="!(scope.row.isHaveLogistics == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : false)">
               修改
             </el-tooltip>
           </el-button>
@@ -98,7 +98,8 @@
             </el-tooltip>
           </el-button> -->
           <el-button type="danger" :icon="Delete" size="default"
-            :disabled="(scope.row.isHaveLogistics == 1 || scope.row.revenueTime != null)" @click="deleteBtn(scope.row.id)">
+            :disabled="(scope.row.isHaveLogistics == 1 || scope.row.revenueTime != null)"
+            @click="deleteBtn(scope.row.id)">
             删除
           </el-button>
         </template>
@@ -472,6 +473,7 @@ const getUpdateDisabled = (row: AddSaleModel) => {
     return false;
   }
 }
+
 const getDeleteDisabled = (row: AddSaleModel) => {
   if (row.isHaveLogistics == '1') {
     console.log("已经存在了相关物流单，无法删除", row.saleContractNo, row.contractPhoto)
