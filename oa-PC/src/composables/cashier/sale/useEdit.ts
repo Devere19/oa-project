@@ -21,11 +21,20 @@ export default function useDetail(getList:FuncList) {
     getList()
   }
 
+  const isEdit=(contractPhoto:string)=>{
+    if(contractPhoto==null||contractPhoto==''){
+      return false
+    }else{
+      return true
+    }
+  }
+
 
   return {
     editRef,
     editBtn,
-    refresh
+    refresh,
+    isEdit
 
   }
 }
