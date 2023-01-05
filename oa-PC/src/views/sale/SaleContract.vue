@@ -85,18 +85,6 @@
               修改
             </el-tooltip>
           </el-button>
-          <!-- <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
-            :disabled="getDeleteDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-              :disabled="!getDeleteDisabled(scope.row)">
-              删除
-            </el-tooltip>
-          </el-button> -->
-          <!-- <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
-              修改
-            </el-tooltip>
-          </el-button> -->
           <el-button type="danger" :icon="Delete" size="default"
             :disabled="(scope.row.isHaveLogistics == 1 || scope.row.revenueTime != null)"
             @click="deleteBtn(scope.row.id)">
@@ -307,7 +295,6 @@ const customerData = reactive<SelectCustomer>({
 const preDeletePhoto = ref<string[]>([])
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
-const tipMessage = ref()
 const isEdit = ref<boolean>(false)
 
 
@@ -471,7 +458,6 @@ const getUpdateDisabled = (row: any) => {
 const getDeleteDisabled = (row: AddSaleModel) => {
   if (row.isHaveLogistics == '1') {
     console.log("已经存在了相关物流单，无法删除", row.saleContractNo, row.contractPhoto)
-    tipMessage.value = "存在相关的物流单，无法删除!"
     return true;
   } else {
     return false

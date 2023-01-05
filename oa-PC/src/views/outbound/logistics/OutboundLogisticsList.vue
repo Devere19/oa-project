@@ -45,7 +45,8 @@
       <el-table-column prop="freight" label="运费"></el-table-column>
       <el-table-column prop="contractPhoto" label="物流合同照片">
         <template #default="scope">
-          <el-image style="width: 100px; height: 100px" :src="scope.row.contractPhoto"
+          <el-image style="width: 100px; height: 100px"
+            :src="scope.row.contractPhoto == '' ? null : scope.row.contractPhoto"
             :preview-src-list="scope.row.contractPhotoList" fit="cover" :preview-teleported="true" />
         </template>
       </el-table-column>
