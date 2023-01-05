@@ -80,23 +80,11 @@
           </el-button>
           <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
+            <el-tooltip effect="dark" :content="scope.row.tips" placement="top-start"
               :disabled="!(scope.row.isHaveLogistics == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : false)">
               修改
             </el-tooltip>
           </el-button>
-          <!-- <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
-            :disabled="getDeleteDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
-              :disabled="!getDeleteDisabled(scope.row)">
-              删除
-            </el-tooltip>
-          </el-button> -->
-          <!-- <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
-              修改
-            </el-tooltip>
-          </el-button> -->
           <el-button type="danger" :icon="Delete" size="default"
             :disabled="(scope.row.isHaveLogistics == 1 || scope.row.revenueTime != null)"
             @click="deleteBtn(scope.row.id)">
@@ -307,7 +295,6 @@ const customerData = reactive<SelectCustomer>({
 const preDeletePhoto = ref<string[]>([])
 const dialogImageUrl = ref('')
 const previewImageFlag = ref(false)
-const tipMessage = ref()
 const isEdit = ref<boolean>(false)
 
 
@@ -458,26 +445,19 @@ const updateSaleContract = async (formEl1: FormInstance | undefined) => {
   })
 }
 
-const getUpdateDisabled = (row: AddSaleModel) => {
+const getUpdateDisabled = (row: any) => {
   if (row.isHaveLogistics == '1') {
-    if (row.contractPhoto == null || row.contractPhoto == '') {
-      console.log("有相关物流单但是没有合同照片", row.saleContractNo, row.contractPhoto)
-      return false;
-    } else {
-      console.log("有相关物流单，并且有了合同照片", row.saleContractNo)
-      tipMessage.value = "存在相关的物流单，并且已经提交合同照片,不允许修改!"
+    if (row.contractPhoto != null || row.contractPhoto != '') {
+      row.tips = "存在相关的物流单,不允许修改!"
       return true;
     }
-  } else {
-    console.log("没有相关物流单", row.saleContractNo)
-    return false;
   }
+  return false;
 }
 
 const getDeleteDisabled = (row: AddSaleModel) => {
   if (row.isHaveLogistics == '1') {
     console.log("已经存在了相关物流单，无法删除", row.saleContractNo, row.contractPhoto)
-    tipMessage.value = "存在相关的物流单，无法删除!"
     return true;
   } else {
     return false

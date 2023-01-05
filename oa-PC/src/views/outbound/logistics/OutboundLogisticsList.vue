@@ -23,7 +23,7 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示未归档数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示未归档数据" }}
         </el-button>
         <!-- <el-upload class="moreDeleteButton" name="file"
           action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
@@ -45,7 +45,8 @@
       <el-table-column prop="freight" label="运费"></el-table-column>
       <el-table-column prop="contractPhoto" label="物流合同照片">
         <template #default="scope">
-          <el-image style="width: 100px; height: 100px" :src="scope.row.contractPhoto"
+          <el-image style="width: 100px; height: 100px"
+            :src="scope.row.contractPhoto == '' ? null : scope.row.contractPhoto"
             :preview-src-list="scope.row.contractPhotoList" fit="cover" :preview-teleported="true" />
         </template>
       </el-table-column>
@@ -59,28 +60,19 @@
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-    isPigeonhole ? "归档" :
-      "取消归档"
-}}
+              isPigeonhole? "归档":
+                "取消归档"
+            }}
           </el-button>
           <el-button :icon="Money" size="default" type="success" @click="openPaymentDialog(scope.row)">付款
           </el-button>
           <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start"
+            <el-tooltip effect="dark" :content="scope.row.tips" placement="top-start"
               :disabled="!(scope.row.relationShippingAuditState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationPaymentAuditState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationShippingExistState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : (scope.row.relationPaymentExistState == 1 ? (scope.row.contractPhoto != null && scope.row.contractPhoto != '' ? true : false) : false))))">
               修改
             </el-tooltip>
           </el-button>
-          <!-- <el-button type="danger" :icon="Delete" size="default" @click="deleteBtn(scope.row.id)"
-            :disabled="(scope.row.relationShippingExistState == '1' || scope.row.relationPaymentExistState == '1')">
-            删除
-          </el-button> -->
-          <!-- <el-button type="info" size="default" :icon="Edit" @click="openUpdateDialog(scope.row)">
-            <el-tooltip effect="dark" :content="tipMessage" placement="top-start">
-              修改
-            </el-tooltip>
-          </el-button> -->
           <el-button type="danger" :icon="Delete" size="default"
             :disabled="(scope.row.relationPaymentExistState == 1 || scope.row.relationShippingExistState == 1)"
             @click="deleteBtn(scope.row.id)">
@@ -205,7 +197,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.upperType'" label="物流详情单类型" label-width='150px'
                   label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-radio-group v-model="item.upperType" :disabled="isEdit">
                     <el-radio label="1" size="default">采购单</el-radio>
                     <el-radio label="0" size="default">加工单</el-radio>
@@ -219,7 +211,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.purchaseContractNo'" label="采购/加工合同编号"
                   label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.purchaseContractNo" placeholder="若从自家仓库出货请填写'000'" :disabled="isEdit">
                   </el-input>
                 </el-form-item>
@@ -229,7 +221,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.outboundTime'" label="出库日期" label-width='150px'
                   label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-date-picker v-model="item.outboundTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
                     :disabled="isEdit" placeholder="请选择出库日期" size="default" />
 
@@ -240,7 +232,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
                   label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'" :disabled="isEdit">
                   </el-input>
                 </el-form-item>
@@ -248,7 +240,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.licensePlateNumber'" label="车牌号"
                   label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.licensePlateNumber" :disabled="isEdit"></el-input>
                 </el-form-item>
               </el-col>
@@ -257,14 +249,14 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.goodsWeight'" label="载货量" label-width='150px'
                   label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.goodsWeight" :disabled="isEdit"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.goodsUnit'" label="货物单位" label-width='150px'
                   label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-select v-model="item.goodsUnit" placeholder="请选择货物单位" size="default" :disabled="isEdit">
                     <el-option label="吨" value="吨"></el-option>
                     <el-option label="斤" value="斤"></el-option>
@@ -276,7 +268,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
                   label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.unitPrice" :disabled="isEdit"></el-input>
                   <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)" type="danger"
                     style="margin-top: 5px;" :disabled="isEdit">删除</el-button>
@@ -285,7 +277,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.unloadingLocation'" label="卸货地点"
                   label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                  { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.unloadingLocation" :disabled="isEdit"></el-input>
                 </el-form-item>
               </el-col>
@@ -433,17 +425,25 @@ const uploadFalse = () => {
 const isEditFlag = ref<boolean>(false)
 
 //修改和删除diable操作
-const tipMessage = ref()
 const getUpdateDisabled = (row: any) => {
-  console.log("调用了一次")
-  if (row.relationShippingExistState == 1) {
+  if (row.relationShippingAuditState == 1) {
     if (row.contractPhoto != null && row.contractPhoto != '') {
-      tipMessage.value = "存在未审核的相关海运单，请将其删除后重试！"
+      row.tips = "存在已审核的相关海运单，不允许修改！"
+      return true;
+    }
+  } else if (row.relationPaymentAuditState == 1) {
+    if (row.contractPhoto != null && row.contractPhoto != '') {
+      row.tips = "存在已审核的相关物流付款单，不允许修改！"
+      return true;
+    }
+  } else if (row.relationShippingExistState == 1) {
+    if (row.contractPhoto != null && row.contractPhoto != '') {
+      row.tips = "存在未审核的相关海运单，请将其删除后重试！"
       return true;
     }
   } else if (row.relationPaymentExistState == 1) {
     if (row.contractPhoto != null && row.contractPhoto != '') {
-      tipMessage.value = "存在未审核的相关物流付款单，请将其删除后重试！"
+      row.tips = "存在未审核的相关物流付款单，请将其删除后重试！"
       return true;
     }
   }
