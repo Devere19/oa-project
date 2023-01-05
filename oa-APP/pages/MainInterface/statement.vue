@@ -370,15 +370,25 @@
 				}
 			},
 			getNewData(){
-				if(this.timeCurrent==0){
+				// if(this.timeCurrent==0){
+				// 	this.setNumber(0,this.choosedDay);
+				// }else if(this.timeCurrent==1){
+				// 	this.setNumber(1,this.choosedMonth);
+				// }else if(this.timeCurrent==2){
+				// 	this.setNumber(2,this.choosedSYear+this.choosedSSeason)
+				// }else if(this.timeCurrent==3){
+				// 	this.setNumber(3,this.choosedYear);
+				// }
+				// 切换时加载好全部数据
+				// if(this.timeCurrent==0){
 					this.setNumber(0,this.choosedDay);
-				}else if(this.timeCurrent==1){
+				// }else if(this.timeCurrent==1){
 					this.setNumber(1,this.choosedMonth);
-				}else if(this.timeCurrent==2){
+				// }else if(this.timeCurrent==2){
 					this.setNumber(2,this.choosedSYear+this.choosedSSeason)
-				}else if(this.timeCurrent==3){
+				// }else if(this.timeCurrent==3){
 					this.setNumber(3,this.choosedYear);
-				}
+				// }
 			},
 			chooseDate(time) {
 				console.log(time);
