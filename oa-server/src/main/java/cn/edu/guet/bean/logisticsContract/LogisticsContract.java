@@ -135,7 +135,11 @@ public class LogisticsContract implements Serializable {
     @TableField(exist = false)
     private List<LogisticsDetail> logisticsDetailList;
 
-
+    /**
+     * 前端修改提示
+     */
+    @TableField(exist = false)
+    private String tips;
 
 
 }

@@ -89,4 +89,9 @@ public class SaleContract {
     //是否存在相关出库物流单
     private Integer isHaveLogistics;
 
+    /**
+     * 前端修改提示
+     */
+    @TableField(exist = false)
+    private String tips;
 }
