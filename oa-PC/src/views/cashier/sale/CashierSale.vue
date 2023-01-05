@@ -47,7 +47,8 @@
             <el-table-column prop="transportMethod" label="运输方式"></el-table-column>
             <el-table-column label="销售合同照片">
                 <template #default="scope">
-                    <el-image style="width: 100px; height: 100px" :src="scope.row.contractPhoto"
+                    <el-image style="width: 100px; height: 100px"
+                        :src="scope.row.contractPhoto == '' ? null : scope.row.contractPhoto"
                         :preview-src-list="scope.row.contractPhotoList" :initial-index="4" fit="cover"
                         preview-teleported="true" />
                 </template>
@@ -71,7 +72,7 @@
                     </el-button>
 
                     <el-button type="success" :icon="Upload" size="default" @click="editBtn(scope.row.id)"
-                        :disabled="scope.row.revenuePhoto != null">上传
+                        :disabled="isEdit(scope.row.contractPhoto)">上传
                     </el-button>
 
                 </template>
@@ -109,7 +110,7 @@ const { listParm, tableHeight, tableList, sizeChange, currentChange, searchBtn, 
 const { detailRef, detailBtn } = useDetail()
 
 //与上传相关的操作
-const { editBtn, editRef, refresh } = useEdit(getList)
+const { editBtn, editRef, refresh, isEdit } = useEdit(getList)
 </script>
 
 <style scoped>
