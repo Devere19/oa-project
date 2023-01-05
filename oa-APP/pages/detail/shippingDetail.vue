@@ -17,6 +17,14 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
+						<view class="headLine">己方公司名：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.ownCompanyName}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
 						<view class="headLine">委托方：</view>
 					</uni-col>
 					<uni-col :span="13">
@@ -249,6 +257,7 @@
 				shippingContract: {
 					shippingContractNo:null,
 					logisticsContractNo:null,
+					ownCompanyName:null,
 					principal:null,
 					packingTime:null,
 					packingLocation:null,
