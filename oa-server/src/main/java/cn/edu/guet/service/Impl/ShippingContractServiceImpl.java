@@ -1,8 +1,10 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.ImportModel.ImportShippingContractModel;
 import cn.edu.guet.bean.logisticsContract.LogisticsContract;
 import cn.edu.guet.mapper.*;
+import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.ShippingContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
@@ -42,6 +44,9 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
     @Autowired
     private LogisticsContractMapper logisticsContractMapper;
+
+    @Autowired
+    private LogisticsContractService logisticsContractService;
 
     @Override
     public Page<ShippingContract> getshippingContractData(int currentPage, int pageSize) {
@@ -270,6 +275,92 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     public Boolean checkContainerNo(String containerNo) {
         List<ShippingContract> shippingContracts = shippingContractMapper.checkContainerNo(containerNo);
         return shippingContracts.size() != 0;
+    }
+
+    @Override
+    public int handleImportShippingContractModel(ImportShippingContractModel importShippingContractModel) {
+        ShippingContract shippingContract = new ShippingContract();
+//        海运合同号
+        if (importShippingContractModel.getShippingContractNo() == null) {
+            return 0;
+        } else {
+//            检验是否重复
+            if (checkShippingContractNo(importShippingContractModel.getShippingContractNo())) {
+                return 0;
+            } else {
+                shippingContract.setShippingContractNo(importShippingContractModel.getShippingContractNo());
+            }
+        }
+//        物流合同号
+        if (importShippingContractModel.getLogisticsContractNo() == null) {
+            return 0;
+        } else {
+//            检验是否存在
+            if (logisticsContractService.checkLogisticsContractNo(importShippingContractModel.getLogisticsContractNo())) {
+                shippingContract.setLogisticsContractNo(importShippingContractModel.getLogisticsContractNo());
+            } else {
+                return 0;
+            }
+        }
+
+        if (importShippingContractModel.getOwnCompanyName() != null) {
+            shippingContract.setOwnCompanyName(importShippingContractModel.getOwnCompanyName());
+        }
+        if (importShippingContractModel.getPrincipal() != null) {
+            shippingContract.setPrincipal(importShippingContractModel.getPrincipal());
+        }
+        if (importShippingContractModel.getPackingTime() != null) {
+            shippingContract.setPackingTime(importShippingContractModel.getPackingTime());
+        }
+        if (importShippingContractModel.getPackingLocation() != null) {
+            shippingContract.setPackingLocation(importShippingContractModel.getPackingLocation());
+        }
+        if (importShippingContractModel.getUnpackingFactory() != null) {
+            shippingContract.setUnpackingFactory(importShippingContractModel.getUnpackingFactory());
+        }
+        if (importShippingContractModel.getContainerNo() != null) {
+            shippingContract.setContainerNo(importShippingContractModel.getContainerNo());
+        }
+        if (importShippingContractModel.getSealNo() != null) {
+            shippingContract.setSealNo(importShippingContractModel.getSealNo());
+        }
+        if (importShippingContractModel.getTallyClerk() != null) {
+            shippingContract.setTallyClerk(importShippingContractModel.getTallyClerk());
+        }
+        if (importShippingContractModel.getTallyClerkPrice() != null) {
+            shippingContract.setTallyClerkPrice(importShippingContractModel.getTallyClerkPrice());
+        }
+        if (importShippingContractModel.getDepartureFleet() != null) {
+            shippingContract.setDepartureFleet(importShippingContractModel.getDepartureFleet());
+        }
+        if (importShippingContractModel.getDeparturePrice() != null) {
+            shippingContract.setDeparturePrice(importShippingContractModel.getDeparturePrice());
+        }
+        if (importShippingContractModel.getCarrierCompanyName() != null) {
+            shippingContract.setCarrierCompanyName(importShippingContractModel.getCarrierCompanyName());
+        }
+        if (importShippingContractModel.getCarrierCompanyPrice() != null) {
+            shippingContract.setCarrierCompanyPrice(importShippingContractModel.getCarrierCompanyPrice());
+        }
+        if (importShippingContractModel.getDestinationPortFleet() != null) {
+            shippingContract.setDestinationPortFleet(importShippingContractModel.getDestinationPortFleet());
+        }
+        if (importShippingContractModel.getDestinationPortPrice() != null) {
+            shippingContract.setDestinationPortPrice(importShippingContractModel.getDestinationPortPrice());
+        }
+        if (importShippingContractModel.getExpenses() != null) {
+            shippingContract.setExpenses(importShippingContractModel.getExpenses());
+        }
+        
+        return addNewShippingContract(shippingContract,null,0);
+    }
+
+    @Override
+    public Boolean checkShippingContractNo(String shippingContractNo) {
+        QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
+        qw.eq("shipping_contract_no", shippingContractNo).orderByDesc("create_time");
+        List<ShippingContract> shippingContracts = shippingContractMapper.selectList(qw);
+        return !shippingContracts.isEmpty();
     }
 
     @Override

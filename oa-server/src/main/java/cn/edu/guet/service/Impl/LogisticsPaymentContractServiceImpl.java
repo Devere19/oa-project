@@ -1,8 +1,8 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.ImportModel.ImportLogisticsPaymentContractModel;
 import cn.edu.guet.bean.logisticsContract.LogisticsContract;
-import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsPaymentContractService;
@@ -47,6 +47,9 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 
     @Autowired
     private LogisticsContractMapper logisticsContractMapper;
+
+    @Autowired
+    private LogisticsContractService logisticsContractService;
 
     @Override
     public Page<LogisticsPaymentContractView> getLogisticsPaymentContractData(int currentPage, int pageSize) {
@@ -193,6 +196,28 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         logisticsPaymentContractView.setLogisticsPaymentDirector(logisticsPaymentStateInfoMapper.selectList(stateQw));
 
         return logisticsPaymentContractView;
+    }
+
+    @Override
+    public int handleImportLogisticsPaymentContractModel(ImportLogisticsPaymentContractModel importLogisticsPaymentContractModel) {
+        LogisticsPaymentContract logisticsPaymentContract = new LogisticsPaymentContract();
+//        物流合同号
+        if (importLogisticsPaymentContractModel.getLogisticsContractNo() == null) {
+            return 0;
+        } else {
+//            检验是否存在
+            if (logisticsContractService.checkLogisticsContractNo(importLogisticsPaymentContractModel.getLogisticsContractNo())) {
+                logisticsPaymentContract.setLogisticsContractNo(importLogisticsPaymentContractModel.getLogisticsContractNo());
+            } else {
+                return 0;
+            }
+        }
+
+        if (importLogisticsPaymentContractModel.getPaymentCount() != null) {
+            logisticsPaymentContract.setPaymentCount(importLogisticsPaymentContractModel.getPaymentCount());
+        }
+
+        return addNewLogisticsPaymentContract(logisticsPaymentContract);
     }
 
     @Override

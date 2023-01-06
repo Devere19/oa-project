@@ -51,9 +51,6 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
     private OwnWarehouseMapper ownWarehouseMapper;
 
     @Autowired
-    private OwnInOutMapper ownInOutMapper;
-
-    @Autowired
     private InboundDetailInfoMapper inboundDetailInfoMapper;
 
     @Autowired

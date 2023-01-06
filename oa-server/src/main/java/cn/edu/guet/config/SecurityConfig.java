@@ -66,6 +66,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/addContractPhoto").permitAll()
                 //放行采购单导入
                 .antMatchers("/purchaseContract/purchaseImportExcel").permitAll()
+                //放行海运单导入
+                .antMatchers("/shippingContract/shippingImportExcel").permitAll()
+                //放行办公经费单导入
+                .antMatchers("/officeExpense/officeExpenseImportExcel").permitAll()
+                //放行采购付款单导入
+                .antMatchers("/purchasePaymentContract/purchasePaymentImportExcel").permitAll()
+                //放行加工付款单导入
+                .antMatchers("/processPaymentContract/processPaymentImportExcel").permitAll()
+                //放行物流付款单导入
+                .antMatchers("/logisticsPaymentContract/logisticsPaymentImportExcel").permitAll()
                 //放行采购单导出
                 .antMatchers("/purchaseContract/purchaseExportExcel").permitAll()
                 //放行销售单导出
@@ -85,6 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 
+    @Override
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();

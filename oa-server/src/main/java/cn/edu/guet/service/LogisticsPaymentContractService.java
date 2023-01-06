@@ -1,10 +1,8 @@
 package cn.edu.guet.service;
 
-
+import cn.edu.guet.bean.ImportModel.ImportLogisticsPaymentContractModel;
 import cn.edu.guet.bean.LogisticsPaymentContract;
 import cn.edu.guet.bean.LogisticsPaymentContractView;
-import cn.edu.guet.bean.PurchasePaymentContractView;
-import cn.edu.guet.bean.ShippingContract;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,6 +18,7 @@ public interface LogisticsPaymentContractService extends IService<LogisticsPayme
     int updateLogisticsPaymentContract(LogisticsPaymentContract logisticsPaymentContract);
     int deleteOneLogisticsPaymentContract(int id);
     LogisticsPaymentContractView getOneLogisticsPaymentContract(int id);
+    int handleImportLogisticsPaymentContractModel(ImportLogisticsPaymentContractModel importLogisticsPaymentContractModel);
 
     //    出纳
     Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize);

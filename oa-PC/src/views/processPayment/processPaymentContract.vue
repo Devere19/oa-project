@@ -10,6 +10,12 @@
                     <el-button :icon="Search" @click="searchTableData" />
                 </template>
             </el-input>
+            <el-upload class="moreDeleteButton" name="file"
+                action="http://120.77.28.123:9000/processPaymentContract/processPaymentImportExcel"
+                :on-error="uploadFalse" :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1"
+                ref="upload" accept=".xlsx,.xls" :show-file-list="false">
+                <el-button :icon="Upload" type="primary">批量导入</el-button>
+            </el-upload>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
@@ -259,9 +265,10 @@
                         财务名称：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
-        processPaymentContractDetail.financeStaff
-}}
+                        {{
+                            processPaymentContractDetail.financeStaff == null ? "暂无" :
+                                processPaymentContractDetail.financeStaff
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -320,17 +327,19 @@
                         出纳名称：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ processPaymentContractDetail.cashier == null ? "暂无" :
-        processPaymentContractDetail.cashier
-}}
+                        {{
+                            processPaymentContractDetail.cashier == null ? "暂无" :
+                                processPaymentContractDetail.cashier
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ processPaymentContractDetail.paymentTime == null ? "未知" :
-        processPaymentContractDetail.paymentTime
-}}
+                        {{
+                            processPaymentContractDetail.paymentTime == null ? "未知" :
+                                processPaymentContractDetail.paymentTime
+                        }}
                     </el-col>
                 </el-row>
             </div>
@@ -358,7 +367,7 @@
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, CloseBold, Edit } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, CloseBold, Edit, Upload } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { processPaymentContractModel, processPaymentDirectorModel } from '@/api/processPaymentContract/ProcessPaymentContractModel'
@@ -824,6 +833,31 @@ const closeUpdateDialog = () => {
 // 修改窗口滑动回最顶端
 const UpdateReturnTop = () => {
     updateDialogTop.value.scrollTop = 0;
+}
+
+const uploadFalse = () => {
+    ElMessage({
+        message: '上传文件失败！',
+        type: 'error',
+        duration: 4000
+    })
+}
+
+const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    changeLoadingFalse();
+    if (response.code == 200) {
+        ElMessage({
+            message: '批量插入加工付款单成功！',
+            type: 'success',
+        })
+        getTableData();
+    } else {
+        ElMessage({
+            message: '系统出错，批量插入加工付款单失败！',
+            type: 'error',
+            duration: 4000
+        })
+    }
 }
 
 </script>

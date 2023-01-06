@@ -1,13 +1,10 @@
 package cn.edu.guet.service;
 
-
+import cn.edu.guet.bean.ImportModel.ImportPurchasePaymentContractModel;
 import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.bean.PurchasePaymentContractView;
-import cn.edu.guet.bean.PurchasePaymentStateView;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
 * @author 陶祎祎
@@ -21,6 +18,7 @@ public interface PurchasePaymentContractService extends IService<PurchasePayment
     int updatePurchasePaymentContract(PurchasePaymentContract purchasePaymentContract);
     int deleteOnePurchasePaymentContract(int id);
     PurchasePaymentContractView getOnePurchasePaymentContract(int id);
+    int handleImportPurchasePaymentContractModel(ImportPurchasePaymentContractModel importPurchasePaymentContractModel);
 
 //    出纳
     Page<PurchasePaymentContractView> getCashierPurchasePayment(int currentPage, int pageSize);

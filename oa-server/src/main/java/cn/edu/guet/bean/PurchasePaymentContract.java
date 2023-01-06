@@ -25,7 +25,7 @@ public class PurchasePaymentContract implements Serializable {
     private Integer id;
 
     /**
-     * 销售单合同编号
+     * 采购单合同编号
      */
     private String purchaseContractNo;
 

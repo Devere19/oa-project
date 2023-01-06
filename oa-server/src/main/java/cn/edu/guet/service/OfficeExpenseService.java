@@ -1,9 +1,7 @@
 package cn.edu.guet.service;
 
-
-import cn.edu.guet.bean.LogisticsPaymentContractView;
+import cn.edu.guet.bean.ImportModel.ImportOfficeExpenseModel;
 import cn.edu.guet.bean.OfficeExpense;
-import cn.edu.guet.bean.ShippingContract;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,6 +16,7 @@ public interface OfficeExpenseService extends IService<OfficeExpense> {
     int addNewOfficeExpense(OfficeExpense officeExpense);
     int updateOfficeExpense(OfficeExpense officeExpense);
     int deleteOneOfficeExpense(int id);
+    int handleImportOfficeExpenseModel(ImportOfficeExpenseModel importOfficeExpenseModel);
 
     //    出纳
     Page<OfficeExpense> getCashierOfficeExpense(int currentPage, int pageSize);

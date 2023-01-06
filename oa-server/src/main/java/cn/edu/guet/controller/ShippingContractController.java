@@ -1,13 +1,20 @@
 package cn.edu.guet.controller;
 
+import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
+import cn.edu.guet.bean.ImportModel.ImportShippingContractModel;
 import cn.edu.guet.bean.ShippingContract;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.ShippingContractService;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.read.listener.PageReadListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @author 陶祎祎
@@ -31,6 +38,20 @@ public class ShippingContractController {
     @RequestMapping("/searchShippingContract")
     public HttpResult searchShippingContract(int current,int page,String searchWord){
         return ResultUtils.success("查询成功",shippingContractService.searchShippingContract(current,page,searchWord));
+    }
+
+    @RequestMapping("/shippingImportExcel")
+    public HttpResult shippingImportExcel(@RequestBody MultipartFile file) throws IOException {
+        EasyExcel.read(file.getInputStream(), ImportShippingContractModel.class, new PageReadListener<ImportShippingContractModel>(dataList -> {
+            System.out.println(dataList.size());
+            for (ImportShippingContractModel importShippingContractModel : dataList) {
+                if(importShippingContractModel.getShippingContractNo()==null){
+                    break;
+                }
+                System.out.println(shippingContractService.handleImportShippingContractModel(importShippingContractModel));
+            }
+        })).sheet().doRead();
+        return ResultUtils.success("批量插入海运单成功");
     }
 
     @DeleteMapping("/deleteOneShippingContract/{id}")
