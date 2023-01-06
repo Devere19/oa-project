@@ -13,4 +13,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {
     SysUser findByName(@Param(value = "name") String name);
+
+    String getNickNameByName(String name);
 }

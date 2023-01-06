@@ -76,6 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/processPaymentContract/processPaymentImportExcel").permitAll()
                 //放行物流付款单导入
                 .antMatchers("/logisticsPaymentContract/logisticsPaymentImportExcel").permitAll()
+                //放行采购付款单导入
+                .antMatchers("/api/logistics/logisContractImportExcel").permitAll()
                 //放行采购单导出
                 .antMatchers("/purchaseContract/purchaseExportExcel").permitAll()
                 //放行销售单导出

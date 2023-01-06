@@ -31,6 +31,12 @@ public class ExportOutLogisticsContract implements Serializable {
      */
     @Excel(name = "销售单合同编号")
     private String saleContractNo;
+
+    /**
+     * 己方公司名
+     */
+    @Excel(name = "己方公司名")
+    private String ownCompanyName;
     /**
      * 销售单合同总重量
      */

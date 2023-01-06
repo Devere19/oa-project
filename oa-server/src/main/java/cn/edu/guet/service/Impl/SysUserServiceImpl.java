@@ -159,4 +159,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         return this.baseMapper.selectPage(page, query);
     }
+
+    @Override
+    public String getNickNameByName(String name) {
+        String nickName=sysUserMapper.getNickNameByName(name);
+        return nickName;
+    }
 }

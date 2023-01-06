@@ -1,10 +1,15 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.ImportModel.ImportLogisticsContractModel;
 import cn.edu.guet.bean.logisticsContract.*;
 
+import cn.edu.guet.http.HttpResult;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 
@@ -109,4 +114,7 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @return
      */
     boolean updateLogistics(LogisticsContract logisticsContract);
+
+    boolean handleImportLogisticsContractModel(ImportLogisticsContractModel importLogisticsContractModel) ;
+
 }

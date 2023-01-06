@@ -3,6 +3,7 @@ package cn.edu.guet.controller;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.edu.guet.bean.ImportModel.ImportLogisticsContractModel;
 import cn.edu.guet.bean.ImportModel.ImportPurchaseContractModel;
 import cn.edu.guet.bean.logisticsContract.*;
 
@@ -227,7 +228,16 @@ public class LogisticsContractController {
 
     @RequestMapping("/logisContractImportExcel")
     public HttpResult purchaseImportExcel(@RequestBody MultipartFile file) throws IOException {
-
+        EasyExcel.read(file.getInputStream(), ImportLogisticsContractModel.class, new PageReadListener<ImportLogisticsContractModel>(dataList -> {
+            System.out.println(dataList.size());
+            for (ImportLogisticsContractModel importLogisticsContractModel : dataList) {
+                if(importLogisticsContractModel.getLogisticsContractNo()==null){
+                    break;
+                }
+                System.out.println(logisticsContractService.handleImportLogisticsContractModel(importLogisticsContractModel));
+//                purchaseContractService.handleImportPurchaseContractModel(importPurchaseContractModel);
+            }
+        })).sheet().doRead();
         return ResultUtils.success("批量插入采购单成功");
     }
 

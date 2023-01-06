@@ -3,13 +3,13 @@
     <!-- 搜索栏目 -->
     <el-form :model="listParm" :inline="true" size="default">
       <el-form-item label="">
-        <el-input v-model="listParm.logisticsContractNo" placeholder="请输入物流单合同编号"></el-input>
+        <el-input v-model="listParm.logisticsContractNo" placeholder="请输入物流单合同编号" style="width: 180px;"> </el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-input v-model="listParm.saleContractNo" placeholder="请输入销售单合同编号"></el-input>
+        <el-input v-model="listParm.saleContractNo" placeholder="请输入销售单合同编号" style="width: 180px;"></el-input>
       </el-form-item>
       <el-form-item label="">
-        <el-input v-model="listParm.squeezeSeason" placeholder="请输入榨季"></el-input>
+        <el-input v-model="listParm.squeezeSeason" placeholder="请输入榨季" style="width: 180px;"></el-input>
       </el-form-item>
       <el-form-item label="">
         <el-date-picker v-model="listParm.startTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
@@ -31,6 +31,12 @@
           <el-button :icon="Upload" type="primary">批量导入</el-button>
         </el-upload> -->
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
+        <el-upload class="moreDeleteButton" name="file"
+          action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
+          :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false"
+          style="margin-left: 4px;">
+          <el-button :icon="Upload" type="primary">导入</el-button>
+        </el-upload>
       </el-form-item>
     </el-form>
 
@@ -406,6 +412,7 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
       message: '批量插入采购单成功！',
       type: 'success',
     })
+    refresh()
   } else {
     ElMessage({
       message: '系统出错，批量插入采购单失败！',
@@ -846,6 +853,14 @@ const rules = reactive({
     },
   ],
 })
+
+//批量导入
+const importSuccess = () => {
+  ElMessage({
+    message: '修改成功！',
+    type: 'success',
+  })
+}
 
 </script>
 
