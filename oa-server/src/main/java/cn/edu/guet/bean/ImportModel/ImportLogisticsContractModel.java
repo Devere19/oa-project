@@ -31,10 +31,24 @@ public class ImportLogisticsContractModel {
     private String logisticsContractNo;
 
     /**
-     * 销售单合同编号
+     * 物流单类型
      */
-    @ExcelProperty(value = "销售单合同编号")
+    @ExcelProperty(value = "物流单类型（1：加工单 0：销售单）")
+    private Integer upperType;
+
+    /**
+     * 销售/加工单合同编号
+     */
+    @ExcelProperty(value = "销售/加工单合同编号")
     private String saleContractNo;
+
+    /**
+     * 物流单合同签订时间
+     */
+    @ExcelProperty(value = "物流单合同签订时间")
+    private Date logisticsContractTime;
+
+
     /**
      * 销售单合同总重量
      */
@@ -53,11 +67,6 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "运费")
     private BigDecimal freight;
 
-    /**
-     * 物流单合同签订时间
-     */
-    @ExcelProperty(value = "物流单合同签订时间")
-    private Date logisticsContractTime;
 
     /**
      * 榨季
@@ -65,14 +74,15 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "榨季")
     private String squeezeSeason;
 
-
     /**
-     * 创建时间
+     * 己方公司名
      */
-    @ExcelProperty(value = "创建时间")
-    private Date createTime;
+    @ExcelProperty(value = "己方公司名")
+    private String ownCompanyName;
 
 
+
+    //物流详情但1
     /**
      * 物流单合同编号（运输合同编号）
      */
@@ -80,10 +90,24 @@ public class ImportLogisticsContractModel {
     private String logisticsContractNo1;
 
     /**
-     * 采购合同编号
+     * 物流详情单类型
      */
-    @ExcelProperty(value = "采购合同编号1")
+    @ExcelProperty(value = "物流详情单类型1")
+    private String upperType1;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号1")
     private String purchaseContractNo1;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期1")
+    private Date outboundTime1;
+
 
     /**
      * 取货厂名
@@ -91,11 +115,6 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "取货厂名1")
     private String goodsFactory1;
 
-    /**
-     * 出库日期
-     */
-    @ExcelProperty(value = "出库日期1")
-    private Date outboundTime1;
 
     /**
      * 车牌号
@@ -116,28 +135,44 @@ public class ImportLogisticsContractModel {
     private String goodsUnit1;
 
     /**
-     * 卸货地点
-     */
-    @ExcelProperty(value = "卸货地点1")
-    private String unloadingLocation1;
-
-    /**
      * 运输单价
      */
     @ExcelProperty(value = "运输单价1")
     private BigDecimal unitPrice1;
 
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点1")
+    private String unloadingLocation1;
+
+    //物流详情但2
     /**
      * 物流单合同编号（运输合同编号）
      */
-    @ExcelProperty(value = "物流单合同编号2（运输合同编号）2")
+    @ExcelProperty(value = "物流单合同编号（运输合同编号）2")
     private String logisticsContractNo2;
 
     /**
-     * 采购合同编号
+     * 物流详情单类型
      */
-    @ExcelProperty(value = "采购合同编号2")
+    @ExcelProperty(value = "物流详情单类型2")
+    private String upperType2;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号2")
     private String purchaseContractNo2;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期2")
+    private Date outboundTime2;
+
 
     /**
      * 取货厂名
@@ -145,11 +180,6 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "取货厂名2")
     private String goodsFactory2;
 
-    /**
-     * 出库日期
-     */
-    @ExcelProperty(value = "出库日期2")
-    private Date outboundTime2;
 
     /**
      * 车牌号
@@ -170,17 +200,19 @@ public class ImportLogisticsContractModel {
     private String goodsUnit2;
 
     /**
-     * 卸货地点
-     */
-    @ExcelProperty(value = "卸货地点2")
-    private String unloadingLocation2;
-
-    /**
      * 运输单价
      */
     @ExcelProperty(value = "运输单价2")
     private BigDecimal unitPrice2;
 
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点2")
+    private String unloadingLocation2;
+
+    //物流详情但3
     /**
      * 物流单合同编号（运输合同编号）
      */
@@ -188,10 +220,24 @@ public class ImportLogisticsContractModel {
     private String logisticsContractNo3;
 
     /**
-     * 采购合同编号
+     * 物流详情单类型
      */
-    @ExcelProperty(value = "采购合同编号3")
+    @ExcelProperty(value = "物流详情单类型3")
+    private String upperType3;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号3")
     private String purchaseContractNo3;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期3")
+    private Date outboundTime3;
+
 
     /**
      * 取货厂名
@@ -199,11 +245,6 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "取货厂名3")
     private String goodsFactory3;
 
-    /**
-     * 出库日期
-     */
-    @ExcelProperty(value = "出库日期3")
-    private Date outboundTime3;
 
     /**
      * 车牌号
@@ -224,17 +265,19 @@ public class ImportLogisticsContractModel {
     private String goodsUnit3;
 
     /**
-     * 卸货地点
-     */
-    @ExcelProperty(value = "卸货地点3")
-    private String unloadingLocation3;
-
-    /**
      * 运输单价
      */
     @ExcelProperty(value = "运输单价3")
     private BigDecimal unitPrice3;
 
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点3")
+    private String unloadingLocation3;
+
+    //物流详情但4
     /**
      * 物流单合同编号（运输合同编号）
      */
@@ -242,10 +285,24 @@ public class ImportLogisticsContractModel {
     private String logisticsContractNo4;
 
     /**
-     * 采购合同编号
+     * 物流详情单类型
      */
-    @ExcelProperty(value = "采购合同编号4")
+    @ExcelProperty(value = "物流详情单类型4")
+    private String upperType4;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号4")
     private String purchaseContractNo4;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期4")
+    private Date outboundTime4;
+
 
     /**
      * 取货厂名
@@ -253,11 +310,6 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "取货厂名4")
     private String goodsFactory4;
 
-    /**
-     * 出库日期
-     */
-    @ExcelProperty(value = "出库日期4")
-    private Date outboundTime4;
 
     /**
      * 车牌号
@@ -278,17 +330,19 @@ public class ImportLogisticsContractModel {
     private String goodsUnit4;
 
     /**
-     * 卸货地点
-     */
-    @ExcelProperty(value = "卸货地点4")
-    private String unloadingLocation4;
-
-    /**
      * 运输单价
      */
     @ExcelProperty(value = "运输单价4")
     private BigDecimal unitPrice4;
 
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点4")
+    private String unloadingLocation4;
+
+    //物流详情但5
     /**
      * 物流单合同编号（运输合同编号）
      */
@@ -296,10 +350,24 @@ public class ImportLogisticsContractModel {
     private String logisticsContractNo5;
 
     /**
-     * 采购合同编号
+     * 物流详情单类型
      */
-    @ExcelProperty(value = "采购合同编号5")
+    @ExcelProperty(value = "物流详情单类型5")
+    private String upperType5;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号5")
     private String purchaseContractNo5;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期5")
+    private Date outboundTime5;
+
 
     /**
      * 取货厂名
@@ -307,11 +375,6 @@ public class ImportLogisticsContractModel {
     @ExcelProperty(value = "取货厂名5")
     private String goodsFactory5;
 
-    /**
-     * 出库日期
-     */
-    @ExcelProperty(value = "出库日期5")
-    private Date outboundTime5;
 
     /**
      * 车牌号
@@ -332,16 +395,340 @@ public class ImportLogisticsContractModel {
     private String goodsUnit5;
 
     /**
-     * 卸货地点
-     */
-    @ExcelProperty(value = "卸货地点5")
-    private String unloadingLocation5;
-
-    /**
      * 运输单价
      */
     @ExcelProperty(value = "运输单价5")
     private BigDecimal unitPrice5;
 
 
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点5")
+    private String unloadingLocation5;
+
+    //物流详情但6
+    /**
+     * 物流单合同编号（运输合同编号）
+     */
+    @ExcelProperty(value = "物流单合同编号（运输合同编号）6")
+    private String logisticsContractNo6;
+
+    /**
+     * 物流详情单类型
+     */
+    @ExcelProperty(value = "物流详情单类型6")
+    private String upperType6;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号6")
+    private String purchaseContractNo6;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期6")
+    private Date outboundTime6;
+
+
+    /**
+     * 取货厂名
+     */
+    @ExcelProperty(value = "取货厂名6")
+    private String goodsFactory6;
+
+
+    /**
+     * 车牌号
+     */
+    @ExcelProperty(value = "车牌号6")
+    private String licensePlateNumber6;
+
+    /**
+     * 载货量
+     */
+    @ExcelProperty(value = "载货量6")
+    private BigDecimal goodsWeight6;
+
+    /**
+     * 货物单位
+     */
+    @ExcelProperty(value = "货物单位6")
+    private String goodsUnit6;
+
+    /**
+     * 运输单价
+     */
+    @ExcelProperty(value = "运输单价6")
+    private BigDecimal unitPrice6;
+
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点6")
+    private String unloadingLocation6;
+
+    //物流详情但7
+    /**
+     * 物流单合同编号（运输合同编号）
+     */
+    @ExcelProperty(value = "物流单合同编号（运输合同编号）7")
+    private String logisticsContractNo7;
+
+    /**
+     * 物流详情单类型
+     */
+    @ExcelProperty(value = "物流详情单类型7")
+    private String upperType7;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号7")
+    private String purchaseContractNo7;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期7")
+    private Date outboundTime7;
+
+
+    /**
+     * 取货厂名
+     */
+    @ExcelProperty(value = "取货厂名7")
+    private String goodsFactory7;
+
+
+    /**
+     * 车牌号
+     */
+    @ExcelProperty(value = "车牌号7")
+    private String licensePlateNumber7;
+
+    /**
+     * 载货量
+     */
+    @ExcelProperty(value = "载货量7")
+    private BigDecimal goodsWeight7;
+
+    /**
+     * 货物单位
+     */
+    @ExcelProperty(value = "货物单位7")
+    private String goodsUnit7;
+
+    /**
+     * 运输单价
+     */
+    @ExcelProperty(value = "运输单价7")
+    private BigDecimal unitPrice7;
+
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点7")
+    private String unloadingLocation7;
+
+    //物流详情但8
+    /**
+     * 物流单合同编号（运输合同编号）
+     */
+    @ExcelProperty(value = "物流单合同编号（运输合同编号）8")
+    private String logisticsContractNo8;
+
+    /**
+     * 物流详情单类型
+     */
+    @ExcelProperty(value = "物流详情单类型8")
+    private String upperType8;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号8")
+    private String purchaseContractNo8;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期8")
+    private Date outboundTime8;
+
+
+    /**
+     * 取货厂名
+     */
+    @ExcelProperty(value = "取货厂名8")
+    private String goodsFactory8;
+
+
+    /**
+     * 车牌号
+     */
+    @ExcelProperty(value = "车牌号8")
+    private String licensePlateNumber8;
+
+    /**
+     * 载货量
+     */
+    @ExcelProperty(value = "载货量8")
+    private BigDecimal goodsWeight8;
+
+    /**
+     * 货物单位
+     */
+    @ExcelProperty(value = "货物单位8")
+    private String goodsUnit8;
+
+    /**
+     * 运输单价
+     */
+    @ExcelProperty(value = "运输单价8")
+    private BigDecimal unitPrice8;
+
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点8")
+    private String unloadingLocation8;
+
+    //物流详情但9
+    /**
+     * 物流单合同编号（运输合同编号）
+     */
+    @ExcelProperty(value = "物流单合同编号（运输合同编号）9")
+    private String logisticsContractNo9;
+
+    /**
+     * 物流详情单类型
+     */
+    @ExcelProperty(value = "物流详情单类型9")
+    private String upperType9;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号9")
+    private String purchaseContractNo9;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期9")
+    private Date outboundTime9;
+
+
+    /**
+     * 取货厂名
+     */
+    @ExcelProperty(value = "取货厂名9")
+    private String goodsFactory9;
+
+
+    /**
+     * 车牌号
+     */
+    @ExcelProperty(value = "车牌号9")
+    private String licensePlateNumber9;
+
+    /**
+     * 载货量
+     */
+    @ExcelProperty(value = "载货量9")
+    private BigDecimal goodsWeight9;
+
+    /**
+     * 货物单位
+     */
+    @ExcelProperty(value = "货物单位9")
+    private String goodsUnit9;
+
+    /**
+     * 运输单价
+     */
+    @ExcelProperty(value = "运输单价9")
+    private BigDecimal unitPrice9;
+
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点9")
+    private String unloadingLocation9;
+
+    //物流详情但10
+    /**
+     * 物流单合同编号（运输合同编号）
+     */
+    @ExcelProperty(value = "物流单合同编号（运输合同编号）10")
+    private String logisticsContractNo10;
+
+    /**
+     * 物流详情单类型
+     */
+    @ExcelProperty(value = "物流详情单类型10")
+    private String upperType10;
+
+
+    /**
+     * 采购/加工合同编号
+     */
+    @ExcelProperty(value = "采购/加工合同编号10")
+    private String purchaseContractNo10;
+
+    /**
+     * 出库日期
+     */
+    @ExcelProperty(value = "出库日期10")
+    private Date outboundTime10;
+
+
+    /**
+     * 取货厂名
+     */
+    @ExcelProperty(value = "取货厂名10")
+    private String goodsFactory10;
+
+
+    /**
+     * 车牌号
+     */
+    @ExcelProperty(value = "车牌号10")
+    private String licensePlateNumber10;
+
+    /**
+     * 载货量
+     */
+    @ExcelProperty(value = "载货量10")
+    private BigDecimal goodsWeight10;
+
+    /**
+     * 货物单位
+     */
+    @ExcelProperty(value = "货物单位10")
+    private String goodsUnit10;
+
+    /**
+     * 运输单价
+     */
+    @ExcelProperty(value = "运输单价10")
+    private BigDecimal unitPrice10;
+
+
+    /**
+     * 卸货地点
+     */
+    @ExcelProperty(value = "卸货地点10")
+    private String unloadingLocation10;
 }

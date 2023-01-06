@@ -1,6 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 
+import cn.edu.guet.bean.ImportModel.ImportLogisticsContractModel;
 import cn.edu.guet.bean.LogisticsPaymentContract;
 import cn.edu.guet.bean.ProcessContract;
 import cn.edu.guet.bean.logisticsContract.*;
@@ -8,13 +9,18 @@ import cn.edu.guet.bean.other.OtherInOut;
 import cn.edu.guet.bean.other.OtherWarehouse;
 import cn.edu.guet.bean.own.OwnInOut;
 import cn.edu.guet.bean.own.OwnWarehouse;
+import cn.edu.guet.bean.purchaseContract.InboundBean;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.bean.sale.SaleContract;
+import cn.edu.guet.http.HttpResult;
+import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.SaleContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.read.listener.PageReadListener;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,12 +30,17 @@ import org.springframework.security.web.PortResolverImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -573,6 +584,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             ExportOutLogisticsContract exportOutLogisticsContract = new ExportOutLogisticsContract();
             exportOutLogisticsContract.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
             exportOutLogisticsContract.setSaleContractNo(logisticsContract.getSaleContractNo());
+            exportOutLogisticsContract.setOwnCompanyName(logisticsContract.getOwnCompanyName());
             exportOutLogisticsContract.setTotalWeight(logisticsContract.getTotalWeight());
             exportOutLogisticsContract.setGoodsUnit(logisticsContract.getGoodsUnit());
             exportOutLogisticsContract.setFreight(logisticsContract.getFreight());
@@ -1041,6 +1053,76 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             return false;
         }
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean handleImportLogisticsContractModel(ImportLogisticsContractModel importLogisticsContractModel) {
+        LogisticsContract logisticsContract = new LogisticsContract();
+        System.out.println("导入excel表的数据:"+importLogisticsContractModel);
+        if (importLogisticsContractModel.getLogisticsContractNo()==null||importLogisticsContractModel.getLogisticsContractNo()==""){
+            return false;
+        }else{
+            //检查是否重复
+            QueryWrapper<LogisticsContract> logisticsContractQueryWrapper = new QueryWrapper<>();
+            logisticsContractQueryWrapper.lambda().eq(LogisticsContract::getLogisticsContractNo,importLogisticsContractModel.getLogisticsContractNo());
+            LogisticsContract query = logisticsContractMapper.selectOne(logisticsContractQueryWrapper);
+            if (query!=null){
+                return false;
+            }
+            logisticsContract.setLogisticsContractNo(importLogisticsContractModel.getLogisticsContractNo());
+            logisticsContract.setOwnCompanyName(importLogisticsContractModel.getOwnCompanyName());
+            logisticsContract.setUpperType(importLogisticsContractModel.getUpperType());
+            logisticsContract.setSaleContractNo(importLogisticsContractModel.getSaleContractNo());
+            logisticsContract.setLogisticsContractTime(importLogisticsContractModel.getLogisticsContractTime());
+            logisticsContract.setTotalWeight(importLogisticsContractModel.getTotalWeight());
+            logisticsContract.setGoodsUnit(importLogisticsContractModel.getGoodsUnit());
+            logisticsContract.setFreight(importLogisticsContractModel.getFreight());
+            logisticsContract.setSqueezeSeason(importLogisticsContractModel.getSqueezeSeason());
+            try {
+                List<LogisticsDetail> logisticsDetailList = new ArrayList<>();
+                for (int i = 1; i <= 10; i++) {
+                    Method logisticsContractNoMethod = importLogisticsContractModel.getClass().getMethod("getLogisticsContractNo" + i);
+                    Method upperTypeMethod = importLogisticsContractModel.getClass().getMethod("getUpperType" + i);
+                    Method purchaseContractNoMethod = importLogisticsContractModel.getClass().getMethod("getPurchaseContractNo" + i);
+                    Method outBoundTimeMethod = importLogisticsContractModel.getClass().getMethod("getOutboundTime" + i);
+                    Method getGoodsFactoryMethod = importLogisticsContractModel.getClass().getMethod("getGoodsFactory" + i);
+                    Method getLicensePlateNumberMethod = importLogisticsContractModel.getClass().getMethod("getLicensePlateNumber" + i);
+                    Method getGoodsWeightMethod = importLogisticsContractModel.getClass().getMethod("getGoodsWeight" + i);
+                    Method getGoodsUnitMethod = importLogisticsContractModel.getClass().getMethod("getGoodsUnit" + i);
+                    Method getUnitPriceMethod = importLogisticsContractModel.getClass().getMethod("getUnitPrice" + i);
+                    Method getUnloadingLocationMethod = importLogisticsContractModel.getClass().getMethod("getUnloadingLocation" + i);
+                    if (logisticsContractNoMethod.invoke(importLogisticsContractModel) != null && upperTypeMethod.invoke(importLogisticsContractModel) != null&&purchaseContractNoMethod.invoke(importLogisticsContractModel)!=null
+                    && outBoundTimeMethod.invoke(importLogisticsContractModel)!=null&&getGoodsFactoryMethod.invoke(importLogisticsContractModel)!=null&&getLicensePlateNumberMethod.invoke(importLogisticsContractModel)!=null
+                    &&getGoodsWeightMethod.invoke(importLogisticsContractModel)!=null&&getGoodsUnitMethod.invoke(importLogisticsContractModel)!=null&&getUnitPriceMethod.invoke(importLogisticsContractModel)!=null
+                    &&getUnloadingLocationMethod.invoke(importLogisticsContractModel)!=null) {
+                        LogisticsDetail logisticsDetail = new LogisticsDetail();
+                        logisticsDetail.setLogisticsContractNo((String) logisticsContractNoMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setUpperType(Integer.parseInt((String) upperTypeMethod.invoke(importLogisticsContractModel)));
+                        logisticsDetail.setPurchaseContractNo((String) purchaseContractNoMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setOutboundTime((Date) outBoundTimeMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setGoodsFactory((String) getGoodsFactoryMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setLicensePlateNumber((String) getLicensePlateNumberMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setGoodsWeight((BigDecimal) getGoodsWeightMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setGoodsUnit((String) getGoodsUnitMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setUnitPrice((BigDecimal) getUnitPriceMethod.invoke(importLogisticsContractModel));
+                        logisticsDetail.setUnloadingLocation((String) getUnloadingLocationMethod.invoke(importLogisticsContractModel));
+                        logisticsDetailList.add(logisticsDetail);
+                    } else {
+                        break;
+                    }
+                }
+                logisticsContract.setLogisticsDetailList(logisticsDetailList);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return addLogisticsContract(logisticsContract);
+    }
+
 
     /**
      * 删除加工单

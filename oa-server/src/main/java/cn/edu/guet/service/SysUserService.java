@@ -40,4 +40,6 @@ public interface SysUserService extends IService<SysUser> {
     void deleteUser(Long userId);
 
     IPage<SysUser> getList(PageParm parm);
+
+    String getNickNameByName(String username);
 }

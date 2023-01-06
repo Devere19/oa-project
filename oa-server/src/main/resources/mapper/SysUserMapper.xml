@@ -23,4 +23,9 @@
         from sys_user u
         where u.name = #{name,jdbcType=VARCHAR}
     </select>
+    <select id="getNickNameByName" resultType="java.lang.String">
+        SELECT nick_name
+        FROM `sys_user`
+        WHERE `name` = #{name,jdbcType=VARCHAR}
+    </select>
 </mapper>
