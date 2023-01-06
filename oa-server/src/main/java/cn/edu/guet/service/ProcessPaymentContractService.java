@@ -1,6 +1,6 @@
 package cn.edu.guet.service;
 
-import cn.edu.guet.bean.ProcessPaymentContract;
+import cn.edu.guet.bean.ImportModel.ImportProcessPaymentContractModel;
 import cn.edu.guet.bean.ProcessPaymentContract;
 import cn.edu.guet.bean.ProcessPaymentContractView;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -18,6 +18,7 @@ public interface ProcessPaymentContractService extends IService<ProcessPaymentCo
     int updateProcessPaymentContract(ProcessPaymentContract processPaymentContract);
     int deleteOneProcessPaymentContract(int id);
     ProcessPaymentContractView getOneProcessPaymentContract(int id);
+    int handleImportProcessPaymentContractModel(ImportProcessPaymentContractModel importProcessPaymentContractModel);
 
     //    出纳
     Page<ProcessPaymentContractView> getCashierProcessPayment(int currentPage, int pageSize);

@@ -10,10 +10,16 @@
                     <el-button :icon="Search" @click="searchTableData" />
                 </template>
             </el-input>
+            <el-upload class="moreDeleteButton" name="file"
+                action="http://120.77.28.123:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
+                :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
+                accept=".xlsx,.xls" :show-file-list="false">
+                <el-button :icon="Upload" type="primary">批量导入</el-button>
+            </el-upload>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
+        <el-table ref="firstTableRef" class="shipppingContractTable" :data="firstTableData" style="width: 98%"
             :border="true" highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
@@ -686,7 +692,7 @@
 <script lang="ts" setup>
 import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules, ElMessageBox } from 'element-plus'
-import { Delete, Search, MoreFilled, Select, CloseBold, Edit } from "@element-plus/icons-vue";
+import { Delete, Search, MoreFilled, Select, CloseBold, Edit, Upload } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
@@ -1441,6 +1447,31 @@ const UpdateReturnTop = () => {
     updateDialogTop.value.scrollTop = 0;
 }
 
+const uploadFalse = () => {
+    ElMessage({
+        message: '上传文件失败！',
+        type: 'error',
+        duration: 4000
+    })
+}
+
+const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    changeLoadingFalse();
+    if (response.code == 200) {
+        ElMessage({
+            message: '批量插入海运单成功！',
+            type: 'success',
+        })
+        getTableData();
+    } else {
+        ElMessage({
+            message: '系统出错，批量插入海运单失败！',
+            type: 'error',
+            duration: 4000
+        })
+    }
+}
+
 </script>
   
 <style scoped>
@@ -1475,7 +1506,7 @@ const UpdateReturnTop = () => {
     margin-right: 1%;
 }
 
-.purchaseContractTable {
+.shipppingContractTable {
     margin: auto;
 }
 

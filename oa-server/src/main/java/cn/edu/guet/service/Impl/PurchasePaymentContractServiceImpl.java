@@ -1,8 +1,10 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.ImportModel.ImportPurchasePaymentContractModel;
 import cn.edu.guet.bean.purchaseContract.PurchaseContract;
 import cn.edu.guet.mapper.*;
+import cn.edu.guet.service.PurchaseContractService;
 import cn.edu.guet.service.PurchasePaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
@@ -45,6 +47,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
 
     @Autowired
     private PurchaseContractMapper purchaseContractMapper;
+    
+    @Autowired
+    private PurchaseContractService purchaseContractService;
 
     @Override
     public Page<PurchasePaymentContractView> getPurchasePaymentContractData(int currentPage, int pageSize) {
@@ -189,6 +194,28 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         purchasePaymentContractView.setPurchasePaymentDirector(purchasePaymentStateInfoMapper.selectList(stateQw));
 
         return purchasePaymentContractView;
+    }
+
+    @Override
+    public int handleImportPurchasePaymentContractModel(ImportPurchasePaymentContractModel importPurchasePaymentContractModel) {
+        PurchasePaymentContract purchasePaymentContract = new PurchasePaymentContract();
+//        采购合同号
+        if (importPurchasePaymentContractModel.getPurchaseContractNo() == null) {
+            return 0;
+        } else {
+//            检验是否存在
+            if (purchaseContractService.checkPurchaseContractNo(importPurchasePaymentContractModel.getPurchaseContractNo())) {
+                purchasePaymentContract.setPurchaseContractNo(importPurchasePaymentContractModel.getPurchaseContractNo());
+            } else {
+                return 0;
+            }
+        }
+
+        if (importPurchasePaymentContractModel.getPaymentCount() != null) {
+            purchasePaymentContract.setPaymentCount(importPurchasePaymentContractModel.getPaymentCount());
+        }
+        
+        return addNewPurchasePaymentContract(purchasePaymentContract);
     }
 
     @Override

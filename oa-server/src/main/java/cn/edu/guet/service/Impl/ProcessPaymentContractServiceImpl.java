@@ -1,7 +1,9 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.ImportModel.ImportProcessPaymentContractModel;
 import cn.edu.guet.mapper.*;
+import cn.edu.guet.service.ProcessContractService;
 import cn.edu.guet.service.ProcessPaymentContractService;
 import cn.edu.guet.util.ImageUtils;
 import cn.edu.guet.util.SecurityUtils;
@@ -45,6 +47,9 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     
     @Autowired
     private ProcessContractMapper processContractMapper;
+    
+    @Autowired
+    private ProcessContractService processContractService;
     
     @Override
     public Page<ProcessPaymentContractView> getProcessPaymentContractData(int currentPage, int pageSize) {
@@ -199,6 +204,37 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
         processPaymentContractView.setProcessPaymentDirector(processPaymentStateInfoMapper.selectList(stateQw));
 
         return processPaymentContractView;
+    }
+
+    @Override
+    public int handleImportProcessPaymentContractModel(ImportProcessPaymentContractModel importProcessPaymentContractModel) {
+        ProcessPaymentContract processPaymentContract = new ProcessPaymentContract();
+//        加工合同号
+        if (importProcessPaymentContractModel.getProcessContractNo() == null) {
+            return 0;
+        } else {
+//            检验是否存在
+            if (processContractService.checkProcessContractNo(importProcessPaymentContractModel.getProcessContractNo())) {
+                processPaymentContract.setProcessContractNo(importProcessPaymentContractModel.getProcessContractNo());
+            } else {
+                return 0;
+            }
+        }
+
+        if (importProcessPaymentContractModel.getPaymentMonth() != null) {
+            processPaymentContract.setPaymentMonth(importProcessPaymentContractModel.getPaymentMonth());
+        }
+        if (importProcessPaymentContractModel.getPaymentMonthPriceT() != null) {
+            processPaymentContract.setPaymentMonthPriceT(importProcessPaymentContractModel.getPaymentMonthPriceT());
+        }
+        if (importProcessPaymentContractModel.getGoodsCount() != null) {
+            processPaymentContract.setGoodsCount(importProcessPaymentContractModel.getGoodsCount());
+        }
+        if (importProcessPaymentContractModel.getPaymentCount() != null) {
+            processPaymentContract.setPaymentCount(importProcessPaymentContractModel.getPaymentCount());
+        }
+
+        return addNewProcessPaymentContract(processPaymentContract);
     }
 
     @Override

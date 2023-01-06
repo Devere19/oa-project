@@ -1,6 +1,7 @@
 package cn.edu.guet.service.Impl;
 
 import cn.edu.guet.bean.*;
+import cn.edu.guet.bean.ImportModel.ImportOfficeExpenseModel;
 import cn.edu.guet.bean.OfficeExpense;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.OfficeExpenseService;
@@ -146,6 +147,26 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         officeDirectorStateMapper.delete(directorStateQw);
 
         return officeExpenseMapper.deleteById(id);
+    }
+
+    @Override
+    public int handleImportOfficeExpenseModel(ImportOfficeExpenseModel importOfficeExpenseModel) {
+        OfficeExpense officeExpense = new OfficeExpense();
+
+        if (importOfficeExpenseModel.getItemsList() == null) {
+            return 0;
+        } else {
+            officeExpense.setItemsList(importOfficeExpenseModel.getItemsList());
+        }
+
+        if (importOfficeExpenseModel.getExpenses() != null) {
+            officeExpense.setExpenses(importOfficeExpenseModel.getExpenses());
+        }
+        if (importOfficeExpenseModel.getTime() != null) {
+            officeExpense.setTime(importOfficeExpenseModel.getTime());
+        }
+
+        return addNewOfficeExpense(officeExpense);
     }
 
     @Override
