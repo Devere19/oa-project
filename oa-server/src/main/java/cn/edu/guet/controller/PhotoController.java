@@ -80,9 +80,12 @@ public class PhotoController {
 
     @RequestMapping("/deletePhoto")
     public HttpResult deletePhoto(String photoURL){
-        File photo= new File("static\\images\\" + photoURL.split("/static/images/")[1]);
+
+        File photo= new File("/static/images/" + photoURL.split("/static/images/")[1]);
         if(photo.exists()){
             System.out.println("删除原文件结果"+photo.delete());
+        }else{
+            System.out.println("没找到照片");
         }
 
         return ResultUtils.success("移除成功");
