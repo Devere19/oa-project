@@ -12,6 +12,7 @@ export type purchaseContractModel = {
     ownCompanyName: string
     squeezeSeason: string
     inboundTime: string
+    inboundFactoryS: any
     goodsName: string
     goodsCount: any
     goodsUnit: string

@@ -54,7 +54,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Override
     public Page<PurchasePaymentContractView> getPurchasePaymentContractData(int currentPage, int pageSize) {
         QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.orderByDesc("create_time");
+        qw.orderByDesc("create_time","id");
         Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
         page = purchasePaymentContractInfoMapper.selectPage(page, qw);
         for (PurchasePaymentContractView record : page.getRecords()) {
@@ -85,7 +85,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
         qw.like("purchase_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
                 .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
                 .like("goods_name", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord).orderByDesc("create_time");
+                .or().like("create_by", searchWord).orderByDesc("create_time","id");
         Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
         page = purchasePaymentContractInfoMapper.selectPage(page, qw);
         for (PurchasePaymentContractView record : page.getRecords()) {
@@ -221,7 +221,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Override
     public Page<PurchasePaymentContractView> getCashierPurchasePayment(int currentPage, int pageSize) {
         QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
         page = purchasePaymentContractInfoMapper.selectPage(page, qw);
         Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
@@ -262,7 +262,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
                 .or().like("customer_enterprise_name", searchWord).or()
                 .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
                 .like("goods_name", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
         Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
         page = purchasePaymentContractInfoMapper.selectPage(page, qw);
         Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
@@ -365,7 +365,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Override
     public Page<PurchasePaymentContractView> getDirectorPPC(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
         page = purchasePaymentContractInfoMapper.selectPage(page, qw);
         Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
@@ -481,7 +481,7 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
                 .or().like("customer_enterprise_name", searchWord).or()
                 .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
                 .like("goods_name", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
         Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
         page = purchasePaymentContractInfoMapper.selectPage(page, qw);
         Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();

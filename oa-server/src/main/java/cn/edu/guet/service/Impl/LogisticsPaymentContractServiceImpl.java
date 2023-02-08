@@ -54,7 +54,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Override
     public Page<LogisticsPaymentContractView> getLogisticsPaymentContractData(int currentPage, int pageSize) {
         QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.orderByDesc("create_time");
+        qw.orderByDesc("create_time","id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         for (LogisticsPaymentContractView record : page.getRecords()) {
@@ -86,7 +86,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 .or().like("logistics_contract_no", searchWord)
                 .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord).orderByDesc("create_time");
+                .or().like("create_by", searchWord).orderByDesc("create_time","id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         for (LogisticsPaymentContractView record : page.getRecords()) {
@@ -223,7 +223,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Override
     public Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize) {
         QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
@@ -264,7 +264,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 .or().like("logistics_contract_no", searchWord)
                 .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
@@ -315,7 +315,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Override
     public Page<LogisticsPaymentContractView> getDirectorLPC(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
@@ -430,7 +430,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 .or().like("logistics_contract_no", searchWord)
                 .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();

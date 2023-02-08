@@ -44,7 +44,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     @Override
     public Page<OfficeExpense> getOfficeExpenseData(int currentPage, int pageSize) {
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.orderByDesc("create_time");
+        qw.orderByDesc("create_time","id");
         Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
         page=officeExpenseMapper.selectPage(page,qw);
         for (OfficeExpense record : page.getRecords()) {
@@ -74,7 +74,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
         qw.like("items_list",searchWord).or().like("finance_staff",searchWord)
                 .or().like("cashier",searchWord).or().like("create_by",searchWord)
-                .orderByDesc("create_time");
+                .orderByDesc("create_time","id");
         Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
         page=officeExpenseMapper.selectPage(page,qw);
         for (OfficeExpense record : page.getRecords()) {
@@ -172,7 +172,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     @Override
     public Page<OfficeExpense> getCashierOfficeExpense(int currentPage, int pageSize) {
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
         page=officeExpenseMapper.selectPage(page,qw);
         Iterator<OfficeExpense> iterator=page.getRecords().iterator();
@@ -211,7 +211,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("items_list",searchWord)
                 .or().like("finance_staff",searchWord).or().like("cashier",searchWord)
-                .or().like("create_by",searchWord)).orderByDesc("create_time");
+                .or().like("create_by",searchWord)).orderByDesc("create_time","id");
         Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
         page=officeExpenseMapper.selectPage(page,qw);
         Iterator<OfficeExpense> iterator=page.getRecords().iterator();
@@ -271,7 +271,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     @Override
     public Page<OfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
         page=officeExpenseMapper.selectPage(page,qw);
         Iterator<OfficeExpense> iterator=page.getRecords().iterator();
@@ -384,7 +384,7 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("items_list",searchWord)
                 .or().like("finance_staff",searchWord).or().like("cashier",searchWord)
-                .or().like("create_by",searchWord)).orderByDesc("create_time");
+                .or().like("create_by",searchWord)).orderByDesc("create_time","id");
         Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
         page=officeExpenseMapper.selectPage(page,qw);
         Iterator<OfficeExpense> iterator=page.getRecords().iterator();

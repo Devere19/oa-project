@@ -124,7 +124,7 @@ public class ProcessContractServiceImpl extends ServiceImpl<ProcessContractMappe
     @Override
     public Page<ProcessContract> getTProcessContractData(int currentPage, int pageSize) {
         QueryWrapper<ProcessContract> qw = new QueryWrapper<>();
-        qw.eq("pigeonhole", 1).orderByDesc("create_time");
+        qw.eq("pigeonhole", 1).orderByDesc("create_time","process_contract_no");
         Page<ProcessContract> page = new Page<>(currentPage, pageSize);
         page = processContractMapper.selectPage(page, qw);
         for (ProcessContract record : page.getRecords()) {
@@ -147,7 +147,7 @@ public class ProcessContractServiceImpl extends ServiceImpl<ProcessContractMappe
     @Override
     public Page<ProcessContract> getFProcessContractData(int currentPage, int pageSize) {
         QueryWrapper<ProcessContract> qw = new QueryWrapper<>();
-        qw.eq("pigeonhole", 0).orderByDesc("create_time");
+        qw.eq("pigeonhole", 0).orderByDesc("create_time","process_contract_no");
         Page<ProcessContract> page = new Page<>(currentPage, pageSize);
         page = processContractMapper.selectPage(page, qw);
         for (ProcessContract record : page.getRecords()) {
@@ -177,14 +177,14 @@ public class ProcessContractServiceImpl extends ServiceImpl<ProcessContractMappe
                             .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
                             .or().like("alcohol_conversion_formula", searchWord).or().like("concentrated_solution_conversion_formula", searchWord)
                             .or().like("create_by", searchWord);
-                }).orderByDesc("create_time");
+                }).orderByDesc("create_time","process_contract_no");
             } else {
                 qw.eq("pigeonhole", 1).and(q -> {
                     q.like("process_contract_no", searchWord)
                             .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
                             .or().like("alcohol_conversion_formula", searchWord).or().like("concentrated_solution_conversion_formula", searchWord)
                             .or().like("create_by", searchWord);
-                }).ge("sign_time", startDate).le("sign_time", endDate).orderByDesc("create_time");
+                }).ge("sign_time", startDate).le("sign_time", endDate).orderByDesc("create_time","process_contract_no");
             }
         } else {
             if (startDate == null && endDate == null) {
@@ -192,14 +192,14 @@ public class ProcessContractServiceImpl extends ServiceImpl<ProcessContractMappe
                     q.like("process_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
                             .like("own_company_name", searchWord).or().like("alcohol_conversion_formula", searchWord).or()
                             .like("concentrated_solution_conversion_formula", searchWord).or().like("create_by", searchWord);
-                }).orderByDesc("create_time");
+                }).orderByDesc("create_time","process_contract_no");
             } else {
                 qw.eq("pigeonhole", 0).and(q -> {
                             q.like("process_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
                                     .like("own_company_name", searchWord).or().like("alcohol_conversion_formula", searchWord).or()
                                     .like("concentrated_solution_conversion_formula", searchWord).or().like("create_by", searchWord);
                         })
-                        .ge("sign_time", startDate).le("sign_time", endDate).orderByDesc("create_time");
+                        .ge("sign_time", startDate).le("sign_time", endDate).orderByDesc("create_time","process_contract_no");
             }
         }
         Page<ProcessContract> page = new Page<>(currentPage, pageSize);
@@ -224,7 +224,7 @@ public class ProcessContractServiceImpl extends ServiceImpl<ProcessContractMappe
     @Override
     public Boolean checkProcessContractNo(String processContractNo) {
         QueryWrapper<ProcessContract> qw = new QueryWrapper<>();
-        qw.eq("process_contract_no", processContractNo).orderByDesc("create_time");
+        qw.eq("process_contract_no", processContractNo).orderByDesc("create_time","process_contract_no");
         List<ProcessContract> processContracts = processContractMapper.selectList(qw);
         return !processContracts.isEmpty();
     }

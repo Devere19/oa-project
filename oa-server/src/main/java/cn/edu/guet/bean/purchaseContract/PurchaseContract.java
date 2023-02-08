@@ -57,6 +57,17 @@ public class PurchaseContract implements Serializable {
     private Date inboundTime;
 
     /**
+     * 入库厂名
+     */
+    private String inboundFactoryName;
+
+    /**
+     * 入库厂名(数组)
+     */
+    @TableField(exist = false)
+    private List<String> inboundFactoryS;
+
+    /**
      * 采购货物名称
      */
     private String goodsName;
@@ -173,6 +184,8 @@ public class PurchaseContract implements Serializable {
             && (this.getOwnCompanyName() == null ? other.getOwnCompanyName() == null : this.getOwnCompanyName().equals(other.getOwnCompanyName()))
             && (this.getSqueezeSeason() == null ? other.getSqueezeSeason() == null : this.getSqueezeSeason().equals(other.getSqueezeSeason()))
             && (this.getInboundTime() == null ? other.getInboundTime() == null : this.getInboundTime().equals(other.getInboundTime()))
+            && (this.getInboundFactoryName() == null ? other.getInboundFactoryName() == null : this.getInboundFactoryName().equals(other.getInboundFactoryName()))
+            && (this.getInboundFactoryS() == null ? other.getInboundFactoryS() == null : this.getInboundFactoryS().equals(other.getInboundFactoryS()))
             && (this.getGoodsName() == null ? other.getGoodsName() == null : this.getGoodsName().equals(other.getGoodsName()))
             && (this.getGoodsCount() == null ? other.getGoodsCount() == null : this.getGoodsCount().equals(other.getGoodsCount()))
             && (this.getGoodsUnit() == null ? other.getGoodsUnit() == null : this.getGoodsUnit().equals(other.getGoodsUnit()))
@@ -204,6 +217,8 @@ public class PurchaseContract implements Serializable {
         result = prime * result + ((getOwnCompanyName() == null) ? 0 : getOwnCompanyName().hashCode());
         result = prime * result + ((getSqueezeSeason() == null) ? 0 : getSqueezeSeason().hashCode());
         result = prime * result + ((getInboundTime() == null) ? 0 : getInboundTime().hashCode());
+        result = prime * result + ((getInboundFactoryName() == null) ? 0 : getInboundFactoryName().hashCode());
+        result = prime * result + ((getInboundFactoryS() == null) ? 0 : getInboundFactoryS().hashCode());
         result = prime * result + ((getGoodsName() == null) ? 0 : getGoodsName().hashCode());
         result = prime * result + ((getGoodsCount() == null) ? 0 : getGoodsCount().hashCode());
         result = prime * result + ((getGoodsUnit() == null) ? 0 : getGoodsUnit().hashCode());
@@ -238,6 +253,8 @@ public class PurchaseContract implements Serializable {
         sb.append(", ownCompanyName=").append(ownCompanyName);
         sb.append(", squeezeSeason=").append(squeezeSeason);
         sb.append(", inboundTime=").append(inboundTime);
+        sb.append(", inboundFactoryName=").append(inboundFactoryName);
+        sb.append(", inboundFactoryS=").append(inboundFactoryS);
         sb.append(", goodsName=").append(goodsName);
         sb.append(", goodsCount=").append(goodsCount);
         sb.append(", goodsUnit=").append(goodsUnit);
