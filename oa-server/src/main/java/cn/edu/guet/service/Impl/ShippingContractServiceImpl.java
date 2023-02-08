@@ -51,7 +51,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> getshippingContractData(int currentPage, int pageSize) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.orderByDesc("create_time");
+        qw.orderByDesc("create_time","shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         for (ShippingContract record : page.getRecords()) {
@@ -94,7 +94,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                 .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord).or().like("container_no", searchWord)
                 .or().like("seal_no", searchWord).or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
                 .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord)
-                .or().like("cashier", searchWord).or().like("create_by", searchWord).orderByDesc("create_time");
+                .or().like("cashier", searchWord).or().like("create_by", searchWord).orderByDesc("create_time","shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         for (ShippingContract record : page.getRecords()) {
@@ -358,7 +358,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Boolean checkShippingContractNo(String shippingContractNo) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.eq("shipping_contract_no", shippingContractNo).orderByDesc("create_time");
+        qw.eq("shipping_contract_no", shippingContractNo).orderByDesc("create_time","shipping_contract_no");
         List<ShippingContract> shippingContracts = shippingContractMapper.selectList(qw);
         return !shippingContracts.isEmpty();
     }
@@ -366,7 +366,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> getCashierShipping(int currentPage, int pageSize) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -421,7 +421,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                 .or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
                 .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -484,7 +484,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> getDirectorSC(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -624,7 +624,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                 .or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
                 .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();

@@ -54,7 +54,7 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     @Override
     public Page<ProcessPaymentContractView> getProcessPaymentContractData(int currentPage, int pageSize) {
         QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
-        qw.orderByDesc("create_time");
+        qw.orderByDesc("create_time","id");
         Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = processPaymentContractInfoMapper.selectPage(page, qw);
         for (ProcessPaymentContractView record : page.getRecords()) {
@@ -84,7 +84,7 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
         QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
         qw.like("process_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
                 .like("own_company_name", searchWord).or().like("finance_staff", searchWord)
-                .or().like("cashier", searchWord).or().like("create_by", searchWord).orderByDesc("create_time");
+                .or().like("cashier", searchWord).or().like("create_by", searchWord).orderByDesc("create_time","id");
         Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = processPaymentContractInfoMapper.selectPage(page, qw);
         for (ProcessPaymentContractView record : page.getRecords()) {
@@ -240,7 +240,7 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     @Override
     public Page<ProcessPaymentContractView> getCashierProcessPayment(int currentPage, int pageSize) {
         QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = processPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<ProcessPaymentContractView> iterator = page.getRecords().iterator();
@@ -280,7 +280,7 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("process_contract_no", searchWord)
                 .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
         Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = processPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<ProcessPaymentContractView> iterator = page.getRecords().iterator();
@@ -359,7 +359,7 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     @Override
     public Page<ProcessPaymentContractView> getDirectorPPC(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
         Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = processPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<ProcessPaymentContractView> iterator = page.getRecords().iterator();
@@ -474,7 +474,7 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
         qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("process_contract_no", searchWord)
                 .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time");
+                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
         Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = processPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<ProcessPaymentContractView> iterator = page.getRecords().iterator();

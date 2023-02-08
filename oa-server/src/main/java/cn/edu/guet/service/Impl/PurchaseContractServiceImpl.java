@@ -144,10 +144,15 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
         if (contractPhotos != "") {
             purchaseContract.setContractPhoto(contractPhotos);
         }
+        String urlString=purchaseContract.getInboundData().get(0).getFactoryName();
         for (int i = 0; i < purchaseContract.getInboundData().size(); i++) {
 //            当不是自家仓库时，即外商仓库
 //            修改，不存在自家仓库的情况，只能从外商入
             if ("自家仓库".equals(purchaseContract.getInboundData().get(i).getFactoryName()) != true) {
+
+//                处理厂名
+                urlString=urlString+","+purchaseContract.getInboundData().get(i).getFactoryName();
+
 //                查询是否存在对应外商仓库，且存储着对应物品
                 QueryWrapper<OtherWarehouse> qw = new QueryWrapper<>();
                 qw.eq("factory_name", purchaseContract.getInboundData().get(i).getFactoryName()).eq("goods_name", purchaseContract.getGoodsName());
@@ -248,6 +253,7 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
 //                }
             }
         }
+        purchaseContract.setInboundFactoryName(urlString);
         if(flag==1){
             purchaseContract.setUnpaidAmount(oldPurchaseContract.getPaymentAmount());
             purchaseContract.setCreateTime(oldPurchaseContract.getCreateTime());
@@ -446,10 +452,21 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
     @Override
     public Page<PurchaseContract> getTPurchaseContractData(int currentPage, int pageSize) {
         QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
-        qw.eq("pigeonhole", 1).orderByDesc("create_time");
+        qw.eq("pigeonhole", 1).orderByDesc("create_time","purchase_contract_no");
         Page<PurchaseContract> page = new Page<>(currentPage, pageSize);
         page = purchaseContractMapper.selectPage(page, qw);
         for (PurchaseContract record : page.getRecords()) {
+            System.out.println(record);
+//            处理厂名
+            String inboundFactoryName=record.getInboundFactoryName();
+            if(inboundFactoryName!=null||"".equals(inboundFactoryName)){
+                List<String> inboundFactoryS = new ArrayList<>();
+                for (String s : inboundFactoryName.split(",")) {
+                    inboundFactoryS.add(s);
+                }
+                record.setInboundFactoryS(inboundFactoryS);
+            }
+
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             //有多个照片
@@ -469,10 +486,21 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
     @Override
     public Page<PurchaseContract> getFPurchaseContractData(int currentPage, int pageSize) {
         QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
-        qw.eq("pigeonhole", 0).orderByDesc("create_time");
+        qw.eq("pigeonhole", 0).orderByDesc("create_time","purchase_contract_no");
         Page<PurchaseContract> page = new Page<>(currentPage, pageSize);
         page = purchaseContractMapper.selectPage(page, qw);
         for (PurchaseContract record : page.getRecords()) {
+
+//            处理厂名
+            String inboundFactoryName=record.getInboundFactoryName();
+            if(inboundFactoryName!=null||"".equals(inboundFactoryName)){
+                List<String> inboundFactoryS = new ArrayList<>();
+                for (String s : inboundFactoryName.split(",")) {
+                    inboundFactoryS.add(s);
+                }
+                record.setInboundFactoryS(inboundFactoryS);
+            }
+
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             //有多个照片
@@ -497,36 +525,47 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
                 qw.eq("pigeonhole", 1).and(q -> {
                     q.like("purchase_contract_no", searchWord)
                             .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
-                            .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
-                            .or().like("create_by", searchWord);
-                }).orderByDesc("create_time");
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).orderByDesc("create_time","purchase_contract_no");
             } else {
                 qw.eq("pigeonhole", 1).and(q -> {
                     q.like("purchase_contract_no", searchWord)
                             .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
-                            .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
-                            .or().like("create_by", searchWord);
-                }).ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time");
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time","purchase_contract_no");
             }
         } else {
             if (startDate == null && endDate == null) {
                 qw.eq("pigeonhole", 0).and(q -> {
-                    q.like("purchase_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
-                            .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
-                            .like("goods_name", searchWord).or().like("create_by", searchWord);
-                }).orderByDesc("create_time");
+                    q.like("purchase_contract_no", searchWord)
+                            .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).orderByDesc("create_time","purchase_contract_no");
             } else {
                 qw.eq("pigeonhole", 0).and(q -> {
-                            q.like("purchase_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
-                                    .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
-                                    .like("goods_name", searchWord).or().like("create_by", searchWord);
-                        })
-                        .ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time");
+                            q.like("purchase_contract_no", searchWord)
+                            .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time","purchase_contract_no");
             }
         }
         Page<PurchaseContract> page = new Page<>(currentPage, pageSize);
         page = purchaseContractMapper.selectPage(page, qw);
         for (PurchaseContract record : page.getRecords()) {
+            //            处理厂名
+            String inboundFactoryName=record.getInboundFactoryName();
+            if(inboundFactoryName!=null||"".equals(inboundFactoryName)){
+                List<String> inboundFactoryS = new ArrayList<>();
+                for (String s : inboundFactoryName.split(",")) {
+                    inboundFactoryS.add(s);
+                }
+                record.setInboundFactoryS(inboundFactoryS);
+            }
+
             //处理图片，形成一个图片数组
             String contractPhoto = record.getContractPhoto();
             //有多个照片
@@ -551,31 +590,32 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
                 qw.eq("pigeonhole", 1).and(q -> {
                     q.like("purchase_contract_no", searchWord)
                             .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
-                            .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
-                            .or().like("create_by", searchWord);
-                }).orderByDesc("create_time");
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).orderByDesc("create_time","purchase_contract_no");
             } else {
                 qw.eq("pigeonhole", 1).and(q -> {
                     q.like("purchase_contract_no", searchWord)
                             .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
-                            .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
-                            .or().like("create_by", searchWord);
-                }).ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time");
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time","purchase_contract_no");
             }
         } else {
             if (startDate == null && endDate == null) {
                 qw.eq("pigeonhole", 0).and(q -> {
-                    q.like("purchase_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
-                            .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
-                            .like("goods_name", searchWord).or().like("create_by", searchWord);
-                }).orderByDesc("create_time");
+                    q.like("purchase_contract_no", searchWord)
+                            .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).orderByDesc("create_time","purchase_contract_no");
             } else {
                 qw.eq("pigeonhole", 0).and(q -> {
-                            q.like("purchase_contract_no", searchWord).or().like("customer_enterprise_name", searchWord).or()
-                                    .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
-                                    .like("goods_name", searchWord).or().like("create_by", searchWord);
-                        })
-                        .ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time");
+                    q.like("purchase_contract_no", searchWord)
+                            .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
+                            .or().like("squeeze_season", searchWord).or().like("inbound_factory_name", searchWord)
+                            .or().like("goods_name", searchWord).or().like("create_by", searchWord);
+                }).ge("inbound_time", startDate).le("inbound_time", endDate).orderByDesc("create_time","purchase_contract_no");
             }
         }
         List<PurchaseContract> purchaseContracts = purchaseContractMapper.selectList(qw);
@@ -605,7 +645,7 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
     @Override
     public Boolean checkPurchaseContractNo(String purchaseContractNo) {
         QueryWrapper<PurchaseContract> qw = new QueryWrapper<>();
-        qw.eq("purchase_contract_no", purchaseContractNo).orderByDesc("create_time");
+        qw.eq("purchase_contract_no", purchaseContractNo).orderByDesc("create_time","purchase_contract_no");
         List<PurchaseContract> purchaseContracts = purchaseContractMapper.selectList(qw);
         return !purchaseContracts.isEmpty();
     }

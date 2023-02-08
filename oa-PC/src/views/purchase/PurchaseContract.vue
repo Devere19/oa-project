@@ -48,6 +48,14 @@
       <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
       <el-table-column property="squeezeSeason" align="center" label="榨季" />
       <el-table-column property="inboundTime" :formatter="conversionDate" align="center" label="入库时间" width="105" />
+      <el-table-column align="center" label="入库厂名" width="120">
+        <template #default="scope">
+          <div v-for="item, index in scope.row.inboundFactoryS" :key="item">
+            <hr v-if="index != 0" />
+            {{ item }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column property="goodsName" align="center" label="采购货物名称" />
       <el-table-column property="goodsCount" align="center" label="采购货物数量" />
       <el-table-column property="goodsUnit" align="center" label="采购货物单位" />
@@ -63,7 +71,8 @@
       <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
         width="105" />
       <el-table-column property="createBy" align="center" label="创建者" />
-      <el-table-column align="center" label="操作" width="490" fixed="right">
+      <!-- <el-table-column align="center" label="操作" width="490"> -->
+        <el-table-column align="center" label="操作" width="490" fixed="right">
         <template #default="scope">
           <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
           </el-button>
@@ -1382,5 +1391,15 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
 .contractDetailTable {
   height: 400px;
   margin-bottom: 20px;
+}
+
+hr {
+  /* width: 1000px; */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height: 1px;
+  color: #EBEEF5;
+  background-color: #EBEEF5;
 }
 </style>
