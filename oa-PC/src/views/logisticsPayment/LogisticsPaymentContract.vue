@@ -16,6 +16,8 @@
                 ref="upload" accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
+            <el-button type="primary"  @click="changeOperateStatus"  style="margin-top: 20px;" 
+        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
@@ -64,7 +66,7 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="390" fixed="right">
+            <el-table-column align="center" label="操作" width="390" fixed="right" v-if="operateStatus">
                 <template #default="scope">
                     <el-button :icon="Select" size="default" type="success" @click="changeState(scope.row)"
                         :disabled="stateAvailable(scope.row)!">
@@ -791,6 +793,12 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
             duration: 4000
         })
     }
+}
+
+const operateStatus = ref<boolean>(true)
+//改变operateStatus
+const changeOperateStatus = () => {
+    operateStatus.value = !operateStatus.value
 }
 
 </script>
