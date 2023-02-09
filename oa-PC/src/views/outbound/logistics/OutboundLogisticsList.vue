@@ -23,7 +23,7 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示未归档数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示原始数据" }}
         </el-button>
         <!-- <el-upload class="moreDeleteButton" name="file"
           action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
@@ -34,9 +34,11 @@
         <el-upload class="moreDeleteButton" name="file"
           action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
           :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false"
-          style="margin-left: 4px;">
+          style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
           <el-button :icon="Upload" type="primary">导入</el-button>
         </el-upload>
+        <el-button type="primary"  @click="changeOperateStatus" 
+        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
       </el-form-item>
     </el-form>
 
@@ -59,7 +61,7 @@
       <el-table-column prop="logisticsContractTime" label="物流单合同签订时间" :formatter="conversionDate"></el-table-column>
       <el-table-column prop="squeezeSeason" label="榨季"></el-table-column>
       <el-table-column prop="createBy" label="创建者名称"></el-table-column>
-      <el-table-column fixed="right" label="操作" align="center" width="480">
+      <el-table-column fixed="right" label="操作" align="center" width="480" v-if="operateStatus">
         <template #default="scope">
           <el-button type="primary" size="default" :icon="MoreFilled"
             @click="detailBtn(scope.row.id, scope.row.logisticsContractNo, scope.row.saleContractNo)">详情
@@ -67,7 +69,7 @@
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
               isPigeonhole? "归档":
-                "取消归档"
+                "还原"
             }}
           </el-button>
           <el-button :icon="Money" size="default" type="success" @click="openPaymentDialog(scope.row)">付款
@@ -860,6 +862,13 @@ const importSuccess = () => {
     message: '修改成功！',
     type: 'success',
   })
+}
+
+
+const operateStatus = ref<boolean>(true)
+//改变operateStatus
+const changeOperateStatus = () => {
+  operateStatus.value = !operateStatus.value
 }
 
 </script>

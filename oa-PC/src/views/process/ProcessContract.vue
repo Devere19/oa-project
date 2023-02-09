@@ -26,6 +26,8 @@
             <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange"
                 :disabled-date="disabledDate" unlink-panels range-separator="To" start-placeholder="开始日期"
                 end-placeholder="结束日期" size="large" @change="changeDay" style="margin: 1% 0% 2% 0%;" />
+                <el-button type="primary" size="large" @click="changeOperateStatus"
+        style="margin-right: 50px; float: right; margin-top: 10px;"> {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
         </div>
         <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%"
             :border="true" highlight-current-row>
@@ -49,7 +51,7 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="490" fixed="right">
+            <el-table-column align="center" label="操作" width="490" fixed="right" v-if="operateStatus">
                 <template #default="scope">
                     <el-button :icon="MoreFilled" size="default" type="primary"
                         @click="openMordDetailDialog(scope.row)">详情
@@ -1067,6 +1069,13 @@ const changeLoadingFalse = () => {
 //         })
 //     }
 // }
+
+const operateStatus = ref<boolean>(true)
+
+//改变operateStatus
+const changeOperateStatus = () => {
+  operateStatus.value = !operateStatus.value
+}
 
 </script>
   
