@@ -447,7 +447,7 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
 import { getOwnCompanySelectApi } from "@/api/ownCompany/index"
-import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel"
+import { SelectCustomer, SelectOwnCompany } from "@/api/cashier/customer/CustomerModel"
 import { purchaseContractModel, inboundDataModel, PurchaseExportModel } from '@/api/purchaseContract/PurchaseContractModel';
 import {
   getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi,

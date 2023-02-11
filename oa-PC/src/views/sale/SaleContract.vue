@@ -247,7 +247,7 @@ import { AddSaleModel } from "@/api/sale/SaleModel";
 import { add } from "lodash";
 import { ElMessage, FormInstance, UploadProps, UploadUserFile } from "element-plus";
 import useInstance from '@/hooks/useInstance';
-import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel";
+import { SelectCustomer, SelectOwnCompany } from "@/api/cashier/customer/CustomerModel";
 import { deletePhotoApi } from "@/api/handlePhoto";
 import { getOwnCompanySelectApi } from "@/api/ownCompany";
 const { global } = useInstance()

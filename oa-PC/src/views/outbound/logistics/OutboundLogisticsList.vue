@@ -368,7 +368,7 @@ import { computed, nextTick, onMounted, reactive, ref } from 'vue';
 import { ElMessage, FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus';
 import useInstance from '@/hooks/useInstance';
 import { deletePhotoApi } from '@/api/handlePhoto';
-import { SelectOwnCompany } from '@/api/customer/CustomerModel';
+import { SelectOwnCompany } from '@/api/cashier/customer/CustomerModel';
 import { getOwnCompanySelectApi } from '@/api/ownCompany';
 import { addNewLogisticsPaymentContractApi, checkLogisticsContractNoApi } from '@/api/logisticsPaymentContract';
 import { userStore } from '@/store/nickName'

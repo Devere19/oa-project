@@ -38,6 +38,8 @@ public class SysUser extends BaseModel {
 
     private String status;
 
+    private String prePassword;
+
 	//表明roleId字段不属于sys_user表，需要排除
 	@TableField(exist = false)
 	private List<Long> roleId;
