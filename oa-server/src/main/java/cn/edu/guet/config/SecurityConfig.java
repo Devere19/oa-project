@@ -60,6 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 放行登录
                 .antMatchers("/login").permitAll()
+                //放行忘记密码功能
+                .antMatchers("/api/user/user/**").permitAll()
                 //放行静态资源
                 .antMatchers("/static/**").permitAll()
                 //放行图片上传

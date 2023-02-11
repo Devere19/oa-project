@@ -34,10 +34,24 @@ export const getRoleApi = (userId: string) => {
 
 //根据名获取permission
 export const getPermissions = (name: string) => {
-  return http.get("/api/user/findPermissions", {name})
+  return http.get("/api/user/findPermissions", { name })
 }
 
 //根据名获取user信息
 export const getNickNameApi = (name: string) => {
   return http.get(`/api/user/nickName/${name}`)
+}
+
+//根据name查询是否有该账号
+export const getUserByName = (name: string) => {
+  return http.get(`/api/user/user/${name}`)
+}
+//验证该用户的姓名和身份证号是否一致
+export const nickAndIdenIsTrue = (nickName: string, identity: string, name: string) => {
+  return http.get(`/api/user/user/${nickName}/${identity}/${name}`)
+}
+
+//修改密码
+export const forgetPasswordApi = (parm: AddUserModel) => {
+  return http.put('/api/user/user', parm)
 }

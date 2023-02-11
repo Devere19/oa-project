@@ -122,8 +122,8 @@ import { ElTable, ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Search, MoreFilled } from "@element-plus/icons-vue";
 import { conversionDateTime, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
-import { customerModel } from '@/api/customer/CustomerModel'
-import { getCustomerDataApi, searchCustomerApi, deleteOneCustomerApi, addNewCustomerApi, updateCustomerApi } from '@/api/customer'
+import { customerModel } from '@/api/cashier/customer/CustomerModel'
+import { getCustomerDataApi, searchCustomerApi, deleteOneCustomerApi, addNewCustomerApi, updateCustomerApi } from '@/api/cashier/customer'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 

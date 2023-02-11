@@ -5,7 +5,7 @@ import { getListApi } from "@/api/user";
 export default function useTable() {
 
   //表格高度
-  const tableHeight=ref(0)
+  const tableHeight = ref(0)
 
   //表格数据
   const tableList = reactive({
@@ -27,9 +27,9 @@ export default function useTable() {
     if (res && res.code == 200) {
       //设置表格的数据
       console.log(res.data)
-      tableList.list=res.data.records
+      tableList.list = res.data.records
       //设置分页总条数
-      listParm.total=res.data.total
+      listParm.total = res.data.total
     }
   }
 
@@ -39,30 +39,30 @@ export default function useTable() {
   }
   //重置
   const resetBtn = () => {
-    listParm.phone=''
-    listParm.nickName=''
+    listParm.phone = ''
+    listParm.nickName = ''
     getList()
   }
   //页容量改变时出发
-  const sizeChange=(size:number)=>{
-    listParm.pageSize=size;
+  const sizeChange = (size: number) => {
+    listParm.pageSize = size;
     getList()
   }
   //页数改变时触发
-  const currentChange=(page:number)=>{
-    listParm.currentPage=page
+  const currentChange = (page: number) => {
+    listParm.currentPage = page
     getList()
   }
   //刷新列表
-  const refresh=()=>{
+  const refresh = () => {
     getList()
   }
 
 
   onMounted(() => {
     getList()
-    nextTick(()=>{
-      tableHeight.value=window.innerHeight-230
+    nextTick(() => {
+      tableHeight.value = window.innerHeight - 230
     })
   })
 

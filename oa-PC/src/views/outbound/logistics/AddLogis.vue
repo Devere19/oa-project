@@ -97,7 +97,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.upperType'" label="物流详情单类型" label-width='150px'
                 label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-radio-group v-model="item.upperType" class="ml-4">
                   <el-radio label="1" size="default">采购单</el-radio>
                   <el-radio label="0" size="default">加工单</el-radio>
@@ -111,7 +111,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.purchaseContractNo'" label="采购/加工合同编号"
                 label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.purchaseContractNo" placeholder="若从自家仓库出货请填写'000'"></el-input>
               </el-form-item>
             </el-col>
@@ -120,7 +120,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.outboundTime'" label="出库日期" label-width='150px'
                 label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-date-picker v-model="item.outboundTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
                   placeholder="请选择出库日期" size="default" />
 
@@ -131,7 +131,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
                 label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'">
                 </el-input>
               </el-form-item>
@@ -139,7 +139,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.licensePlateNumber'" label="车牌号"
                 label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.licensePlateNumber"></el-input>
               </el-form-item>
             </el-col>
@@ -148,14 +148,14 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsWeight'" label="载货量" label-width='150px'
                 label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.goodsWeight"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.goodsUnit'" label="货物单位" label-width='150px'
                 label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-select v-model="item.goodsUnit" placeholder="请选择货物单位" size="default">
                   <el-option label="吨" value="吨"></el-option>
                   <el-option label="斤" value="斤"></el-option>
@@ -167,7 +167,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
                 label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.unitPrice"></el-input>
                 <el-button v-show="index != 0" @click.prevent="removeInboundItem(item)" type="danger"
                   style="margin-top: 5px;">删除</el-button>
@@ -176,7 +176,7 @@
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.unloadingLocation'" label="卸货地点"
                 label-width='150px' label-position="right" :rules="[
-  { required: true, trigger: ['change'] }]">
+                { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.unloadingLocation"></el-input>
               </el-form-item>
             </el-col>
@@ -211,7 +211,7 @@ import { ElMessage, FormInstance, UploadProps, UploadUserFile } from 'element-pl
 import { deletePhotoApi } from '@/api/handlePhoto';
 import { addLogisticsApi } from '@/api/logistics';
 import { getOwnCompanySelectApi } from '@/api/ownCompany';
-import { SelectOwnCompany } from '@/api/customer/CustomerModel';
+import { SelectOwnCompany } from '@/api/cashier/customer/CustomerModel';
 const { dialog, onShow, onClose, onConfirm } = useDialog()
 
 const addFormRef = ref<FormInstance>()

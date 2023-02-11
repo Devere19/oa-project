@@ -42,7 +42,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUser findByName(String name) {
         // SysUser sysUser = sysUserMapper.findByName(name);
         QueryWrapper<SysUser> sysUserQueryWrapper = new QueryWrapper<>();
-        sysUserQueryWrapper.lambda().eq(SysUser::getName,name);
+        sysUserQueryWrapper.lambda().eq(SysUser::getName, name);
         SysUser sysUser = sysUserMapper.selectOne(sysUserQueryWrapper);
 
         if (sysUser != null) {
@@ -50,7 +50,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             ArrayList<String> roleNameList = new ArrayList<>();
             for (SysUserRole userRole : userRoles) {
                 QueryWrapper<SysRole> sysRoleQueryWrapper = new QueryWrapper<>();
-                sysRoleQueryWrapper.lambda().eq(SysRole::getId,userRole.getRoleId());
+                sysRoleQueryWrapper.lambda().eq(SysRole::getId, userRole.getRoleId());
                 SysRole sysRole = sysRoleMapper.selectOne(sysRoleQueryWrapper);
                 roleNameList.add(sysRole.getName());
             }
@@ -118,7 +118,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         int insert = this.baseMapper.updateById(sysUser);
         if (insert > 0) {
             // 先删除原来的角色
-            System.out.println("id:"+ sysUser.getId());
+            System.out.println("id:" + sysUser.getId());
             QueryWrapper<SysUserRole> query = new QueryWrapper<>();
             query.lambda().eq(SysUserRole::getUserId, sysUser.getId());
             sysUserRoleService.remove(query);
@@ -162,7 +162,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public String getNickNameByName(String name) {
-        String nickName=sysUserMapper.getNickNameByName(name);
+        String nickName = sysUserMapper.getNickNameByName(name);
         return nickName;
+    }
+
+    @Override
+    public Boolean getUserByName(String name) {
+        QueryWrapper<SysUser> query = new QueryWrapper<>();
+        query.lambda().eq(SysUser::getName, name);
+        SysUser sysUser = this.baseMapper.selectOne(query);
+        return sysUser == null ? false : true;
+    }
+
+    @Override
+    public Boolean nickAndIdenIsTrue(String nickName, String identity, String name) {
+        QueryWrapper<SysUser> query = new QueryWrapper<>();
+        query.lambda().eq(SysUser::getName, name);
+        SysUser sysUser = this.baseMapper.selectOne(query);
+        if (sysUser.getNickName().equals(nickName)&&sysUser.getIdentity().equals(identity)){
+            return true;
+        }
+        return false;
     }
 }

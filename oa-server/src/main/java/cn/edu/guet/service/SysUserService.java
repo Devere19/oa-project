@@ -42,4 +42,10 @@ public interface SysUserService extends IService<SysUser> {
     IPage<SysUser> getList(PageParm parm);
 
     String getNickNameByName(String username);
+
+    //根据name查询是否有该账号
+    Boolean getUserByName(String name);
+
+    //验证该用户的姓名和身份证号是否一致
+    Boolean nickAndIdenIsTrue(String nickName, String identity, String name);
 }

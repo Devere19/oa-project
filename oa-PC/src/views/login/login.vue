@@ -33,7 +33,7 @@
                         </el-col>
                     </el-row>
                     <!-- <el-checkbox style="flex: 1" v-model="loginForm.checked" label="记住密码" size="large" />
-                        <span>忘记密码？</span> -->
+                      <span>忘记密码？</span> -->
                 </el-form>
 
                 <div class="login-btn">
@@ -44,14 +44,69 @@
                     <el-button :icon="CircleClose" round @click="resetForm(loginFormRef)" size="large">重置</el-button>
                 </div>
             </div>
+
+            <el-dialog v-model="forgetPasswordVisiable" title="忘记密码" width="30%" :before-close="handleClose">
+                <div class="forgetPassword_box">
+                    <el-steps :active="active" align-center finish-status="success">
+                        <el-step title="请输入用户名" />
+                        <el-step title="请输入姓名和身份证号" />
+                        <el-step title="请输入您要修改的密码" />
+                    </el-steps>
+                    <el-main>
+                        <el-form :model="addModel" ref="form" label-width="120px" :inline="false">
+                            <el-col :span="16" :offset="0" v-if="active == 0">
+                                <el-form-item prop="name" label="用户名" :rules="[
+                                { required: true, trigger: ['change'] }]">
+                                    <el-input v-model="addModel.name"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="16" :offset="0" v-if="active == 1">
+                                <el-form-item prop="nickName" label="姓名" :rules="[
+                                { required: true, trigger: ['change'] }]">
+                                    <el-input v-model="addModel.nickName"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="16" :offset="0" v-if="active == 1">
+                                <el-form-item prop="identity" label="身份证" :rules="[
+                                { required: true, trigger: ['change'] }]">
+                                    <el-input v-model="addModel.identity"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="16" :offset="0" v-if="active == 2">
+                                <el-form-item prop="password" label="输入密码" :rules="[
+                                { required: true, trigger: ['change'] }]">
+                                    <el-input v-model="addModel.password"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="16" :offset="0" v-if="active == 2">
+                                <el-form-item prop="mobile" label="再次确认密码" :rules="[
+                                { required: true, trigger: ['change'] }]">
+                                    <el-input v-model="addModel.mobile"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-form>
+
+                    </el-main>
+
+
+                </div>
+                <template #footer>
+                    <span class="dialog-footer">
+                        <el-button @click="beforeClickBtn" :disabled="active == 0" v-if="active != 3">上一步</el-button>
+                        <el-button type="primary" @click="nextClickBtn()">
+                            {{ active== 2 ? "提交" : active == 3 ? "返回登录页" : "下一步" }}
+                        </el-button>
+                    </span>
+                </template>
+            </el-dialog>
         </div>
     </div>
 </template>
-  
+
 <script setup lang="ts">
 import { Base64 } from 'js-base64'
 import { onMounted, reactive, ref } from 'vue'
-import { ElMessage, FormInstance, FormRules } from 'element-plus'
+import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router';
 import { loginApi } from '@/api/login'
 import { findNavTreeApi } from '@/api/menu'
@@ -59,14 +114,96 @@ import { navTreeStore } from '@/store/navTree';
 import { storeToRefs } from 'pinia';
 import { permsStore } from '@/store/perm'
 import { getPermissions } from '@/api/user';
-import { getNickNameApi } from '@/api/user';
+import { getNickNameApi, getUserByName, nickAndIdenIsTrue, forgetPasswordApi } from '@/api/user';
 import { userStore } from '@/store/nickName';
 import { UserFilled, Lock, User, CircleClose } from '@element-plus/icons-vue'
+import { AddUserModel } from '@/api/user/UserModel';
+import { add } from 'lodash';
 const userNickNameStore = userStore()
 const permStore = permsStore()
 const store = navTreeStore()
 // const { navTree } = storeToRefs(store)
 const router = useRouter()
+//忘记密码
+const forgetPasswordVisiable = ref(false)
+const active = ref(0)
+const handleClose = () => {
+    forgetPasswordVisiable.value = false
+}
+
+const nextClickBtn = async () => {
+    if (active.value == 3) {
+        forgetPasswordVisiable.value = false
+        active.value = 0
+    } else if (active.value == 0) {
+        if (addModel.name == '') {
+            alert("用户名不能为空")
+            return
+        }
+        let res = await getUserByName(addModel.name)
+        if (res.data && res.code == 200) {
+            ElMessage.success("存在该用户名")
+            active.value++
+        } else {
+            ElMessage.error("该用户名不存在")
+        }
+    }
+    else if (active.value == 1) {
+        if (addModel.nickName == '' || addModel.identity == '') {
+            alert("姓名和身份证不能为空")
+            return
+        }
+        let res = await nickAndIdenIsTrue(addModel.nickName, addModel.identity, addModel.name)
+        if (res.data && res.code == 200) {
+            ElMessage.success("验证成功")
+            active.value++
+        } else {
+            ElMessage.error("姓名或身份证错误，请重新输入！")
+        }
+    }
+    else if (active.value == 2) {
+        if (addModel.password == '' || addModel.mobile == '') {
+            alert("请输入密码")
+            return
+        }
+        if (addModel.mobile !== addModel.password) {
+            alert("两次输入的密码不一样")
+            return
+        }
+        let res = await forgetPasswordApi(addModel)
+        if (res && res.code == 200) {
+            ElMessage.success("修改密码成功")
+            active.value++
+        } else {
+            ElMessage.error("修改密码失败")
+        }
+
+    }
+
+}
+const beforeClickBtn = () => {
+    active.value--
+}
+//表单绑定的对象
+const addModel = reactive({
+    id: "",
+    type: "",
+    roleId: [],
+    name: "",
+    nickName: '',
+    age: '',
+    mobile: '',
+    identity: '',
+    homeAddress: '',
+    onboardingTime: '',
+    departureTime: '',
+    password: '',
+    status: '',  //在职/离职
+    salt: '',
+    prePassword: ''
+})
+
+
 
 const loginFormRef = ref<FormInstance>()
 const loading = ref(false)
@@ -75,6 +212,7 @@ const loginForm = reactive({
     password: '',
     checked: true,
 })
+
 
 const loginRules = reactive<FormRules>({
     username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -162,16 +300,17 @@ const getCookie = () => {
 }
 
 const forgetPassword = () => {
-    ElMessage({
-        message: '该功能暂未开发！',
-        type: 'error',
-        duration: 4000
-    })
+    forgetPasswordVisiable.value = true
 }
 
 </script>
-  
+
 <style scoped lang="scss">
+.forgetPassword_box {
+    width: 100%;
+    height: 400px;
+}
+
 .login-container {
     width: 100vw;
     height: 100vh;
@@ -270,4 +409,3 @@ const forgetPassword = () => {
     }
 }
 </style>
-  

@@ -75,7 +75,7 @@ public class PasswordEncoder {
 	 *            字节数组
 	 * @return 16进制字串
 	 */
-	private String byteArrayToHexString(byte[] b) {
+	public String byteArrayToHexString(byte[] b) {
 		StringBuffer resultSb = new StringBuffer();
 		for (int i = 0; i < b.length; i++) {
 			resultSb.append(byteToHexString(b[i]));

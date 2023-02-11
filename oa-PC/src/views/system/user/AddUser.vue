@@ -72,7 +72,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12" :offset="0" v-if="addModel.type == '0'">
+          <el-col :span="12" :offset="0">
             <el-form-item prop="password" label="密码">
               <el-input v-model="addModel.password"></el-input>
             </el-form-item>
@@ -111,7 +111,7 @@ const show = async (type: string, row?: AddUserModel) => {
   addModel.roleId = [];
   addModel.mobile = "";
   addModel.name = "";
-  dialog.height = 300
+  dialog.height = 350
   addModel.type = type
   addModel.password = ''
   addModel.salt = ''
