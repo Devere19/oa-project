@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <el-dialog v-model="forgetPasswordVisiable" title="忘记密码" width="30%" :before-close="handleClose">
+            <el-dialog v-model="forgetPasswordVisiable" title="忘记密码" width="40%" :before-close="handleClose">
                 <div class="forgetPassword_box">
                     <el-steps :active="active" align-center finish-status="success">
                         <el-step title="请输入用户名" />
