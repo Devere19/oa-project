@@ -36,7 +36,7 @@
         unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
         @change="changeDay" style="margin: 1% 0% 2% 0%;" />
       <el-button type="primary" size="large" @click="changeOperateStatus"
-        style="margin-right: 50px; float: right; margin-top: 10px;"> {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+        style="margin-right: 50px; float: right; margin-top: 10px;"> {{ operateStatus?"隐藏操作": "显示操作" }}</el-button>
     </div>
     <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
       highlight-current-row @selection-change="handleSelectionChange">
@@ -1267,6 +1267,7 @@ const addHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
 // 更新窗口照片移除后发送请求后台删除照片
 const updateHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
   console.log(uploadFile, uploadFiles);
+  console.log(uploadFile.url == uploadFile.response.data);
   if (UpdatePurchaseContractData.contractPhotoArray.indexOf(uploadFile.url!) == -1) {
     UpdatePurchaseContractData.contractPhotoArray.splice(UpdatePurchaseContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
     console.log("移出照片数据组");
