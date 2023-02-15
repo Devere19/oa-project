@@ -26,8 +26,10 @@
             <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange"
                 :disabled-date="disabledDate" unlink-panels range-separator="To" start-placeholder="开始日期"
                 end-placeholder="结束日期" size="large" @change="changeDay" style="margin: 1% 0% 2% 0%;" />
-                <el-button type="primary" size="large" @click="changeOperateStatus"
-        style="margin-right: 50px; float: right; margin-top: 10px;"> {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+            <el-button type="primary" size="large" @click="changeOperateStatus"
+                style="margin-right: 50px; float: right; margin-top: 10px;"> {{
+                    operateStatus?"隐藏操作": "显示操作"
+                }}</el-button>
         </div>
         <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%"
             :border="true" highlight-current-row>
@@ -98,7 +100,7 @@
                     </el-form-item>
                     <el-form-item label="加工方公司名" prop="customerEnterpriseName">
                         <el-select v-model="NewProcessContractData.customerEnterpriseName" placeholder="下拉选择"
-                            size="large">
+                            size="large" filterable>
                             <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
                                 :value="item.value" />
                         </el-select>
@@ -154,7 +156,7 @@
                     </el-form-item>
                     <el-form-item label="加工方公司名" prop="customerEnterpriseName">
                         <el-select v-model="UpdateProcessContractData.customerEnterpriseName" placeholder="下拉选择"
-                            size="large" :disabled="updateFlag">
+                            size="large" :disabled="updateFlag" filterable>
                             <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
                                 :value="item.value" />
                         </el-select>
@@ -1074,7 +1076,7 @@ const operateStatus = ref<boolean>(true)
 
 //改变operateStatus
 const changeOperateStatus = () => {
-  operateStatus.value = !operateStatus.value
+    operateStatus.value = !operateStatus.value
 }
 
 </script>

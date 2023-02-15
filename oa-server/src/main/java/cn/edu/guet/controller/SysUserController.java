@@ -85,10 +85,10 @@ public class SysUserController {
         //判断该用户是否存在
         System.out.println(sysUser);
         QueryWrapper<SysUser> query = new QueryWrapper<>();
-        query.lambda().eq(SysUser::getName, sysUser.getName());
+        query.lambda().eq(SysUser::getId, sysUser.getId());
         SysUser one = sysUserService.getOne(query);
 
-        if (one != null && one.getId().equals(sysUser.getId())) {
+        if (one != null) {
             //更新
             sysUserService.editUser(sysUser);
             return ResultUtils.success("更新成功！");
