@@ -118,7 +118,8 @@
             <el-input v-model="NewPurchaseContractData.purchaseContractNo" size="large" />
           </el-form-item>
           <el-form-item label="供货方公司名" prop="customerEnterpriseName">
-            <el-select v-model="NewPurchaseContractData.customerEnterpriseName" placeholder="下拉选择" size="large">
+            <el-select v-model="NewPurchaseContractData.customerEnterpriseName" placeholder="下拉选择" size="large"
+              filterable>
               <el-option v-for="item in customerData.list" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -204,7 +205,7 @@
           </el-form-item>
           <el-form-item label="供货方公司名" prop="customerEnterpriseName">
             <el-select v-model="UpdatePurchaseContractData.customerEnterpriseName" placeholder="下拉选择" size="large"
-              :disabled="updateFlag">
+              filterable :disabled="updateFlag">
               <el-option v-for="item in customerData.list" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>

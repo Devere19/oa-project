@@ -11,7 +11,8 @@
           </el-col>
           <el-col :span="12" :offset="0">
             <el-form-item prop="customerEnterpriseName" label="销售公司">
-              <el-select v-model="addModel.customerEnterpriseName" class="m-2" placeholder="请选择销售公司" size="default">
+              <el-select v-model="addModel.customerEnterpriseName" class="m-2" placeholder="请选择销售公司" size="default"
+                filterable>
                 <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
                   :value="item.value" />
               </el-select>
