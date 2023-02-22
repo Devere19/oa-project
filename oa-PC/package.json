@@ -19,6 +19,7 @@
     "pinia-plugin-persist": "^1.0.0",
     "vue": "^3.2.37",
     "vue-router": "^4.0.12",
+    "vue3-print-nb": "^0.1.4",
     "vuex": "^4.0.2",
     "vuex-along": "^1.2.13"
   },
