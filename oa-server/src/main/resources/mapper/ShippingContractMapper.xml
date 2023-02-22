@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.guet.mapper.ShippingContractMapper">
     <select id="checkContainerNo" resultType="cn.edu.guet.bean.ShippingContract">
-        SELECT * FROM shipping_contract WHERE container_no=#{containerNo} AND DATE_SUB(packing_time, INTERVAL 30 DAY)
+        SELECT * FROM shipping_contract WHERE (first_container_no=#{containerNo} OR second_container_no=#{containerNo}) AND DATE_SUB(packing_time, INTERVAL 30 DAY)
     </select>
 
     <!--    导出-->
@@ -14,8 +14,9 @@
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
         WHERE payment_time between #{startDate} and #{endDate}
         ORDER BY payment_time
@@ -25,8 +26,9 @@
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
         HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
         ORDER BY date_format(payment_time, '%Y-%m')
@@ -36,8 +38,9 @@
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
         HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
         ORDER BY CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time)))
@@ -47,8 +50,9 @@
         SELECT
             shipping_contract_no,logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract
         HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
         ORDER BY date_format(payment_time, '%Y')
@@ -58,8 +62,9 @@
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract sc
         WHERE sc.own_company_name=#{company} AND payment_time between #{startDate} and #{endDate}
         ORDER BY payment_time
@@ -69,8 +74,9 @@
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract sc
         WHERE sc.own_company_name=#{company}
         HAVING date_format(payment_time, '%Y-%m') between #{startDate} and #{endDate}
@@ -81,8 +87,9 @@
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract sc
         WHERE sc.own_company_name=#{company}
         HAVING CONCAT(YEAR(payment_time),CONCAT('-',QUARTER(payment_time))) between #{startDate} and #{endDate}
@@ -93,8 +100,9 @@
         SELECT
             sc.shipping_contract_no,sc.logistics_contract_no,expenses,payment_count,payment_time,
             finance_staff,cashier,own_company_name,principal,packing_time,packing_location,unpacking_factory,
-            container_no,seal_no,tally_clerk,tally_clerk_price,departure_fleet,departure_price,
-            carrier_company_name,carrier_company_price,destination_port_fleet,destination_port_price
+            first_container_no,second_container_no,first_seal_no,second_seal_no,tally_clerk,tally_clerk_price,
+            tally_clerk_remark,fleet_manage_name,departure_fleet,departure_price,carrier_company_name,
+            carrier_company_price,destination_port_fleet,destination_port_price
         FROM shipping_contract sc
         WHERE sc.own_company_name=#{company}
         HAVING date_format(payment_time, '%Y') between #{startDate} and #{endDate}
