@@ -51,7 +51,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> getshippingContractData(int currentPage, int pageSize) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.orderByDesc("create_time","shipping_contract_no");
+        qw.orderByDesc("create_time", "shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         for (ShippingContract record : page.getRecords()) {
@@ -90,11 +90,13 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> searchShippingContract(int currentPage, int pageSize, String searchWord) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord).or().like("principal", searchWord)
-                .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord).or().like("container_no", searchWord)
-                .or().like("seal_no", searchWord).or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
-                .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord)
-                .or().like("cashier", searchWord).or().like("create_by", searchWord).orderByDesc("create_time","shipping_contract_no");
+        qw.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord)
+                .or().like("principal", searchWord).or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
+                .or().like("first_container_no", searchWord).or().like("second_container_no", searchWord).or().like("first_seal_no", searchWord)
+                .or().like("second_seal_no", searchWord).or().like("tally_clerk", searchWord).or().like("tally_clerk_remark", searchWord)
+                .or().like("fleet_manage_name", searchWord).or().like("departure_fleet", searchWord).or().like("carrier_company_name", searchWord)
+                .or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
+                .or().like("create_by", searchWord).orderByDesc("create_time", "shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         for (ShippingContract record : page.getRecords()) {
@@ -132,11 +134,11 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int addNewShippingContract(ShippingContract shippingContract,ShippingContract oldShippingContract,int flag) {
+    public int addNewShippingContract(ShippingContract shippingContract, ShippingContract oldShippingContract, int flag) {
         if (ImageUtils.getDBString(shippingContract.getContractPhotoArray()) != "") {
             shippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
         }
-        if(flag==1){
+        if (flag == 1) {
             shippingContract.setFinanceStaff(oldShippingContract.getFinanceStaff());
             shippingContract.setFinanceState(oldShippingContract.getFinanceState());
             shippingContract.setCashier(oldShippingContract.getCashier());
@@ -145,7 +147,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
             shippingContract.setPaymentPhoto(oldShippingContract.getPaymentPhoto());
             shippingContract.setCreateTime(oldShippingContract.getCreateTime());
             shippingContract.setCreateBy(oldShippingContract.getCreateBy());
-        }else{
+        } else {
             shippingContract.setCreateBy(SecurityUtils.getUsername());
         }
         shippingContract.setLastUpdateBy(SecurityUtils.getUsername());
@@ -153,7 +155,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
         if (result == 1) {
 //            为0，则新增
-            if(flag==0){
+            if (flag == 0) {
                 //        查询出董事会的ID
                 QueryWrapper<Director> directorQw = new QueryWrapper<>();
                 directorQw.orderByAsc("nick_name").last("limit 3");
@@ -168,16 +170,16 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                     shippingDirectorState.setLastUpdateBy(SecurityUtils.getUsername());
                     shippingDirectorStateMapper.insert(shippingDirectorState);
                 }
-            }else if(flag==1){
+            } else if (flag == 1) {
 //                不为0，则更新
-                if(shippingContract.getShippingContractNo().equals(oldShippingContract.getShippingContractNo())==false){
+                if (shippingContract.getShippingContractNo().equals(oldShippingContract.getShippingContractNo()) == false) {
 //                    比较海运单号是否改变，若未改变则无需进行审批记录的修改
                     QueryWrapper<ShippingDirectorState> SDSQw = new QueryWrapper<>();
-                    SDSQw.eq("shipping_contract_no",oldShippingContract.getShippingContractNo());
+                    SDSQw.eq("shipping_contract_no", oldShippingContract.getShippingContractNo());
                     List<ShippingDirectorState> shippingDirectorStateList = shippingDirectorStateMapper.selectList(SDSQw);
 
-                    for(int i=0;i<shippingDirectorStateList.size();i++){
-                        ShippingDirectorState shippingDirectorState=shippingDirectorStateList.get(i);
+                    for (int i = 0; i < shippingDirectorStateList.size(); i++) {
+                        ShippingDirectorState shippingDirectorState = shippingDirectorStateList.get(i);
                         shippingDirectorState.setShippingContractNo(shippingContract.getShippingContractNo());
                         shippingDirectorStateMapper.updateById(shippingDirectorState);
                     }
@@ -187,7 +189,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
             //            获取物流单,修改存在物流付款单标记
             QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
             qw.eq("logistics_contract_no", shippingContract.getLogisticsContractNo());
-            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+            LogisticsContract logisticsContract = logisticsContractMapper.selectOne(qw);
             logisticsContract.setRelationShippingExistState(1);
             logisticsContractMapper.updateById(logisticsContract);
         }
@@ -198,25 +200,25 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateShippingContract(ShippingContract shippingContract) {
-        int result=0;
+        int result = 0;
 
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
         qw.eq("shipping_contract_no", shippingContract.getOldShippingContractNo());
-        ShippingContract oldShippingContract=shippingContractMapper.selectOne(qw);
+        ShippingContract oldShippingContract = shippingContractMapper.selectOne(qw);
 
 //        只修改了图片
-        if(shippingContract.getOnlyUpdatePhoto()==1){
+        if (shippingContract.getOnlyUpdatePhoto() == 1) {
             if (ImageUtils.getDBString(shippingContract.getContractPhotoArray()) != "") {
                 oldShippingContract.setContractPhoto(ImageUtils.getDBString(shippingContract.getContractPhotoArray()));
-            }else{
+            } else {
                 oldShippingContract.setContractPhoto(null);
             }
-            result=shippingContractMapper.updateById(oldShippingContract);
-        }else{
+            result = shippingContractMapper.updateById(oldShippingContract);
+        } else {
             //        0代表是删除，1代表是更新，所以此次选择1，则不删除原图片和审批记录
-            if(deleteOneShippingContract(shippingContract.getId(),1)==1){
+            if (deleteOneShippingContract(shippingContract.getId(), 1) == 1) {
                 //        0代表是新增，1代表是更新，所以此次选择1，则更新原审批记录
-                result=addNewShippingContract(shippingContract,oldShippingContract,1);
+                result = addNewShippingContract(shippingContract, oldShippingContract, 1);
             }
         }
         return result;
@@ -224,10 +226,10 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int deleteOneShippingContract(int id,int flag) {
+    public int deleteOneShippingContract(int id, int flag) {
         ShippingContract shippingContract = shippingContractMapper.selectById(id);
 
-        if(flag==0){
+        if (flag == 0) {
             //        删除相关审核记录
             QueryWrapper<ShippingDirectorState> directorStateQw = new QueryWrapper<>();
             directorStateQw.eq("shipping_contract_no", shippingContract.getShippingContractNo());
@@ -236,22 +238,22 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
             ImageUtils.deleteImages(shippingContract.getContractPhoto());
         }
 
-        String logisticsContractNo=shippingContract.getLogisticsContractNo();
+        String logisticsContractNo = shippingContract.getLogisticsContractNo();
 
-        int result=shippingContractMapper.deleteById(id);
+        int result = shippingContractMapper.deleteById(id);
 
-        if(result==1){
+        if (result == 1) {
 //            查询是否存在其他海运单
             QueryWrapper<ShippingContract> SCQw = new QueryWrapper<>();
-            SCQw.eq("logistics_contract_no",logisticsContractNo);
-            List<ShippingContract> shippingContractList=shippingContractMapper.selectList(SCQw);
+            SCQw.eq("logistics_contract_no", logisticsContractNo);
+            List<ShippingContract> shippingContractList = shippingContractMapper.selectList(SCQw);
 
 //            若不存在则修改物流单字段
-            if(shippingContractList.isEmpty()==true){
+            if (shippingContractList.isEmpty() == true) {
                 //            获取物流单
                 QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
                 qw.eq("logistics_contract_no", logisticsContractNo);
-                LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+                LogisticsContract logisticsContract = logisticsContractMapper.selectOne(qw);
                 logisticsContract.setRelationShippingExistState(0);
                 logisticsContractMapper.updateById(logisticsContract);
             }
@@ -262,7 +264,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
 
     @Override
     public ShippingContract getOneShippingContract(int id) {
-        ShippingContract shippingContract=shippingContractMapper.selectById(id);
+        ShippingContract shippingContract = shippingContractMapper.selectById(id);
 
         QueryWrapper<ShippingStateView> stateQw = new QueryWrapper<>();
         stateQw.eq("shipping_contract_no", shippingContract.getShippingContractNo()).orderByAsc("nick_name");
@@ -318,17 +320,29 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         if (importShippingContractModel.getUnpackingFactory() != null) {
             shippingContract.setUnpackingFactory(importShippingContractModel.getUnpackingFactory());
         }
-        if (importShippingContractModel.getContainerNo() != null) {
-            shippingContract.setContainerNo(importShippingContractModel.getContainerNo());
+        if (importShippingContractModel.getFirstContainerNo() != null) {
+            shippingContract.setFirstContainerNo(importShippingContractModel.getFirstContainerNo());
         }
-        if (importShippingContractModel.getSealNo() != null) {
-            shippingContract.setSealNo(importShippingContractModel.getSealNo());
+        if (importShippingContractModel.getSecondContainerNo() != null) {
+            shippingContract.setSecondContainerNo(importShippingContractModel.getSecondContainerNo());
+        }
+        if (importShippingContractModel.getFirstSealNo() != null) {
+            shippingContract.setFirstSealNo(importShippingContractModel.getFirstSealNo());
+        }
+        if (importShippingContractModel.getSecondSealNo() != null) {
+            shippingContract.setSecondSealNo(importShippingContractModel.getSecondSealNo());
         }
         if (importShippingContractModel.getTallyClerk() != null) {
             shippingContract.setTallyClerk(importShippingContractModel.getTallyClerk());
         }
         if (importShippingContractModel.getTallyClerkPrice() != null) {
             shippingContract.setTallyClerkPrice(importShippingContractModel.getTallyClerkPrice());
+        }
+        if (importShippingContractModel.getTallyClerkRemark() != null) {
+            shippingContract.setTallyClerkRemark(importShippingContractModel.getTallyClerkRemark());
+        }
+        if (importShippingContractModel.getFleetManageName() != null) {
+            shippingContract.setFleetManageName(importShippingContractModel.getFleetManageName());
         }
         if (importShippingContractModel.getDepartureFleet() != null) {
             shippingContract.setDepartureFleet(importShippingContractModel.getDepartureFleet());
@@ -351,14 +365,14 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
         if (importShippingContractModel.getExpenses() != null) {
             shippingContract.setExpenses(importShippingContractModel.getExpenses());
         }
-        
-        return addNewShippingContract(shippingContract,null,0);
+
+        return addNewShippingContract(shippingContract, null, 0);
     }
 
     @Override
     public Boolean checkShippingContractNo(String shippingContractNo) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.eq("shipping_contract_no", shippingContractNo).orderByDesc("create_time","shipping_contract_no");
+        qw.eq("shipping_contract_no", shippingContractNo).orderByDesc("create_time", "shipping_contract_no");
         List<ShippingContract> shippingContracts = shippingContractMapper.selectList(qw);
         return !shippingContracts.isEmpty();
     }
@@ -366,7 +380,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> getCashierShipping(int currentPage, int pageSize) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","shipping_contract_no");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time", "shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -414,14 +428,15 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> searchCashierShipping(int currentPage, int pageSize, String searchWord) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("shipping_contract_no", searchWord)
-                .or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord).or().like("principal", searchWord)
-                .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
-                .or().like("container_no", searchWord).or().like("seal_no", searchWord)
-                .or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
-                .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord)
-                .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time","shipping_contract_no");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q ->
+                q.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord)
+                        .or().like("principal", searchWord).or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
+                        .or().like("first_container_no", searchWord).or().like("second_container_no", searchWord).or().like("first_seal_no", searchWord)
+                        .or().like("second_seal_no", searchWord).or().like("tally_clerk", searchWord).or().like("tally_clerk_remark", searchWord)
+                        .or().like("fleet_manage_name", searchWord).or().like("departure_fleet", searchWord).or().like("carrier_company_name", searchWord)
+                        .or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
+                        .or().like("create_by", searchWord)
+        ).orderByDesc("create_time", "shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -484,7 +499,7 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> getDirectorSC(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","shipping_contract_no");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time", "shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -617,14 +632,15 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Override
     public Page<ShippingContract> searchDirectorSC(int currentPage, int pageSize, String searchWord, int userId) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("shipping_contract_no", searchWord)
-                .or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord).or().like("principal", searchWord)
-                .or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
-                .or().like("container_no", searchWord).or().like("seal_no", searchWord)
-                .or().like("tally_clerk", searchWord).or().like("departure_fleet", searchWord)
-                .or().like("carrier_company_name", searchWord).or().like("destination_port_fleet", searchWord)
-                .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time","shipping_contract_no");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q ->
+                q.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord)
+                        .or().like("principal", searchWord).or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
+                        .or().like("first_container_no", searchWord).or().like("second_container_no", searchWord).or().like("first_seal_no", searchWord)
+                        .or().like("second_seal_no", searchWord).or().like("tally_clerk", searchWord).or().like("tally_clerk_remark", searchWord)
+                        .or().like("fleet_manage_name", searchWord).or().like("departure_fleet", searchWord).or().like("carrier_company_name", searchWord)
+                        .or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
+                        .or().like("create_by", searchWord)
+        ).orderByDesc("create_time", "shipping_contract_no");
         Page<ShippingContract> page = new Page<>(currentPage, pageSize);
         page = shippingContractMapper.selectPage(page, qw);
         Iterator<ShippingContract> iterator = page.getRecords().iterator();
@@ -635,15 +651,15 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews = shippingStateInfoMapper.selectList(stateQw);
 
-            for(int i=0;i<shippingStateViews.size();i++){
+            for (int i = 0; i < shippingStateViews.size(); i++) {
 //                判断是否有该登录的董事
-                if(shippingStateViews.get(i).getUserId()==userId){
+                if (shippingStateViews.get(i).getUserId() == userId) {
                     break;
-                }else{
+                } else {
 //                    如果这次没有，而且第三次了还没有，说明该董事不是审核该笔采购单的，移除该条数据
-                    if(i==shippingStateViews.size()-1){
+                    if (i == shippingStateViews.size() - 1) {
                         iterator.remove();
-                        page.setTotal(page.getTotal()-1);
+                        page.setTotal(page.getTotal() - 1);
                     }
                 }
             }
@@ -683,16 +699,16 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     public int changeFinanceState(String shippingContractNo, String financeStaff) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
         qw.eq("shipping_contract_no", shippingContractNo);
-        ShippingContract shippingContract=shippingContractMapper.selectOne(qw);
+        ShippingContract shippingContract = shippingContractMapper.selectOne(qw);
         shippingContract.setFinanceStaff(financeStaff);
         shippingContract.setFinanceState(1);
 
-        int result=shippingContractMapper.updateById(shippingContract);
+        int result = shippingContractMapper.updateById(shippingContract);
 
-        if(result==1){
+        if (result == 1) {
             QueryWrapper<LogisticsContract> LCqw = new QueryWrapper<>();
             LCqw.eq("logistics_contract_no", shippingContract.getLogisticsContractNo());
-            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(LCqw);
+            LogisticsContract logisticsContract = logisticsContractMapper.selectOne(LCqw);
             logisticsContract.setRelationShippingAuditState(1);
             logisticsContractMapper.updateById(logisticsContract);
         }

@@ -58,7 +58,7 @@ public class ExportShippingModel {
     private String cashier;
 
     /**
-     * 委托方
+     * 己方公司名
      */
     @Excel(name = "己方公司名")
     private String ownCompanyName;
@@ -88,16 +88,28 @@ public class ExportShippingModel {
     private String unpackingFactory;
 
     /**
-     * 集装箱号
+     * 集装箱号1
      */
-    @Excel(name = "集装箱号")
-    private String containerNo;
+    @Excel(name = "集装箱号1")
+    private String firstContainerNo;
 
     /**
-     * 铅封号
+     * 集装箱号2
      */
-    @Excel(name = "铅封号")
-    private String sealNo;
+    @Excel(name = "集装箱号2")
+    private String secondContainerNo;
+
+    /**
+     * 铅封号1
+     */
+    @Excel(name = "铅封号1")
+    private String firstSealNo;
+
+    /**
+     * 铅封号2
+     */
+    @Excel(name = "铅封号2")
+    private String secondSealNo;
 
     /**
      * 理货员
@@ -110,6 +122,18 @@ public class ExportShippingModel {
      */
     @Excel(name = "理货费用")
     private BigDecimal tallyClerkPrice;
+
+    /**
+     * 理货费用备注
+     */
+    @Excel(name = "理货费用备注")
+    private String tallyClerkRemark;
+
+    /**
+     * 车队管理名称
+     */
+    @Excel(name = "车队管理名称")
+    private String fleetManageName;
 
     /**
      * 起运承运车队

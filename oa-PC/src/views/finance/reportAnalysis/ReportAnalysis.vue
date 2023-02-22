@@ -18,8 +18,8 @@
                         <el-form-item label="公司:">
                             <el-select v-model="dataCompany" placeholder="下拉选择" size="large" @change="changeCompany">
                                 <el-option v-for="item in ownCompanyData"
-                                    v-show="item.label != '总体' ? (dataType != '1' ? true : false) : true"
-                                    :key="item.value" :label="item.label" :value="item.value" />
+                                    v-show="item.label != '总体' ? (dataType != '1' ? true : false) : true" :key="item.value"
+                                    :label="item.label" :value="item.value" />
                                 <!-- <el-option label="总体" value="0"></el-option>
                                 <el-option v-show="dataType != '1'" label="广西永湘物流有限公司" value="1"></el-option>
                                 <el-option v-show="dataType != '1'" label="广西南宁锦泰行工贸有限公司" value="2"></el-option>
@@ -164,8 +164,7 @@
                         <div class="rowCenterGroup">
                             <el-date-picker v-model="choosedSStartYear" value-format="YYYY" type="year"
                                 :disabled-date="disabledDate" placeholder="开始年份" size="large" @change="changeSSYear" />
-                            <el-select v-model="choosedStartSeason" placeholder="开始季度" size="large"
-                                @change="changeSseason">
+                            <el-select v-model="choosedStartSeason" placeholder="开始季度" size="large" @change="changeSseason">
                                 <el-option label="第一季度" value="1"></el-option>
                                 <el-option label="第二季度" value="2"></el-option>
                                 <el-option label="第三季度" value="3"></el-option>
@@ -174,8 +173,7 @@
                             <span>&nbsp;&nbsp;To&nbsp;&nbsp;</span>
                             <el-date-picker v-model="choosedSEndYear" value-format="YYYY" type="year"
                                 :disabled-date="disabledDate" placeholder="结束年份" size="large" @change="changeSEYear" />
-                            <el-select v-model="choosedEndSeason" placeholder="结束季度" size="large"
-                                @change="changeEseason">
+                            <el-select v-model="choosedEndSeason" placeholder="结束季度" size="large" @change="changeEseason">
                                 <el-option label="第一季度" value="1"></el-option>
                                 <el-option label="第二季度" value="2"></el-option>
                                 <el-option label="第三季度" value="3"></el-option>
@@ -215,8 +213,7 @@
                     <div v-show="seasonPickerFlag" class="pickerGroup">
                         <div class="rowCenterGroup">
                             <el-date-picker v-model="detailSYear" type="year" value-format="YYYY"
-                                :disabled-date="disabledDate" placeholder="选择年份" size="large"
-                                @change="changeDetailSYear" />
+                                :disabled-date="disabledDate" placeholder="选择年份" size="large" @change="changeDetailSYear" />
                             <el-select v-model="detailSSeason" placeholder="选择季度" size="large"
                                 @change="changeDetailSSeason">
                                 <el-option label="第一季度" value="1"></el-option>
@@ -227,8 +224,8 @@
                         </div>
                     </div>
                     <div v-show="yearPickerFlag" class="pickerGroup">
-                        <el-date-picker v-model="detailYear" type="year" value-format="YYYY"
-                            :disabled-date="disabledDate" placeholder="选择年份" size="large" @change="changeDetailYear" />
+                        <el-date-picker v-model="detailYear" type="year" value-format="YYYY" :disabled-date="disabledDate"
+                            placeholder="选择年份" size="large" @change="changeDetailYear" />
                     </div>
                     <el-button class="exportButton" :icon="Download" type="success" @click="exportExcel">导出
                     </el-button>
@@ -240,8 +237,8 @@
                         </span>
                     </el-col>
                 </el-row>
-                <el-table v-show="dataType == '0'" ref="incomeTableRef" :data="incomeTableData" border stripe
-                    size="default" height="250px" style="width: 90%" highlight-current-row>
+                <el-table v-show="dataType == '0'" ref="incomeTableRef" :data="incomeTableData" border stripe size="default"
+                    height="250px" style="width: 90%" highlight-current-row>
                     <el-table-column type="index" align="center" label="ID" width="90%" />
                     <el-table-column prop="saleContractNo" align="center" label="销售单合同编号"></el-table-column>
                     <el-table-column align="center" label="销售方公司名">
@@ -275,8 +272,8 @@
                         </span>
                     </el-col>
                 </el-row>
-                <el-table v-show="dataType == '0'" ref="spendTableRef" :data="spendTableData" border stripe
-                    size="default" height="350px" style="width: 90%" highlight-current-row>
+                <el-table v-show="dataType == '0'" ref="spendTableRef" :data="spendTableData" border stripe size="default"
+                    height="350px" style="width: 90%" highlight-current-row>
                     <el-table-column type="index" align="center" label="ID" width="90%" />
                     <el-table-column prop="type" label="支出类型" align="center" />
                     <el-table-column prop="ownCompanyName" label="己方公司名" width="140" align="center" />
@@ -287,8 +284,7 @@
                         <template #default="scope">
                             <el-image style="width: 80px; height: 80px"
                                 :src="scope.row.paymentPhoto == '' ? null : scope.row.paymentPhoto"
-                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover"
-                                :preview-teleported="true" />
+                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover" :preview-teleported="true" />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" align="center" width="120">
@@ -312,8 +308,7 @@
                         <template #default="scope">
                             <el-image style="width: 100px; height: 100px"
                                 :src="scope.row.paymentPhoto == '' ? null : scope.row.paymentPhoto"
-                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover"
-                                :preview-teleported="true" />
+                                :preview-src-list="scope.row.paymentPhotoArray" fit="cover" :preview-teleported="true" />
                         </template>
                     </el-table-column>
                     <el-table-column align="center" label="操作" width="130" fixed="right">
@@ -430,16 +425,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ saleContractDetail.revenueBy == null ? "暂无" :
-        saleContractDetail.revenueBy
-}}
+                        saleContractDetail.revenueBy
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     收款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ saleContractDetail.revenueTime == null ? "未知" :
-        saleContractDetail.revenueTime
-}}
+                        saleContractDetail.revenueTime
+                    }}
                 </el-col>
             </el-row>
         </div>
@@ -543,8 +538,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.financeStaff == null ? "暂无" :
-        purchasePaymentContractDetail.financeStaff
-}}
+                        purchasePaymentContractDetail.financeStaff
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -604,16 +599,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.cashier == null ? "暂无" :
-        purchasePaymentContractDetail.cashier
-}}
+                        purchasePaymentContractDetail.cashier
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ purchasePaymentContractDetail.paymentTime == null ? "未知" :
-        purchasePaymentContractDetail.paymentTime
-}}
+                        purchasePaymentContractDetail.paymentTime
+                    }}
                 </el-col>
             </el-row>
         </div>
@@ -635,8 +630,7 @@
             </el-row>
         </div>
     </el-dialog>
-    <el-dialog v-model="processDialogFlag" title="加工付款单详情" width="55%" draggable center
-        :before-close="closeProcessDetail">
+    <el-dialog v-model="processDialogFlag" title="加工付款单详情" width="55%" draggable center :before-close="closeProcessDetail">
         <div>
             <el-row justify="center">
                 <el-col :span="6" class="moreDetailTitle">
@@ -697,8 +691,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
-        processPaymentContractDetail.financeStaff
-}}
+                        processPaymentContractDetail.financeStaff
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -758,16 +752,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ processPaymentContractDetail.cashier == null ? "暂无" :
-        processPaymentContractDetail.cashier
-}}
+                        processPaymentContractDetail.cashier
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ processPaymentContractDetail.paymentTime == null ? "未知" :
-        processPaymentContractDetail.paymentTime
-}}
+                        processPaymentContractDetail.paymentTime
+                    }}
                 </el-col>
             </el-row>
         </div>
@@ -865,8 +859,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.financeStaff == null ? "暂无" :
-        logisticsPaymentContractDetail.financeStaff
-}}
+                        logisticsPaymentContractDetail.financeStaff
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -926,16 +920,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.cashier == null ? "暂无" :
-        logisticsPaymentContractDetail.cashier
-}}
+                        logisticsPaymentContractDetail.cashier
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ logisticsPaymentContractDetail.paymentTime == null ? "未知" :
-        logisticsPaymentContractDetail.paymentTime
-}}
+                        logisticsPaymentContractDetail.paymentTime
+                    }}
                 </el-col>
             </el-row>
         </div>
@@ -957,8 +951,7 @@
             </el-row>
         </div>
     </el-dialog>
-    <el-dialog v-model="shippingDialogFlag" title="海运单详情" width="50%" draggable center
-        :before-close="closeShippingDetail">
+    <el-dialog v-model="shippingDialogFlag" title="海运单详情" width="50%" draggable center :before-close="closeShippingDetail">
         <!-- <el-divider content-position="center">基本信息</el-divider> -->
         <div>
             <el-row justify="center">
@@ -1005,16 +998,30 @@
             </el-row>
             <el-row justify="center">
                 <el-col :span="6" class="moreDetailTitle">
-                    集装箱号：
+                    集装箱号1：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
-                    {{ ShippingContractDetail.containerNo }}
+                    {{ ShippingContractDetail.firstContainerNo }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
-                    铅封号：
+                    铅封号1：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
-                    {{ ShippingContractDetail.sealNo }}
+                    {{ ShippingContractDetail.firstSealNo }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    集装箱号2：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ ShippingContractDetail.secondContainerNo }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    铅封号2：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ ShippingContractDetail.secondSealNo }}
                 </el-col>
             </el-row>
             <el-row justify="center">
@@ -1029,6 +1036,22 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ ShippingContractDetail.tallyClerkPrice }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    理货费用备注：
+                </el-col>
+                <el-col :span="18" class="moreDetailContent">
+                    {{ ShippingContractDetail.tallyClerkRemark }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    车队管理名称：
+                </el-col>
+                <el-col :span="18" class="moreDetailContent">
+                    {{ ShippingContractDetail.fleetManageName }}
                 </el-col>
             </el-row>
             <el-row justify="center">
@@ -1191,8 +1214,7 @@
             </el-row>
         </div>
     </el-dialog>
-    <el-dialog v-model="officeDialogFlag" title="办公经费单详情" width="55%" draggable center
-        :before-close="closeOfficeDetail">
+    <el-dialog v-model="officeDialogFlag" title="办公经费单详情" width="55%" draggable center :before-close="closeOfficeDetail">
         <div>
             <el-row justify="center">
                 <el-col style="textAlign:center" class="moreDetailTitle">
@@ -1227,8 +1249,8 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ officeExpenseDetail.financeStaff == null ? "暂无" :
-        officeExpenseDetail.financeStaff
-}}
+                        officeExpenseDetail.financeStaff
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     财务审核状态：
@@ -1288,16 +1310,16 @@
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ officeExpenseDetail.cashier == null ? "暂无" :
-        officeExpenseDetail.financeStaff
-}}
+                        officeExpenseDetail.financeStaff
+                    }}
                 </el-col>
                 <el-col :span="6" class="moreDetailTitle">
                     付款时间：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
                     {{ officeExpenseDetail.paymentTime == null ? "未知" :
-        officeExpenseDetail.paymentTime
-}}
+                        officeExpenseDetail.paymentTime
+                    }}
                 </el-col>
             </el-row>
         </div>
@@ -1785,10 +1807,14 @@ const ShippingContractDetail = reactive({
     packingTime: '',
     packingLocation: '',
     unpackingFactory: '',
-    containerNo: '',
-    sealNo: '',
+    firstContainerNo: '',
+    firstSealNo: '',
+    secondContainerNo: '',
+    secondSealNo: '',
     tallyClerk: '',
     tallyClerkPrice: '',
+    tallyClerkRemark: '',
+    fleetManageName: '',
     departureFleet: '',
     departurePrice: '',
     carrierCompanyName: '',
@@ -2548,10 +2574,14 @@ const openShippingDetail = (row: any) => {
             ShippingContractDetail.packingTime = dateConversion(res.data.packingTime)
             ShippingContractDetail.packingLocation = res.data.packingLocation
             ShippingContractDetail.unpackingFactory = res.data.unpackingFactory
-            ShippingContractDetail.containerNo = res.data.containerNo
-            ShippingContractDetail.sealNo = res.data.sealNo
-            ShippingContractDetail.tallyClerk = res.data.tallyClerk
-            ShippingContractDetail.tallyClerkPrice = res.data.tallyClerkPrice
+            ShippingContractDetail.firstContainerNo = row.firstContainerNo
+            ShippingContractDetail.firstSealNo = row.firstSealNo
+            ShippingContractDetail.secondContainerNo = row.secondContainerNo
+            ShippingContractDetail.secondSealNo = row.secondSealNo
+            ShippingContractDetail.tallyClerk = row.tallyClerk
+            ShippingContractDetail.tallyClerkPrice = row.tallyClerkPrice
+            ShippingContractDetail.tallyClerkRemark = row.tallyClerkRemark
+            ShippingContractDetail.fleetManageName = row.fleetManageName
             ShippingContractDetail.departureFleet = res.data.departureFleet
             ShippingContractDetail.departurePrice = res.data.departurePrice
             ShippingContractDetail.carrierCompanyName = res.data.carrierCompanyName

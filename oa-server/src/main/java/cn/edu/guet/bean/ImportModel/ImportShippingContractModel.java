@@ -1,5 +1,6 @@
 package cn.edu.guet.bean.ImportModel;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -59,16 +60,28 @@ public class ImportShippingContractModel {
     private String unpackingFactory;
 
     /**
-     * 集装箱号
+     * 集装箱号1
      */
-    @ExcelProperty(value = "集装箱号")
-    private String containerNo;
+    @ExcelProperty(value = "集装箱号1")
+    private String firstContainerNo;
 
     /**
-     * 铅封号
+     * 铅封号1
      */
-    @ExcelProperty(value = "铅封号")
-    private String sealNo;
+    @ExcelProperty(value = "铅封号1")
+    private String firstSealNo;
+
+    /**
+     * 集装箱号2
+     */
+    @ExcelProperty(value = "集装箱号2")
+    private String secondContainerNo;
+
+    /**
+     * 铅封号2
+     */
+    @ExcelProperty(value = "铅封号2")
+    private String secondSealNo;
 
     /**
      * 理货员
@@ -81,6 +94,18 @@ public class ImportShippingContractModel {
      */
     @ExcelProperty(value = "理货费用")
     private BigDecimal tallyClerkPrice;
+
+    /**
+     * 理货费用备注
+     */
+    @Excel(name = "理货费用备注")
+    private String tallyClerkRemark;
+
+    /**
+     * 车队管理名称
+     */
+    @Excel(name = "车队管理名称")
+    private String fleetManageName;
 
     /**
      * 起运承运车队

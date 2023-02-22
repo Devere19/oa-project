@@ -11,13 +11,13 @@
                 </template>
             </el-input>
             <el-upload class="moreDeleteButton" name="file"
-                action="http://120.77.28.123:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
+                action="http://localhost:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
                 :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
-            <el-button type="primary"  @click="changeOperateStatus" style="margin-top: 20px;" 
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+            <el-button type="primary" @click="changeOperateStatus" style="margin-top: 20px;">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
@@ -31,14 +31,17 @@
             <el-table-column property="logisticsContractNo" align="center" label="物流合同编号" width="120" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="principal" align="center" label="委托方" />
-            <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期"
-                width="105" />
+            <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期" width="105" />
             <el-table-column property="packingLocation" align="center" label="装箱地点" />
             <el-table-column property="unpackingFactory" align="center" label="卸箱工厂" />
-            <el-table-column property="containerNo" align="center" label="集装箱号" />
-            <el-table-column property="sealNo" align="center" label="铅封号" />
+            <el-table-column property="firstContainerNo" align="center" label="集装箱号1" />
+            <el-table-column property="firstSealNo" align="center" label="铅封号1" />
+            <el-table-column property="secondContainerNo" align="center" label="集装箱号2" />
+            <el-table-column property="secondSealNo" align="center" label="铅封号2" />
             <el-table-column property="tallyClerk" align="center" label="理货员" />
             <el-table-column property="tallyClerkPrice" align="center" label="理货费用" />
+            <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" />
+            <el-table-column property="fleetManageName" align="center" label="车队管理名称" />
             <el-table-column property="departureFleet" align="center" label="起运承运车队" />
             <el-table-column property="departurePrice" align="center" label="起运车队费用" />
             <el-table-column property="carrierCompanyName" align="center" label="承运船公司" />
@@ -118,8 +121,7 @@
                         :disabled="stateAvailable(scope.row)!">
                         通过
                     </el-button>
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="(scope.row.financeStaff != null ? (scope.row.contractPhoto == null ? false : true) : false)">修改
@@ -132,9 +134,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" title="新增海运单" width="50%" draggable center :before-close="closeAddDialog">
@@ -186,15 +187,30 @@
                     <el-row>
                         <el-col :span="12">
                             <!--30天内只能出现一次  -->
-                            <el-form-item label="集装箱号" prop="containerNo">
-                                <el-input v-model="NewShippingContractData.containerNo" size="large"
-                                    :suffix-icon="containerSameFlag ? 'CloseBold' : 'Select'"
-                                    @input="checkContainerNo" />
+                            <el-form-item label="集装箱号1" prop="firstContainerNo">
+                                <el-input v-model="NewShippingContractData.firstContainerNo" size="large"
+                                    :suffix-icon="firstContainerSameFlag ? 'CloseBold' : 'Select'"
+                                    @input="checkFirstContainerNo" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="铅封号" prop="sealNo">
-                                <el-input v-model="NewShippingContractData.sealNo" size="large" />
+                            <el-form-item label="铅封号1" prop="firstSealNo">
+                                <el-input v-model="NewShippingContractData.firstSealNo" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <!--30天内只能出现一次  -->
+                            <el-form-item label="集装箱号2" prop="secondContainerNo">
+                                <el-input v-model="NewShippingContractData.secondContainerNo" size="large"
+                                    :suffix-icon="secondContainerSameFlag ? 'CloseBold' : 'Select'"
+                                    @input="checkSecondContainerNo" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="铅封号2" prop="secondSealNo">
+                                <el-input v-model="NewShippingContractData.secondSealNo" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -207,6 +223,18 @@
                         <el-col :span="12">
                             <el-form-item label="理货费用" prop="tallyClerkPrice">
                                 <el-input v-model="NewShippingContractData.tallyClerkPrice" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="理货费用备注" prop="tallyClerkRemark">
+                                <el-input v-model="NewShippingContractData.tallyClerkRemark" autosize type="textarea" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="车队管理名称" prop="fleetManageName">
+                                <el-input v-model="NewShippingContractData.fleetManageName" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -254,8 +282,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="己方公司名" prop="ownCompanyName">
-                                <el-select v-model="NewShippingContractData.ownCompanyName" placeholder="下拉选择"
-                                    size="large">
+                                <el-select v-model="NewShippingContractData.ownCompanyName" placeholder="下拉选择" size="large">
                                     <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label"
                                         :value="item.value" />
                                 </el-select>
@@ -282,8 +309,8 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="updateDialogFlag" :title="updateFlag == true ? '补充合同照片' : '修改海运单'" width="50%" draggable
-            center :before-close="closeUpdateDialog">
+        <el-dialog v-model="updateDialogFlag" :title="updateFlag == true ? '补充合同照片' : '修改海运单'" width="50%" draggable center
+            :before-close="closeUpdateDialog">
             <ul ref="updateDialogTop" style="overflow: auto;height:600px">
                 <el-form ref="secondFormRef" :rules="firstRules" label-position="right" label-width="180px"
                     :model="UpdateShippingContractData" style="max-width: 98%">
@@ -337,15 +364,30 @@
                     <el-row>
                         <el-col :span="12">
                             <!--30天内只能出现一次  -->
-                            <el-form-item label="集装箱号" prop="containerNo">
-                                <el-input v-model="UpdateShippingContractData.containerNo" size="large"
-                                    :disabled="updateFlag" />
+                            <el-form-item label="集装箱号1" prop="firstContainerNo">
+                                <el-input v-model="UpdateShippingContractData.firstContainerNo" size="large"
+                                    :suffix-icon="firstContainerSameFlag ? 'CloseBold' : 'Select'"
+                                    @input="checkFirstContainerNo" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="铅封号" prop="sealNo">
-                                <el-input v-model="UpdateShippingContractData.sealNo" size="large"
-                                    :disabled="updateFlag" />
+                            <el-form-item label="铅封号1" prop="firstSealNo">
+                                <el-input v-model="UpdateShippingContractData.firstSealNo" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <!--30天内只能出现一次  -->
+                            <el-form-item label="集装箱号2" prop="secondContainerNo">
+                                <el-input v-model="UpdateShippingContractData.secondContainerNo" size="large"
+                                    :suffix-icon="secondContainerSameFlag ? 'CloseBold' : 'Select'"
+                                    @input="checkSecondContainerNo" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="铅封号2" prop="secondSealNo">
+                                <el-input v-model="UpdateShippingContractData.secondSealNo" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -360,6 +402,18 @@
                             <el-form-item label="理货费用" prop="tallyClerkPrice">
                                 <el-input v-model="UpdateShippingContractData.tallyClerkPrice" size="large"
                                     :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="理货费用备注" prop="tallyClerkRemark">
+                                <el-input v-model="UpdateShippingContractData.tallyClerkRemark" autosize type="textarea" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="车队管理名称" prop="fleetManageName">
+                                <el-input v-model="UpdateShippingContractData.fleetManageName" size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -423,9 +477,8 @@
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="UpdatePhotoData"
-                            action="http://120.77.28.123:9000/addContractPhoto" list-type="picture-card"
-                            :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
+                        <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                             :on-success="updateHandlePhotoSuccess">
                             <el-icon>
                                 <Plus />
@@ -502,16 +555,30 @@
                 </el-row>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
-                        集装箱号：
+                        集装箱号1：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.containerNo }}
+                        {{ ShippingContractDetail.firstContainerNo }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
-                        铅封号：
+                        铅封号1：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.sealNo }}
+                        {{ ShippingContractDetail.firstSealNo }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        集装箱号2：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.secondContainerNo }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        铅封号2：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.secondSealNo }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -526,6 +593,22 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ ShippingContractDetail.tallyClerkPrice }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        理货费用备注：
+                    </el-col>
+                    <el-col :span="18" class="moreDetailContent">
+                        {{ ShippingContractDetail.tallyClerkRemark }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        车队管理名称：
+                    </el-col>
+                    <el-col :span="18" class="moreDetailContent">
+                        {{ ShippingContractDetail.fleetManageName }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -726,9 +809,13 @@ const firstFormRef = ref<FormInstance>()
 const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const updateDialogTop = ref<any>()
-const containerSameFlag = ref(true)
+const firstContainerSameFlag = ref(true)
+const secondContainerSameFlag = ref(true)
 const logisticsContractNoFlag = ref(false)
 const logisticsNoResult = ref()
+
+const tempFirstContainer = ref();
+const tempSecondContainer = ref();
 
 const loginUserName = ref("")
 const loginUserRole = ref("")
@@ -747,10 +834,14 @@ const NewShippingContractData = reactive({
     packingTime: '',
     packingLocation: '',
     unpackingFactory: '',
-    containerNo: '',
-    sealNo: '',
+    firstContainerNo: '',
+    firstSealNo: '',
+    secondContainerNo: '',
+    secondSealNo: '',
     tallyClerk: '',
     tallyClerkPrice: '',
+    tallyClerkRemark: '',
+    fleetManageName: '',
     departureFleet: '',
     departurePrice: '',
     carrierCompanyName: '',
@@ -774,10 +865,14 @@ const UpdateShippingContractData = reactive({
     packingTime: '',
     packingLocation: '',
     unpackingFactory: '',
-    containerNo: '',
-    sealNo: '',
+    firstContainerNo: '',
+    firstSealNo: '',
+    secondContainerNo: '',
+    secondSealNo: '',
     tallyClerk: '',
     tallyClerkPrice: '',
+    tallyClerkRemark: '',
+    fleetManageName: '',
     departureFleet: '',
     departurePrice: '',
     carrierCompanyName: '',
@@ -800,10 +895,14 @@ const ShippingContractDetail = reactive({
     packingTime: '',
     packingLocation: '',
     unpackingFactory: '',
-    containerNo: '',
-    sealNo: '',
+    firstContainerNo: '',
+    firstSealNo: '',
+    secondContainerNo: '',
+    secondSealNo: '',
     tallyClerk: '',
     tallyClerkPrice: '',
+    tallyClerkRemark: '',
+    fleetManageName: '',
     departureFleet: '',
     departurePrice: '',
     carrierCompanyName: '',
@@ -859,10 +958,10 @@ const firstRules = reactive<FormRules>({
     unpackingFactory: [
         { required: true, trigger: ['change'] }
     ],
-    containerNo: [
+    firstContainerNo: [
         { required: true, trigger: ['change'] }
     ],
-    sealNo: [
+    firstSealNo: [
         { required: true, trigger: ['change'] }
     ],
     tallyClerk: [
@@ -1071,10 +1170,16 @@ const openUpdateDialog = (row: any) => {
         UpdateShippingContractData.packingTime = dateConversion(row.packingTime)
         UpdateShippingContractData.packingLocation = row.packingLocation
         UpdateShippingContractData.unpackingFactory = row.unpackingFactory
-        UpdateShippingContractData.containerNo = row.containerNo
-        UpdateShippingContractData.sealNo = row.sealNo
+        UpdateShippingContractData.firstContainerNo = row.firstContainerNo
+        tempFirstContainer.value = row.firstContainerNo
+        UpdateShippingContractData.firstSealNo = row.firstSealNo
+        UpdateShippingContractData.secondContainerNo = row.secondContainerNo
+        tempSecondContainer.value = row.secondContainerNo
+        UpdateShippingContractData.secondSealNo = row.secondSealNo
         UpdateShippingContractData.tallyClerk = row.tallyClerk
         UpdateShippingContractData.tallyClerkPrice = row.tallyClerkPrice
+        UpdateShippingContractData.tallyClerkRemark = row.tallyClerkRemark
+        UpdateShippingContractData.fleetManageName = row.fleetManageName
         UpdateShippingContractData.departureFleet = row.departureFleet
         UpdateShippingContractData.departurePrice = row.departurePrice
         UpdateShippingContractData.carrierCompanyName = row.carrierCompanyName
@@ -1123,12 +1228,12 @@ const checkLogisticsContractNo = (e: any) => {
     })
 }
 
-const checkContainerNo = (e: any) => {
+const checkFirstContainerNo = (e: any) => {
     checkContainerNoApi(e).then(res => {
-        containerSameFlag.value = res.data
+        firstContainerSameFlag.value = res.data
         if (res.data == true) {
             ElMessage({
-                message: '集装箱号在30天内已重复，请检查！',
+                message: '集装箱号1在30天内已重复，请检查！',
                 type: 'error',
                 grouping: true,
                 duration: 4000
@@ -1137,6 +1242,27 @@ const checkContainerNo = (e: any) => {
             ElMessage({
                 message: '验证合法！',
                 type: 'success',
+                grouping: true,
+            })
+        }
+    })
+}
+
+const checkSecondContainerNo = (e: any) => {
+    checkContainerNoApi(e).then(res => {
+        secondContainerSameFlag.value = res.data
+        if (res.data == true) {
+            ElMessage({
+                message: '集装箱号2在30天内已重复，请检查！',
+                type: 'error',
+                grouping: true,
+                duration: 4000
+            })
+        } else {
+            ElMessage({
+                message: '验证合法！',
+                type: 'success',
+                grouping: true,
             })
         }
     })
@@ -1148,7 +1274,7 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
     await formEl1.validate((valid, fields) => {
         if (valid) {
             if (logisticsContractNoFlag.value != false) {
-                if (containerSameFlag.value == false) {
+                if (firstContainerSameFlag.value == false && secondContainerSameFlag.value == false && NewShippingContractData.firstContainerNo != NewShippingContractData.secondContainerNo) {
                     changeLoadingTrue();
                     NewShippingContractData.createBy = loginUserName.value;
                     console.log(NewShippingContractData);
@@ -1161,7 +1287,8 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
                             })
                             getTableData();
                             addDialogFlag.value = false;
-                            containerSameFlag.value = true;
+                            firstContainerSameFlag.value = true;
+                            secondContainerSameFlag.value = true;
                             logisticsContractNoFlag.value = false;
                             AddReturnTop();
                             firstFormRef.value?.resetFields();
@@ -1178,11 +1305,25 @@ const sendNewShippingContract = async (formEl1: FormInstance | undefined) => {
                         }
                     })
                 } else {
-                    ElMessage({
-                        message: '集装箱号在30天内已重复，请检查！',
-                        type: 'error',
-                        duration: 4000
-                    })
+                    if (firstContainerSameFlag.value == true) {
+                        ElMessage({
+                            message: '集装箱号1在30天内已重复，请检查！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    } else if (secondContainerSameFlag.value == true) {
+                        ElMessage({
+                            message: '集装箱号2在30天内已重复，请检查！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    } else if (NewShippingContractData.firstContainerNo == NewShippingContractData.secondContainerNo) {
+                        ElMessage({
+                            message: '集装箱号1和集装箱号2重复，请检查！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    }
                 }
             } else {
                 if (logisticsNoResult.value == 1) {
@@ -1216,45 +1357,70 @@ const updateShippingContract = async (formEl1: FormInstance | undefined) => {
     await formEl1.validate((valid, fields) => {
         if (valid) {
             if (logisticsContractNoFlag.value != false) {
-                changeLoadingTrue();
-                UpdateShippingContractData.createBy = loginUserName.value;
-                console.log(UpdateShippingContractData);
-                for (let i = 0; i < preDeletePhoto.value.length; i++) {
-                    // 删除修改的照片
-                    deletePhotoApi(preDeletePhoto.value[i]);
-                    UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(preDeletePhoto.value[i]), 1);
-                    console.log("删除修改照片" + i);
-                }
-                if (updateFlag.value == true) {
-                    UpdateShippingContractData.onlyUpdatePhoto = 1;
-                } else {
-                    UpdateShippingContractData.onlyUpdatePhoto = 0;
-                }
-                updateShippingContractApi(UpdateShippingContractData).then(res => {
-                    if (res.data == 1) {
-                        changeLoadingFalse();
-                        ElMessage({
-                            message: '修改海运单成功！',
-                            type: 'success',
-                        })
-                        getTableData();
-                        updateDialogFlag.value = false;
-                        containerSameFlag.value = true;
-                        logisticsContractNoFlag.value = false;
-                        UpdateReturnTop();
-                        secondFormRef.value?.resetFields();
-                        UpdatePhotoData.value = [];
-                        preDeletePhoto.value = [];
+                if ((firstContainerSameFlag.value == false || tempFirstContainer.value == UpdateShippingContractData.firstContainerNo || (tempFirstContainer.value == UpdateShippingContractData.secondContainerNo && tempSecondContainer.value == UpdateShippingContractData.firstContainerNo) || (tempSecondContainer.value == UpdateShippingContractData.firstContainerNo && tempSecondContainer.value != UpdateShippingContractData.secondContainerNo))
+                    && (secondContainerSameFlag.value == false || tempSecondContainer.value == UpdateShippingContractData.secondContainerNo || (tempFirstContainer.value == UpdateShippingContractData.secondContainerNo && tempSecondContainer.value == UpdateShippingContractData.firstContainerNo) || (tempFirstContainer.value == UpdateShippingContractData.secondContainerNo && tempFirstContainer.value != UpdateShippingContractData.firstContainerNo))
+                    && UpdateShippingContractData.firstContainerNo != UpdateShippingContractData.secondContainerNo) {
+                    changeLoadingTrue();
+                    UpdateShippingContractData.createBy = loginUserName.value;
+                    console.log(UpdateShippingContractData);
+                    for (let i = 0; i < preDeletePhoto.value.length; i++) {
+                        // 删除修改的照片
+                        deletePhotoApi(preDeletePhoto.value[i]);
+                        UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(preDeletePhoto.value[i]), 1);
+                        console.log("删除修改照片" + i);
                     }
-                    else {
-                        changeLoadingFalse();
+                    if (updateFlag.value == true) {
+                        UpdateShippingContractData.onlyUpdatePhoto = 1;
+                    } else {
+                        UpdateShippingContractData.onlyUpdatePhoto = 0;
+                    }
+                    updateShippingContractApi(UpdateShippingContractData).then(res => {
+                        if (res.data == 1) {
+                            changeLoadingFalse();
+                            ElMessage({
+                                message: '修改海运单成功！',
+                                type: 'success',
+                            })
+                            getTableData();
+                            updateDialogFlag.value = false;
+                            firstContainerSameFlag.value = true;
+                            secondContainerSameFlag.value = true;
+                            logisticsContractNoFlag.value = false;
+                            UpdateReturnTop();
+                            secondFormRef.value?.resetFields();
+                            UpdatePhotoData.value = [];
+                            preDeletePhoto.value = [];
+                        }
+                        else {
+                            changeLoadingFalse();
+                            ElMessage({
+                                message: '修改海运单失败！',
+                                type: 'error',
+                                duration: 4000
+                            })
+                        }
+                    })
+                } else {
+                    if (firstContainerSameFlag.value == true) {
                         ElMessage({
-                            message: '修改海运单失败！',
+                            message: '集装箱号1在30天内已重复，请检查！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    } else if (secondContainerSameFlag.value == true) {
+                        ElMessage({
+                            message: '集装箱号2在30天内已重复，请检查！',
+                            type: 'error',
+                            duration: 4000
+                        })
+                    } else if (UpdateShippingContractData.firstContainerNo == UpdateShippingContractData.secondContainerNo) {
+                        ElMessage({
+                            message: '集装箱号1和集装箱号2重复，请检查！',
                             type: 'error',
                             duration: 4000
                         })
                     }
-                })
+                }
             } else {
                 if (logisticsNoResult.value == 1) {
                     ElMessage({
@@ -1290,10 +1456,14 @@ const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.packingTime = dateConversion(row.packingTime)
     ShippingContractDetail.packingLocation = row.packingLocation
     ShippingContractDetail.unpackingFactory = row.unpackingFactory
-    ShippingContractDetail.containerNo = row.containerNo
-    ShippingContractDetail.sealNo = row.sealNo
+    ShippingContractDetail.firstContainerNo = row.firstContainerNo
+    ShippingContractDetail.firstSealNo = row.firstSealNo
+    ShippingContractDetail.secondContainerNo = row.secondContainerNo
+    ShippingContractDetail.secondSealNo = row.secondSealNo
     ShippingContractDetail.tallyClerk = row.tallyClerk
     ShippingContractDetail.tallyClerkPrice = row.tallyClerkPrice
+    ShippingContractDetail.tallyClerkRemark = row.tallyClerkRemark
+    ShippingContractDetail.fleetManageName = row.fleetManageName
     ShippingContractDetail.departureFleet = row.departureFleet
     ShippingContractDetail.departurePrice = row.departurePrice
     ShippingContractDetail.carrierCompanyName = row.carrierCompanyName
@@ -1382,7 +1552,7 @@ const updateHandlePhotoSuccess: UploadProps['onSuccess'] = (response, uploadFile
 }
 
 // 照片移除后发送请求后台删除照片
-const addHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+const addHandleRemove: UploadProps['onRemove'] = (uploadFile: any, uploadFiles: any) => {
     console.log(uploadFile, uploadFiles);
     NewShippingContractData.contractPhotoArray.splice(NewShippingContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
     console.log("移出照片数据组");
@@ -1390,7 +1560,7 @@ const addHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
 }
 
 // 更新窗口照片移除后发送请求后台删除照片
-const updateHandleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+const updateHandleRemove: UploadProps['onRemove'] = (uploadFile: any, uploadFiles: any) => {
     console.log(uploadFile, uploadFiles);
     if (UpdateShippingContractData.contractPhotoArray.indexOf(uploadFile.url!) == -1) {
         UpdateShippingContractData.contractPhotoArray.splice(UpdateShippingContractData.contractPhotoArray.indexOf(uploadFile.response.data), 1);
@@ -1418,7 +1588,8 @@ const closeAddDialog = () => {
     addDialogFlag.value = false;
     AddReturnTop();
     firstFormRef.value?.resetFields();
-    containerSameFlag.value = true;
+    firstContainerSameFlag.value = true;
+    secondContainerSameFlag.value = true;
     logisticsContractNoFlag.value = false;
     AddPhotoData.value = [];
     if (NewShippingContractData.contractPhotoArray.length != 0) {
@@ -1437,6 +1608,8 @@ const closeUpdateDialog = () => {
     secondFormRef.value?.resetFields();
     UpdatePhotoData.value = [];
     preDeletePhoto.value = [];
+    tempFirstContainer.value = null;
+    tempSecondContainer.value = null;
 }
 
 // 新增窗口滑动回最顶端
@@ -1477,7 +1650,7 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
 const operateStatus = ref<boolean>(true)
 //改变operateStatus
 const changeOperateStatus = () => {
-  operateStatus.value = !operateStatus.value
+    operateStatus.value = !operateStatus.value
 }
 </script>
   

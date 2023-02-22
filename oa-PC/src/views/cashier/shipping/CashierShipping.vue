@@ -10,8 +10,8 @@
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="海运合同编号" align="center" width="120">
@@ -19,14 +19,17 @@
             </el-table-column>
             <el-table-column property="logisticsContractNo" align="center" label="物流合同编号" width="120" />
             <el-table-column property="principal" align="center" label="委托方" />
-            <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期"
-                width="105" />
+            <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期" width="105" />
             <el-table-column property="packingLocation" align="center" label="装箱地点" />
             <el-table-column property="unpackingFactory" align="center" label="卸箱工厂" />
-            <el-table-column property="containerNo" align="center" label="集装箱号" />
-            <el-table-column property="sealNo" align="center" label="铅封号" />
+            <el-table-column property="firstContainerNo" align="center" label="集装箱号1" />
+            <el-table-column property="firstSealNo" align="center" label="铅封号1" />
+            <el-table-column property="secondContainerNo" align="center" label="集装箱号2" />
+            <el-table-column property="secondSealNo" align="center" label="铅封号2" />
             <el-table-column property="tallyClerk" align="center" label="理货员" />
             <el-table-column property="tallyClerkPrice" align="center" label="理货费用" />
+            <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" />
+            <el-table-column property="fleetManageName" align="center" label="车队管理名称" />
             <el-table-column property="departureFleet" align="center" label="起运承运车队" />
             <el-table-column property="departurePrice" align="center" label="起运车队费用" />
             <el-table-column property="carrierCompanyName" align="center" label="承运船公司" />
@@ -77,8 +80,7 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="200" fixed="right">
                 <template #default="scope">
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
                         @click="openUploadDialog(scope.row)">
@@ -88,9 +90,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="previewImageFlag">
@@ -144,16 +145,30 @@
                 </el-row>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
-                        集装箱号：
+                        集装箱号1：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.containerNo }}
+                        {{ ShippingContractDetail.firstContainerNo }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
-                        铅封号：
+                        铅封号1：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
-                        {{ ShippingContractDetail.sealNo }}
+                        {{ ShippingContractDetail.firstSealNo }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        集装箱号2：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.secondContainerNo }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        铅封号2：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.secondSealNo }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -168,6 +183,22 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ ShippingContractDetail.tallyClerkPrice }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        理货费用备注：
+                    </el-col>
+                    <el-col :span="18" class="moreDetailContent">
+                        {{ ShippingContractDetail.tallyClerkRemark }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        车队管理名称：
+                    </el-col>
+                    <el-col :span="18" class="moreDetailContent">
+                        {{ ShippingContractDetail.fleetManageName }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -330,8 +361,7 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center
-            :before-close="closeUploadDialog">
+        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center :before-close="closeUploadDialog">
             <ul ref="uploadDialogTop" style="overflow: auto;height:300px">
                 <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="150px"
                     :model="uploadPaymentData" style="max-width: 80%">
@@ -406,10 +436,14 @@ const ShippingContractDetail = reactive({
     packingTime: '',
     packingLocation: '',
     unpackingFactory: '',
-    containerNo: '',
-    sealNo: '',
+    firstContainerNo: '',
+    firstSealNo: '',
+    secondContainerNo: '',
+    secondSealNo: '',
     tallyClerk: '',
     tallyClerkPrice: '',
+    tallyClerkRemark: '',
+    fleetManageName: '',
     departureFleet: '',
     departurePrice: '',
     carrierCompanyName: '',
@@ -502,10 +536,14 @@ const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.packingTime = dateConversion(row.packingTime)
     ShippingContractDetail.packingLocation = row.packingLocation
     ShippingContractDetail.unpackingFactory = row.unpackingFactory
-    ShippingContractDetail.containerNo = row.containerNo
-    ShippingContractDetail.sealNo = row.sealNo
+    ShippingContractDetail.firstContainerNo = row.firstContainerNo
+    ShippingContractDetail.firstSealNo = row.firstSealNo
+    ShippingContractDetail.secondContainerNo = row.secondContainerNo
+    ShippingContractDetail.secondSealNo = row.secondSealNo
     ShippingContractDetail.tallyClerk = row.tallyClerk
     ShippingContractDetail.tallyClerkPrice = row.tallyClerkPrice
+    ShippingContractDetail.tallyClerkRemark = row.tallyClerkRemark
+    ShippingContractDetail.fleetManageName = row.fleetManageName
     ShippingContractDetail.departureFleet = row.departureFleet
     ShippingContractDetail.departurePrice = row.departurePrice
     ShippingContractDetail.carrierCompanyName = row.carrierCompanyName
@@ -599,7 +637,7 @@ const closeUploadDialog = () => {
 }
 
 // 照片移除后发送请求后台删除照片
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+const handleRemove: UploadProps['onRemove'] = (uploadFile: any, uploadFiles: any) => {
     console.log(uploadFile, uploadFiles);
     uploadPaymentData.paymentPhotoArray.splice(uploadPaymentData.paymentPhotoArray.indexOf(uploadFile.response.data), 1);
     console.log("移出照片数据组");

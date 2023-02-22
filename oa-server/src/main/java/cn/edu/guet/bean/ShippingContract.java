@@ -1,5 +1,6 @@
 package cn.edu.guet.bean;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -68,14 +69,24 @@ public class ShippingContract implements Serializable {
     private String unpackingFactory;
 
     /**
-     * 集装箱号
+     * 集装箱号1
      */
-    private String containerNo;
+    private String firstContainerNo;
 
     /**
-     * 铅封号
+     * 集装箱号2
      */
-    private String sealNo;
+    private String secondContainerNo;
+
+    /**
+     * 铅封号1
+     */
+    private String firstSealNo;
+
+    /**
+     * 铅封号2
+     */
+    private String secondSealNo;
 
     /**
      * 理货员
@@ -86,6 +97,18 @@ public class ShippingContract implements Serializable {
      * 理货费用
      */
     private BigDecimal tallyClerkPrice;
+
+    /**
+     * 理货费用备注
+     */
+    @Excel(name = "理货费用备注")
+    private String tallyClerkRemark;
+
+    /**
+     * 车队管理名称
+     */
+    @Excel(name = "车队管理名称")
+    private String fleetManageName;
 
     /**
      * 起运承运车队
@@ -228,8 +251,10 @@ public class ShippingContract implements Serializable {
             && (this.getPackingTime() == null ? other.getPackingTime() == null : this.getPackingTime().equals(other.getPackingTime()))
             && (this.getPackingLocation() == null ? other.getPackingLocation() == null : this.getPackingLocation().equals(other.getPackingLocation()))
             && (this.getUnpackingFactory() == null ? other.getUnpackingFactory() == null : this.getUnpackingFactory().equals(other.getUnpackingFactory()))
-            && (this.getContainerNo() == null ? other.getContainerNo() == null : this.getContainerNo().equals(other.getContainerNo()))
-            && (this.getSealNo() == null ? other.getSealNo() == null : this.getSealNo().equals(other.getSealNo()))
+            && (this.getFirstContainerNo() == null ? other.getFirstContainerNo() == null : this.getFirstContainerNo().equals(other.getFirstContainerNo()))
+            && (this.getSecondContainerNo() == null ? other.getSecondContainerNo() == null : this.getSecondContainerNo().equals(other.getSecondContainerNo()))
+            && (this.getFirstSealNo() == null ? other.getFirstSealNo() == null : this.getFirstSealNo().equals(other.getFirstSealNo()))
+            && (this.getSecondSealNo() == null ? other.getSecondSealNo() == null : this.getSecondSealNo().equals(other.getSecondSealNo()))
             && (this.getTallyClerk() == null ? other.getTallyClerk() == null : this.getTallyClerk().equals(other.getTallyClerk()))
             && (this.getTallyClerkPrice() == null ? other.getTallyClerkPrice() == null : this.getTallyClerkPrice().equals(other.getTallyClerkPrice()))
             && (this.getDepartureFleet() == null ? other.getDepartureFleet() == null : this.getDepartureFleet().equals(other.getDepartureFleet()))
@@ -268,8 +293,10 @@ public class ShippingContract implements Serializable {
         result = prime * result + ((getPackingTime() == null) ? 0 : getPackingTime().hashCode());
         result = prime * result + ((getPackingLocation() == null) ? 0 : getPackingLocation().hashCode());
         result = prime * result + ((getUnpackingFactory() == null) ? 0 : getUnpackingFactory().hashCode());
-        result = prime * result + ((getContainerNo() == null) ? 0 : getContainerNo().hashCode());
-        result = prime * result + ((getSealNo() == null) ? 0 : getSealNo().hashCode());
+        result = prime * result + ((getFirstContainerNo() == null) ? 0 : getFirstContainerNo().hashCode());
+        result = prime * result + ((getSecondContainerNo() == null) ? 0 : getSecondContainerNo().hashCode());
+        result = prime * result + ((getFirstSealNo() == null) ? 0 : getFirstSealNo().hashCode());
+        result = prime * result + ((getSecondSealNo() == null) ? 0 : getSecondSealNo().hashCode());
         result = prime * result + ((getTallyClerk() == null) ? 0 : getTallyClerk().hashCode());
         result = prime * result + ((getTallyClerkPrice() == null) ? 0 : getTallyClerkPrice().hashCode());
         result = prime * result + ((getDepartureFleet() == null) ? 0 : getDepartureFleet().hashCode());
@@ -311,8 +338,10 @@ public class ShippingContract implements Serializable {
         sb.append(", packingTime=").append(packingTime);
         sb.append(", packingLocation=").append(packingLocation);
         sb.append(", unpackingFactory=").append(unpackingFactory);
-        sb.append(", containerNo=").append(containerNo);
-        sb.append(", sealNo=").append(sealNo);
+        sb.append(", firstContainerNo=").append(firstContainerNo);
+        sb.append(", secondContainerNo=").append(secondContainerNo);
+        sb.append(", firstSealNo=").append(firstSealNo);
+        sb.append(", secondSealNo=").append(secondSealNo);
         sb.append(", tallyClerk=").append(tallyClerk);
         sb.append(", tallyClerkPrice=").append(tallyClerkPrice);
         sb.append(", departureFleet=").append(departureFleet);
