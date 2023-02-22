@@ -11,7 +11,7 @@
                 </template>
             </el-input>
             <el-upload class="moreDeleteButton" name="file"
-                action="http://localhost:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
+                action="http://120.77.28.123:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
                 :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
