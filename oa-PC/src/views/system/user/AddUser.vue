@@ -11,7 +11,8 @@
           </el-col>
           <el-col :span="12" :offset="0">
             <el-form-item prop="name" label="用户名">
-              <el-input v-model="addModel.name"></el-input>
+              <el-input v-model="addModel.name" :suffix-icon="userNameSameFlag ? 'CloseBold' : 'Select'"
+                @input="checkUserName"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -91,7 +92,7 @@ import useDialog from '@/hooks/useDialog';
 import { nextTick, reactive, ref } from 'vue';
 import useSelectRole from '@/composables/user/useSelectRole';
 import { ElMessage, FormInstance } from 'element-plus';
-import { addApi, editApi } from '@/api/user';
+import { addApi, editApi, getUserByName } from '@/api/user';
 import { EditType, Title } from '@/type/BaseEnum';
 import useInstance from '@/hooks/useInstance';
 const { global } = useInstance()
@@ -126,6 +127,7 @@ const show = async (type: string, row?: AddUserModel) => {
     nextTick(() => {
       global.$objCopy(row, addModel)
       addModel.roleId = roleId.value
+      tempUserName.value = addModel.name
     })
     addModel.type = type
   }
@@ -227,6 +229,35 @@ const rules = reactive({
 //注册事件
 const emits = defineEmits(['refresh'])
 
+// 用户名重复flag
+const userNameSameFlag = ref();
+// 临时用户名（用于编辑情况）
+const tempUserName = ref();
+
+// 验证用户名是否重复
+const checkUserName = async (e: any) => {
+  if (e == "" || e == null) {
+    return;
+  }
+  getUserByName(e).then(res => {
+    userNameSameFlag.value = res.data;
+    if (userNameSameFlag.value == true) {
+      ElMessage({
+        message: '该用户名已重复，请修改！',
+        type: 'error',
+        grouping: true,
+        duration: 4000
+      })
+    } else if (userNameSameFlag.value == false) {
+      ElMessage({
+        message: '用户名验证合法！',
+        type: 'success',
+        grouping: true,
+      })
+    }
+  });
+}
+
 //表单提交
 const commit = () => {
   addFormRef.value?.validate(async (avlid) => {
@@ -234,10 +265,26 @@ const commit = () => {
       let res = null;
       if (addModel.type == EditType.ADD) {
         console.log('新增')
-        res = await addApi(addModel)
+        if (userNameSameFlag.value == false) {
+          res = await addApi(addModel)
+        } else {
+          ElMessage({
+            message: '该用户名已重复，请修改!',
+            type: 'error',
+            duration: 4000
+          })
+        }
       } else {
         console.log('编辑')
-        res = await editApi(addModel)
+        if (userNameSameFlag.value == false || tempUserName.value == addModel.name) {
+          res = await editApi(addModel);
+        } else {
+          ElMessage({
+            message: '该用户名已重复，请修改!',
+            type: 'error',
+            duration: 4000
+          })
+        }
       }
       if (res && res.code == 200) {
         ElMessage.success(res.msg)
@@ -250,6 +297,4 @@ const commit = () => {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
