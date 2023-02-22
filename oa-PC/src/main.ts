@@ -16,8 +16,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
 // 持久化存储pinia
 import piniaPluginPersist from 'pinia-plugin-persist'
-
-
+import print from 'vue3-print-nb'
 
 
 const app = createApp(App)
@@ -31,7 +30,7 @@ app.use(ElementPlus, {
     locale: zhCn,
 })
 app.use(createPinia().use(piniaPluginPersist))
-app.use(router).mount('#app')
+app.use(router).use(print).mount('#app')
 
 //全局挂载使用
 app.config.globalProperties.$myconfirm = myconFirm
