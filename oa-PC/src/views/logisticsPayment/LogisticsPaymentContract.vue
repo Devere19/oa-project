@@ -16,24 +16,25 @@
                 ref="upload" accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
-            <el-button type="primary"  @click="changeOperateStatus"  style="margin-top: 20px;" 
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="物流合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.logisticsContractNo }}</template>
             </el-table-column>
+            <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="saleContractNo" align="center" label="加工/销售合同编号" width="150" />
             <el-table-column property="freight" align="center" label="运费总价" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
-            <el-table-column property="logisticsContractTime" :formatter="conversionDate" align="center"
-                label="物流合同签订时间" width="105" />
+            <el-table-column property="logisticsContractTime" :formatter="conversionDate" align="center" label="物流合同签订时间"
+                width="105" />
             <el-table-column property="goodsName" align="center" label="运输货物名称" />
             <el-table-column property="totalWeight" align="center" label="运输货物总量" />
             <el-table-column property="goodsUnit" align="center" label="运输货物单位" />
@@ -72,8 +73,7 @@
                         :disabled="stateAvailable(scope.row)!">
                         通过
                     </el-button>
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="scope.row.financeStaff != null">修改
@@ -86,9 +86,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" title="新增物流付款单" width="40%" draggable center :before-close="closeAddDialog">
@@ -169,6 +168,12 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.logisticsContractNo }}
                     </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        己方公司名：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ logisticsPaymentContractDetail.ownCompanyName }}
+                    </el-col>
                 </el-row>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
@@ -236,7 +241,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             logisticsPaymentContractDetail.financeStaff == null ? "暂无" :
-                                logisticsPaymentContractDetail.financeStaff
+                            logisticsPaymentContractDetail.financeStaff
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -298,7 +303,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             logisticsPaymentContractDetail.cashier == null ? "暂无" :
-                                logisticsPaymentContractDetail.financeStaff
+                            logisticsPaymentContractDetail.financeStaff
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -307,7 +312,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             logisticsPaymentContractDetail.paymentTime == null ? "未知" :
-                                logisticsPaymentContractDetail.paymentTime
+                            logisticsPaymentContractDetail.paymentTime
                         }}
                     </el-col>
                 </el-row>
@@ -390,6 +395,7 @@ const UpdateLogisticsPaymentContractData = reactive({
 const logisticsPaymentContractDetail = reactive({
     id: '',
     logisticsContractNo: '',
+    ownCompanyName: '',
     saleContractNo: '',
     freight: '',
     paymentCount: '',
@@ -662,6 +668,7 @@ const updateLogisticsPaymentContract = async (formEl1: FormInstance | undefined)
 // 打开物流付款单详情窗口
 const openMordDetailDialog = async (row: any) => {
     logisticsPaymentContractDetail.logisticsContractNo = row.logisticsContractNo
+    logisticsPaymentContractDetail.ownCompanyName = row.ownCompanyName
     logisticsPaymentContractDetail.saleContractNo = row.saleContractNo
     logisticsPaymentContractDetail.freight = row.freight
     logisticsPaymentContractDetail.paymentCount = row.paymentCount

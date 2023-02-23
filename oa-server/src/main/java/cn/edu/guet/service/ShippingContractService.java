@@ -1,5 +1,6 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.CashierShipping;
 import cn.edu.guet.bean.ImportModel.ImportShippingContractModel;
 import cn.edu.guet.bean.ShippingContract;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,8 +23,8 @@ public interface ShippingContractService extends IService<ShippingContract> {
     Boolean checkShippingContractNo(String shippingContractNo);
 
     //    出纳
-    Page<ShippingContract> getCashierShipping(int currentPage, int pageSize);
-    Page<ShippingContract> searchCashierShipping(int currentPage, int pageSize,String searchWord);
+    Page<CashierShipping> getCashierShipping(int currentPage, int pageSize);
+    Page<CashierShipping> searchCashierShipping(int currentPage, int pageSize,String searchWord);
     int uploadCashierShipping(ShippingContract shippingContract);
 
     //    APP

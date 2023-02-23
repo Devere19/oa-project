@@ -35,8 +35,8 @@
       <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange" :disabled-date="disabledDate"
         unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
         @change="changeDay" style="margin: 1% 0% 2% 0%;" />
-      <el-button type="primary" size="large" @click="changeOperateStatus"
-        style="margin-right: 50px; float: right; margin-top: 10px;"> {{ operateStatus?"隐藏操作": "显示操作" }}</el-button>
+      <el-button type="primary" size="default" @click="changeOperateStatus"
+        style="margin-right: 50px; float: right; margin-top: 10px;"> {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
     </div>
     <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
       highlight-current-row @selection-change="handleSelectionChange">
@@ -84,8 +84,8 @@
           <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
             :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'" @click="changePigeonhole(scope.row)">{{
               scope.row.pigeonhole ==
-                1 ?
-                "归档" : "还原"
+              1 ?
+              "归档" : "还原"
             }}</el-button>
           <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
             :disabled="getUpdateDisabled(scope.row)">
@@ -125,8 +125,7 @@
           </el-form-item>
           <el-form-item label="己方公司名" prop="ownCompanyName">
             <el-select v-model="NewPurchaseContractData.ownCompanyName" placeholder="下拉选择" size="large">
-              <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label"
-                :value="item.value" />
+              <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="榨季" prop="squeezeSeason">
@@ -154,15 +153,15 @@
               <el-tag size="large" hit>{{ "入库单" + (index + 1) }}</el-tag>
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.factoryName'" label="厂名" :rules="[
-            { required: true, trigger: ['change'] }]">
+              { required: true, trigger: ['change'] }]">
               <el-input v-model="item.factoryName" size="large" @change="changeOwnFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
-            { required: true, trigger: ['change'] }]">
+              { required: true, trigger: ['change'] }]">
               <el-input v-model="item.inboundGoodsCount" size="large" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.goodsUnitPrice'" label="采购单价" :rules="[
-            { required: true, trigger: ['change'] }]">
+              { required: true, trigger: ['change'] }]">
               <el-input v-model="item.goodsUnitPrice" size="large" />
               <el-button v-show="index != 0" @click.prevent="removeInboundItem(0, item)">删除</el-button>
             </el-form-item>
@@ -212,8 +211,7 @@
           <el-form-item label="己方公司名" prop="ownCompanyName">
             <el-select v-model="UpdatePurchaseContractData.ownCompanyName" placeholder="下拉选择" size="large"
               :disabled="updateFlag">
-              <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label"
-                :value="item.value" />
+              <el-option v-for="item in ownCompanyData.list" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="榨季" prop="squeezeSeason">
@@ -238,21 +236,20 @@
               <el-option label="斤" value="斤"></el-option>
             </el-select>
           </el-form-item>
-          <div v-for="(item, index) in UpdatePurchaseContractData.inboundData" label-position="right"
-            label-width="200px">
+          <div v-for="(item, index) in UpdatePurchaseContractData.inboundData" label-position="right" label-width="200px">
             <el-form-item>
               <el-tag size="large" hit>{{ "入库单" + (index + 1) }}</el-tag>
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.factoryName'" label="厂名" :rules="[
-            { required: true, trigger: ['change'] }]">
+              { required: true, trigger: ['change'] }]">
               <el-input v-model="item.factoryName" size="large" @change="changeOwnFlag" :disabled="updateFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.inboundGoodsCount'" label="入库数量" :rules="[
-            { required: true, trigger: ['change'] }]">
+              { required: true, trigger: ['change'] }]">
               <el-input v-model="item.inboundGoodsCount" size="large" :disabled="updateFlag" />
             </el-form-item>
             <el-form-item :prop="'inboundData.' + index + '.goodsUnitPrice'" label="采购单价" :rules="[
-            { required: true, trigger: ['change'] }]">
+              { required: true, trigger: ['change'] }]">
               <el-input v-model="item.goodsUnitPrice" size="large" :disabled="updateFlag" />
               <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)"
                 :disabled="updateFlag">删除</el-button>
@@ -448,7 +445,7 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
 import { getOwnCompanySelectApi } from "@/api/ownCompany/index"
-import { SelectCustomer, SelectOwnCompany } from "@/api/cashier/customer/CustomerModel"
+import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel"
 import { purchaseContractModel, inboundDataModel, PurchaseExportModel } from '@/api/purchaseContract/PurchaseContractModel';
 import {
   getTPurchaseContractDataApi, getFPurchaseContractDataApi, searchPurchaseContractApi,

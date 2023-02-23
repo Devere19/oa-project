@@ -51,6 +51,9 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     @Autowired
     private PurchaseContractService purchaseContractService;
 
+    @Autowired
+    private CashierPurchasePaymentMapper cashierPurchasePaymentMapper;
+
     @Override
     public Page<PurchasePaymentContractView> getPurchasePaymentContractData(int currentPage, int pageSize) {
         QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
@@ -219,14 +222,14 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     }
 
     @Override
-    public Page<PurchasePaymentContractView> getCashierPurchasePayment(int currentPage, int pageSize) {
-        QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
-        Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = purchasePaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
+    public Page<CashierPurchasePayment> getCashierPurchasePayment(int currentPage, int pageSize) {
+        QueryWrapper<CashierPurchasePayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").orderByDesc("create_time","id");
+        Page<CashierPurchasePayment> page = new Page<>(currentPage, pageSize);
+        page = cashierPurchasePaymentMapper.selectPage(page, qw);
+        Iterator<CashierPurchasePayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            PurchasePaymentContractView record = iterator.next();
+            CashierPurchasePayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<PurchasePaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("purchase_payment_contract_id", record.getId()).isNotNull("state").orderByDesc("nick_name");
@@ -256,18 +259,18 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     }
 
     @Override
-    public Page<PurchasePaymentContractView> searchCashierPurchasePayment(int currentPage, int pageSize, String searchWord) {
-        QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("purchase_contract_no", searchWord)
+    public Page<CashierPurchasePayment> searchCashierPurchasePayment(int currentPage, int pageSize, String searchWord) {
+        QueryWrapper<CashierPurchasePayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").and(q -> q.like("purchase_contract_no", searchWord)
                 .or().like("customer_enterprise_name", searchWord).or()
                 .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
                 .like("goods_name", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
                 .or().like("create_by", searchWord)).orderByDesc("create_time","id");
-        Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = purchasePaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
+        Page<CashierPurchasePayment> page = new Page<>(currentPage, pageSize);
+        page = cashierPurchasePaymentMapper.selectPage(page, qw);
+        Iterator<CashierPurchasePayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            PurchasePaymentContractView record = iterator.next();
+            CashierPurchasePayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<PurchasePaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("purchase_payment_contract_id", record.getId()).isNotNull("state").orderByDesc("nick_name");

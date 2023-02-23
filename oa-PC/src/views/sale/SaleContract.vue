@@ -26,11 +26,10 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示原始数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示原始数据" }}
         </el-button>
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
-        <el-button type="primary"  @click="changeOperateStatus"
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+        <el-button type="primary" @click="changeOperateStatus"> {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格 -->
@@ -76,8 +75,8 @@
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-              isPigeonhole? "归档":
-                "还原"
+              isPigeonhole ? "归档" :
+              "还原"
             }}
           </el-button>
           <el-button type="info" :icon="Edit" size="default" @click="openUpdateDialog(scope.row)"
@@ -98,8 +97,8 @@
 
     <!-- 分页 -->
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page.sync="listParm.currentPage"
-      :page-sizes="[10, 20, 40, 80, 100]" :page-size="listParm.pageSize"
-      layout="total, sizes, prev, pager, next, jumper" :total="listParm.total" background>
+      :page-sizes="[10, 20, 40, 80, 100]" :page-size="listParm.pageSize" layout="total, sizes, prev, pager, next, jumper"
+      :total="listParm.total" background>
       :pager-count="7">
     </el-pagination>
 
@@ -229,7 +228,6 @@
       </template>
     </el-dialog>
   </el-main>
-
 </template>
 
 <script setup lang="ts">
@@ -247,7 +245,7 @@ import { AddSaleModel } from "@/api/sale/SaleModel";
 import { add } from "lodash";
 import { ElMessage, FormInstance, UploadProps, UploadUserFile } from "element-plus";
 import useInstance from '@/hooks/useInstance';
-import { SelectCustomer, SelectOwnCompany } from "@/api/cashier/customer/CustomerModel";
+import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel";
 import { deletePhotoApi } from "@/api/handlePhoto";
 import { getOwnCompanySelectApi } from "@/api/ownCompany";
 const { global } = useInstance()
@@ -564,6 +562,4 @@ const changeOperateStatus = () => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

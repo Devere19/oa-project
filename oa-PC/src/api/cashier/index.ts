@@ -129,3 +129,11 @@ export const uploadCashierOfficeExpenseApi = (officeExpense: officeExpenseModel)
     return http.post("cashier/uploadCashierOfficeExpense",
         officeExpense)
 }
+
+// 获取物流单的对方公司名
+export const getLogisticsCustomerApi = (logisticsContractNo: string) => {
+    return http.get("cashier/getLogisticsCustomer",
+        {
+            logisticsContractNo: logisticsContractNo,
+        })
+}

@@ -101,13 +101,11 @@ public class ShippingContract implements Serializable {
     /**
      * 理货费用备注
      */
-    @Excel(name = "理货费用备注")
     private String tallyClerkRemark;
 
     /**
      * 车队管理名称
      */
-    @Excel(name = "车队管理名称")
     private String fleetManageName;
 
     /**

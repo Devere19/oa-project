@@ -1,5 +1,6 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.CashierLogisticsPayment;
 import cn.edu.guet.bean.ImportModel.ImportLogisticsPaymentContractModel;
 import cn.edu.guet.bean.LogisticsPaymentContract;
 import cn.edu.guet.bean.LogisticsPaymentContractView;
@@ -21,9 +22,10 @@ public interface LogisticsPaymentContractService extends IService<LogisticsPayme
     int handleImportLogisticsPaymentContractModel(ImportLogisticsPaymentContractModel importLogisticsPaymentContractModel);
 
     //    出纳
-    Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize);
-    Page<LogisticsPaymentContractView> searchCashierLogisticsPayment(int currentPage, int pageSize,String searchWord);
+    Page<CashierLogisticsPayment> getCashierLogisticsPayment(int currentPage, int pageSize);
+    Page<CashierLogisticsPayment> searchCashierLogisticsPayment(int currentPage, int pageSize,String searchWord);
     int uploadCashierLogisticsPayment(LogisticsPaymentContract logisticsPaymentContract);
+    String getLogisticsCustomer(String logisticsContractNo);
 
     //    APP
     Page<LogisticsPaymentContractView> getDirectorLPC(int currentPage, int pageSize, int userId , int type);
