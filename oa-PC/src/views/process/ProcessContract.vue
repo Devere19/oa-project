@@ -19,28 +19,26 @@
             </el-input>
             <!-- <el-button class="moreDeleteButton" :icon="Download" type="success" @click="exportExcel">导出
         </el-button> -->
+            <el-button type="primary" class="moreDeleteButton" @click="changeOperateStatus"> {{
+                operateStatus ? "隐藏操作" : "显示操作"
+            }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
         <div align="center">
-            <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange"
-                :disabled-date="disabledDate" unlink-panels range-separator="To" start-placeholder="开始日期"
-                end-placeholder="结束日期" size="large" @change="changeDay" style="margin: 1% 0% 2% 0%;" />
-            <el-button type="primary" size="large" @click="changeOperateStatus"
-                style="margin-right: 50px; float: right; margin-top: 10px;"> {{
-                    operateStatus?"隐藏操作": "显示操作"
-                }}</el-button>
+            <el-date-picker v-model="choosedDay" value-format="YYYY-MM-DD" type="daterange" :disabled-date="disabledDate"
+                unlink-panels range-separator="To" start-placeholder="开始日期" end-placeholder="结束日期" size="large"
+                @change="changeDay" style="margin: 1% 0% 2% 0%;" />
         </div>
-        <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <el-table-column label="加工合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.processContractNo }}</template>
             </el-table-column>
             <el-table-column property="goodsName" align="center" label="货物名称" width="100" />
             <el-table-column property="customerEnterpriseName" align="center" label="加工方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
-            <el-table-column property="signTime" :formatter="conversionDate" align="center" label="合同签订时间"
-                width="105" />
+            <el-table-column property="signTime" :formatter="conversionDate" align="center" label="合同签订时间" width="105" />
             <el-table-column property="alcoholConversionFormula" align="center" label="酒精转换公式" />
             <el-table-column property="concentratedSolutionConversionFormula" align="center" label="浓缩液转换公式" />
             <el-table-column align="center" label="合同照片" width="130">
@@ -55,17 +53,15 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="490" fixed="right" v-if="operateStatus">
                 <template #default="scope">
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Money" size="default" type="success" @click="openAddPaymentDialog(scope.row)">付款
                     </el-button>
                     <el-button :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default"
-                        :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
-                        @click="changePigeonhole(scope.row)">{{
+                        :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'" @click="changePigeonhole(scope.row)">{{
                             scope.row.pigeonhole ==
-                                1 ?
-                                "归档" : "还原"
+                            1 ?
+                            "归档" : "还原"
                         }}</el-button>
                     <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="getUpdateDisabled(scope.row)">
@@ -83,8 +79,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total"
                 @size-change="showPigeonhole == false ? (searchData == null || searchData == '' ? getTTableData() : searchTableData()) : (searchData == null || searchData == '' ? getFTableData() : searchTableData())"
                 @current-change="showPigeonhole == false ? (searchData == null || searchData == '' ? getTTableData() : searchTableData()) : (searchData == null || searchData == '' ? getFTableData() : searchTableData())" />
         </div>
@@ -99,8 +95,8 @@
                         <el-input v-model="NewProcessContractData.goodsName" size="large" />
                     </el-form-item>
                     <el-form-item label="加工方公司名" prop="customerEnterpriseName">
-                        <el-select v-model="NewProcessContractData.customerEnterpriseName" placeholder="下拉选择"
-                            size="large" filterable>
+                        <el-select v-model="NewProcessContractData.customerEnterpriseName" placeholder="下拉选择" size="large"
+                            filterable>
                             <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
                                 :value="item.value" />
                         </el-select>
@@ -112,8 +108,8 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="合同签订时间" prop="signTime">
-                        <el-date-picker type="date" v-model="NewProcessContractData.signTime"
-                            :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM-DD" size="large">
+                        <el-date-picker type="date" v-model="NewProcessContractData.signTime" :disabled-date="disabledDate"
+                            style="width: 100%;" value-format="YYYY-MM-DD" size="large">
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="酒精转换公式" prop="alcoholConversionFormula">
@@ -142,8 +138,8 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="updateDialogFlag" :title="updateFlag == true ? '补充合同照片' : '修改加工单'" width="50%" draggable
-            center :before-close="closeUpdateDialog">
+        <el-dialog v-model="updateDialogFlag" :title="updateFlag == true ? '补充合同照片' : '修改加工单'" width="50%" draggable center
+            :before-close="closeUpdateDialog">
             <ul ref="updateDialogTop" style="overflow: auto;height:600px">
                 <el-form ref="thridFormRef" :rules="firstRules" label-position="right" label-width="180px"
                     :model="UpdateProcessContractData" style="max-width: 65%">
@@ -179,13 +175,12 @@
                             size="large" :disabled="updateFlag" />
                     </el-form-item>
                     <el-form-item label="浓缩液转换公式" prop="concentratedSolutionConversionFormula">
-                        <el-input v-model="UpdateProcessContractData.concentratedSolutionConversionFormula"
-                            type="textarea" autosize size="large" :disabled="updateFlag" />
+                        <el-input v-model="UpdateProcessContractData.concentratedSolutionConversionFormula" type="textarea"
+                            autosize size="large" :disabled="updateFlag" />
                     </el-form-item>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="UpdatePhotoData"
-                            action="http://120.77.28.123:9000/addContractPhoto" list-type="picture-card"
-                            :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
+                        <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                            list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                             :on-success="updateHandlePhotoSuccess">
                             <el-icon>
                                 <Plus />
@@ -319,8 +314,7 @@
                     <el-row justify="center">
                         <el-col :span="16">
                             <el-form-item label="加工合同编号" prop="processContractNo">
-                                <el-input v-model="NewProcessPaymentContractData.processContractNo" size="large"
-                                    disabled />
+                                <el-input v-model="NewProcessPaymentContractData.processContractNo" size="large" disabled />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -328,8 +322,7 @@
                         <el-col :span="16">
                             <el-form-item label="付款月份" prop="paymentMonth">
                                 <el-date-picker type="month" v-model="NewProcessPaymentContractData.paymentMonth"
-                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM"
-                                    size="large">
+                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM" size="large">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -377,7 +370,7 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { getSelectApi } from "@/api/sale/index"
 import { getOwnCompanySelectApi } from "@/api/ownCompany/index"
-import { SelectCustomer, SelectOwnCompany } from "@/api/cashier/customer/CustomerModel"
+import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel"
 import { processContractModel } from '@/api/processContract/ProcessContractModel';
 import {
     getTProcessContractDataApi, getFProcessContractDataApi, searchProcessContractApi,

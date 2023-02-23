@@ -50,7 +50,10 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     
     @Autowired
     private ProcessContractService processContractService;
-    
+
+    @Autowired
+    private CashierProcessPaymentMapper cashierProcessPaymentMapper;
+
     @Override
     public Page<ProcessPaymentContractView> getProcessPaymentContractData(int currentPage, int pageSize) {
         QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
@@ -238,14 +241,14 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     }
 
     @Override
-    public Page<ProcessPaymentContractView> getCashierProcessPayment(int currentPage, int pageSize) {
-        QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
-        Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = processPaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<ProcessPaymentContractView> iterator = page.getRecords().iterator();
+    public Page<CashierProcessPayment> getCashierProcessPayment(int currentPage, int pageSize) {
+        QueryWrapper<CashierProcessPayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").orderByDesc("create_time","id");
+        Page<CashierProcessPayment> page = new Page<>(currentPage, pageSize);
+        page = cashierProcessPaymentMapper.selectPage(page, qw);
+        Iterator<CashierProcessPayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            ProcessPaymentContractView record = iterator.next();
+            CashierProcessPayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<ProcessPaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("process_payment_contract_id", record.getId()).isNotNull("state").orderByDesc("nick_name");
@@ -275,17 +278,17 @@ public class ProcessPaymentContractServiceImpl extends ServiceImpl<ProcessPaymen
     }
 
     @Override
-    public Page<ProcessPaymentContractView> searchCashierProcessPayment(int currentPage, int pageSize, String searchWord) {
-        QueryWrapper<ProcessPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("process_contract_no", searchWord)
+    public Page<CashierProcessPayment> searchCashierProcessPayment(int currentPage, int pageSize, String searchWord) {
+        QueryWrapper<CashierProcessPayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").and(q -> q.like("process_contract_no", searchWord)
                 .or().like("customer_enterprise_name", searchWord).or().like("own_company_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
                 .or().like("create_by", searchWord)).orderByDesc("create_time","id");
-        Page<ProcessPaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = processPaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<ProcessPaymentContractView> iterator = page.getRecords().iterator();
+        Page<CashierProcessPayment> page = new Page<>(currentPage, pageSize);
+        page = cashierProcessPaymentMapper.selectPage(page, qw);
+        Iterator<CashierProcessPayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            ProcessPaymentContractView record = iterator.next();
+            CashierProcessPayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<ProcessPaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("process_payment_contract_id", record.getId()).isNotNull("state").orderByDesc("nick_name");

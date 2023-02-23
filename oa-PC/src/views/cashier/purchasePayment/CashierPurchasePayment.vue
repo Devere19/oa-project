@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column property="paymentAmount" align="center" label="采购总价" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
-            <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" />
+            <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
             <el-table-column property="inboundTime" :formatter="conversionDate" align="center" label="入库时间" width="105" />
@@ -584,6 +584,7 @@ const openPrintDialog = (row: any) => {
 const closePrintDialog = () => {
     printDialogFlag.value = false;
 }
+
 
 </script>
 

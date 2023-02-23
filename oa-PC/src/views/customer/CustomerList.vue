@@ -26,8 +26,7 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="200" fixed="right">
                 <template #default="scope">
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Delete" size="default" type="danger"
                         @click="openOneDeleteDialog(scope.$index, scope.row)">
@@ -37,9 +36,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" :title="addFlag ? '新增客户' : '修改信息'" width="40%" draggable center
@@ -122,8 +120,8 @@ import { ElTable, ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Search, MoreFilled } from "@element-plus/icons-vue";
 import { conversionDateTime, timeConversion } from "@/utils/timeFormat"
 // import type from 'element-plus'
-import { customerModel } from '@/api/cashier/customer/CustomerModel'
-import { getCustomerDataApi, searchCustomerApi, deleteOneCustomerApi, addNewCustomerApi, updateCustomerApi } from '@/api/cashier/customer'
+import { customerModel } from '@/api/customer/CustomerModel'
+import { getCustomerDataApi, searchCustomerApi, deleteOneCustomerApi, addNewCustomerApi, updateCustomerApi } from '@/api/customer'
 import { userStore } from '@/store/nickName'
 const userNickNameStore = userStore()
 

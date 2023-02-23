@@ -48,6 +48,9 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     @Autowired
     private LogisticsContractService logisticsContractService;
 
+    @Autowired
+    private CashierShippingMapper cashierShippingMapper;
+
     @Override
     public Page<ShippingContract> getshippingContractData(int currentPage, int pageSize) {
         QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
@@ -378,57 +381,53 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
     }
 
     @Override
-    public Page<ShippingContract> getCashierShipping(int currentPage, int pageSize) {
-        QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time", "shipping_contract_no");
-        Page<ShippingContract> page = new Page<>(currentPage, pageSize);
-        page = shippingContractMapper.selectPage(page, qw);
-        Iterator<ShippingContract> iterator = page.getRecords().iterator();
+    public Page<CashierShipping> getCashierShipping(int currentPage, int pageSize) {
+        QueryWrapper<CashierShipping> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state", "1,1,1").orderByDesc("create_time", "shipping_contract_no");
+        Page<CashierShipping> page = new Page<>(currentPage, pageSize);
+        page = cashierShippingMapper.selectPage(page, qw);
+        Iterator<CashierShipping> iterator = page.getRecords().iterator();
+
         while (iterator.hasNext()) {
-            ShippingContract record = iterator.next();
+            CashierShipping record = iterator.next();
 //            获取董事长审核信息，并添加进对象中
             QueryWrapper<ShippingStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).isNotNull("state").orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews = shippingStateInfoMapper.selectList(stateQw);
 
-            if (shippingStateViews.size() < 3) {
-                iterator.remove();
-                page.setTotal(page.getTotal() - 1);
-            } else {
-                record.setShippingDirector(shippingStateViews);
+            record.setShippingDirector(shippingStateViews);
 
-                //处理图片，形成一个图片数组
-                String contractPhoto = record.getContractPhoto();
-                String paymentPhoto = record.getPaymentPhoto();
-                //有多个照片,合同照片
-                if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
-                    //分割图片字符串，形成一个数组
-                    List<String> list = ImageUtils.imageSplit(contractPhoto);
-                    record.setContractPhotoArray(list);
-                    //取第一个图片的url
-                    record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
-                } else {
-                    record.setContractPhotoArray(Arrays.asList(contractPhoto));
-                }
-                //            付款照片
-                if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
-                    //分割图片字符串，形成一个数组
-                    List<String> list = ImageUtils.imageSplit(paymentPhoto);
-                    record.setPaymentPhotoArray(list);
-                    //取第一个图片的url
-                    record.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
-                } else {
-                    record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
-                }
+            //处理图片，形成一个图片数组
+            String contractPhoto = record.getContractPhoto();
+            String paymentPhoto = record.getPaymentPhoto();
+            //有多个照片,合同照片
+            if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(contractPhoto);
+                record.setContractPhotoArray(list);
+                //取第一个图片的url
+                record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
+            } else {
+                record.setContractPhotoArray(Arrays.asList(contractPhoto));
+            }
+            //            付款照片
+            if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(paymentPhoto);
+                record.setPaymentPhotoArray(list);
+                //取第一个图片的url
+                record.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
+            } else {
+                record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
             }
         }
         return page;
     }
 
     @Override
-    public Page<ShippingContract> searchCashierShipping(int currentPage, int pageSize, String searchWord) {
-        QueryWrapper<ShippingContract> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q ->
+    public Page<CashierShipping> searchCashierShipping(int currentPage, int pageSize, String searchWord) {
+        QueryWrapper<CashierShipping> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state", "1,1,1").and(q ->
                 q.like("shipping_contract_no", searchWord).or().like("logistics_contract_no", searchWord).or().like("own_company_name", searchWord)
                         .or().like("principal", searchWord).or().like("packing_location", searchWord).or().like("unpacking_factory", searchWord)
                         .or().like("first_container_no", searchWord).or().like("second_container_no", searchWord).or().like("first_seal_no", searchWord)
@@ -437,45 +436,40 @@ public class ShippingContractServiceImpl extends ServiceImpl<ShippingContractMap
                         .or().like("destination_port_fleet", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
                         .or().like("create_by", searchWord)
         ).orderByDesc("create_time", "shipping_contract_no");
-        Page<ShippingContract> page = new Page<>(currentPage, pageSize);
-        page = shippingContractMapper.selectPage(page, qw);
-        Iterator<ShippingContract> iterator = page.getRecords().iterator();
+        Page<CashierShipping> page = new Page<>(currentPage, pageSize);
+        page = cashierShippingMapper.selectPage(page, qw);
+        Iterator<CashierShipping> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            ShippingContract record = iterator.next();
+            CashierShipping record = iterator.next();
 //            获取董事长审核信息，并添加进对象中
             QueryWrapper<ShippingStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("shipping_contract_no", record.getShippingContractNo()).isNotNull("state").orderByDesc("nick_name");
             List<ShippingStateView> shippingStateViews = shippingStateInfoMapper.selectList(stateQw);
 
-            if (shippingStateViews.size() < 3) {
-                iterator.remove();
-                page.setTotal(page.getTotal() - 1);
-            } else {
-                record.setShippingDirector(shippingStateViews);
+            record.setShippingDirector(shippingStateViews);
 
-                //处理图片，形成一个图片数组
-                String contractPhoto = record.getContractPhoto();
-                String paymentPhoto = record.getPaymentPhoto();
-                //有多个照片,合同照片
-                if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
-                    //分割图片字符串，形成一个数组
-                    List<String> list = ImageUtils.imageSplit(contractPhoto);
-                    record.setContractPhotoArray(list);
-                    //取第一个图片的url
-                    record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
-                } else {
-                    record.setContractPhotoArray(Arrays.asList(contractPhoto));
-                }
-                //            付款照片
-                if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
-                    //分割图片字符串，形成一个数组
-                    List<String> list = ImageUtils.imageSplit(paymentPhoto);
-                    record.setPaymentPhotoArray(list);
-                    //取第一个图片的url
-                    record.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
-                } else {
-                    record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
-                }
+            //处理图片，形成一个图片数组
+            String contractPhoto = record.getContractPhoto();
+            String paymentPhoto = record.getPaymentPhoto();
+            //有多个照片,合同照片
+            if (StringUtils.isNotEmpty(contractPhoto) && contractPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(contractPhoto);
+                record.setContractPhotoArray(list);
+                //取第一个图片的url
+                record.setContractPhoto(ImageUtils.getFirstImageUrl(contractPhoto));
+            } else {
+                record.setContractPhotoArray(Arrays.asList(contractPhoto));
+            }
+            //            付款照片
+            if (StringUtils.isNotEmpty(paymentPhoto) && paymentPhoto.contains(",")) {
+                //分割图片字符串，形成一个数组
+                List<String> list = ImageUtils.imageSplit(paymentPhoto);
+                record.setPaymentPhotoArray(list);
+                //取第一个图片的url
+                record.setPaymentPhoto(ImageUtils.getFirstImageUrl(paymentPhoto));
+            } else {
+                record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
             }
         }
         return page;

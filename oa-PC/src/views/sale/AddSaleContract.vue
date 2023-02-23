@@ -13,8 +13,7 @@
             <el-form-item prop="customerEnterpriseName" label="销售公司">
               <el-select v-model="addModel.customerEnterpriseName" class="m-2" placeholder="请选择销售公司" size="default"
                 filterable>
-                <el-option v-for="item in customerData.list" :key="item.value" :label="item.label"
-                  :value="item.value" />
+                <el-option v-for="item in customerData.list" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -120,7 +119,7 @@ import SysDialog from "@/components/SysDialog.vue";
 import useDialog from '@/hooks/useDialog';
 import { AddSaleModel } from "@/api/sale/SaleModel"
 import { nextTick, onMounted, reactive, ref } from "vue";
-import { SelectCustomer } from "@/api/cashier/customer/CustomerModel";
+import { SelectCustomer } from "@/api/customer/CustomerModel";
 import { getSelectApi, addSaleContractApi, editSaleContractApi } from "@/api/sale/index";
 import { ElMessage, FormInstance, UploadFile, UploadFiles, UploadInstance, UploadProps, UploadUserFile } from "element-plus";
 import { add } from "lodash";
@@ -128,7 +127,7 @@ import { deletePhotoApi } from "@/api/handlePhoto";
 import { EditType } from "@/type/BaseEnum";
 import useInstance from '@/hooks/useInstance';
 import OwnCompanyList from "../ownCompany/OwnCompanyList.vue";
-import { SelectOwnCompany } from "@/api/cashier/customer/CustomerModel"
+import { SelectOwnCompany } from "@/api/customer/CustomerModel"
 import { getOwnCompanySelectApi } from "@/api/ownCompany";
 const { global } = useInstance()
 //弹框属性
@@ -342,6 +341,4 @@ defineExpose({
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

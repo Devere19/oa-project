@@ -8,6 +8,14 @@ export type purchasePaymentModel = {
     cashier: string
 }
 
+export type processPaymentModel = {
+    id: any
+    processContractNo: string
+    paymentTime: string
+    paymentPhotoArray: any
+    cashier: string
+}
+
 export type logisticsPaymentModel = {
     id: any
     logisticsContractNo: string

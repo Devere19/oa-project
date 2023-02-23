@@ -7,6 +7,8 @@
                     <el-button :icon="Search" @click="searchTableData" />
                 </template>
             </el-input>
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
@@ -18,6 +20,7 @@
                 <template #default="scope">{{ scope.row.shippingContractNo }}</template>
             </el-table-column>
             <el-table-column property="logisticsContractNo" align="center" label="物流合同编号" width="120" />
+            <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="principal" align="center" label="委托方" />
             <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期" width="105" />
             <el-table-column property="packingLocation" align="center" label="装箱地点" />
@@ -78,8 +81,10 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="200" fixed="right">
+            <el-table-column align="center" label="操作" width="290" fixed="right" v-if="operateStatus">
                 <template #default="scope">
+                    <el-button :icon="Printer" size="default" type="info" @click="openPrintDialog(scope.row)">制单
+                    </el-button>
                     <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
@@ -392,19 +397,24 @@
                 </span>
             </template>
         </el-dialog>
+
+        <PrintFormDialog :printDialogFlag="printDialogFlag" :formData="formData" @onClose="closePrintDialog">
+        </PrintFormDialog>
     </div>
 </template>
   
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Upload, Search, MoreFilled } from "@element-plus/icons-vue";
+import { Upload, Search, MoreFilled, Printer } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
+import { numberToChina } from "@/utils/chinaNumberUtil"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { shippingContractModel, shippingDirectorModel } from '@/api/shippingContract/ShippingContractModel'
-import { getCashierShippingApi, searchCashierShippingApi, uploadCashierShippingApi } from '@/api/cashier'
+import { getCashierShippingApi, searchCashierShippingApi, uploadCashierShippingApi, getLogisticsCustomerApi } from '@/api/cashier'
 import { userStore } from '@/store/nickName'
+import PrintFormDialog from '@/components/PrintFormDialog.vue'
 const userNickNameStore = userStore()
 
 const searchData = ref("")
@@ -489,6 +499,7 @@ const disabledDate = (time: Date) => {
 onMounted(() => {
     getTableData();
     loginUserName.value = userNickNameStore.user.nickName;
+    console.log("页面挂载");
 })
 
 // 获取海运单数据
@@ -673,6 +684,41 @@ const changeLoadingFalse = () => {
 // 新增窗口滑动回最顶端
 const ReturnTop = () => {
     uploadDialogTop.value.scrollTop = 0;
+}
+
+// 按钮显示
+const operateStatus = ref<boolean>(true)
+//改变operateStatus
+const changeOperateStatus = () => {
+    operateStatus.value = !operateStatus.value
+}
+
+const printDialogFlag = ref(false)
+const formData = reactive({
+    ownCompanyName: "",
+    agent: "",
+    amount: "",
+    customerEnterpriseName: "",
+    director: <string[]>[],
+    financeStaff: ""
+})
+
+const openPrintDialog = (row: any) => {
+    printDialogFlag.value = true;
+    formData.ownCompanyName = row.ownCompanyName;
+    formData.agent = loginUserName.value;
+    formData.amount = numberToChina(row.expenses);
+    getLogisticsCustomerApi(row.logisticsContractNo).then(res => {
+        formData.customerEnterpriseName = res.data
+    })
+    row.shippingDirector.forEach((d: any) => {
+        formData.director.push(d.nickName);
+    });
+    formData.financeStaff = row.financeStaff;
+}
+
+const closePrintDialog = () => {
+    printDialogFlag.value = false;
 }
 
 </script>

@@ -1,5 +1,6 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.CashierPurchasePayment;
 import cn.edu.guet.bean.ImportModel.ImportPurchasePaymentContractModel;
 import cn.edu.guet.bean.PurchasePaymentContract;
 import cn.edu.guet.bean.PurchasePaymentContractView;
@@ -21,8 +22,8 @@ public interface PurchasePaymentContractService extends IService<PurchasePayment
     int handleImportPurchasePaymentContractModel(ImportPurchasePaymentContractModel importPurchasePaymentContractModel);
 
 //    出纳
-    Page<PurchasePaymentContractView> getCashierPurchasePayment(int currentPage, int pageSize);
-    Page<PurchasePaymentContractView> searchCashierPurchasePayment(int currentPage, int pageSize,String searchWord);
+    Page<CashierPurchasePayment> getCashierPurchasePayment(int currentPage, int pageSize);
+    Page<CashierPurchasePayment> searchCashierPurchasePayment(int currentPage, int pageSize,String searchWord);
     int uploadCashierPurchasePayment(PurchasePaymentContract purchasePaymentContract);
 
     //审批
