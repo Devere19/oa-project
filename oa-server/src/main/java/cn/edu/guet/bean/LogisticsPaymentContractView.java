@@ -96,6 +96,11 @@ public class LogisticsPaymentContractView implements Serializable {
     private String saleContractNo;
 
     /**
+     * 己方公司名
+     */
+    private String ownCompanyName;
+
+    /**
      * 运费
      */
     private BigDecimal freight;

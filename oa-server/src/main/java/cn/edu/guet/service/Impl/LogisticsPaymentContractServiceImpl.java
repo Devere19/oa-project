@@ -3,6 +3,7 @@ package cn.edu.guet.service.Impl;
 import cn.edu.guet.bean.*;
 import cn.edu.guet.bean.ImportModel.ImportLogisticsPaymentContractModel;
 import cn.edu.guet.bean.logisticsContract.LogisticsContract;
+import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.mapper.*;
 import cn.edu.guet.service.LogisticsContractService;
 import cn.edu.guet.service.LogisticsPaymentContractService;
@@ -51,10 +52,16 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Autowired
     private LogisticsContractService logisticsContractService;
 
+    @Autowired
+    private SaleContractMapper saleContractMapper;
+
+    @Autowired
+    private CashierLogisticsPaymentMapper cashierLogisticsPaymentMapper;
+
     @Override
     public Page<LogisticsPaymentContractView> getLogisticsPaymentContractData(int currentPage, int pageSize) {
         QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.orderByDesc("create_time","id");
+        qw.orderByDesc("create_time", "id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         for (LogisticsPaymentContractView record : page.getRecords()) {
@@ -86,7 +93,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 .or().like("logistics_contract_no", searchWord)
                 .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord).orderByDesc("create_time","id");
+                .or().like("create_by", searchWord).orderByDesc("create_time", "id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         for (LogisticsPaymentContractView record : page.getRecords()) {
@@ -137,7 +144,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
             //            获取物流单,修改存在物流付款单标记
             QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
             qw.eq("logistics_contract_no", logisticsPaymentContract.getLogisticsContractNo());
-            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+            LogisticsContract logisticsContract = logisticsContractMapper.selectOne(qw);
             logisticsContract.setRelationPaymentExistState(1);
             logisticsContractMapper.updateById(logisticsContract);
         }
@@ -148,7 +155,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateLogisticsPaymentContract(LogisticsPaymentContract logisticsPaymentContract) {
-        LogisticsPaymentContract oldLogisticsPaymentContract=logisticsPaymentContractMapper.selectById(logisticsPaymentContract.getId());
+        LogisticsPaymentContract oldLogisticsPaymentContract = logisticsPaymentContractMapper.selectById(logisticsPaymentContract.getId());
         oldLogisticsPaymentContract.setLogisticsContractNo(logisticsPaymentContract.getLogisticsContractNo());
         oldLogisticsPaymentContract.setPaymentCount(logisticsPaymentContract.getPaymentCount());
         oldLogisticsPaymentContract.setLastUpdateBy(SecurityUtils.getUsername());
@@ -158,11 +165,11 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int deleteOneLogisticsPaymentContract(int id) {
-        String logisticsContractNo=logisticsPaymentContractMapper.selectById(id).getLogisticsContractNo();
+        String logisticsContractNo = logisticsPaymentContractMapper.selectById(id).getLogisticsContractNo();
 
-        int result=logisticsPaymentContractMapper.deleteById(id);
+        int result = logisticsPaymentContractMapper.deleteById(id);
 
-        if(result==1){
+        if (result == 1) {
             //        删除相关审核记录
             QueryWrapper<LogisticsDirectorState> directorStateQw = new QueryWrapper<>();
             directorStateQw.eq("logistics_payment_contract_id", id);
@@ -170,15 +177,15 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 
 //            查询是否存在其他物流付款单
             QueryWrapper<LogisticsPaymentContract> LPCQw = new QueryWrapper<>();
-            LPCQw.eq("logistics_contract_no",logisticsContractNo);
-            List<LogisticsPaymentContract> logisticsPaymentContractList=logisticsPaymentContractMapper.selectList(LPCQw);
+            LPCQw.eq("logistics_contract_no", logisticsContractNo);
+            List<LogisticsPaymentContract> logisticsPaymentContractList = logisticsPaymentContractMapper.selectList(LPCQw);
 
 //            若不存在则修改物流单字段
-            if(logisticsPaymentContractList.isEmpty()==true){
+            if (logisticsPaymentContractList.isEmpty() == true) {
                 //            获取物流单
                 QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
                 qw.eq("logistics_contract_no", logisticsContractNo);
-                LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+                LogisticsContract logisticsContract = logisticsContractMapper.selectOne(qw);
                 logisticsContract.setRelationPaymentExistState(0);
                 logisticsContractMapper.updateById(logisticsContract);
             }
@@ -189,7 +196,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 
     @Override
     public LogisticsPaymentContractView getOneLogisticsPaymentContract(int id) {
-        LogisticsPaymentContractView logisticsPaymentContractView=logisticsPaymentContractInfoMapper.selectById(id);
+        LogisticsPaymentContractView logisticsPaymentContractView = logisticsPaymentContractInfoMapper.selectById(id);
 
         QueryWrapper<LogisticsPaymentStateView> stateQw = new QueryWrapper<>();
         stateQw.eq("logistics_payment_contract_id", id).orderByDesc("nick_name");
@@ -221,23 +228,19 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     }
 
     @Override
-    public Page<LogisticsPaymentContractView> getCashierLogisticsPayment(int currentPage, int pageSize) {
-        QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
-        Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
+    public Page<CashierLogisticsPayment> getCashierLogisticsPayment(int currentPage, int pageSize) {
+        QueryWrapper<CashierLogisticsPayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").orderByDesc("create_time", "id");
+        Page<CashierLogisticsPayment> page = new Page<>(currentPage, pageSize);
+        page = cashierLogisticsPaymentMapper.selectPage(page, qw);
+        Iterator<CashierLogisticsPayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            LogisticsPaymentContractView record = iterator.next();
+            CashierLogisticsPayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<LogisticsPaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("logistics_payment_contract_id", record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
 
-            if (logisticsPaymentStateViews.size() < 3) {
-                iterator.remove();
-                page.setTotal(page.getTotal() - 1);
-            } else {
                 record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
 
                 //处理图片，形成一个图片数组
@@ -252,33 +255,28 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 } else {
                     record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
                 }
-            }
         }
         return page;
     }
 
     @Override
-    public Page<LogisticsPaymentContractView> searchCashierLogisticsPayment(int currentPage, int pageSize, String searchWord) {
-        QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("sale_contract_no", searchWord)
+    public Page<CashierLogisticsPayment> searchCashierLogisticsPayment(int currentPage, int pageSize, String searchWord) {
+        QueryWrapper<CashierLogisticsPayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").and(q -> q.like("sale_contract_no", searchWord)
                 .or().like("logistics_contract_no", searchWord)
                 .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
-        Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
+                .or().like("create_by", searchWord)).orderByDesc("create_time", "id");
+        Page<CashierLogisticsPayment> page = new Page<>(currentPage, pageSize);
+        page = cashierLogisticsPaymentMapper.selectPage(page, qw);
+        Iterator<CashierLogisticsPayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            LogisticsPaymentContractView record = iterator.next();
+            CashierLogisticsPayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<LogisticsPaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("logistics_payment_contract_id", record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<LogisticsPaymentStateView> logisticsPaymentStateViews = logisticsPaymentStateInfoMapper.selectList(stateQw);
 
-            if (logisticsPaymentStateViews.size() < 3) {
-                iterator.remove();
-                page.setTotal(page.getTotal() - 1);
-            } else {
                 record.setLogisticsPaymentDirector(logisticsPaymentStateViews);
 
                 //处理图片，形成一个图片数组
@@ -293,7 +291,6 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 } else {
                     record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
                 }
-            }
         }
         return page;
     }
@@ -313,9 +310,19 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
     }
 
     @Override
+    public String getLogisticsCustomer(String logisticsContractNo) {
+        QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
+        qw.eq("logistics_contract_no", logisticsContractNo);
+        LogisticsContract logisticsContract = logisticsContractMapper.selectOne(qw);
+        QueryWrapper<SaleContract> q = new QueryWrapper<>();
+        q.eq("sale_contract_no", logisticsContract.getSaleContractNo());
+        return saleContractMapper.selectOne(q).getCustomerEnterpriseName();
+    }
+
+    @Override
     public Page<LogisticsPaymentContractView> getDirectorLPC(int currentPage, int pageSize, int userId, int type) {
         QueryWrapper<LogisticsPaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
+        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time", "id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
@@ -430,7 +437,7 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
                 .or().like("logistics_contract_no", searchWord)
                 .or().like("squeeze_season", searchWord).or().like("goods_name", searchWord)
                 .or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
+                .or().like("create_by", searchWord)).orderByDesc("create_time", "id");
         Page<LogisticsPaymentContractView> page = new Page<>(currentPage, pageSize);
         page = logisticsPaymentContractInfoMapper.selectPage(page, qw);
         Iterator<LogisticsPaymentContractView> iterator = page.getRecords().iterator();
@@ -479,12 +486,12 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
         UpdateWrapper<LogisticsPaymentContract> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id).set("finance_state", 1).set("finance_staff", financeStaff);
 
-        int result=logisticsPaymentContractMapper.update(null, updateWrapper);
+        int result = logisticsPaymentContractMapper.update(null, updateWrapper);
 
-        if(result==1){
+        if (result == 1) {
             QueryWrapper<LogisticsContract> qw = new QueryWrapper<>();
             qw.eq("logistics_contract_no", logisticsPaymentContractMapper.selectById(id).getLogisticsContractNo());
-            LogisticsContract logisticsContract=logisticsContractMapper.selectOne(qw);
+            LogisticsContract logisticsContract = logisticsContractMapper.selectOne(qw);
             logisticsContract.setRelationPaymentAuditState(1);
             logisticsContractMapper.updateById(logisticsContract);
         }

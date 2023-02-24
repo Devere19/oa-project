@@ -11,18 +11,18 @@
                 </template>
             </el-input>
             <el-upload class="moreDeleteButton" name="file"
-                action="http://120.77.28.123:9000/processPaymentContract/processPaymentImportExcel"
-                :on-error="uploadFalse" :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1"
-                ref="upload" accept=".xlsx,.xls" :show-file-list="false">
+                action="http://120.77.28.123:9000/processPaymentContract/processPaymentImportExcel" :on-error="uploadFalse"
+                :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
+                accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
-            <el-button type="primary"  @click="changeOperateStatus"  style="margin-top: 20px;" 
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+            <el-button type="primary" class="moreDeleteButton" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="加工合同编号" align="center" width="120">
@@ -68,8 +68,7 @@
                         :disabled="stateAvailable(scope.row)!">
                         通过
                     </el-button>
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <!-- <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="scope.row.cashier != null ? true : (scope.row.financeStaff != null ? true : directorState(scope.row.processPaymentDirector))">修改
@@ -85,9 +84,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" title="新增加工付款单" width="40%" draggable center :before-close="closeAddDialog">
@@ -108,8 +106,7 @@
                         <el-col :span="16">
                             <el-form-item label="付款月份" prop="paymentMonth">
                                 <el-date-picker type="month" v-model="NewProcessPaymentContractData.paymentMonth"
-                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM"
-                                    size="large">
+                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM" size="large">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -165,8 +162,7 @@
                         <el-col :span="16">
                             <el-form-item label="付款月份" prop="paymentMonth">
                                 <el-date-picker type="month" v-model="UpdateProcessPaymentContractData.paymentMonth"
-                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM"
-                                    size="large">
+                                    :disabled-date="disabledDate" style="width: 100%;" value-format="YYYY-MM" size="large">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -269,7 +265,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             processPaymentContractDetail.financeStaff == null ? "暂无" :
-                                processPaymentContractDetail.financeStaff
+                            processPaymentContractDetail.financeStaff
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -331,7 +327,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             processPaymentContractDetail.cashier == null ? "暂无" :
-                                processPaymentContractDetail.cashier
+                            processPaymentContractDetail.cashier
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -340,7 +336,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             processPaymentContractDetail.paymentTime == null ? "未知" :
-                                processPaymentContractDetail.paymentTime
+                            processPaymentContractDetail.paymentTime
                         }}
                     </el-col>
                 </el-row>

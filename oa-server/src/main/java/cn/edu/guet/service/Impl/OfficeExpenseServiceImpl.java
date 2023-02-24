@@ -40,7 +40,10 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
 
     @Autowired
     private DirectorMapper directorMapper;
-    
+
+    @Autowired
+    private CashierOfficeExpenseMapper cashierOfficeExpenseMapper;
+
     @Override
     public Page<OfficeExpense> getOfficeExpenseData(int currentPage, int pageSize) {
         QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
@@ -170,23 +173,19 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     }
 
     @Override
-    public Page<OfficeExpense> getCashierOfficeExpense(int currentPage, int pageSize) {
-        QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
-        Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
-        page=officeExpenseMapper.selectPage(page,qw);
-        Iterator<OfficeExpense> iterator=page.getRecords().iterator();
+    public Page<CashierOfficeExpense> getCashierOfficeExpense(int currentPage, int pageSize) {
+        QueryWrapper<CashierOfficeExpense> qw= new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").orderByDesc("create_time","id");
+        Page<CashierOfficeExpense> page =new Page<>(currentPage,pageSize);
+        page=cashierOfficeExpenseMapper.selectPage(page,qw);
+        Iterator<CashierOfficeExpense> iterator=page.getRecords().iterator();
         while (iterator.hasNext()){
-            OfficeExpense record=iterator.next();
+            CashierOfficeExpense record=iterator.next();
 //            获取董事长审核信息，并添加进对象中
             QueryWrapper<OfficeStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("office_expense_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<OfficeStateView> officeStateViews=(officeStateInfoMapper.selectList(stateQw));
 
-            if(officeStateViews.size()<3){
-                iterator.remove();
-                page.setTotal(page.getTotal()-1);
-            }else{
                 record.setOfficeDirector(officeStateViews);
 
                 //处理图片，形成一个图片数组
@@ -201,31 +200,26 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
                 }else{
                     record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
                 }
-            }
         }
         return page;
     }
 
     @Override
-    public Page<OfficeExpense> searchCashierOfficeExpense(int currentPage, int pageSize, String searchWord) {
-        QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("items_list",searchWord)
+    public Page<CashierOfficeExpense> searchCashierOfficeExpense(int currentPage, int pageSize, String searchWord) {
+        QueryWrapper<CashierOfficeExpense> qw= new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").eq("director_state","1,1,1").and(q->q.like("items_list",searchWord)
                 .or().like("finance_staff",searchWord).or().like("cashier",searchWord)
                 .or().like("create_by",searchWord)).orderByDesc("create_time","id");
-        Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
-        page=officeExpenseMapper.selectPage(page,qw);
-        Iterator<OfficeExpense> iterator=page.getRecords().iterator();
+        Page<CashierOfficeExpense> page =new Page<>(currentPage,pageSize);
+        page=cashierOfficeExpenseMapper.selectPage(page,qw);
+        Iterator<CashierOfficeExpense> iterator=page.getRecords().iterator();
         while (iterator.hasNext()){
-            OfficeExpense record=iterator.next();
+            CashierOfficeExpense record=iterator.next();
 //            获取董事长审核信息，并添加进对象中
             QueryWrapper<OfficeStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("office_expense_id",record.getId()).isNotNull("state").orderByDesc("nick_name");
             List<OfficeStateView> officeStateViews=(officeStateInfoMapper.selectList(stateQw));
 
-            if(officeStateViews.size()<3){
-                iterator.remove();
-                page.setTotal(page.getTotal()-1);
-            }else{
                 record.setOfficeDirector(officeStateViews);
 
                 //处理图片，形成一个图片数组
@@ -240,7 +234,6 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
                 }else{
                     record.setPaymentPhotoArray(Arrays.asList(paymentPhoto));
                 }
-            }
         }
         return page;
     }

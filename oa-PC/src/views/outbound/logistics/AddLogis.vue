@@ -217,7 +217,7 @@ import { ElMessage, FormInstance, UploadProps, UploadUserFile } from 'element-pl
 import { deletePhotoApi } from '@/api/handlePhoto';
 import { addLogisticsApi } from '@/api/logistics';
 import { getOwnCompanySelectApi } from '@/api/ownCompany';
-import { SelectOwnCompany } from '@/api/cashier/customer/CustomerModel';
+import { SelectOwnCompany } from '@/api/customer/CustomerModel';
 const { dialog, onShow, onClose, onConfirm } = useDialog()
 
 const addFormRef = ref<FormInstance>()

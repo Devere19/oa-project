@@ -1,5 +1,6 @@
 package cn.edu.guet.service;
 
+import cn.edu.guet.bean.CashierProcessPayment;
 import cn.edu.guet.bean.ImportModel.ImportProcessPaymentContractModel;
 import cn.edu.guet.bean.ProcessPaymentContract;
 import cn.edu.guet.bean.ProcessPaymentContractView;
@@ -21,8 +22,8 @@ public interface ProcessPaymentContractService extends IService<ProcessPaymentCo
     int handleImportProcessPaymentContractModel(ImportProcessPaymentContractModel importProcessPaymentContractModel);
 
     //    出纳
-    Page<ProcessPaymentContractView> getCashierProcessPayment(int currentPage, int pageSize);
-    Page<ProcessPaymentContractView> searchCashierProcessPayment(int currentPage, int pageSize,String searchWord);
+    Page<CashierProcessPayment> getCashierProcessPayment(int currentPage, int pageSize);
+    Page<CashierProcessPayment> searchCashierProcessPayment(int currentPage, int pageSize,String searchWord);
     int uploadCashierProcessPayment(ProcessPaymentContract processPaymentContract);
 
     //审批

@@ -10,8 +10,8 @@
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column property="itemsList" align="center" label="支出项目清单" />
@@ -35,8 +35,7 @@
                     {{ scope.row.officeDirector[2].state == null ? "未处理" : "已通过✔" }}
                 </template>
             </el-table-column>
-            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间"
-                width="105" />
+            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间" width="105" />
             <el-table-column align="center" label="付款流水截图" width="130">
                 <template #default="scope">
                     <el-image style="width: 100px; height: 100px"
@@ -49,8 +48,7 @@
             <el-table-column property="createBy" align="center" label="创建者" />
             <el-table-column align="center" label="操作" width="200" fixed="right">
                 <template #default="scope">
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
                         @click="openUploadDialog(scope.row)">
@@ -60,9 +58,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="previewImageFlag">
@@ -104,8 +101,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.financeStaff == null ? "暂无" :
-        officeExpenseDetail.financeStaff
-}}
+                            officeExpenseDetail.financeStaff
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -173,16 +170,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.cashier == null ? "暂无" :
-        officeExpenseDetail.cashier
-}}
+                            officeExpenseDetail.cashier
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ officeExpenseDetail.paymentTime == null ? "未知" :
-        officeExpenseDetail.paymentTime
-}}
+                            officeExpenseDetail.paymentTime
+                        }}
                     </el-col>
                 </el-row>
             </div>
@@ -210,8 +207,7 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center
-            :before-close="closeUploadDialog">
+        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center :before-close="closeUploadDialog">
             <ul ref="uploadDialogTop" style="overflow: auto;height:300px">
                 <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="150px"
                     :model="uploadPaymentData" style="max-width: 80%">
