@@ -16,13 +16,13 @@
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
-            <el-button type="primary"  @click="changeOperateStatus"  style="margin-top: 20px;" 
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column property="itemsList" align="center" label="支出项目清单" />
@@ -68,8 +68,7 @@
                         :disabled="stateAvailable(scope.row)!">
                         通过
                     </el-button>
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="scope.row.financeStaff != null">修改
@@ -82,9 +81,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" title="新增办公经费单" width="40%" draggable center :before-close="closeAddDialog">
@@ -104,8 +102,7 @@
                     <el-row justify="center">
                         <el-col :span="16">
                             <el-form-item label="支出项目清单" prop="itemsList">
-                                <el-input v-model="NewOfficeExpenseData.itemsList" type="textarea" autosize
-                                    size="large" />
+                                <el-input v-model="NewOfficeExpenseData.itemsList" type="textarea" autosize size="large" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -208,7 +205,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             officeExpenseDetail.financeStaff == null ? "暂无" :
-                                officeExpenseDetail.financeStaff
+                            officeExpenseDetail.financeStaff
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -270,7 +267,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             officeExpenseDetail.cashier == null ? "暂无" :
-                                officeExpenseDetail.financeStaff
+                            officeExpenseDetail.financeStaff
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -279,7 +276,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             officeExpenseDetail.paymentTime == null ? "未知" :
-                                officeExpenseDetail.paymentTime
+                            officeExpenseDetail.paymentTime
                         }}
                     </el-col>
                 </el-row>

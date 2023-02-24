@@ -16,7 +16,7 @@
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
-            <el-button type="primary" @click="changeOperateStatus" style="margin-top: 20px;">
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
                 {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>

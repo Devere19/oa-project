@@ -14,7 +14,7 @@
                     {{ formData.ownCompanyName }}
                 </el-col>
                 <el-col :span="4" :class="['centerCommon', 'unTopBotLeftGroup', 'weightGroup']">
-                    用
+                    用途
                 </el-col>
                 <el-col :span="8" class="unTopBotLeftGroup">
                 </el-col>
@@ -27,7 +27,6 @@
                     {{ formData.agent }}
                 </el-col>
                 <el-col :span="4" :class="['centerCommon', 'unTopLeftGroup', 'weightGroup']">
-                    途
                 </el-col>
                 <el-col :span="8" class="unTopLeftGroup">
                 </el-col>
@@ -48,19 +47,19 @@
             </el-row>
             <el-row>
                 <el-col :span="4" :class="['centerCommon', 'unTopBotGroup', 'weightGroup']">
-                    对方
+
                 </el-col>
                 <el-col :span="8" :class="['centerCommon', 'unTopBotLeftGroup']">
                 </el-col>
                 <el-col :span="4" :class="['centerCommon', 'unTopLeftGroup', 'weightGroup']">
-                    户口
+                    开户名
                 </el-col>
                 <el-col :span="8" class="unTopLeftGroup">
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="4" :class="['centerCommon', 'unTopBotGroup', 'weightGroup']">
-                    单位
+                    对方单位名称
                 </el-col>
                 <el-col :span="8" :class="['centerCommon', 'unTopBotLeftGroup']">
                     {{ formData.customerEnterpriseName }}
@@ -73,7 +72,7 @@
             </el-row>
             <el-row>
                 <el-col :span="4" :class="['centerCommon', 'unTopGroup', 'weightGroup']">
-                    名称
+
                 </el-col>
                 <el-col :span="8" :class="['centerCommon', 'unTopLeftGroup']">
                 </el-col>
@@ -93,28 +92,28 @@
             </el-row>
             <el-row>
                 <el-col :span="12" :class="['centerCommon', 'unTopBotGroup']">
-                    {{ formData.director[0] }}————已通过
+                    {{ formData.director[0] }}——已通过
                 </el-col>
                 <el-col :span="12" class="unTopBotLeftGroup">
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12" :class="['centerCommon', 'unTopBotGroup']">
-                    {{ formData.director[1] }}————已通过
+                    {{ formData.director[1] }}——已通过
                 </el-col>
                 <el-col :span="12" class="unTopBotLeftGroup">
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12" :class="['centerCommon', 'unTopBotGroup']">
-                    {{ formData.director[2] }}————已通过
+                    {{ formData.director[2] }}——已通过
                 </el-col>
                 <el-col :span="12" class="unTopBotLeftGroup">
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12" :class="['centerCommon', 'unTopGroup']">
-                    {{ formData.financeStaff }}————已通过
+                    {{ formData.financeStaff }}——已通过
                 </el-col>
                 <el-col :span="12" class="unTopLeftGroup">
                 </el-col>

@@ -141,4 +141,9 @@ public class CashierController {
         return ResultUtils.success("上传成功",officeExpenseService.uploadCashierOfficeExpense(officeExpense));
     }
 
+    //    获取物流单对方公司名
+    @RequestMapping("/getLogisticsCustomer")
+    public HttpResult getLogisticsCustomer(String logisticsContractNo){
+        return ResultUtils.success("查询成功",logisticsPaymentContractService.getLogisticsCustomer(logisticsContractNo));
+    }
 }

@@ -7,22 +7,25 @@
                     <el-button :icon="Search" @click="searchTableData" />
                 </template>
             </el-input>
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="物流合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.logisticsContractNo }}</template>
             </el-table-column>
-            <el-table-column property="saleContractNo" align="center" label="销售合同编号" />
+            <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
+            <el-table-column property="saleContractNo" align="center" label="加工/销售合同编号" />
             <el-table-column property="freight" align="center" label="运费总价" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
-            <el-table-column property="logisticsContractTime" :formatter="conversionDate" align="center"
-                label="物流合同签订时间" width="105" />
+            <el-table-column property="logisticsContractTime" :formatter="conversionDate" align="center" label="物流合同签订时间"
+                width="105" />
             <el-table-column property="goodsName" align="center" label="运输货物名称" />
             <el-table-column property="totalWeight" align="center" label="运输货物总量" />
             <el-table-column property="goodsUnit" align="center" label="运输货物单位" />
@@ -44,8 +47,7 @@
                     {{ scope.row.logisticsPaymentDirector[2].state == null ? "未处理" : "已通过✔" }}
                 </template>
             </el-table-column>
-            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间"
-                width="100" />
+            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间" width="100" />
             <el-table-column align="center" label="付款流水截图" width="130">
                 <template #default="scope">
                     <el-image style="width: 100px; height: 100px"
@@ -56,10 +58,11 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="200" fixed="right">
+            <el-table-column align="center" label="操作" width="290" fixed="right" v-if="operateStatus">
                 <template #default="scope">
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="Printer" size="default" type="info" @click="openPrintDialog(scope.row)">制单
+                    </el-button>
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
                         @click="openUploadDialog(scope.row)">
@@ -69,9 +72,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="previewImageFlag">
@@ -87,10 +89,16 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.logisticsContractNo }}
                     </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        己方公司名：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ logisticsPaymentContractDetail.ownCompanyName }}
+                    </el-col>
                 </el-row>
                 <el-row justify="center">
                     <el-col :span="6" class="moreDetailTitle">
-                        销售合同编号：
+                        加工/销售合同编号：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.saleContractNo }}
@@ -153,8 +161,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.financeStaff == null ? "暂无" :
-        logisticsPaymentContractDetail.financeStaff
-}}
+                            logisticsPaymentContractDetail.financeStaff
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -214,16 +222,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.cashier == null ? "暂无" :
-        logisticsPaymentContractDetail.cashier
-}}
+                            logisticsPaymentContractDetail.cashier
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ logisticsPaymentContractDetail.paymentTime == null ? "未知" :
-        logisticsPaymentContractDetail.paymentTime
-}}
+                            logisticsPaymentContractDetail.paymentTime
+                        }}
                     </el-col>
                 </el-row>
             </div>
@@ -251,8 +259,7 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center
-            :before-close="closeUploadDialog">
+        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center :before-close="closeUploadDialog">
             <ul ref="uploadDialogTop" style="overflow: auto;height:300px">
                 <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="150px"
                     :model="uploadPaymentData" style="max-width: 80%">
@@ -283,19 +290,24 @@
                 </span>
             </template>
         </el-dialog>
+
+        <PrintFormDialog :printDialogFlag="printDialogFlag" :formData="formData" @onClose="closePrintDialog">
+        </PrintFormDialog>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Upload, Search, MoreFilled } from "@element-plus/icons-vue";
+import { Upload, Search, MoreFilled, Printer } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
+import { numberToChina } from "@/utils/chinaNumberUtil"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { logisticsPaymentContractModel, logisticsPaymentDirectorModel } from '@/api/logisticsPaymentContract/LogisticsPaymentContractModel'
-import { getCashierLogisticsPaymentApi, searchCashierLogisticsPaymentApi, uploadCashierLogisticsPaymentApi } from '@/api/cashier'
+import { getCashierLogisticsPaymentApi, searchCashierLogisticsPaymentApi, uploadCashierLogisticsPaymentApi, getLogisticsCustomerApi } from '@/api/cashier'
 import { userStore } from '@/store/nickName'
+import PrintFormDialog from '@/components/PrintFormDialog.vue'
 const userNickNameStore = userStore()
 
 const searchData = ref("")
@@ -322,6 +334,7 @@ const firstTableRef = ref<InstanceType<typeof ElTable>>()
 const logisticsPaymentContractDetail = reactive({
     id: '',
     logisticsContractNo: '',
+    ownCompanyName: '',
     saleContractNo: '',
     freight: '',
     paymentCount: '',
@@ -409,6 +422,7 @@ const returnAllData = () => {
 // 打开物流付款单详情窗口
 const openMordDetailDialog = async (row: any) => {
     logisticsPaymentContractDetail.logisticsContractNo = row.logisticsContractNo
+    logisticsPaymentContractDetail.ownCompanyName = row.ownCompanyName
     logisticsPaymentContractDetail.saleContractNo = row.saleContractNo
     logisticsPaymentContractDetail.freight = row.freight
     logisticsPaymentContractDetail.paymentCount = row.paymentCount
@@ -500,7 +514,7 @@ const closeUploadDialog = () => {
 }
 
 // 照片移除后发送请求后台删除照片
-const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
+const handleRemove: UploadProps['onRemove'] = (uploadFile: any, uploadFiles: any) => {
     console.log(uploadFile, uploadFiles);
     uploadPaymentData.paymentPhotoArray.splice(uploadPaymentData.paymentPhotoArray.indexOf(uploadFile.response.data), 1);
     console.log("移出照片数据组");
@@ -536,6 +550,41 @@ const changeLoadingFalse = () => {
 // 新增窗口滑动回最顶端
 const ReturnTop = () => {
     uploadDialogTop.value.scrollTop = 0;
+}
+
+// 按钮显示
+const operateStatus = ref<boolean>(true)
+//改变operateStatus
+const changeOperateStatus = () => {
+    operateStatus.value = !operateStatus.value
+}
+
+const printDialogFlag = ref(false)
+const formData = reactive({
+    ownCompanyName: "",
+    agent: "",
+    amount: "",
+    customerEnterpriseName: "",
+    director: <string[]>[],
+    financeStaff: ""
+})
+
+const openPrintDialog = (row: any) => {
+    printDialogFlag.value = true;
+    formData.ownCompanyName = row.ownCompanyName;
+    formData.agent = loginUserName.value;
+    formData.amount = numberToChina(row.paymentCount);
+    getLogisticsCustomerApi(row.logisticsContractNo).then(res => {
+        formData.customerEnterpriseName = res.data
+    })
+    row.logisticsPaymentDirector.forEach((d: any) => {
+        formData.director.push(d.nickName);
+    });
+    formData.financeStaff = row.financeStaff;
+}
+
+const closePrintDialog = () => {
+    printDialogFlag.value = false;
 }
 
 </script>

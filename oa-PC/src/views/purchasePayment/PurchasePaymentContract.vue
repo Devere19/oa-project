@@ -16,13 +16,13 @@
                 ref="upload" accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
             </el-upload>
-            <el-button type="primary"  @click="changeOperateStatus" style="margin-top: 20px;" 
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="purchaseContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="采购合同编号" align="center" width="120">
@@ -33,8 +33,7 @@
             <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
-            <el-table-column property="inboundTime" :formatter="conversionDate" align="center" label="入库时间"
-                width="105" />
+            <el-table-column property="inboundTime" :formatter="conversionDate" align="center" label="入库时间" width="105" />
             <el-table-column property="goodsName" align="center" label="采购货物名称" />
             <el-table-column property="goodsCount" align="center" label="采购货物数量" />
             <el-table-column property="goodsUnit" align="center" label="采购货物单位" />
@@ -73,8 +72,7 @@
                         :disabled="stateAvailable(scope.row)!">
                         通过
                     </el-button>
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <!-- <el-button :icon="Edit" size="default" type="info" @click="openUpdateDialog(scope.row)"
                         :disabled="scope.row.cashier != null ? true : (scope.row.financeStaff != null ? true : directorState(scope.row.purchasePaymentDirector))">修改
@@ -90,9 +88,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="addDialogFlag" title="新增采购付款单" width="40%" draggable center :before-close="closeAddDialog">
@@ -246,7 +243,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             purchasePaymentContractDetail.financeStaff == null ? "暂无" :
-                                purchasePaymentContractDetail.financeStaff
+                            purchasePaymentContractDetail.financeStaff
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -308,7 +305,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             purchasePaymentContractDetail.cashier == null ? "暂无" :
-                                purchasePaymentContractDetail.cashier
+                            purchasePaymentContractDetail.cashier
                         }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
@@ -317,7 +314,7 @@
                     <el-col :span="6" class="moreDetailContent">
                         {{
                             purchasePaymentContractDetail.paymentTime == null ? "未知" :
-                                purchasePaymentContractDetail.paymentTime
+                            purchasePaymentContractDetail.paymentTime
                         }}
                     </el-col>
                 </el-row>

@@ -7,11 +7,13 @@
                     <el-button :icon="Search" @click="searchTableData" />
                 </template>
             </el-input>
+            <el-button class="moreDeleteButton" type="primary" @click="changeOperateStatus">
+                {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
             <el-button v-show="returnAll" class="moreDeleteButton" type="danger" @click="returnAllData">返回全部
             </el-button>
         </div>
-        <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%"
-            :border="true" highlight-current-row>
+        <el-table ref="firstTableRef" class="processContractTable" :data="firstTableData" style="width: 98%" :border="true"
+            highlight-current-row>
             <!-- 暂时隐藏index -->
             <!-- <el-table-column type="index" align="center" label="ID" width="50%" /> -->
             <el-table-column label="加工合同编号" align="center" width="120">
@@ -41,8 +43,7 @@
                     {{ scope.row.processPaymentDirector[2].state == null ? "未处理" : "已通过✔" }}
                 </template>
             </el-table-column>
-            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间"
-                width="105" />
+            <el-table-column property="paymentTime" :formatter="conversionDate" align="center" label="付款时间" width="105" />
             <el-table-column align="center" label="付款流水截图" width="130">
                 <template #default="scope">
                     <el-image style="width: 100px; height: 100px"
@@ -53,10 +54,11 @@
             <el-table-column property="createTime" :formatter="conversionDateTime" sortable align="center" label="创建时间"
                 width="105" />
             <el-table-column property="createBy" align="center" label="创建者" />
-            <el-table-column align="center" label="操作" width="200" fixed="right">
+            <el-table-column align="center" label="操作" width="290" fixed="right" v-if="operateStatus">
                 <template #default="scope">
-                    <el-button :icon="MoreFilled" size="default" type="primary"
-                        @click="openMordDetailDialog(scope.row)">详情
+                    <el-button :icon="Printer" size="default" type="info" @click="openPrintDialog(scope.row)">制单
+                    </el-button>
+                    <el-button :icon="MoreFilled" size="default" type="primary" @click="openMordDetailDialog(scope.row)">详情
                     </el-button>
                     <el-button :icon="Upload" size="default" type="success" :disabled="scope.row.cashier != null"
                         @click="openUploadDialog(scope.row)">
@@ -66,9 +68,8 @@
         </el-table>
         <div class="paginationGroup">
             <el-pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :hide-on-single-page="false"
-                :page-sizes="[5, 10, 20, 50, 100]" :background="background"
-                layout="total, sizes, prev, pager, next, jumper" :total="total"
-                @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
+                :page-sizes="[5, 10, 20, 50, 100]" :background="background" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" @size-change="searchData == null || searchData == '' ? getTableData() : searchTableData()"
                 @current-change="searchData == null || searchData == '' ? getTableData() : searchTableData()" />
         </div>
         <el-dialog v-model="previewImageFlag">
@@ -136,8 +137,8 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.financeStaff == null ? "暂无" :
-        processPaymentContractDetail.financeStaff
-}}
+                            processPaymentContractDetail.financeStaff
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         财务审核状态：
@@ -197,16 +198,16 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.cashier == null ? "暂无" :
-        processPaymentContractDetail.cashier
-}}
+                            processPaymentContractDetail.cashier
+                        }}
                     </el-col>
                     <el-col :span="6" class="moreDetailTitle">
                         付款时间：
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.paymentTime == null ? "未知" :
-        processPaymentContractDetail.paymentTime
-}}
+                            processPaymentContractDetail.paymentTime
+                        }}
                     </el-col>
                 </el-row>
             </div>
@@ -234,8 +235,7 @@
                 </span>
             </template>
         </el-dialog>
-        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center
-            :before-close="closeUploadDialog">
+        <el-dialog v-model="uploadDialogFlag" title="上传窗口" width="40%" draggable center :before-close="closeUploadDialog">
             <ul ref="uploadDialogTop" style="overflow: auto;height:300px">
                 <el-form ref="firstFormRef" :rules="firstRules" label-position="right" label-width="150px"
                     :model="uploadPaymentData" style="max-width: 80%">
@@ -266,19 +266,24 @@
                 </span>
             </template>
         </el-dialog>
+
+        <PrintFormDialog :printDialogFlag="printDialogFlag" :formData="formData" @onClose="closePrintDialog">
+        </PrintFormDialog>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElTable, ElMessage, UploadProps, UploadUserFile, FormInstance, FormRules } from 'element-plus'
-import { Upload, Search, MoreFilled } from "@element-plus/icons-vue";
+import { Upload, Search, MoreFilled, Printer } from "@element-plus/icons-vue";
 import { conversionDate, conversionDateTime, dateConversion, timeConversion } from "@/utils/timeFormat"
+import { numberToChina } from "@/utils/chinaNumberUtil"
 // import type from 'element-plus'
 import { deletePhotoApi } from '@/api/handlePhoto'
 import { processPaymentContractModel, processPaymentDirectorModel } from '@/api/processPaymentContract/processPaymentContractModel'
 import { getCashierProcessPaymentApi, searchCashierProcessPaymentApi, uploadCashierProcessPaymentApi } from '@/api/cashier'
 import { userStore } from '@/store/nickName'
+import PrintFormDialog from '@/components/PrintFormDialog.vue'
 const userNickNameStore = userStore()
 
 const searchData = ref("")
@@ -514,6 +519,39 @@ const changeLoadingFalse = () => {
 // 新增窗口滑动回最顶端
 const ReturnTop = () => {
     uploadDialogTop.value.scrollTop = 0;
+}
+
+// 按钮显示
+const operateStatus = ref<boolean>(true)
+//改变operateStatus
+const changeOperateStatus = () => {
+    operateStatus.value = !operateStatus.value
+}
+
+const printDialogFlag = ref(false)
+const formData = reactive({
+    ownCompanyName: "",
+    agent: "",
+    amount: "",
+    customerEnterpriseName: "",
+    director: <string[]>[],
+    financeStaff: ""
+})
+
+const openPrintDialog = (row: any) => {
+    printDialogFlag.value = true;
+    formData.ownCompanyName = row.ownCompanyName;
+    formData.agent = loginUserName.value;
+    formData.amount = numberToChina(row.paymentCount);
+    formData.customerEnterpriseName = row.customerEnterpriseName;
+    row.processPaymentDirector.forEach((d: any) => {
+        formData.director.push(d.nickName);
+    });
+    formData.financeStaff = row.financeStaff;
+}
+
+const closePrintDialog = () => {
+    printDialogFlag.value = false;
 }
 
 </script>
