@@ -92,5 +92,10 @@ public class LogisticsDetail implements Serializable {
      */
     private Integer upperType;
 
+    /**
+     * 计算方式【装货结算、卸货结算】
+     */
+    private String calculationMethod;
+
 
 }

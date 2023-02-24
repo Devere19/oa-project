@@ -15,6 +15,7 @@
         <el-table-column prop="licensePlateNumber" label="车牌号"></el-table-column>
         <el-table-column prop="goodsWeight" label="载货量"></el-table-column>
         <el-table-column prop="goodsUnit" label="重量单位"></el-table-column>
+        <el-table-column prop="calculationMethod" label="结算方式"></el-table-column>
       </el-table>
     </template>
 
@@ -38,7 +39,7 @@ const tableList = reactive({
 
 
 //展示
-const show = async (id: string,logisticsContractNo:string, saleContractNo: string) => {
+const show = async (id: string, logisticsContractNo: string, saleContractNo: string) => {
   logisticsContractNumber.value = logisticsContractNo
   saleContractNumber.value = saleContractNo
   //获取当前物流单的物流信息详情

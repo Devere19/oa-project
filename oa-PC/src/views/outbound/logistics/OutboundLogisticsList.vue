@@ -23,7 +23,7 @@
         <el-button @click="searchBtn" :icon="Search">搜索</el-button>
         <el-button @click="resetBtn" type="danger" plain :icon="Close">重置</el-button>
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
-        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole? "显示归档数据": "显示原始数据" }}
+        <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示原始数据" }}
         </el-button>
         <!-- <el-upload class="moreDeleteButton" name="file"
           action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
@@ -37,8 +37,7 @@
           style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
           <el-button :icon="Upload" type="primary">导入</el-button>
         </el-upload>
-        <el-button type="primary"  @click="changeOperateStatus" 
-        > {{operateStatus?"隐藏操作":"显示操作"}}</el-button>
+        <el-button type="primary" @click="changeOperateStatus"> {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -68,8 +67,8 @@
           </el-button>
           <el-button :type="scope.row.pigeonhole == 1 ? 'warning' : 'defalut'"
             :icon="scope.row.pigeonhole == 1 ? Hide : View" size="default" @click="changePigeonhole(scope.row.id)">{{
-              isPigeonhole? "归档":
-                "还原"
+              isPigeonhole ? "归档" :
+              "还原"
             }}
           </el-button>
           <el-button :icon="Money" size="default" type="success" @click="openPaymentDialog(scope.row)">付款
@@ -92,8 +91,8 @@
 
     <!-- 分页 -->
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page.sync="listParm.currentPage"
-      :page-sizes="[10, 20, 40, 80, 100]" :page-size="listParm.pageSize"
-      layout="total, sizes, prev, pager, next, jumper" :total="listParm.total" background>
+      :page-sizes="[10, 20, 40, 80, 100]" :page-size="listParm.pageSize" layout="total, sizes, prev, pager, next, jumper"
+      :total="listParm.total" background>
       :pager-count="7">
     </el-pagination>
 
@@ -161,8 +160,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
-              <el-form-item prop="squeezeSeason" label="榨季" label-width='150px' label-position="right"
-                :disabled="isEdit">
+              <el-form-item prop="squeezeSeason" label="榨季" label-width='150px' label-position="right" :disabled="isEdit">
                 <el-input v-model="addModel.squeezeSeason" size="default" :disabled="isEdit"></el-input>
               </el-form-item>
             </el-col>
@@ -205,7 +203,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.upperType'" label="物流详情单类型" label-width='150px'
                   label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-radio-group v-model="item.upperType" :disabled="isEdit">
                     <el-radio label="1" size="default">采购单</el-radio>
                     <el-radio label="0" size="default">加工单</el-radio>
@@ -219,7 +217,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.purchaseContractNo'" label="采购/加工合同编号"
                   label-width='150px' label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.purchaseContractNo" placeholder="若从自家仓库出货请填写'000'" :disabled="isEdit">
                   </el-input>
                 </el-form-item>
@@ -229,7 +227,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.outboundTime'" label="出库日期" label-width='150px'
                   label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-date-picker v-model="item.outboundTime" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD"
                     :disabled="isEdit" placeholder="请选择出库日期" size="default" />
 
@@ -240,7 +238,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.goodsFactory'" label="取货厂名" label-width='150px'
                   label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.goodsFactory" placeholder="自家仓库出货请填写'自家仓库'" :disabled="isEdit">
                   </el-input>
                 </el-form-item>
@@ -248,7 +246,7 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.licensePlateNumber'" label="车牌号"
                   label-width='150px' label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.licensePlateNumber" :disabled="isEdit"></el-input>
                 </el-form-item>
               </el-col>
@@ -257,14 +255,14 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.goodsWeight'" label="载货量" label-width='150px'
                   label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.goodsWeight" :disabled="isEdit"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.goodsUnit'" label="货物单位" label-width='150px'
                   label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-select v-model="item.goodsUnit" placeholder="请选择货物单位" size="default" :disabled="isEdit">
                     <el-option label="吨" value="吨"></el-option>
                     <el-option label="斤" value="斤"></el-option>
@@ -276,16 +274,14 @@
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
                   label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.unitPrice" :disabled="isEdit"></el-input>
-                  <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)" type="danger"
-                    style="margin-top: 5px;" :disabled="isEdit">删除</el-button>
                 </el-form-item>
               </el-col>
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.unloadingLocation'" label="卸货地点"
                   label-width='150px' label-position="right" :rules="[
-                  { required: true, trigger: ['change'] }]">
+                    { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.unloadingLocation" :disabled="isEdit"></el-input>
                 </el-form-item>
               </el-col>
@@ -296,6 +292,18 @@
             </el-col> -->
             </el-row>
             <el-row>
+              <el-col :span="12" :offset="0">
+                <el-form-item :prop="'logisticsDetailList.' + index + '.calculationMethod'" label="结算方式"
+                  label-width='150px' label-position="right" :rules="[
+                    { required: true, trigger: ['change'] }]">
+                  <el-select v-model="item.calculationMethod" placeholder="请选择计算方式" size="default">
+                    <el-option label="装货结算" value="装货结算"></el-option>
+                    <el-option label="卸货结算" value="卸货结算"></el-option>
+                  </el-select>
+                  <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)" type="danger"
+                    style="margin-top: 5px;" :disabled="isEdit">删除</el-button>
+                </el-form-item>
+              </el-col>
               <el-col :span="12" :offset="0">
                 <el-form-item label="" label-width='150px' label-position="right">
                   <el-button type="warning" icon="Plus" @click="addLogisticsDetail(1)"
@@ -501,6 +509,7 @@ const addModel = reactive<AddLogisticsModel>({
       goodsFactory: '',
       outboundTime: '',
       licensePlateNumber: '',
+      calculationMethod: '',
       goodsWeight: '',
       goodsUnit: '',
       unloadingLocation: '',
@@ -719,7 +728,7 @@ const removeInboundItem = (flag: number, item: LogisticsDetailList) => {
     }
   }
 }
-// 添加物流详情但
+// 添加物流详情单
 const addLogisticsDetail = (flag: number) => {
   // flag为0则是添加，为1则是修改
   if (flag == 0) {
@@ -735,7 +744,8 @@ const addLogisticsDetail = (flag: number) => {
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
+      calculationMethod: ''
     })
   } else if (flag == 1) {
     addModel.logisticsDetailList.push({
@@ -750,7 +760,8 @@ const addLogisticsDetail = (flag: number) => {
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
+      calculationMethod: '',
     })
   }
 }
@@ -873,6 +884,4 @@ const changeOperateStatus = () => {
 
 </script>
 
-<style scoped >
-
-</style>  
+<style scoped ></style>  

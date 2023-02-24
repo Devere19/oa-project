@@ -10,7 +10,7 @@ const config = {
     'Content-Type': 'application/json;charset=UTF-8'
   },
   // baseURL: 'https://www.glypro19.com',
-  timeout: 50000
+  timeout: 50000000
 }
 
 //定义返回值类型
