@@ -520,7 +520,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 QueryWrapper<PurchaseContract> purchaseContractQueryWrapper = new QueryWrapper<>();
                 purchaseContractQueryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, logisticsDetail.getPurchaseContractNo());
                 PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
-                if (purchaseContract==null){
+                if (purchaseContract == null) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     return ResultUtils.error("采购合同错误,请检查采购合同号");
                 }
@@ -532,7 +532,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
                 otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
                 OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
-                if (otherWarehouse==null){
+                if (otherWarehouse == null) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                     return ResultUtils.error("仓库没有找到，请检查厂名和加工单的货物名称是否正确");
                 }
@@ -630,7 +630,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             saleContractQueryWrapper.lambda().eq(SaleContract::getSaleContractNo, logisticsContract.getSaleContractNo());
             SaleContract saleContract = saleContractMapper.selectOne(saleContractQueryWrapper);
             if (saleContract == null) {
-                return ResultUtils.error("销售单合同号错误");
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultUtils.error("物流单中销售单合同号错误，请重新核对");
             }
             goodsName = saleContract.getGoodsName();
         } else {
@@ -639,7 +640,8 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             purchaseContractQueryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, purchaseContractNo);
             PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
             if (purchaseContract == null) {
-                return ResultUtils.error("采购合同编号错误");
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultUtils.error("物流详情单中有采购合同编号错误，请重新核对");
             }
             //货物名称
             goodsName = purchaseContract.getGoodsName();
@@ -720,6 +722,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 QueryWrapper<PurchaseContract> queryWrapper = new QueryWrapper<>();
                 queryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, detailPurchaseContractNo);
                 PurchaseContract purchaseContract1 = purchaseContractMapper.selectOne(queryWrapper);
+                if (purchaseContract1 == null) {
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return ResultUtils.error("物流详情单中有采购合同编号错误，请重新核对");
+                }
                 purchaseContract1.setRelationLogisticsExistState(1);
                 purchaseContractMapper.updateById(purchaseContract1);
 
@@ -729,6 +735,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
                 otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
                 OtherWarehouse one = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+                if (one == null) {
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return ResultUtils.error("物流详情单中有取货厂名错误，请重新核对");
+                }
                 BigDecimal goodsCount = one.getGoodsCount();
                 //判断单位
                 if (logisticsDetail.getGoodsUnit().equals("吨")) {
@@ -770,6 +780,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, factoryName);
                     otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
                     OtherWarehouse one = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+                    if (one == null) {
+                        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                        return ResultUtils.error("类型为加工单的物流详情单中有取货厂名错误，请重新核对");
+                    }
                     BigDecimal goodsCount = one.getGoodsCount();
                     //判断单位
                     if (logisticsDetail.getGoodsUnit().equals("吨")) {
@@ -800,6 +814,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                         QueryWrapper<OwnWarehouse> ownWarehouseQueryWrapper = new QueryWrapper<>();
                         ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getGoodsName, goodsName);
                         OwnWarehouse ownWarehouse = ownWarehouseMapper.selectOne(ownWarehouseQueryWrapper);
+                        if (ownWarehouse == null) {
+                            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                            return ResultUtils.error("自家仓库没有该货物库存");
+                        }
                         BigDecimal goodsCount = ownWarehouse.getGoodsCount();
                         //判断单位
                         if (logisticsDetail.getGoodsUnit().equals("吨")) {
@@ -827,6 +845,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                         QueryWrapper<PurchaseContract> queryWrapper = new QueryWrapper<>();
                         queryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, detailPurchaseContractNo);
                         PurchaseContract purchaseContract1 = purchaseContractMapper.selectOne(queryWrapper);
+                        if (purchaseContract1 == null) {
+                            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                            return ResultUtils.error("物流详情单中有采购合同编号错误，请重新核对");
+                        }
                         purchaseContract1.setRelationLogisticsExistState(1);
                         purchaseContractMapper.updateById(purchaseContract1);
 
@@ -836,6 +858,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                         otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
                         otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
                         OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+                        if (otherWarehouse == null) {
+                            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                            return ResultUtils.error("类型为采购单的物流详情单中有取货厂名错误，请重新核对");
+                        }
                         BigDecimal goodsCount = otherWarehouse.getGoodsCount();
                         //判断单位
                         if (logisticsDetail.getGoodsUnit().equals("吨")) {
