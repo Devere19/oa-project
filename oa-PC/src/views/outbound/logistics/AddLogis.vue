@@ -169,8 +169,6 @@
                 label-position="right" :rules="[
                   { required: true, trigger: ['change'] }]">
                 <el-input v-model="item.unitPrice"></el-input>
-                <el-button v-show="index != 0" @click.prevent="removeInboundItem(item)" type="danger"
-                  style="margin-top: 5px;">删除</el-button>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
@@ -180,13 +178,21 @@
                 <el-input v-model="item.unloadingLocation"></el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="12" :offset="0">
-              <el-form-item label="" label-width='150px' label-position="right">
-                <el-button type="warning" icon="Plus" @click="addLogisticsDetail">添加物流详情单</el-button>
-              </el-form-item>
-            </el-col> -->
+
           </el-row>
           <el-row>
+            <el-col :span="12" :offset="0">
+              <el-form-item :prop="'logisticsDetailList.' + index + '.calculationMethod'" label="结算方式" label-width='150px'
+                label-position="right" :rules="[
+                  { required: true, trigger: ['change'] }]">
+                <el-select v-model="item.calculationMethod" placeholder="请选择计算方式" size="default">
+                  <el-option label="装货结算" value="装货结算"></el-option>
+                  <el-option label="卸货结算" value="卸货结算"></el-option>
+                </el-select>
+                <el-button v-show="index != 0" @click.prevent="removeInboundItem(item)" type="danger"
+                  style="margin-top: 5px;">删除</el-button>
+              </el-form-item>
+            </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item label="" label-width='150px' label-position="right">
                 <el-button type="warning" icon="Plus" @click="addLogisticsDetail">添加物流详情单</el-button>
@@ -261,6 +267,7 @@ const addModel = reactive<AddLogisticsModel>({
       outboundTime: '',
       licensePlateNumber: '',
       goodsWeight: '',
+      calculationMethod: '',
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
@@ -283,6 +290,7 @@ const show = () => {
       goodsFactory: '',
       outboundTime: '',
       licensePlateNumber: '',
+      calculationMethod: '',
       goodsWeight: '',
       goodsUnit: '',
       unloadingLocation: '',
@@ -341,6 +349,7 @@ const addLogisticsDetail = () => {
     goodsUnit: '',
     unloadingLocation: '',
     unitPrice: '',
+    calculationMethod: '',
     createBy: ''
   })
 }

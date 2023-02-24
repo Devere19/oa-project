@@ -276,8 +276,6 @@
                   label-position="right" :rules="[
                     { required: true, trigger: ['change'] }]">
                   <el-input v-model="item.unitPrice" :disabled="isEdit"></el-input>
-                  <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)" type="danger"
-                    style="margin-top: 5px;" :disabled="isEdit">删除</el-button>
                 </el-form-item>
               </el-col>
               <el-col :span="12" :offset="0">
@@ -294,6 +292,18 @@
             </el-col> -->
             </el-row>
             <el-row>
+              <el-col :span="12" :offset="0">
+                <el-form-item :prop="'logisticsDetailList.' + index + '.calculationMethod'" label="结算方式"
+                  label-width='150px' label-position="right" :rules="[
+                    { required: true, trigger: ['change'] }]">
+                  <el-select v-model="item.calculationMethod" placeholder="请选择计算方式" size="default">
+                    <el-option label="装货结算" value="装货结算"></el-option>
+                    <el-option label="卸货结算" value="卸货结算"></el-option>
+                  </el-select>
+                  <el-button v-show="index != 0" @click.prevent="removeInboundItem(1, item)" type="danger"
+                    style="margin-top: 5px;" :disabled="isEdit">删除</el-button>
+                </el-form-item>
+              </el-col>
               <el-col :span="12" :offset="0">
                 <el-form-item label="" label-width='150px' label-position="right">
                   <el-button type="warning" icon="Plus" @click="addLogisticsDetail(1)"
@@ -499,6 +509,7 @@ const addModel = reactive<AddLogisticsModel>({
       goodsFactory: '',
       outboundTime: '',
       licensePlateNumber: '',
+      calculationMethod: '',
       goodsWeight: '',
       goodsUnit: '',
       unloadingLocation: '',
@@ -717,7 +728,7 @@ const removeInboundItem = (flag: number, item: LogisticsDetailList) => {
     }
   }
 }
-// 添加物流详情但
+// 添加物流详情单
 const addLogisticsDetail = (flag: number) => {
   // flag为0则是添加，为1则是修改
   if (flag == 0) {
@@ -733,7 +744,8 @@ const addLogisticsDetail = (flag: number) => {
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
+      calculationMethod: ''
     })
   } else if (flag == 1) {
     addModel.logisticsDetailList.push({
@@ -748,7 +760,8 @@ const addLogisticsDetail = (flag: number) => {
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
+      calculationMethod: '',
     })
   }
 }

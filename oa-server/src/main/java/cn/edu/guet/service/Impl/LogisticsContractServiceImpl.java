@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.security.web.PortResolverImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -201,181 +202,9 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(LogisticsContract logisticsContract) {
-        //新增物流单   然后新增物流详情单
-        //图片字段处理
-        List<String> contractPhotoList = logisticsContract.getContractPhotoList();
-        logisticsContract.setContractPhoto(ImageUtils.getDBString(contractPhotoList));
-        logisticsContract.setPigeonhole("1");
-        logisticsContract.setCreateBy(SecurityUtils.getUsername());
-        logisticsContract.setLastUpdateBy(SecurityUtils.getUsername());
-        logisticsContractMapper.insert(logisticsContract);
-        List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
-        //新增对应的物流详情单
-        for (LogisticsDetail logisticsDetail : logisticsDetailList) {
-            logisticsDetail.setLogisticsContractNo(logisticsContract.getLogisticsContractNo());
-            logisticsDetail.setCreateBy(SecurityUtils.getUsername());
-            logisticsDetail.setLastUpdateBy(SecurityUtils.getUsername());
-            logisticsDetailMapper.insert(logisticsDetail);
-        }
-
-        //运往自家仓库
-        //拿到货物名称
-        //采购单号
-        String purchaseContractNo = logisticsDetailList.get(0).getPurchaseContractNo();
-        QueryWrapper<PurchaseContract> purchaseContractQueryWrapper = new QueryWrapper<>();
-        purchaseContractQueryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, purchaseContractNo);
-        PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
-        //货物名称
-        String goodsName = purchaseContract.getGoodsName();
-
-        //销售单合同是000   运往自家仓库的物流操作
-        if (logisticsContract.getSaleContractNo().equals("000")) {
-            System.out.println("00000");
-            //从其他厂取货，存到自家仓库  需要维护的是外商仓库的库存  外商仓库的出库记录  自家仓库的库存  自家仓库的入库记录
-            //修改自家仓库库存
-            //先判断是否有该货物，如果有的话跟新，没有的话插入
-            QueryWrapper<OwnWarehouse> query = new QueryWrapper<>();
-            query.lambda().eq(OwnWarehouse::getGoodsName, goodsName);
-            OwnWarehouse ownWarehouse = ownWarehouseMapper.selectOne(query);
-            if (ownWarehouse != null) {
-                System.out.println("自家库存不为空");
-                //更新库存
-                BigDecimal totalWeight = logisticsContract.getTotalWeight();
-                BigDecimal goodsCount = ownWarehouse.getGoodsCount();
-                //判断物流合同的单位是吨还是斤
-                if (logisticsContract.getGoodsUnit().equals("吨")) {
-                    System.out.println("选择是的吨");
-                    ownWarehouse.setGoodsCount(goodsCount.add(totalWeight.multiply(BigDecimal.valueOf(2000))));
-                } else {
-                    System.out.println("选择的是斤");
-                    ownWarehouse.setGoodsCount(goodsCount.add(totalWeight));
-                }
-                ownWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
-                ownWarehouseMapper.updateById(ownWarehouse);
-            } else {
-                System.out.println("自家仓库没有该物品");
-                //插入新的数据
-                OwnWarehouse addOwnWarehouse = new OwnWarehouse();
-                addOwnWarehouse.setGoodsName(goodsName);
-                addOwnWarehouse.setFactoryName("自家仓库");
-                if (logisticsContract.getGoodsUnit().equals("吨")) {
-                    System.out.println("新增的，并且选择是的吨");
-                    addOwnWarehouse.setGoodsCount(logisticsContract.getTotalWeight().multiply(BigDecimal.valueOf(2000)));
-                } else {
-                    System.out.println("新增的，并且选择是的斤");
-                    addOwnWarehouse.setGoodsCount(logisticsContract.getTotalWeight());
-                }
-                addOwnWarehouse.setGoodsUnit("斤");
-                addOwnWarehouse.setCreateBy(SecurityUtils.getUsername());
-                addOwnWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
-                ownWarehouseMapper.insert(addOwnWarehouse);
-            }
-            //新增自家仓库入库记录
-            OwnInOut ownInOut = new OwnInOut();
-            ownInOut.setInOutType(1);
-            ownInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
-            ownInOut.setInOutGoodsName(goodsName);
-            ownInOut.setInOutGoodsCount(logisticsContract.getTotalWeight());
-            ownInOut.setInOutGoodsUnit(logisticsContract.getGoodsUnit());
-            ownInOut.setCreateBy(SecurityUtils.getUsername());
-            ownInOut.setLastUpdateBy(SecurityUtils.getUsername());
-            ownInOutMapper.insert(ownInOut);
-            //外商库存库存修改和出库记录
-            for (LogisticsDetail logisticsDetail : logisticsDetailList) {
-                //更新外商库存
-                //根据厂名和货物名称拿到库存，然后更新库存量
-                QueryWrapper<OtherWarehouse> otherWarehouseQueryWrapper = new QueryWrapper<>();
-                otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
-                otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
-                OtherWarehouse one = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
-                BigDecimal goodsCount = one.getGoodsCount();
-                //判断单位
-                if (logisticsDetail.getGoodsUnit().equals("吨")) {
-                    System.out.println("物流详情货物单位选择是的吨");
-                    one.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight().multiply(BigDecimal.valueOf(2000))));
-                } else {
-                    System.out.println("流详情货物单位选择的是斤");
-                    one.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
-                }
-                one.setLastUpdateBy(SecurityUtils.getUsername());
-                otherWarehouseMapper.updateById(one);
-                //出库记录
-                Integer id = one.getId();
-                OtherInOut otherInOut = new OtherInOut();
-                otherInOut.setOtherWarehouseId(id);
-                otherInOut.setInOutType(0);
-                otherInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
-                otherInOut.setInOutGoodsName(goodsName);
-                otherInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
-                otherInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
-                otherInOut.setCreateBy(SecurityUtils.getUsername());
-                otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
-                otherInOutMapper.insert(otherInOut);
-            }
-        } else {
-            //销售合同不是000  出售商品的操作
-            for (LogisticsDetail logisticsDetail : logisticsDetailList) {
-                //采购合同是000 取货厂名是自家仓库
-                if (logisticsDetail.getPurchaseContractNo().equals("000")) {
-                    //减少自家仓库库存表
-                    QueryWrapper<OwnWarehouse> ownWarehouseQueryWrapper = new QueryWrapper<>();
-                    ownWarehouseQueryWrapper.lambda().eq(OwnWarehouse::getGoodsName, goodsName);
-                    OwnWarehouse ownWarehouse = ownWarehouseMapper.selectOne(ownWarehouseQueryWrapper);
-                    BigDecimal goodsCount = ownWarehouse.getGoodsCount();
-                    //判断单位
-                    if (logisticsDetail.getGoodsUnit().equals("吨")) {
-                        System.out.println("物流详情货物单位选择是的吨");
-                        ownWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight().multiply(BigDecimal.valueOf(2000))));
-                    } else {
-                        System.out.println("流详情货物单位选择的是斤");
-                        ownWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
-                    }
-                    ownWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
-                    ownWarehouseMapper.updateById(ownWarehouse);
-                    //自家仓库出库记录
-                    OwnInOut ownInOut = new OwnInOut();
-                    ownInOut.setInOutType(0);
-                    ownInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
-                    ownInOut.setInOutGoodsName(goodsName);
-                    ownInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
-                    ownInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
-                    ownInOut.setCreateBy(SecurityUtils.getUsername());
-                    ownInOut.setLastUpdateBy(SecurityUtils.getUsername());
-                    ownInOutMapper.insert(ownInOut);
-                } else {
-                    //如果采购合同不是000
-                    //外商仓库库存表
-                    QueryWrapper<OtherWarehouse> otherWarehouseQueryWrapper = new QueryWrapper<>();
-                    otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
-                    otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
-                    OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
-                    BigDecimal goodsCount = otherWarehouse.getGoodsCount();
-                    //判断单位
-                    if (logisticsDetail.getGoodsUnit().equals("吨")) {
-                        System.out.println("物流详情货物单位选择是的吨");
-                        otherWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight().multiply(BigDecimal.valueOf(2000))));
-                    } else {
-                        System.out.println("流详情货物单位选择的是斤");
-                        otherWarehouse.setGoodsCount(goodsCount.subtract(logisticsDetail.getGoodsWeight()));
-                    }
-                    otherWarehouse.setLastUpdateBy(SecurityUtils.getUsername());
-                    otherWarehouseMapper.updateById(otherWarehouse);
-                    //外商仓库出库记录
-                    Integer id = otherWarehouse.getId();
-                    OtherInOut otherInOut = new OtherInOut();
-                    otherInOut.setOtherWarehouseId(id);
-                    otherInOut.setInOutType(0);
-                    otherInOut.setInOutContractNo(logisticsContract.getLogisticsContractNo());
-                    otherInOut.setInOutGoodsName(goodsName);
-                    otherInOut.setInOutGoodsCount(logisticsDetail.getGoodsWeight());
-                    otherInOut.setInOutGoodsUnit(logisticsDetail.getGoodsUnit());
-                    otherInOut.setCreateBy(SecurityUtils.getUsername());
-                    otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
-                    otherInOutMapper.insert(otherInOut);
-                }
-            }
-        }
+    public HttpResult add(LogisticsContract logisticsContract) {
+        Integer contractType = logisticsContract.getUpperType();
+        return contractType == 0 ? addProcessLogisticsContract(logisticsContract) : addLogisticsContract(logisticsContract);
     }
 
     @Override
@@ -615,7 +444,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addProcessLogisticsContract(LogisticsContract logisticsContract) {
+    public HttpResult addProcessLogisticsContract(LogisticsContract logisticsContract) {
         //维护加工单的relation_logistics_exist_state
         // QueryWrapper<ProcessContract> processContractQueryWrapper1 = new QueryWrapper<>();
         // processContractQueryWrapper1.lambda().eq(ProcessContract::getProcessContractNo,logisticsContract.getSaleContractNo());
@@ -626,8 +455,13 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         QueryWrapper<ProcessContract> processContractQueryWrapper = new QueryWrapper<>();
         processContractQueryWrapper.lambda().eq(ProcessContract::getProcessContractNo, logisticsContract.getSaleContractNo());
         ProcessContract processContract = processContractMapper.selectOne(processContractQueryWrapper);
+        if (processContract == null) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultUtils.error("加工单填写错误");
+        }
         //货物名称
         String goodsName = processContract.getGoodsName();
+
 
         //加工单的物流单
         //生成物流单
@@ -686,6 +520,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 QueryWrapper<PurchaseContract> purchaseContractQueryWrapper = new QueryWrapper<>();
                 purchaseContractQueryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, logisticsDetail.getPurchaseContractNo());
                 PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
+                if (purchaseContract==null){
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return ResultUtils.error("采购合同错误,请检查采购合同号");
+                }
                 purchaseContract.setRelationLogisticsExistState(1);
                 purchaseContractMapper.updateById(purchaseContract);
 
@@ -694,6 +532,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getFactoryName, logisticsDetail.getGoodsFactory());
                 otherWarehouseQueryWrapper.lambda().eq(OtherWarehouse::getGoodsName, goodsName);
                 OtherWarehouse otherWarehouse = otherWarehouseMapper.selectOne(otherWarehouseQueryWrapper);
+                if (otherWarehouse==null){
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return ResultUtils.error("仓库没有找到，请检查厂名和加工单的货物名称是否正确");
+                }
 
                 BigDecimal goodsCount = otherWarehouse.getGoodsCount();
                 //判断单位
@@ -772,12 +614,12 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             otherInOut.setLastUpdateBy(SecurityUtils.getUsername());
             otherInOutMapper.insert(otherInOut);
         }
-        return true;
+        return ResultUtils.success("新增加工单成功");
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addLogisticsContract(LogisticsContract logisticsContract) {
+    public HttpResult addLogisticsContract(LogisticsContract logisticsContract) {
         //销售单的物流单
         //物流详情单
         List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
@@ -787,17 +629,23 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             QueryWrapper<SaleContract> saleContractQueryWrapper = new QueryWrapper<>();
             saleContractQueryWrapper.lambda().eq(SaleContract::getSaleContractNo, logisticsContract.getSaleContractNo());
             SaleContract saleContract = saleContractMapper.selectOne(saleContractQueryWrapper);
+            if (saleContract == null) {
+                return ResultUtils.error("销售单合同号错误");
+            }
             goodsName = saleContract.getGoodsName();
         } else {
             String purchaseContractNo = logisticsDetailList.get(0).getPurchaseContractNo();
             QueryWrapper<PurchaseContract> purchaseContractQueryWrapper = new QueryWrapper<>();
             purchaseContractQueryWrapper.lambda().eq(PurchaseContract::getPurchaseContractNo, purchaseContractNo);
             PurchaseContract purchaseContract = purchaseContractMapper.selectOne(purchaseContractQueryWrapper);
+            if (purchaseContract == null) {
+                return ResultUtils.error("采购合同编号错误");
+            }
             //货物名称
             goodsName = purchaseContract.getGoodsName();
         }
-        if (StringUtils.isEmpty(goodsName)){
-            return false;
+        if (StringUtils.isEmpty(goodsName)) {
+            return ResultUtils.error("请检查所有合同单号是否填写正确");
         }
 
         //生成物流单
@@ -1015,7 +863,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 }
             }
         }
-        return true;
+        return ResultUtils.success("新增物流单成功", true);
     }
 
     @Override
@@ -1036,37 +884,37 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateLogistics(LogisticsContract logisticsContract) {
+    public HttpResult updateLogistics(LogisticsContract logisticsContract) {
         //删除
         boolean deleteResult = deleteById(logisticsContract.getId());
         //新增
         Integer upperType = logisticsContract.getUpperType();
         boolean addResult = false;
         if (upperType == 0) {
-            addResult = addProcessLogisticsContract(logisticsContract);
+            return addProcessLogisticsContract(logisticsContract);
         } else {
-            addResult = addLogisticsContract(logisticsContract);
+            return addLogisticsContract(logisticsContract);
         }
-        if (deleteResult&&addResult){
-            return true;
-        }else{
-            return false;
-        }
+        // if (deleteResult&&addResult){
+        //     return true;
+        // }else{
+        //     return false;
+        // }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean handleImportLogisticsContractModel(ImportLogisticsContractModel importLogisticsContractModel) {
         LogisticsContract logisticsContract = new LogisticsContract();
-        System.out.println("导入excel表的数据:"+importLogisticsContractModel);
-        if (importLogisticsContractModel.getLogisticsContractNo()==null||importLogisticsContractModel.getLogisticsContractNo()==""){
+        System.out.println("导入excel表的数据:" + importLogisticsContractModel);
+        if (importLogisticsContractModel.getLogisticsContractNo() == null || importLogisticsContractModel.getLogisticsContractNo() == "") {
             return false;
-        }else{
+        } else {
             //检查是否重复
             QueryWrapper<LogisticsContract> logisticsContractQueryWrapper = new QueryWrapper<>();
-            logisticsContractQueryWrapper.lambda().eq(LogisticsContract::getLogisticsContractNo,importLogisticsContractModel.getLogisticsContractNo());
+            logisticsContractQueryWrapper.lambda().eq(LogisticsContract::getLogisticsContractNo, importLogisticsContractModel.getLogisticsContractNo());
             LogisticsContract query = logisticsContractMapper.selectOne(logisticsContractQueryWrapper);
-            if (query!=null){
+            if (query != null) {
                 return false;
             }
             logisticsContract.setLogisticsContractNo(importLogisticsContractModel.getLogisticsContractNo());
@@ -1091,10 +939,10 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                     Method getGoodsUnitMethod = importLogisticsContractModel.getClass().getMethod("getGoodsUnit" + i);
                     Method getUnitPriceMethod = importLogisticsContractModel.getClass().getMethod("getUnitPrice" + i);
                     Method getUnloadingLocationMethod = importLogisticsContractModel.getClass().getMethod("getUnloadingLocation" + i);
-                    if (logisticsContractNoMethod.invoke(importLogisticsContractModel) != null && upperTypeMethod.invoke(importLogisticsContractModel) != null&&purchaseContractNoMethod.invoke(importLogisticsContractModel)!=null
-                    && outBoundTimeMethod.invoke(importLogisticsContractModel)!=null&&getGoodsFactoryMethod.invoke(importLogisticsContractModel)!=null&&getLicensePlateNumberMethod.invoke(importLogisticsContractModel)!=null
-                    &&getGoodsWeightMethod.invoke(importLogisticsContractModel)!=null&&getGoodsUnitMethod.invoke(importLogisticsContractModel)!=null&&getUnitPriceMethod.invoke(importLogisticsContractModel)!=null
-                    &&getUnloadingLocationMethod.invoke(importLogisticsContractModel)!=null) {
+                    if (logisticsContractNoMethod.invoke(importLogisticsContractModel) != null && upperTypeMethod.invoke(importLogisticsContractModel) != null && purchaseContractNoMethod.invoke(importLogisticsContractModel) != null
+                            && outBoundTimeMethod.invoke(importLogisticsContractModel) != null && getGoodsFactoryMethod.invoke(importLogisticsContractModel) != null && getLicensePlateNumberMethod.invoke(importLogisticsContractModel) != null
+                            && getGoodsWeightMethod.invoke(importLogisticsContractModel) != null && getGoodsUnitMethod.invoke(importLogisticsContractModel) != null && getUnitPriceMethod.invoke(importLogisticsContractModel) != null
+                            && getUnloadingLocationMethod.invoke(importLogisticsContractModel) != null) {
                         LogisticsDetail logisticsDetail = new LogisticsDetail();
                         logisticsDetail.setLogisticsContractNo((String) logisticsContractNoMethod.invoke(importLogisticsContractModel));
                         logisticsDetail.setUpperType(Integer.parseInt((String) upperTypeMethod.invoke(importLogisticsContractModel)));
@@ -1120,7 +968,9 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
                 e.printStackTrace();
             }
         }
-        return addLogisticsContract(logisticsContract);
+        // return addLogisticsContract(logisticsContract);
+        HttpResult httpResult = addLogisticsContract(logisticsContract);
+        return (boolean) httpResult.getData();
     }
 
 
@@ -1140,7 +990,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         QueryWrapper<LogisticsDetail> detailQueryWrapper = new QueryWrapper<>();
         detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
         List<LogisticsDetail> logisticsDetails = logisticsDetailMapper.selectList(detailQueryWrapper);
-        System.out.println("删除的物流详情单:"+logisticsDetails);
+        System.out.println("删除的物流详情单:" + logisticsDetails);
 
         System.out.println("删除加工单");
         //货物名称
@@ -1319,13 +1169,13 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
         //先拿到该物流单和物流单合同号
         LogisticsContract logisticsContract = logisticsContractMapper.selectById(id);
         String logisticsContractNo = logisticsContract.getLogisticsContractNo();
-        System.out.println("删除的物流单号"+logisticsContractNo);
+        System.out.println("删除的物流单号" + logisticsContractNo);
 
         //根据物流单号拿到物流详情集合
         QueryWrapper<LogisticsDetail> detailQueryWrapper = new QueryWrapper<>();
         detailQueryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo, logisticsContractNo);
         List<LogisticsDetail> logisticsDetails = logisticsDetailMapper.selectList(detailQueryWrapper);
-        System.out.println("删除的物流详情但："+logisticsDetails);
+        System.out.println("删除的物流详情但：" + logisticsDetails);
 
         System.out.println("删除销售单");
         //货物名称

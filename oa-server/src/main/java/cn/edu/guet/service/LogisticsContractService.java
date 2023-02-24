@@ -51,7 +51,7 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * 新增物流单和物流详情但
      * @param logisticsContract
      */
-    void add(LogisticsContract logisticsContract);
+    HttpResult add(LogisticsContract logisticsContract);
 
     /**
      * 检查物流合同单号是否存在*
@@ -92,14 +92,14 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @param logisticsContract
      * @return
      */
-    boolean addProcessLogisticsContract(LogisticsContract logisticsContract);
+    HttpResult addProcessLogisticsContract(LogisticsContract logisticsContract);
 
     /**
      * 新增物流单是销售单类型/运往自家仓库
      * @param logisticsContract
      * @return
      */
-    boolean addLogisticsContract(LogisticsContract logisticsContract);
+    HttpResult addLogisticsContract(LogisticsContract logisticsContract);
 
     /**
      * 删除物流单
@@ -113,7 +113,7 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
      * @param logisticsContract
      * @return
      */
-    boolean updateLogistics(LogisticsContract logisticsContract);
+    HttpResult updateLogistics(LogisticsContract logisticsContract);
 
     boolean handleImportLogisticsContractModel(ImportLogisticsContractModel importLogisticsContractModel) ;
 

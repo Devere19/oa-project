@@ -138,50 +138,7 @@ public class LogisticsContractController {
      */
     @PostMapping("/add")
     public HttpResult add(@RequestBody LogisticsContract logisticsContract) {
-        Integer contractType = logisticsContract.getUpperType();
-
-        if (contractType == 0) {
-            System.out.println("新增的是加工单类型的物流单");
-            // boolean flag = processContractService.editRelationLogisticsExistState(logisticsContract.getSaleContractNo());
-            // if (!flag) {
-            //     return ResultUtils.success("加工单不正确");
-            // }
-            //加工单
-            boolean result = logisticsContractService.addProcessLogisticsContract(logisticsContract);
-            if (result) {
-                return ResultUtils.success("新增成功");
-            } else {
-                return ResultUtils.error("新增失败");
-            }
-        } else {
-            // boolean flag = saleContractService.editIsHaveLogistics(logisticsContract.getSaleContractNo());
-            // if (!flag) {
-            //     return ResultUtils.error("销售单合同不正确");
-            // }
-            System.out.println("新增的销售单/自家仓库类型的物流单");
-            boolean result = logisticsContractService.addLogisticsContract(logisticsContract);
-            if (result) {
-                return ResultUtils.success("新增成功");
-            } else {
-                return ResultUtils.error("新增失败");
-            }
-        }
-        // if (contractType == 0) {
-        //     //加工单
-        //     //判断是否有该加工合同编号，如果有，修改该合同编号的relation_logistics_exist_state字段为1 如果没有返回false
-        //     boolean result = processContractService.editRelationLogisticsExistState(logisticsContract.getSaleContractNo());
-        //     if (!result) {
-        //         return ResultUtils.error("加工单合同不正确");
-        //     }
-        // } else {
-        //     //销售单
-        //     //判断是否有该销售单合同编号，如果有，修改该合同编号的isHaveLogistics字段为1 如果没有返回false
-        //     boolean result = saleContractService.editIsHaveLogistics(logisticsContract.getSaleContractNo());
-        //     if (!result) {
-        //         return ResultUtils.error("销售单合同不正确");
-        //     }
-        // }
-        // logisticsContractService.add(logisticsContract);
+        return logisticsContractService.add(logisticsContract);
     }
 
     @PostMapping("/exportListParm")
@@ -243,12 +200,12 @@ public class LogisticsContractController {
 
     @PostMapping("/edit")
     public HttpResult updateLogistics(@RequestBody LogisticsContract logisticsContract){
-        boolean result=logisticsContractService.updateLogistics(logisticsContract);
-        if (result){
-            return ResultUtils.success("修改完成");
-        }else{
-            return ResultUtils.error("修改失败");
-        }
+        return logisticsContractService.updateLogistics(logisticsContract);
+        // if (result){
+        //     return ResultUtils.success("修改完成");
+        // }else{
+        //     return ResultUtils.error("修改失败");
+        // }
     }
 
 
