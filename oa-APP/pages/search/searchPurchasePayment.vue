@@ -140,7 +140,6 @@
 					})
 				} else {
 					this.current = this.current + 1,
-						this.page = this.page + 5,
 						// 获取未审批采购付款单
 						this.$request({
 							url: '/purchasePaymentContract/searchDirectorPPC',

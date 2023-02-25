@@ -189,9 +189,19 @@ public class CashierShipping implements Serializable {
     private String lastUpdateBy;
 
     /**
+     *
+     */
+    private String directorId;
+
+    /**
      * 
      */
     private String directorState;
+
+    /**
+     *
+     */
+    private String concatDirectorState;
 
     /**
      * 前端数据传输*

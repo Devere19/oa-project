@@ -262,79 +262,31 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
      * @return
      */
     @Override
-    public Page<OfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId, int type) {
-        QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
-        Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
-        page=officeExpenseMapper.selectPage(page,qw);
-        Iterator<OfficeExpense> iterator=page.getRecords().iterator();
+    public Page<CashierOfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId, int type) {
+        QueryWrapper<CashierOfficeExpense> qw= new QueryWrapper<>();
+//        该处的-是为了模糊匹配时匹配到完整的director_id
+//        避免出现查userId=1，却查出userId=11这样的情况
+        if(type==0){
+            qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
+                    q.like("director_id",userId+"-").notLike("concat_director_state",userId+"-1")).orderByDesc("create_time","id");
+        }else if(type==1){
+            qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
+                    q.like("director_id",userId+"-").like("concat_director_state",userId+"-1").ne("director_state","1,1,1")).orderByDesc("create_time","id");
+        }else if(type==2){
+            qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
+                    q.like("director_id",userId+"-").like("concat_director_state",userId+"-1").eq("director_state","1,1,1")).orderByDesc("create_time","id");
+        }
+        Page<CashierOfficeExpense> page =new Page<>(currentPage,pageSize);
+        page=cashierOfficeExpenseMapper.selectPage(page,qw);
+        Iterator<CashierOfficeExpense> iterator=page.getRecords().iterator();
         while (iterator.hasNext()){
-            OfficeExpense record=iterator.next();
+            CashierOfficeExpense record=iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<OfficeStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("office_expense_id",record.getId()).orderByDesc("nick_name");
             List<OfficeStateView> officeStateViews = officeStateInfoMapper.selectList(stateQw);
-
-            boolean own=false;
-            int flag=0;
-
-            for(int j=0;j<officeStateViews.size();j++){
-//                获取已经审核了的董事次数
-                if(officeStateViews.get(j).getState()!=null){
-                    flag++;
-                }else{
-//                    若有没审核的，且获取的是已完成的数据，则不符合，去除
-                    if(type==2){
-                        iterator.remove();
-                        page.setTotal(page.getTotal()-1);
-                        break;
-                    }
-                }
-            }
-
-            for(int i=0;i<officeStateViews.size();i++){
-//                判断三个审批状态中是否有自己的审批状态（该处判断主要是用于董事会更迭，若不判断当前获取数据的董事会成员是否在审批的董事会成员中，则会乱套）
-                if(officeStateViews.get(i).getUserId()==userId){
-//                    如果是，则标记为true
-                    own=true;
-                    if(type==0){
-//                    当存在自己，且获取的数据为未审批时，则判断是否为null，为null才是未审批
-                        if(officeStateViews.get(i).getState()!=null){
-//                            不为null，去除
-                            iterator.remove();
-                            page.setTotal(page.getTotal()-1);
-                            break;
-                        }
-                    }
-//                    当存在自己，判断自己的状态是否为null，为null则是未审批
-                    if(officeStateViews.get(i).getState()==null){
-//                        当获取的是已审批的数据时，则去除
-                        if(type==1){
-                            iterator.remove();
-                            page.setTotal(page.getTotal()-1);
-                            break;
-                        }
-                    }else{
-//                        当不为null，则自己已经审批
-                        if(type==1){
-//                            若获取的是已审批但未完成的数据，判断是否三个董事都审批了
-                            if(flag==3){
-//                                是则去除
-                                iterator.remove();
-                                page.setTotal(page.getTotal()-1);
-                            }
-                        }
-                    }
-                }else{
-//                    循环中userId不等于自己的Id，当循环到最后一次，且最后一次也没匹配上，则去除
-                    if(i==officeStateViews.size()-1&&own==false){
-                        iterator.remove();
-                        page.setTotal(page.getTotal()-1);
-                    }
-                }
-            }
-            
             record.setOfficeDirector(officeStateViews);
+
             //处理图片，形成一个图片数组
             String paymentPhoto = record.getPaymentPhoto();
 //            付款照片
@@ -373,35 +325,22 @@ public class OfficeExpenseServiceImpl extends ServiceImpl<OfficeExpenseMapper, O
     }
 
     @Override
-    public Page<OfficeExpense> searchDirectorOE(int currentPage, int pageSize, String searchWord, int userId) {
-        QueryWrapper<OfficeExpense> qw= new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->q.like("items_list",searchWord)
+    public Page<CashierOfficeExpense> searchDirectorOE(int currentPage, int pageSize, String searchWord, int userId) {
+        QueryWrapper<CashierOfficeExpense> qw= new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").and(w->w.like("director_id",userId+"-").and(q->q.like("items_list",searchWord)
                 .or().like("finance_staff",searchWord).or().like("cashier",searchWord)
-                .or().like("create_by",searchWord)).orderByDesc("create_time","id");
-        Page<OfficeExpense> page =new Page<>(currentPage,pageSize);
-        page=officeExpenseMapper.selectPage(page,qw);
-        Iterator<OfficeExpense> iterator=page.getRecords().iterator();
+                .or().like("create_by",searchWord))).orderByDesc("create_time","id");
+        Page<CashierOfficeExpense> page =new Page<>(currentPage,pageSize);
+        page=cashierOfficeExpenseMapper.selectPage(page,qw);
+        Iterator<CashierOfficeExpense> iterator=page.getRecords().iterator();
         while (iterator.hasNext()){
-            OfficeExpense record=iterator.next();
+            CashierOfficeExpense record=iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<OfficeStateView> stateQw= new QueryWrapper<>();
             stateQw.eq("office_expense_id",record.getId()).orderByDesc("nick_name");
             List<OfficeStateView> officeStateViews = officeStateInfoMapper.selectList(stateQw);
-
-            for(int i=0;i<officeStateViews.size();i++){
-//                判断是否有该登录的董事
-                if(officeStateViews.get(i).getUserId()==userId){
-                    break;
-                }else{
-//                    如果这次没有，而且第三次了还没有，说明该董事不是审核该笔采购单的，移除该条数据
-                    if(i==officeStateViews.size()-1){
-                        iterator.remove();
-                        page.setTotal(page.getTotal()-1);
-                    }
-                }
-            }
-
             record.setOfficeDirector(officeStateViews);
+
             //处理图片，形成一个图片数组
             String paymentPhoto = record.getPaymentPhoto();
 //            付款照片

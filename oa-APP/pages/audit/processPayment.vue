@@ -347,8 +347,7 @@
 						showCancel: false
 					})
 				} else {
-					this.topList[0].current = this.topList[0].current + 1,
-						this.topList[0].page = this.topList[0].page + 5,
+					this.topList[0].current = this.topList[0].current + 1;
 						// 获取未审批加工付款单
 						this.$request({
 							url: '/processPaymentContract/getDirectorPPC',
@@ -360,7 +359,15 @@
 							}
 						}).then(res => {
 								if (res.code == 200) {
-									this.unauditedList = [...this.unauditedList, ...res.data.records];
+									if(this.unauditedList.length==res.data.total){
+										uni.showModal({
+											content: "暂无更多数据",
+											showCancel: false
+										});
+										this.topList[0].current=this.topList[0].current-1;
+									}else{
+										this.unauditedList=[...this.unauditedList, ...res.data.records];	
+									}
 								}
 							},
 							err => {
@@ -372,14 +379,13 @@
 				}
 			},
 			getAuditedData() {
-				if (this.unauditedList.length == this.topList[0].count) {
+				if (this.unauditedList.length == this.topList[1].count) {
 					uni.showModal({
 						content: "暂无更多数据",
 						showCancel: false
 					})
 				} else {
-					this.topList[1].current = this.topList[1].current + 1,
-						this.topList[1].page = this.topList[1].page + 5,
+					this.topList[1].current = this.topList[1].current + 1;
 						// 获取未审批加工付款单
 						this.$request({
 							url: '/processPaymentContract/getDirectorPPC',
@@ -395,7 +401,8 @@
 										uni.showModal({
 											content: "暂无更多数据",
 											showCancel: false
-										})
+										});
+										this.topList[1].current=this.topList[1].current-1;
 									} else {
 										this.auditedList = [...this.auditedList, ...res.data.records];
 									}
@@ -410,14 +417,13 @@
 				}
 			},
 			getCompletedData() {
-				if (this.unauditedList.length == this.topList[0].count) {
+				if (this.unauditedList.length == this.topList[2].count) {
 					uni.showModal({
 						content: "暂无更多数据",
 						showCancel: false
 					})
 				} else {
-					this.topList[2].current = this.topList[2].current + 1,
-						this.topList[2].page = this.topList[2].page + 5,
+					this.topList[2].current = this.topList[2].current + 1;
 						// 获取未审批加工付款单
 						this.$request({
 							url: '/processPaymentContract/getDirectorPPC',
@@ -433,7 +439,8 @@
 										uni.showModal({
 											content: "暂无更多数据",
 											showCancel: false
-										})
+										});
+										this.topList[2].current=this.topList[2].current-1;
 									} else {
 										this.completedList = [...this.completedList, ...res.data.records];
 									}

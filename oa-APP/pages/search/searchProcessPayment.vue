@@ -139,7 +139,6 @@
 					})
 				} else {
 					this.current = this.current + 1,
-						this.page = this.page + 5,
 						// 获取未审批加工付款单
 						this.$request({
 							url: '/processPaymentContract/searchDirectorPPC',

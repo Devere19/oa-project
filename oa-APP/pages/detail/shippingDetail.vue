@@ -9,7 +9,7 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
-						<view class="headLine">运输合同编号：</view>
+						<view class="headLine">物流合同编号：</view>
 					</uni-col>
 					<uni-col :span="13">
 						<view class="contractContent">{{shippingContract.logisticsContractNo}}</view>
@@ -57,18 +57,34 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
-						<view class="headLine">集装箱号：</view>
+						<view class="headLine">集装箱号1：</view>
 					</uni-col>
 					<uni-col :span="13">
-						<view class="contractContent">{{shippingContract.containerNo}}</view>
+						<view class="contractContent">{{shippingContract.firstContainerNo}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
-						<view class="headLine">铅封号：</view>
+						<view class="headLine">铅封号1：</view>
 					</uni-col>
 					<uni-col :span="13">
-						<view class="contractContent">{{shippingContract.sealNo}}</view>
+						<view class="contractContent">{{shippingContract.firstSealNo}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">集装箱号2：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.secondContainerNo}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">铅封号2：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.secondSealNo}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -85,6 +101,22 @@
 					</uni-col>
 					<uni-col :span="13">
 						<view class="contractContent">{{shippingContract.tallyClerkPrice}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">理货费用备注：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.tallyClerkRemark}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">车队管理名称：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.fleetManageName}}</view>
 					</uni-col>
 				</uni-row>
 				<uni-row>
@@ -262,10 +294,14 @@
 					packingTime:null,
 					packingLocation:null,
 					unpackingFactory:null,
-					containerNo:null,
-					sealNo:null,
+					firstContainerNo:null,
+					firstSealNo:null,
+					secondContainerNo:null,
+					secondSealNo:null,
 					tallyClerk:null,
 					tallyClerkPrice:null,
+					tallyClerkRemark:null,
+					fleetManageName:null,
 					departureFleet:null,
 					departurePrice:null,
 					carrierCompanyName:null,

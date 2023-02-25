@@ -6,18 +6,18 @@
 				<view class="cardContent">
 					<uni-row style="width: 100%;">
 						<uni-col :span="8">
-							集装箱号 :
+							委托方 :
 						</uni-col>
 						<uni-col :span="16">
-							{{item.containerNo}}
+							{{item.principal}}
 						</uni-col>
 					</uni-row>
 					<uni-row style="width: 100%;">
 						<uni-col :span="8">
-							铅封号 :
+							装箱地点 :
 						</uni-col>
 						<uni-col :span="16">
-							{{item.sealNo}}
+							{{item.packingLocation}}
 						</uni-col>
 					</uni-row>
 					<uni-row style="width: 100%;">
@@ -140,7 +140,6 @@
 					})
 				} else {
 					this.current = this.current + 1,
-						this.page = this.page + 5,
 						this.$request({
 							url: '/shippingContract/searchDirectorSC',
 							data: {

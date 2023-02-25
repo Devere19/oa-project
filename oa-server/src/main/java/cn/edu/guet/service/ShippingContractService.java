@@ -28,9 +28,9 @@ public interface ShippingContractService extends IService<ShippingContract> {
     int uploadCashierShipping(ShippingContract shippingContract);
 
     //    APP
-    Page<ShippingContract> getDirectorSC(int currentPage, int pageSize, int userId ,int type);
+    Page<CashierShipping> getDirectorSC(int currentPage, int pageSize, int userId ,int type);
     ShippingContract getOneDirectorSC(int id);
-    Page<ShippingContract> searchDirectorSC(int currentPage, int pageSize ,String searchWord, int userId);
+    Page<CashierShipping> searchDirectorSC(int currentPage, int pageSize ,String searchWord, int userId);
 
     //审批
     int changeFinanceState(String shippingContractNo,String financeStaff);

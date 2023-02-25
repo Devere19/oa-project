@@ -366,80 +366,32 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
      * @return
      */
     @Override
-    public Page<PurchasePaymentContractView> getDirectorPPC(int currentPage, int pageSize, int userId, int type) {
-        QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").orderByDesc("create_time","id");
-        Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = purchasePaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
+    public Page<CashierPurchasePayment> getDirectorPPC(int currentPage, int pageSize, int userId, int type) {
+        QueryWrapper<CashierPurchasePayment> qw = new QueryWrapper<>();
+//        该处的-是为了模糊匹配时匹配到完整的director_id
+//        避免出现查userId=1，却查出userId=11这样的情况
+        if(type==0){
+            qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
+                    q.like("director_id",userId+"-").notLike("concat_director_state",userId+"-1")).orderByDesc("create_time","id");
+        }else if(type==1){
+            qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
+                    q.like("director_id",userId+"-").like("concat_director_state",userId+"-1").ne("director_state","1,1,1")).orderByDesc("create_time","id");
+        }else if(type==2){
+            qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
+                    q.like("director_id",userId+"-").like("concat_director_state",userId+"-1").eq("director_state","1,1,1")).orderByDesc("create_time","id");
+        }
+        Page<CashierPurchasePayment> page = new Page<>(currentPage, pageSize);
+        page = cashierPurchasePaymentMapper.selectPage(page, qw);
+        Iterator<CashierPurchasePayment> iterator = page.getRecords().iterator();
 
         while (iterator.hasNext()) {
-            PurchasePaymentContractView record = iterator.next();
+            CashierPurchasePayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<PurchasePaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("purchase_payment_contract_id", record.getId()).orderByDesc("nick_name");
             List<PurchasePaymentStateView> purchasePaymentStateViews = purchasePaymentStateInfoMapper.selectList(stateQw);
-
-            boolean own = false;
-            int flag = 0;
-
-            for (int j = 0; j < purchasePaymentStateViews.size(); j++) {
-//                获取已经审核了的董事次数
-                if (purchasePaymentStateViews.get(j).getState() != null) {
-                    flag++;
-                } else {
-//                    若有没审核的，且获取的是已完成的数据，则不符合，去除
-                    if (type == 2) {
-                        iterator.remove();
-                        page.setTotal(page.getTotal() - 1);
-                        break;
-                    }
-                }
-            }
-
-            for (int i = 0; i < purchasePaymentStateViews.size(); i++) {
-//                判断三个审批状态中是否有自己的审批状态（该处判断主要是用于董事会更迭，若不判断当前获取数据的董事会成员是否在审批的董事会成员中，则会乱套）
-                if (purchasePaymentStateViews.get(i).getUserId() == userId) {
-//                    如果是，则标记为true
-                    own = true;
-                    if (type == 0) {
-//                    当存在自己，且获取的数据为未审批时，则判断是否为null，为null才是未审批
-                        if (purchasePaymentStateViews.get(i).getState() != null) {
-//                            不为null，去除
-                            iterator.remove();
-                            page.setTotal(page.getTotal() - 1);
-                            break;
-                        }
-                    }
-//                    当存在自己，判断自己的状态是否为null，为null则是未审批
-                    if (purchasePaymentStateViews.get(i).getState() == null) {
-//                        当获取的是已审批的数据时，则去除
-                        if (type == 1) {
-                            iterator.remove();
-                            page.setTotal(page.getTotal() - 1);
-                            break;
-                        }
-                    } else {
-//                        当不为null，则自己已经审批
-                        if (type == 1) {
-//                            若获取的是已审批但未完成的数据，判断是否三个董事都审批了
-                            if (flag == 3) {
-//                                是则去除
-                                iterator.remove();
-                                page.setTotal(page.getTotal() - 1);
-                            }
-                        }
-                    }
-                } else {
-//                    循环中userId不等于自己的Id，当循环到最后一次，且最后一次也没匹配上，则去除
-                    if (i == purchasePaymentStateViews.size() - 1 && own == false) {
-                        iterator.remove();
-                        page.setTotal(page.getTotal() - 1);
-                    }
-                }
-            }
-
             record.setPurchasePaymentDirector(purchasePaymentStateViews);
+
             //处理图片，形成一个图片数组
             String paymentPhoto = record.getPaymentPhoto();
 //            付款照片
@@ -478,36 +430,22 @@ public class PurchasePaymentContractServiceImpl extends ServiceImpl<PurchasePaym
     }
 
     @Override
-    public Page<PurchasePaymentContractView> searchDirectorPPC(int currentPage, int pageSize, String searchWord, int userId) {
-        QueryWrapper<PurchasePaymentContractView> qw = new QueryWrapper<>();
-        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("purchase_contract_no", searchWord)
+    public Page<CashierPurchasePayment> searchDirectorPPC(int currentPage, int pageSize, String searchWord, int userId) {
+        QueryWrapper<CashierPurchasePayment> qw = new QueryWrapper<>();
+        qw.isNotNull("finance_staff").isNotNull("finance_state").and(q -> q.like("director_id",userId+"-").and(w->w.like("purchase_contract_no", searchWord)
                 .or().like("customer_enterprise_name", searchWord).or()
                 .like("own_company_name", searchWord).or().like("squeeze_season", searchWord).or()
                 .like("goods_name", searchWord).or().like("finance_staff", searchWord).or().like("cashier", searchWord)
-                .or().like("create_by", searchWord)).orderByDesc("create_time","id");
-        Page<PurchasePaymentContractView> page = new Page<>(currentPage, pageSize);
-        page = purchasePaymentContractInfoMapper.selectPage(page, qw);
-        Iterator<PurchasePaymentContractView> iterator = page.getRecords().iterator();
+                .or().like("create_by", searchWord))).orderByDesc("create_time","id");
+        Page<CashierPurchasePayment> page = new Page<>(currentPage, pageSize);
+        page = cashierPurchasePaymentMapper.selectPage(page, qw);
+        Iterator<CashierPurchasePayment> iterator = page.getRecords().iterator();
         while (iterator.hasNext()) {
-            PurchasePaymentContractView record = iterator.next();
+            CashierPurchasePayment record = iterator.next();
 //            获取董事长审核信息，并加入对象中
             QueryWrapper<PurchasePaymentStateView> stateQw = new QueryWrapper<>();
             stateQw.eq("purchase_payment_contract_id", record.getId()).orderByDesc("nick_name");
             List<PurchasePaymentStateView> purchasePaymentStateViews = purchasePaymentStateInfoMapper.selectList(stateQw);
-
-            for(int i=0;i<purchasePaymentStateViews.size();i++){
-//                判断是否有该登录的董事
-                if(purchasePaymentStateViews.get(i).getUserId()==userId){
-                    break;
-                }else{
-//                    如果这次没有，而且第三次了还没有，说明该董事不是审核该笔采购单的，移除该条数据
-                    if(i==purchasePaymentStateViews.size()-1){
-                        iterator.remove();
-                        page.setTotal(page.getTotal()-1);
-                    }
-                }
-            }
-
             record.setPurchasePaymentDirector(purchasePaymentStateViews);
 
             //处理图片，形成一个图片数组
