@@ -32,7 +32,7 @@
         </el-upload> -->
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
         <el-upload class="moreDeleteButton" name="file"
-          action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
+          action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
           :data="{ createBy: userNickNameStore.user.nickName }" :on-success="uploadSuccess" :limit="1" ref="upload"
           accept=".xlsx,.xls" :show-file-list="false" style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
           <el-button :icon="Upload" type="primary">导入</el-button>
@@ -410,8 +410,8 @@ const exportOutBtn = async () => {
   let res = await exportApi(exportListParm)
   if (res && res.code == 200) {
     const abtn = document.createElement("a");
-    // abtn.href = "http://120.77.28.123:9000/api/logistics/exportExcel"
-    abtn.href = "http://localhost:9000/api/logistics/exportExcel"
+    abtn.href = "http://120.77.28.123:9000/api/logistics/exportExcel"
+    // abtn.href = "http://localhost:9000/api/logistics/exportExcel"
     abtn.click();
   }
 }

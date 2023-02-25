@@ -4,13 +4,13 @@ import { ElMessage } from 'element-plus';
 
 //axios配置
 const config = {
-  baseURL: 'http://localhost:9000',
-  // baseURL: 'http://120.77.28.123:9000',
+  // baseURL: 'http://localhost:9000',
+  baseURL: 'http://120.77.28.123:9000',
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },
   // baseURL: 'https://www.glypro19.com',
-  timeout: 50000000
+  timeout: 99999999999
 }
 
 //定义返回值类型
