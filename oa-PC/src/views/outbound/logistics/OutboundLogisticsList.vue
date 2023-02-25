@@ -33,8 +33,8 @@
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
         <el-upload class="moreDeleteButton" name="file"
           action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
-          :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false"
-          style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
+          :data="{ createBy: userNickNameStore.user.nickName }" :on-success="uploadSuccess" :limit="1" ref="upload"
+          accept=".xlsx,.xls" :show-file-list="false" style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
           <el-button :icon="Upload" type="primary">导入</el-button>
         </el-upload>
         <el-button type="primary" @click="changeOperateStatus"> {{ operateStatus ? "隐藏操作" : "显示操作" }}</el-button>
@@ -427,13 +427,13 @@ const exportListParm = reactive<ExportListParm>({
 const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
   if (response.code == 200) {
     ElMessage({
-      message: '批量插入采购单成功！',
+      message: response.msg,
       type: 'success',
     })
     refresh()
   } else {
     ElMessage({
-      message: '系统出错，批量插入采购单失败！',
+      message: response.msg,
       type: 'error',
       duration: 4000
     })
@@ -442,7 +442,7 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
 
 const uploadFalse = () => {
   ElMessage({
-    message: '上传文件失败！',
+    message: response.msg,
     type: 'error',
     duration: 4000
   })

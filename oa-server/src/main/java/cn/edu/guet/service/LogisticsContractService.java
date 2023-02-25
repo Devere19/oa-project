@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -120,4 +121,11 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
     boolean deleteProcessContract(Integer id);
 
     boolean deleteSaleContract(Integer id);
+
+    /**
+     * 导入物流单
+     * @param map
+     * @return
+     */
+    HttpResult importExcel(HashMap<String, LogisticsContract> map);
 }

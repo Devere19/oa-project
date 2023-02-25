@@ -13,6 +13,7 @@ import cn.edu.guet.bean.sale.SaleContract;
 import cn.edu.guet.http.HttpResult;
 import cn.edu.guet.http.ResultUtils;
 import cn.edu.guet.service.*;
+import cn.edu.guet.util.SecurityUtils;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -27,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -183,19 +187,86 @@ public class LogisticsContractController {
         }
     }
 
+    /**
+     * 导入
+     * @param file
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/logisContractImportExcel")
-    public HttpResult purchaseImportExcel(@RequestBody MultipartFile file) throws IOException {
+    public HttpResult purchaseImportExcel(@RequestBody MultipartFile file,@RequestParam("createBy") String createBy) throws IOException {
+        HashMap<String, LogisticsContract> map = new HashMap<>();
         EasyExcel.read(file.getInputStream(), ImportLogisticsContractModel.class, new PageReadListener<ImportLogisticsContractModel>(dataList -> {
             System.out.println(dataList.size());
             for (ImportLogisticsContractModel importLogisticsContractModel : dataList) {
                 if(importLogisticsContractModel.getLogisticsContractNo()==null){
                     break;
                 }
-                System.out.println(logisticsContractService.handleImportLogisticsContractModel(importLogisticsContractModel));
+                if (map.containsKey(importLogisticsContractModel.getLogisticsContractNo())){
+                    LogisticsContract logisticsContract = map.get(importLogisticsContractModel.getLogisticsContractNo());
+                    //构造新的物流详情单
+                    List<LogisticsDetail> logisticsDetailList = logisticsContract.getLogisticsDetailList();
+                    LogisticsDetail logisticsDetail = new LogisticsDetail();
+                    logisticsDetail.setLogisticsContractNo(importLogisticsContractModel.getDetailLogisticsContractNo());
+                    logisticsDetail.setUpperType(Integer.valueOf(importLogisticsContractModel.getDetailUpperType()));
+                    logisticsDetail.setPurchaseContractNo(importLogisticsContractModel.getDetailPurchaseContractNo());
+                    logisticsDetail.setOutboundTime(importLogisticsContractModel.getDetailOutboundTime());
+                    logisticsDetail.setGoodsFactory(importLogisticsContractModel.getDetailGoodsFactory());
+                    logisticsDetail.setLicensePlateNumber(importLogisticsContractModel.getDetailLicensePlateNumber());
+                    logisticsDetail.setGoodsWeight(importLogisticsContractModel.getDetailGoodsWeight());
+                    logisticsDetail.setGoodsUnit(importLogisticsContractModel.getDetailGoodsUnit());
+                    logisticsDetail.setUploadingWeight(importLogisticsContractModel.getDetailUploadingWeight());
+                    logisticsDetail.setUnloadingLocation(importLogisticsContractModel.getDetailUnloadingLocation());
+                    logisticsDetail.setUnitPrice(importLogisticsContractModel.getDetailUnitPrice());
+                    logisticsDetail.setCalculationMethod(importLogisticsContractModel.getDetailCalculationMethod());
+                    logisticsDetail.setCreateBy(createBy);
+                    logisticsDetail.setLastUpdateBy(createBy);
+                    logisticsDetailList.add(logisticsDetail);
+                    logisticsContract.setLogisticsDetailList(logisticsDetailList);
+                    logisticsContract.setCreateBy(createBy);
+                    logisticsContract.setLastUpdateBy(createBy);
+                    map.put(importLogisticsContractModel.getLogisticsContractNo(),logisticsContract);
+                }else{
+                    //不包含  构造物流单和物流详情单
+                    //构造物流单
+                    LogisticsContract logisticsContract = new LogisticsContract();
+                    logisticsContract.setLogisticsContractNo(importLogisticsContractModel.getLogisticsContractNo());
+                    logisticsContract.setSaleContractNo(importLogisticsContractModel.getSaleContractNo());
+                    logisticsContract.setOwnCompanyName(importLogisticsContractModel.getOwnCompanyName());
+                    logisticsContract.setTotalWeight(importLogisticsContractModel.getTotalWeight());
+                    logisticsContract.setGoodsUnit(importLogisticsContractModel.getGoodsUnit());
+                    logisticsContract.setFreight(importLogisticsContractModel.getFreight());
+                    logisticsContract.setLogisticsContractTime(importLogisticsContractModel.getLogisticsContractTime());
+                    logisticsContract.setSqueezeSeason(importLogisticsContractModel.getSqueezeSeason());
+                    logisticsContract.setUpperType(importLogisticsContractModel.getUpperType());
+                    logisticsContract.setCreateBy(createBy);
+                    logisticsContract.setLastUpdateBy(createBy);
+                    //构造物流详情单
+                    LogisticsDetail logisticsDetail = new LogisticsDetail();
+                    List<LogisticsDetail> logisticsDetailArrayList = new ArrayList<>();
+                    logisticsDetail.setLogisticsContractNo(importLogisticsContractModel.getDetailLogisticsContractNo());
+                    logisticsDetail.setUpperType(Integer.valueOf(importLogisticsContractModel.getDetailUpperType()));
+                    logisticsDetail.setPurchaseContractNo(importLogisticsContractModel.getDetailPurchaseContractNo());
+                    logisticsDetail.setOutboundTime(importLogisticsContractModel.getDetailOutboundTime());
+                    logisticsDetail.setGoodsFactory(importLogisticsContractModel.getDetailGoodsFactory());
+                    logisticsDetail.setLicensePlateNumber(importLogisticsContractModel.getDetailLicensePlateNumber());
+                    logisticsDetail.setGoodsWeight(importLogisticsContractModel.getDetailGoodsWeight());
+                    logisticsDetail.setGoodsUnit(importLogisticsContractModel.getDetailGoodsUnit());
+                    logisticsDetail.setUploadingWeight(importLogisticsContractModel.getDetailUploadingWeight());
+                    logisticsDetail.setUnloadingLocation(importLogisticsContractModel.getDetailUnloadingLocation());
+                    logisticsDetail.setUnitPrice(importLogisticsContractModel.getDetailUnitPrice());
+                    logisticsDetail.setCalculationMethod(importLogisticsContractModel.getDetailCalculationMethod());
+                    logisticsDetail.setCreateBy(createBy);
+                    logisticsDetail.setLastUpdateBy(createBy);
+                    logisticsDetailArrayList.add(logisticsDetail);
+                    logisticsContract.setLogisticsDetailList(logisticsDetailArrayList);
+                    map.put(importLogisticsContractModel.getLogisticsContractNo(),logisticsContract);
+                }
+                // System.out.println(logisticsContractService.handleImportLogisticsContractModel(importLogisticsContractModel));
 //                purchaseContractService.handleImportPurchaseContractModel(importPurchaseContractModel);
             }
         })).sheet().doRead();
-        return ResultUtils.success("批量插入采购单成功");
+        return logisticsContractService.importExcel(map);
     }
 
     @PostMapping("/edit")
