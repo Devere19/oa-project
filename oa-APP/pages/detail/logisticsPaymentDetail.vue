@@ -12,7 +12,7 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="9" :offset="2">
-						<view class="headLine">销售合同编号：</view>
+						<view class="headLine">加工/销售合同编号：</view>
 					</uni-col>
 					<uni-col :span="12">
 						<view class="contractContent">{{logisticsPaymentContract.saleContractNo}}</view>

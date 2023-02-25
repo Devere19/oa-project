@@ -26,113 +26,113 @@
 		</view>
 		<view v-show="chooseForm==0" v-for="(item,index) in unauditedList" :key="item.id" class="formCard">
 			<!-- <uni-transition custom-class="transition" :duration=500 :mode-class="item.modeClass" :show="item.show"> -->
-				<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="采购付款单" :subTitle="item.purchaseContractNo"
-					:extra="item.customerEnterpriseName">
-					<view class="cardContent">
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								采购货物名称 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.goodsName}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								采购总金额 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.paymentAmount}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								本次付款金额 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.paymentCount}}
-							</uni-col>
-						</uni-row>
-					</view>
-					<view class="auditStatusGroup">
-						<view v-for="(statusItem,statusIndex) in item.purchasePaymentDirector" :key="statusItem.userId"
-							class="auditStatusItem">
-							<view>{{statusItem.nickName}}</view>
-							<view v-show="statusIndex==0">
-								<uni-icons :style="'margin-left:15rpx'"
-									:type="statusItem.state == null ? '' : 'checkmarkempty'"
-									size="24" color="#0081ff"></uni-icons>
-							</view>
-							<view v-show="statusIndex==1">
-								<uni-icons :style="'margin-left:15rpx'"
-									:type="statusItem.state == null ? '' : 'checkmarkempty'"
-									size="24" color="#0081ff"></uni-icons>
-							</view>
-							<view v-show="statusIndex==2">
-								<uni-icons :style="'margin-left:15rpx'"
-									:type="statusItem.state == null ? '' : 'checkmarkempty'"
-									size="24" color="#0081ff"></uni-icons>
-							</view>
-						</view>
-					</view>
-					<view slot="actions" class="actionGroup">
-						<view class="actionGroupItem" @tap="actionsClick('pass',item.id,index)">
-							<button class="buttonGroup" type="primary">通过</button>
-						</view>
-						<view class="actionGroupItem" @tap="actionsClick('more',item.id,index)">
-							<button class="buttonGroup">详情</button>
-						</view>
-					</view>
-				</uni-card>
-			<!-- </uni-transition> -->
-		</view>
-		<view v-show="chooseForm==1" v-for="(item,index) in auditedList" :key="item.id" class="formCard">
 			<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="采购付款单" :subTitle="item.purchaseContractNo"
 				:extra="item.customerEnterpriseName">
-					<view class="cardContent">
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								采购货物名称 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.goodsName}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								采购总金额 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.paymentAmount}}
-							</uni-col>
-						</uni-row>
-						<uni-row style="width: 100%;">
-							<uni-col :span="8">
-								本次付款金额 :
-							</uni-col>
-							<uni-col :span="16">
-								{{item.paymentCount}}
-							</uni-col>
-						</uni-row>
-					</view>
+				<view class="cardContent">
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							采购货物名称 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.goodsName}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							采购总金额 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.paymentAmount}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							本次付款金额 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.paymentCount}}
+						</uni-col>
+					</uni-row>
+				</view>
 				<view class="auditStatusGroup">
 					<view v-for="(statusItem,statusIndex) in item.purchasePaymentDirector" :key="statusItem.userId"
 						class="auditStatusItem">
 						<view>{{statusItem.nickName}}</view>
 						<view v-show="statusIndex==0">
 							<uni-icons :style="'margin-left:15rpx'"
-								:type="statusItem.state == null ? '' : 'checkmarkempty'"
-								size="24" color="#0081ff"></uni-icons>
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
 						</view>
 						<view v-show="statusIndex==1">
 							<uni-icons :style="'margin-left:15rpx'"
-								:type="statusItem.state == null ? '' : 'checkmarkempty'"
-								size="24" color="#0081ff"></uni-icons>
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
 						</view>
 						<view v-show="statusIndex==2">
 							<uni-icons :style="'margin-left:15rpx'"
-								:type="statusItem.state == null ? '' : 'checkmarkempty'"
-								size="24" color="#0081ff"></uni-icons>
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
+						</view>
+					</view>
+				</view>
+				<view slot="actions" class="actionGroup">
+					<view class="actionGroupItem" @tap="actionsClick('pass',item.id,index)">
+						<button class="buttonGroup" type="primary">通过</button>
+					</view>
+					<view class="actionGroupItem" @tap="actionsClick('more',item.id,index)">
+						<button class="buttonGroup">详情</button>
+					</view>
+				</view>
+			</uni-card>
+			<!-- </uni-transition> -->
+		</view>
+		<view v-show="chooseForm==1" v-for="(item,index) in auditedList" :key="item.id" class="formCard">
+			<uni-card style="box-shadow: 5rpx 5rpx 15rpx #00ffff" title="采购付款单" :subTitle="item.purchaseContractNo"
+				:extra="item.customerEnterpriseName">
+				<view class="cardContent">
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							采购货物名称 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.goodsName}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							采购总金额 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.paymentAmount}}
+						</uni-col>
+					</uni-row>
+					<uni-row style="width: 100%;">
+						<uni-col :span="8">
+							本次付款金额 :
+						</uni-col>
+						<uni-col :span="16">
+							{{item.paymentCount}}
+						</uni-col>
+					</uni-row>
+				</view>
+				<view class="auditStatusGroup">
+					<view v-for="(statusItem,statusIndex) in item.purchasePaymentDirector" :key="statusItem.userId"
+						class="auditStatusItem">
+						<view>{{statusItem.nickName}}</view>
+						<view v-show="statusIndex==0">
+							<uni-icons :style="'margin-left:15rpx'"
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
+						</view>
+						<view v-show="statusIndex==1">
+							<uni-icons :style="'margin-left:15rpx'"
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
+						</view>
+						<view v-show="statusIndex==2">
+							<uni-icons :style="'margin-left:15rpx'"
+								:type="statusItem.state == null ? '' : 'checkmarkempty'" size="24" color="#0081ff">
+							</uni-icons>
 						</view>
 					</view>
 				</view>
@@ -172,7 +172,7 @@
 						</uni-col>
 					</uni-row>
 				</view>
-<!-- 				<view class="auditStatusGroup">
+				<!-- 				<view class="auditStatusGroup">
 					<view v-for="(statusItem,statusIndex) in item.purchasePaymentDirector" :key="statusItem.userId"
 						class="auditStatusItem">
 						<view>{{statusItem.nickName}}</view>
@@ -216,25 +216,25 @@
 					nickName: '',
 				},
 				topList: [{
-						id:0,
+						id: 0,
 						count: 0,
 						tips: "待审批",
-						current:1,
-						page:5
+						current: 1,
+						page: 5
 					},
 					{
-						id:1,
+						id: 1,
 						count: 0,
 						tips: "已审批",
-						current:1,
-						page:5
+						current: 1,
+						page: 5
 					},
 					{
-						id:2,
+						id: 2,
 						count: 0,
 						tips: "已完成",
-						current:1,
-						page:5
+						current: 1,
+						page: 5
 					}
 				],
 				chooseForm: 0,
@@ -260,9 +260,9 @@
 		// 		this.chooseForm = 2;
 		// 	}
 		// },
-		onNavigationBarButtonTap(){
+		onNavigationBarButtonTap() {
 			uni.switchTab({
-				url:"/pages/MainInterface/audit"
+				url: "/pages/MainInterface/audit"
 			})
 		},
 		onReachBottom() {
@@ -275,7 +275,7 @@
 			}
 		},
 		methods: {
-			getContractData(){
+			getContractData() {
 				// 获取未审批采购付款单
 				this.$request({
 					url: '/purchasePaymentContract/getDirectorPPC',
@@ -285,18 +285,18 @@
 						userId: this.user.userId,
 						type: 0,
 					}
-				}).then(res=>{
-					if(res.code==200){
-						this.unauditedList=res.data.records;
-						this.topList[0].count=res.data.total;
-						console.log(this.unauditedList);
-					}
-				},
-				err=>{
-					uni.showModal({
-						content: "请求服务失败",
-						showCancel: false
-					})
+				}).then(res => {
+						if (res.code == 200) {
+							this.unauditedList = res.data.records;
+							this.topList[0].count = res.data.total;
+							console.log(this.unauditedList);
+						}
+					},
+					err => {
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+							})
 				})
 				// 获取已审批的采购付款单
 				this.$request({
@@ -307,19 +307,19 @@
 						userId: this.user.userId,
 						type: 1,
 					}
-				}).then(res=>{
-					if(res.code==200){
-						this.auditedList=res.data.records;
-						this.topList[1].count=res.data.total;
-						console.log(this.auditedList);
-					}
-				},
-				err=>{
-					uni.showModal({
-						content: "请求服务失败",
-						showCancel: false
+				}).then(res => {
+						if (res.code == 200) {
+							this.auditedList = res.data.records;
+							this.topList[1].count = res.data.total;
+							console.log(this.auditedList);
+						}
+					},
+					err => {
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
 					})
-				})
 				// 获取已完成的采购付款单
 				this.$request({
 					url: '/purchasePaymentContract/getDirectorPPC',
@@ -329,29 +329,28 @@
 						userId: this.user.userId,
 						type: 2,
 					}
-				}).then(res=>{
-					if(res.code==200){
-						this.completedList=res.data.records;
-						this.topList[2].count=res.data.total;
-						console.log(this.completedList);
-					}
-				},
-				err=>{
-					uni.showModal({
-						content: "请求服务失败",
-						showCancel: false
+				}).then(res => {
+						if (res.code == 200) {
+							this.completedList = res.data.records;
+							this.topList[2].count = res.data.total;
+							console.log(this.completedList);
+						}
+					},
+					err => {
+						uni.showModal({
+							content: "请求服务失败",
+							showCancel: false
+						})
 					})
-				})
 			},
-			getUnAuditedData(){
-				if(this.unauditedList.length==this.topList[0].count){
+			getUnAuditedData() {
+				if (this.unauditedList.length == this.topList[0].count) {
 					uni.showModal({
 						content: "暂无更多数据",
 						showCancel: false
 					})
-				}else{
-					this.topList[0].current=this.topList[0].current+1,
-					this.topList[0].page=this.topList[0].page+5,
+				} else {
+					this.topList[0].current = this.topList[0].current + 1;
 					// 获取未审批采购付款单
 					this.$request({
 						url: '/purchasePaymentContract/getDirectorPPC',
@@ -361,28 +360,35 @@
 							userId: this.user.userId,
 							type: 0,
 						}
-					}).then(res=>{
-						if(res.code==200){
-								this.unauditedList=[...this.unauditedList, ...res.data.records];
-						}
-					},
-					err=>{
-						uni.showModal({
-							content: "请求服务失败",
-							showCancel: false
+					}).then(res => {
+							if (res.code == 200) {
+								if (this.unauditedList.length == res.data.total) {
+									uni.showModal({
+										content: "暂无更多数据",
+										showCancel: false
+									});
+									this.topList[0].current = this.topList[0].current - 1;
+								} else {
+									this.unauditedList = [...this.unauditedList, ...res.data.records];
+								}
+							}
+						},
+						err => {
+							uni.showModal({
+								content: "请求服务失败",
+								showCancel: false
+							})
 						})
-					})
 				}
 			},
-			getAuditedData(){
-				if(this.unauditedList.length==this.topList[0].count){
+			getAuditedData() {
+				if (this.unauditedList.length == this.topList[1].count) {
 					uni.showModal({
 						content: "暂无更多数据",
 						showCancel: false
 					})
-				}else{
-					this.topList[1].current=this.topList[1].current+1,
-					this.topList[1].page=this.topList[1].page+5,
+				} else {
+					this.topList[1].current = this.topList[1].current + 1;
 					// 获取未审批采购付款单
 					this.$request({
 						url: '/purchasePaymentContract/getDirectorPPC',
@@ -392,35 +398,35 @@
 							userId: this.user.userId,
 							type: 1,
 						}
-					}).then(res=>{
-						if(res.code==200){
-							if(this.auditedList.length==res.data.total){
-								uni.showModal({
-									content: "暂无更多数据",
-									showCancel: false
-								})
-							}else{
-								this.auditedList=[...this.auditedList, ...res.data.records];
+					}).then(res => {
+							if (res.code == 200) {
+								if (this.auditedList.length == res.data.total) {
+									uni.showModal({
+										content: "暂无更多数据",
+										showCancel: false
+									});
+									this.topList[1].current = this.topList[1].current - 1;
+								} else {
+									this.auditedList = [...this.auditedList, ...res.data.records];
+								}
 							}
-						}
-					},
-					err=>{
-						uni.showModal({
-							content: "请求服务失败",
-							showCancel: false
-						})
+						},
+						err => {
+							uni.showModal({
+								content: "请求服务失败",
+								showCancel: false
+								})
 					})
 				}
 			},
-			getCompletedData(){
-				if(this.unauditedList.length==this.topList[0].count){
+			getCompletedData() {
+				if (this.unauditedList.length == this.topList[2].count) {
 					uni.showModal({
 						content: "暂无更多数据",
 						showCancel: false
 					})
-				}else{
-					this.topList[2].current=this.topList[2].current+1,
-					this.topList[2].page=this.topList[2].page+5,
+				} else {
+					this.topList[2].current = this.topList[2].current + 1;
 					// 获取未审批采购付款单
 					this.$request({
 						url: '/purchasePaymentContract/getDirectorPPC',
@@ -430,24 +436,25 @@
 							userId: this.user.userId,
 							type: 2,
 						}
-					}).then(res=>{
-						if(res.code==200){
-							if(this.completedList.length==res.data.total){
-								uni.showModal({
-									content: "暂无更多数据",
-									showCancel: false
-								})
-							}else{
-								this.completedList=[...this.completedList, ...res.data.records];
+					}).then(res => {
+							if (res.code == 200) {
+								if (this.completedList.length == res.data.total) {
+									uni.showModal({
+										content: "暂无更多数据",
+										showCancel: false
+									});
+									this.topList[2].current = this.topList[2].current - 1;
+								} else {
+									this.completedList = [...this.completedList, ...res.data.records];
+								}
 							}
-						}
-					},
-					err=>{
-						uni.showModal({
-							content: "请求服务失败",
-							showCancel: false
+						},
+						err => {
+							uni.showModal({
+								content: "请求服务失败",
+								showCancel: false
+							})
 						})
-					})
 				}
 			},
 			topCardClick(e) {
@@ -461,7 +468,7 @@
 			},
 			actionsClick(result, id, index) {
 				if (result == "pass") {
-					let that=this;
+					let that = this;
 					uni.showModal({
 						content: "您确定要‘通过’该单吗？",
 						showCancel: true,

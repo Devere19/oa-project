@@ -21,6 +21,7 @@
             </el-table-column>
             <el-table-column property="customerEnterpriseName" align="center" label="加工方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
+            <el-table-column property="goodsName" align="center" label="加工货物" width="100" />
             <el-table-column property="paymentMonth" align="center" label="付款月份" width="100" />
             <el-table-column property="paymentMonthPriceT" align="center" label="加工单价(元/吨)" width="130" />
             <el-table-column property="goodsCount" align="center" label="加工总量(吨)" width="110" />
@@ -84,6 +85,12 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ processPaymentContractDetail.processContractNo }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        加工货物：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ processPaymentContractDetail.goodsName }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -312,6 +319,7 @@ const processPaymentContractDetail = reactive({
     processContractNo: '',
     paymentMonth: '',
     paymentMonthPriceT: '',
+    goodsName: '',
     goodsCount: '',
     paymentCount: '',
     customerEnterpriseName: '',
@@ -395,6 +403,7 @@ const openMordDetailDialog = async (row: any) => {
     processPaymentContractDetail.processContractNo = row.processContractNo
     processPaymentContractDetail.paymentMonth = row.paymentMonth
     processPaymentContractDetail.paymentMonthPriceT = row.paymentMonthPriceT
+    processPaymentContractDetail.goodsName = row.goodsName
     processPaymentContractDetail.goodsCount = row.goodsCount
     processPaymentContractDetail.paymentCount = row.paymentCount
     processPaymentContractDetail.customerEnterpriseName = row.customerEnterpriseName

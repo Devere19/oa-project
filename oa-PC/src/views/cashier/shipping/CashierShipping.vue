@@ -23,14 +23,14 @@
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
             <el-table-column property="principal" align="center" label="委托方" />
             <el-table-column property="packingTime" :formatter="conversionDate" align="center" label="装箱日期" width="105" />
-            <el-table-column property="packingLocation" align="center" label="装箱地点" />
-            <el-table-column property="unpackingFactory" align="center" label="卸箱工厂" />
-            <el-table-column property="firstContainerNo" align="center" label="集装箱号1" />
-            <el-table-column property="firstSealNo" align="center" label="铅封号1" />
-            <el-table-column property="secondContainerNo" align="center" label="集装箱号2" />
-            <el-table-column property="secondSealNo" align="center" label="铅封号2" />
-            <el-table-column property="tallyClerk" align="center" label="理货员" />
-            <el-table-column property="tallyClerkPrice" align="center" label="理货费用" />
+            <el-table-column property="packingLocation" align="center" label="装箱地点" width="100" />
+            <el-table-column property="unpackingFactory" align="center" label="卸箱工厂" width="100" />
+            <el-table-column property="firstContainerNo" align="center" label="集装箱号1" width="110" />
+            <el-table-column property="firstSealNo" align="center" label="铅封号1" width="90" />
+            <el-table-column property="secondContainerNo" align="center" label="集装箱号2" width="110" />
+            <el-table-column property="secondSealNo" align="center" label="铅封号2" width="90" />
+            <el-table-column property="tallyClerk" align="center" label="理货员" width="90" />
+            <el-table-column property="tallyClerkPrice" align="center" label="理货费用" width="100" />
             <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" />
             <el-table-column property="fleetManageName" align="center" label="车队管理名称" />
             <el-table-column property="departureFleet" align="center" label="起运承运车队" />

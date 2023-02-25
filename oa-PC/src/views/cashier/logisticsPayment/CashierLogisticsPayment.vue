@@ -20,8 +20,8 @@
                 <template #default="scope">{{ scope.row.logisticsContractNo }}</template>
             </el-table-column>
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />
-            <el-table-column property="saleContractNo" align="center" label="加工/销售合同编号" />
-            <el-table-column property="freight" align="center" label="运费总价" />
+            <el-table-column property="saleContractNo" align="center" label="加工/销售合同编号" width="150" />
+            <el-table-column property="freight" align="center" label="运费总价" width="100" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
             <el-table-column property="squeezeSeason" align="center" label="榨季" />
             <el-table-column property="logisticsContractTime" :formatter="conversionDate" align="center" label="物流合同签订时间"

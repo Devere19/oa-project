@@ -32,7 +32,7 @@ public interface ProcessPaymentContractService extends IService<ProcessPaymentCo
 
 
     //    APP
-    Page<ProcessPaymentContractView> getDirectorPPC(int currentPage, int pageSize, int userId ,int type);
+    Page<CashierProcessPayment> getDirectorPPC(int currentPage, int pageSize, int userId ,int type);
     ProcessPaymentContractView getOneDirectorPPC(int id);
-    Page<ProcessPaymentContractView> searchDirectorPPC(int currentPage, int pageSize ,String searchWord, int userId);
+    Page<CashierProcessPayment> searchDirectorPPC(int currentPage, int pageSize ,String searchWord, int userId);
 }

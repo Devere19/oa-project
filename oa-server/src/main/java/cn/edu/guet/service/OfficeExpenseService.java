@@ -25,9 +25,9 @@ public interface OfficeExpenseService extends IService<OfficeExpense> {
     int uploadCashierOfficeExpense(OfficeExpense officeExpense);
 
     //    APP
-    Page<OfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId , int type);
+    Page<CashierOfficeExpense> getDirectorOE(int currentPage, int pageSize, int userId , int type);
     OfficeExpense getOneDirectorOE(int id);
-    Page<OfficeExpense> searchDirectorOE(int currentPage, int pageSize, String searchWord, int userId);
+    Page<CashierOfficeExpense> searchDirectorOE(int currentPage, int pageSize, String searchWord, int userId);
 
     //审批
     int changeFinanceState(int id,String financeStaff);

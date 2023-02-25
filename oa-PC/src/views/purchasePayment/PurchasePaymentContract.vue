@@ -28,7 +28,7 @@
             <el-table-column label="采购合同编号" align="center" width="120">
                 <template #default="scope">{{ scope.row.purchaseContractNo }}</template>
             </el-table-column>
-            <el-table-column property="paymentAmount" align="center" label="采购总价" />
+            <el-table-column property="paymentAmount" align="center" label="采购总价" width="100" />
             <el-table-column property="paymentCount" align="center" label="本次付款金额" />
             <el-table-column property="customerEnterpriseName" align="center" label="供货方公司名" width="140" />
             <el-table-column property="ownCompanyName" align="center" label="己方公司名" width="140" />

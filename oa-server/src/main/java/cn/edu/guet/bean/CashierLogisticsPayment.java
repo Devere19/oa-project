@@ -119,9 +119,19 @@ public class CashierLogisticsPayment implements Serializable {
     private String goodsUnit;
 
     /**
+     *
+     */
+    private String directorId;
+
+    /**
      * 
      */
     private String directorState;
+
+    /**
+     *
+     */
+    private String concatDirectorState;
 
     /**
      * 前端数据传输*

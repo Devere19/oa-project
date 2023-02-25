@@ -139,7 +139,6 @@
 					})
 				} else {
 					this.current = this.current + 1,
-						this.page = this.page + 5,
 						this.$request({
 							url: '/officeExpense/searchDirectorOE',
 							data: {
