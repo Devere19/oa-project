@@ -32,7 +32,7 @@
         </el-upload> -->
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
         <el-upload class="moreDeleteButton" name="file"
-          action="http://120.77.28.123:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
+          action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
           :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false"
           style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
           <el-button :icon="Upload" type="primary">导入</el-button>
@@ -103,7 +103,7 @@
     <AddLogis ref="addRef" @refresh="refresh"> </AddLogis>
 
     <!-- 修改物流单弹窗 -->
-    <el-dialog class="updateDialog" v-model="updateDialogFlag" :title="isEdit == false ? '补充合同照片' : '修改物流单'" width="50%"
+    <el-dialog class="updateDialog" v-model="updateDialogFlag" :title="isEdit == false ? '补充合同照片' : '修改物流单'" width="850px"
       draggable center :before-close="closeUpdateDialog">
       <ul ref="updateDialogTop" style="overflow: auto;height:600px">
         <el-form :model="addModel" ref="thridFormRef" label-width="80px" size="default" :rules="rules">
@@ -126,7 +126,7 @@
           </el-row>
           <el-row>
             <el-col :span="12" :offset="0">
-              <el-form-item prop="saleContractNo" label="销售/加工单合同编号" label-width='150px' label-position="right">
+              <el-form-item prop="saleContractNo" label="销售/加工单合同号" label-width='150px' label-position="right">
                 <el-input v-model="addModel.saleContractNo" placeholder="运往自家仓库请填写'000'" :disabled="isEdit"></el-input>
               </el-form-item>
             </el-col>
@@ -272,10 +272,10 @@
             </el-row>
             <el-row>
               <el-col :span="12" :offset="0">
-                <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
+                <el-form-item :prop="'logisticsDetailList.' + index + '.uploadingWeight'" label="卸货量" label-width='150px'
                   label-position="right" :rules="[
                     { required: true, trigger: ['change'] }]">
-                  <el-input v-model="item.unitPrice" :disabled="isEdit"></el-input>
+                  <el-input v-model="item.uploadingWeight"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" :offset="0">
@@ -292,6 +292,13 @@
             </el-col> -->
             </el-row>
             <el-row>
+              <el-col :span="12" :offset="0">
+                <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
+                  label-position="right" :rules="[
+                    { required: true, trigger: ['change'] }]">
+                  <el-input v-model="item.unitPrice" :disabled="isEdit"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="12" :offset="0">
                 <el-form-item :prop="'logisticsDetailList.' + index + '.calculationMethod'" label="结算方式"
                   label-width='150px' label-position="right" :rules="[
@@ -403,7 +410,8 @@ const exportOutBtn = async () => {
   let res = await exportApi(exportListParm)
   if (res && res.code == 200) {
     const abtn = document.createElement("a");
-    abtn.href = "http://120.77.28.123:9000/api/logistics/exportExcel"
+    // abtn.href = "http://120.77.28.123:9000/api/logistics/exportExcel"
+    abtn.href = "http://localhost:9000/api/logistics/exportExcel"
     abtn.click();
   }
 }
@@ -514,7 +522,8 @@ const addModel = reactive<AddLogisticsModel>({
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
+      uploadingWeight: ''
     }
   ])
 })
@@ -745,7 +754,8 @@ const addLogisticsDetail = (flag: number) => {
       unloadingLocation: '',
       unitPrice: '',
       createBy: '',
-      calculationMethod: ''
+      calculationMethod: '',
+      uploadingWeight: ''
     })
   } else if (flag == 1) {
     addModel.logisticsDetailList.push({
@@ -762,6 +772,7 @@ const addLogisticsDetail = (flag: number) => {
       unitPrice: '',
       createBy: '',
       calculationMethod: '',
+      uploadingWeight: ''
     })
   }
 }

@@ -165,10 +165,10 @@
           </el-row>
           <el-row>
             <el-col :span="12" :offset="0">
-              <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
+              <el-form-item :prop="'logisticsDetailList.' + index + '.uploadingWeight'" label="卸货量" label-width='150px'
                 label-position="right" :rules="[
                   { required: true, trigger: ['change'] }]">
-                <el-input v-model="item.unitPrice"></el-input>
+                <el-input v-model="item.uploadingWeight"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" :offset="0">
@@ -181,6 +181,13 @@
 
           </el-row>
           <el-row>
+            <el-col :span="12" :offset="0">
+              <el-form-item :prop="'logisticsDetailList.' + index + '.unitPrice'" label="运输单价" label-width='150px'
+                label-position="right" :rules="[
+                  { required: true, trigger: ['change'] }]">
+                <el-input v-model="item.unitPrice"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="12" :offset="0">
               <el-form-item :prop="'logisticsDetailList.' + index + '.calculationMethod'" label="结算方式" label-width='150px'
                 label-position="right" :rules="[
@@ -271,7 +278,8 @@ const addModel = reactive<AddLogisticsModel>({
       goodsUnit: '',
       unloadingLocation: '',
       unitPrice: '',
-      createBy: ''
+      createBy: '',
+      uploadingWeight: ''
     }
   ])
 })
@@ -296,6 +304,7 @@ const show = () => {
       unloadingLocation: '',
       unitPrice: '',
       createBy: '',
+      uploadingWeight: ''
     }
   ])
   PhotoData.value = [];
@@ -350,7 +359,8 @@ const addLogisticsDetail = () => {
     unloadingLocation: '',
     unitPrice: '',
     calculationMethod: '',
-    createBy: ''
+    createBy: '',
+    uploadingWeight: ''
   })
 }
 

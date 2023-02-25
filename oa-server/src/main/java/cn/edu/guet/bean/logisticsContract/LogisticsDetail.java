@@ -97,5 +97,10 @@ public class LogisticsDetail implements Serializable {
      */
     private String calculationMethod;
 
+    /**
+     * 些货量
+     */
+    private BigDecimal uploadingWeight;
+
 
 }

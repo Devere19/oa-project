@@ -23,6 +23,7 @@ export type LogisticsDetailList = {
   outboundTime: string,
   licensePlateNumber: string,
   goodsWeight: string,
+  uploadingWeight:string,
   goodsUnit: string,
   calculationMethod:string,
   unloadingLocation: string,

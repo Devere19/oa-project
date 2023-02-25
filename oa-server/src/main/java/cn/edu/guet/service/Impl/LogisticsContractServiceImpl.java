@@ -26,6 +26,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.PortResolverImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1005,6 +1006,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
      *
      * @return
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteProcessContract(Integer id) {
         //先拿到该物流单和物流单合同号
@@ -1190,6 +1192,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
      *
      * @return
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteSaleContract(Integer id) {
         //先拿到该物流单和物流单合同号
