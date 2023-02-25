@@ -117,4 +117,7 @@ public interface LogisticsContractService extends IService<LogisticsContract> {
 
     boolean handleImportLogisticsContractModel(ImportLogisticsContractModel importLogisticsContractModel) ;
 
+    boolean deleteProcessContract(Integer id);
+
+    boolean deleteSaleContract(Integer id);
 }
