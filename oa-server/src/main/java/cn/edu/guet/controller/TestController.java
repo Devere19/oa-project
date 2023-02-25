@@ -1,9 +1,6 @@
 package cn.edu.guet.controller;
 
-import cn.edu.guet.util.PasswordEncoder;
-import cn.edu.guet.util.PasswordUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * @Author Devere19
@@ -11,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version 1.0
  */
 
-public class TestController {
-    public static void main(String[] args) {
-    }
+public class TestController implements HandlerInterceptor {
+
+
 }
