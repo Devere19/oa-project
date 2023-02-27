@@ -1320,10 +1320,14 @@ const uploadSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
       getFTableData();
     }
   } else {
+    let msg = '';
+    response.data.map((item: any) => msg = msg + item + '<p>');
     ElMessage({
-      message: '系统出错，批量插入采购单失败！',
+      dangerouslyUseHTMLString: true,
+      message: msg,
       type: 'error',
-      duration: 4000
+      duration: 0,
+      showClose: true,
     })
   }
 }

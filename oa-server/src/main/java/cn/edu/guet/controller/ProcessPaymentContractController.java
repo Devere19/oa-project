@@ -10,10 +10,14 @@ import cn.edu.guet.service.ProcessPaymentContractService;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 陶祎祎
@@ -38,17 +42,29 @@ public class ProcessPaymentContractController {
         return ResultUtils.success("查询成功",processPaymentContractService.searchProcessPaymentContract(current,page,searchWord));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/processPaymentImportExcel")
     public HttpResult processPaymentImportExcel(@RequestBody MultipartFile file) throws IOException {
+        List<String> errorList=new ArrayList<>();
         EasyExcel.read(file.getInputStream(), ImportProcessPaymentContractModel.class, new PageReadListener<ImportProcessPaymentContractModel>(dataList -> {
             System.out.println(dataList.size());
             for (ImportProcessPaymentContractModel importProcessPaymentContractModel : dataList) {
                 if(importProcessPaymentContractModel.getProcessContractNo()==null){
                     break;
                 }
-                System.out.println(processPaymentContractService.handleImportProcessPaymentContractModel(importProcessPaymentContractModel));
+                int result=processPaymentContractService.handleImportProcessPaymentContractModel(importProcessPaymentContractModel);
+                if(result==0){
+                    String msg="加工合同号（"+importProcessPaymentContractModel.getProcessContractNo()+"）不存在";
+                    if(!errorList.contains(msg)){
+                        errorList.add(msg);
+                    }
+                }
             }
         })).sheet().doRead();
+        if(!errorList.isEmpty()){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultUtils.error("批量插入加工付款单失败",errorList);
+        }
         return ResultUtils.success("批量插入加工付款单成功");
     }
 

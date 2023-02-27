@@ -15,6 +15,8 @@ import com.alibaba.excel.read.listener.PageReadListener;
 import com.alibaba.fastjson.JSON;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import static cn.edu.guet.util.ExcelUtils.downloadExcel;
 
@@ -52,18 +56,29 @@ public class PurchaseContractController {
         return ResultUtils.success("查询成功",purchaseContractService.searchPurchaseContract(current,page,searchWord,showPigeonhole,startDate,endDate));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/purchaseImportExcel")
     public HttpResult purchaseImportExcel(@RequestBody MultipartFile file) throws IOException {
+        List<String> errorList=new ArrayList<>();
         EasyExcel.read(file.getInputStream(), ImportPurchaseContractModel.class, new PageReadListener<ImportPurchaseContractModel>(dataList -> {
             System.out.println(dataList.size());
             for (ImportPurchaseContractModel importPurchaseContractModel : dataList) {
                 if(importPurchaseContractModel.getPurchaseContractNo()==null){
                     break;
                 }
-                System.out.println(purchaseContractService.handleImportPurchaseContractModel(importPurchaseContractModel));
-//                purchaseContractService.handleImportPurchaseContractModel(importPurchaseContractModel);
+                int result=purchaseContractService.handleImportPurchaseContractModel(importPurchaseContractModel);
+                if(result==0){
+                    String msg="采购合同号（"+importPurchaseContractModel.getPurchaseContractNo()+"）已重复";
+                    if(!errorList.contains(msg)){
+                        errorList.add(msg);
+                    }
+                }
             }
         })).sheet().doRead();
+        if(!errorList.isEmpty()){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultUtils.error("批量插入采购单失败",errorList);
+        }
         return ResultUtils.success("批量插入采购单成功");
     }
 
