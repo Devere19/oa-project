@@ -44,7 +44,7 @@ public class ImportShippingContractModel {
     /**
      * 装箱日期
      */
-    @ExcelProperty(value = "装箱日期")
+    @ExcelProperty(value = "装箱日期（格式为xxxx-xx-xx）")
     private Date packingTime;
 
     /**
@@ -116,7 +116,7 @@ public class ImportShippingContractModel {
     /**
      * 起运承运车队费用
      */
-    @ExcelProperty(value = "起运承运车队费用")
+    @ExcelProperty(value = "起运承运车队费用(元)")
     private BigDecimal departurePrice;
 
     /**
@@ -128,7 +128,7 @@ public class ImportShippingContractModel {
     /**
      * 承运船公司费用
      */
-    @ExcelProperty(value = "承运船公司费用")
+    @ExcelProperty(value = "承运船公司费用(元)")
     private BigDecimal carrierCompanyPrice;
 
     /**
@@ -140,13 +140,13 @@ public class ImportShippingContractModel {
     /**
      * 目的港承运车队费用
      */
-    @ExcelProperty(value = "目的港承运车队费用")
+    @ExcelProperty(value = "目的港承运车队费用(元)")
     private BigDecimal destinationPortPrice;
 
     /**
      * 总费用
      */
-    @ExcelProperty(value = "总费用")
+    @ExcelProperty(value = "总费用(元)")
     private BigDecimal expenses;
 
 }

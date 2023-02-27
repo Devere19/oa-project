@@ -30,6 +30,6 @@ public class ImportOfficeExpenseModel {
     /**
      * 日期
      */
-    @ExcelProperty(value = "日期")
+    @ExcelProperty(value = "日期（格式为xxxx-xx-xx）")
     private Date time;
 }
