@@ -11,10 +11,14 @@ import cn.edu.guet.service.ShippingContractService;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.listener.PageReadListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 陶祎祎
@@ -40,17 +44,26 @@ public class ShippingContractController {
         return ResultUtils.success("查询成功",shippingContractService.searchShippingContract(current,page,searchWord));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @RequestMapping("/shippingImportExcel")
     public HttpResult shippingImportExcel(@RequestBody MultipartFile file) throws IOException {
+        List<String> errorList=new ArrayList<>();
         EasyExcel.read(file.getInputStream(), ImportShippingContractModel.class, new PageReadListener<ImportShippingContractModel>(dataList -> {
             System.out.println(dataList.size());
             for (ImportShippingContractModel importShippingContractModel : dataList) {
                 if(importShippingContractModel.getShippingContractNo()==null){
                     break;
                 }
-                System.out.println(shippingContractService.handleImportShippingContractModel(importShippingContractModel));
+                int result=shippingContractService.handleImportShippingContractModel(importShippingContractModel);
+                if(result==0){
+                    errorList.add("海运单（"+importShippingContractModel.getShippingContractNo()+"），其海运单号已重复，或其物流单号不存在");
+                }
             }
         })).sheet().doRead();
+        if(!errorList.isEmpty()){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultUtils.error("批量插入海运单失败",errorList);
+        }
         return ResultUtils.success("批量插入海运单成功");
     }
 
