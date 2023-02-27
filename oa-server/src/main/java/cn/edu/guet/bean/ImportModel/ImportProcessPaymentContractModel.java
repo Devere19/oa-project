@@ -23,7 +23,7 @@ public class ImportProcessPaymentContractModel {
     /**
      * 付款月份
      */
-    @ExcelProperty(value = "付款月份")
+    @ExcelProperty(value = "付款月份（格式为xxxx-xx）")
     private String paymentMonth;
 
     /**

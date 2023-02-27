@@ -44,7 +44,7 @@ public class ImportPurchaseContractModel {
     /**
      * 入库时间（合同实际签订时间）
      */
-    @ExcelProperty(value = "入库时间（合同实际签订时间）")
+    @ExcelProperty(value = "入库时间（格式为xxxx-xx-xx）")
     private Date inboundTime;
 
     /**
