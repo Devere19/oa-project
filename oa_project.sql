@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : zwyali.mysql
+ Source Server         : 120.77.28.123.3306
  Source Server Type    : MySQL
  Source Server Version : 80024
  Source Host           : 120.77.28.123:3306
@@ -11,7 +11,7 @@
  Target Server Version : 80024
  File Encoding         : 65001
 
- Date: 25/02/2023 19:27:56
+ Date: 25/02/2023 21:50:30
 */
 
 SET NAMES utf8mb4;
@@ -99,6 +99,8 @@ CREATE TABLE `logistics_contract`  (
 -- ----------------------------
 INSERT INTO `logistics_contract` VALUES (90, 'WL1', 'XS测试', '广西众润贸易有限责任公司', '测试', 50.00, '吨', 1000.00, 'http://120.77.28.123:9000/static/images/ef73f162912f4da08350ad137300326d.jpg', '2023-01-06', '测试', '1', 1, 1, 1, 1, '2023-01-06 17:22:06', '黄佳森', '2023-01-06 17:22:06', '黄佳森', 1);
 INSERT INTO `logistics_contract` VALUES (114, 'WL测试', 'XS测试', '广西永湘贸易有限责任公司', '测试', 10.00, '吨', 20.00, '', '2023-01-06', '10月', '1', NULL, NULL, NULL, NULL, '2023-02-25 18:38:11', '超管', '2023-02-25 18:38:11', '超管', 1);
+INSERT INTO `logistics_contract` VALUES (136, 'WL测试2', 'XS测试', '广西永湘贸易有限责任公司', '测试', 5.00, '吨', 5.00, '', '2023-02-25', '3月', '1', NULL, NULL, NULL, NULL, '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36', '超管', 1);
+INSERT INTO `logistics_contract` VALUES (137, 'WL测试1', 'XS测试', '广西永湘贸易有限责任公司', '测试', 10.00, '吨', 10.00, '', '2023-01-06', '10月', '1', NULL, NULL, NULL, NULL, '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36', '超管', 1);
 
 -- ----------------------------
 -- Table structure for logistics_detail
@@ -131,6 +133,9 @@ CREATE TABLE `logistics_detail`  (
 INSERT INTO `logistics_detail` VALUES (105, 'WL1', 'CG测试', 'A厂', '2023-01-06', '桂C1111', 50.00, 40.00, '吨', '天津港', '装货结算', 100.00, '2023-01-06 17:20:03', '黄佳森', '2023-02-25 10:34:47', '黄佳森', 1);
 INSERT INTO `logistics_detail` VALUES (144, 'WL测试', 'CG测试', 'A厂', '2023-02-24', '桂C456123', 5.00, 5.00, '吨', '海南港口', '卸货结算', 10.00, '2023-01-06 22:16:17', '超管', '2023-02-25 10:34:49', '超管', 1);
 INSERT INTO `logistics_detail` VALUES (145, 'WL测试', 'CG测试', 'A厂', '2023-02-24', '桂C888', 5.00, 4.00, '吨', '河北港口', '装货结算', 10.00, '2023-01-06 22:16:17', '超管', '2023-02-25 10:34:51', '超管', 1);
+INSERT INTO `logistics_detail` VALUES (177, 'WL测试2', 'CG测试', 'A厂', '2023-02-25', '桂C222222', 2.00, 2.00, '吨', '桂林港口', '卸货结算', 5.00, '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36', '超管', 1);
+INSERT INTO `logistics_detail` VALUES (178, 'WL测试1', 'CG测试', 'A厂', '2023-01-16', '桂C456123', 5.00, 2.00, '吨', '海南港口', '装货结算', 10.00, '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36', '超管', 1);
+INSERT INTO `logistics_detail` VALUES (179, 'WL测试1', 'CG测试', 'A厂', '2023-01-16', '桂C488888', 5.00, 4.00, '吨', '河北港口', '装货结算', 10.00, '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36', '超管', 1);
 
 -- ----------------------------
 -- Table structure for logistics_director_state
@@ -311,6 +316,9 @@ INSERT INTO `other_in_out` VALUES (644, 95, 1, 'HT16032223000005', '甘蔗糖蜜
 INSERT INTO `other_in_out` VALUES (646, 96, 1, 'HT15032223000006', '甘蔗糖蜜', 1500.00, '吨', 0.76, '2023-01-16', '2023-01-30 09:14:46', '韩娜', '2023-01-30 09:14:46', '韩娜');
 INSERT INTO `other_in_out` VALUES (671, 88, 0, 'WL测试', '测试', 5.00, '吨', NULL, NULL, '2023-02-25 18:38:12', '超管', '2023-02-25 18:38:12', '超管');
 INSERT INTO `other_in_out` VALUES (672, 88, 0, 'WL测试', '测试', 5.00, '吨', NULL, NULL, '2023-02-25 18:38:12', '超管', '2023-02-25 18:38:12', '超管');
+INSERT INTO `other_in_out` VALUES (699, 88, 0, 'WL测试2', '测试', 2.00, '吨', NULL, NULL, '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36', '超管');
+INSERT INTO `other_in_out` VALUES (700, 88, 0, 'WL测试1', '测试', 5.00, '吨', NULL, NULL, '2023-02-25 21:36:37', '超管', '2023-02-25 21:36:37', '超管');
+INSERT INTO `other_in_out` VALUES (701, 88, 0, 'WL测试1', '测试', 5.00, '吨', NULL, NULL, '2023-02-25 21:36:37', '超管', '2023-02-25 21:36:37', '超管');
 
 -- ----------------------------
 -- Table structure for other_warehouse
@@ -337,7 +345,7 @@ INSERT INTO `other_warehouse` VALUES (82, '上林糖厂', '甘蔗糖蜜', 160000
 INSERT INTO `other_warehouse` VALUES (85, '南圩糖厂', '甘蔗糖蜜', 2000000.000000, '斤', '2023-01-06 12:43:23', '韩娜', '2023-01-06 12:43:23', '韩娜');
 INSERT INTO `other_warehouse` VALUES (86, '1', '1', 0.000000, '斤', '2023-01-06 12:43:29', 'admin', '2023-01-06 12:43:29', 'admin');
 INSERT INTO `other_warehouse` VALUES (87, '龙门糖厂', '甘蔗糖蜜', 4000000.000000, '斤', '2023-01-06 14:35:25', '韩娜', '2023-01-06 14:35:25', '韩娜');
-INSERT INTO `other_warehouse` VALUES (88, 'A厂', '测试', 80000.000000, '斤', '2023-01-06 17:17:22', '黄佳森', '2023-01-06 22:14:35', '超管');
+INSERT INTO `other_warehouse` VALUES (88, 'A厂', '测试', 56000.000000, '斤', '2023-01-06 17:17:22', '黄佳森', '2023-01-06 22:14:35', '超管');
 INSERT INTO `other_warehouse` VALUES (89, '崇左江州糖厂', '甘蔗糖蜜', 10000000.000000, '斤', '2023-01-09 17:00:37', '韩娜', '2023-01-09 17:00:37', '韩娜');
 INSERT INTO `other_warehouse` VALUES (90, '合浦伟恒', '甘蔗糖蜜', 5000000.000000, '斤', '2023-01-13 09:42:06', '韩娜', '2023-01-13 09:42:06', '韩娜');
 INSERT INTO `other_warehouse` VALUES (91, '大明山牌', '白砂糖', 12000000.000000, '斤', '2023-01-13 09:44:04', '韩娜', '2023-01-13 09:44:04', '韩娜');
@@ -7173,6 +7181,120 @@ INSERT INTO `sys_log` VALUES (33506, '超管', NULL, 'cn.edu.guet.controller.Sys
 INSERT INTO `sys_log` VALUES (33507, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 69, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:26:09', '超管', '2023-02-25 19:26:09');
 INSERT INTO `sys_log` VALUES (33508, '超管', NULL, 'cn.edu.guet.controller.ShippingContractController.getshippingContractData()', '1', 282, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:26:09', '超管', '2023-02-25 19:26:09');
 INSERT INTO `sys_log` VALUES (33509, '超管', NULL, 'cn.edu.guet.controller.CashierController.getCashierShipping()', '1', 402, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:26:30', '超管', '2023-02-25 19:26:30');
+INSERT INTO `sys_log` VALUES (33510, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 457, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:45:24', '超管', '2023-02-25 19:45:24');
+INSERT INTO `sys_log` VALUES (33511, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 481, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:45:24', '超管', '2023-02-25 19:45:24');
+INSERT INTO `sys_log` VALUES (33512, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 31, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:45:24', '超管', '2023-02-25 19:45:24');
+INSERT INTO `sys_log` VALUES (33513, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 612, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 19:45:36', NULL, '2023-02-25 19:45:36');
+INSERT INTO `sys_log` VALUES (33514, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 62, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 19:45:36', '超管', '2023-02-25 19:45:36');
+INSERT INTO `sys_log` VALUES (33515, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 411, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:16:48', NULL, '2023-02-25 20:16:48');
+INSERT INTO `sys_log` VALUES (33516, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 159, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:16:49', '超管', '2023-02-25 20:16:49');
+INSERT INTO `sys_log` VALUES (33517, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 2, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:32:07', '超管', '2023-02-25 20:32:07');
+INSERT INTO `sys_log` VALUES (33518, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 717, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:32:09', NULL, '2023-02-25 20:32:09');
+INSERT INTO `sys_log` VALUES (33519, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1560, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:32:17', NULL, '2023-02-25 20:32:17');
+INSERT INTO `sys_log` VALUES (33520, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 95, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:32:18', '超管', '2023-02-25 20:32:18');
+INSERT INTO `sys_log` VALUES (33521, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getDetailLogistics()', '115', 97, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:34:36', '超管', '2023-02-25 20:34:36');
+INSERT INTO `sys_log` VALUES (33522, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 65, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:17', '超管', '2023-02-25 20:37:17');
+INSERT INTO `sys_log` VALUES (33523, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 101, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:17', '超管', '2023-02-25 20:37:17');
+INSERT INTO `sys_log` VALUES (33524, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 29, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:17', '超管', '2023-02-25 20:37:17');
+INSERT INTO `sys_log` VALUES (33525, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '116', 829, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:20', '超管', '2023-02-25 20:37:20');
+INSERT INTO `sys_log` VALUES (33526, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 66, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:20', '超管', '2023-02-25 20:37:20');
+INSERT INTO `sys_log` VALUES (33527, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '115', 837, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:23', '超管', '2023-02-25 20:37:23');
+INSERT INTO `sys_log` VALUES (33528, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 63, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:37:23', '超管', '2023-02-25 20:37:23');
+INSERT INTO `sys_log` VALUES (33529, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1941, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:38:06', NULL, '2023-02-25 20:38:06');
+INSERT INTO `sys_log` VALUES (33530, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 106, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:38:06', '超管', '2023-02-25 20:38:06');
+INSERT INTO `sys_log` VALUES (33531, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 471, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:40', '超管', '2023-02-25 20:39:40');
+INSERT INTO `sys_log` VALUES (33532, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 487, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:40', '超管', '2023-02-25 20:39:40');
+INSERT INTO `sys_log` VALUES (33533, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 31, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:40', '超管', '2023-02-25 20:39:40');
+INSERT INTO `sys_log` VALUES (33534, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '118', 844, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:44', '超管', '2023-02-25 20:39:44');
+INSERT INTO `sys_log` VALUES (33535, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 65, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:44', '超管', '2023-02-25 20:39:44');
+INSERT INTO `sys_log` VALUES (33536, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '117', 584, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:46', '超管', '2023-02-25 20:39:46');
+INSERT INTO `sys_log` VALUES (33537, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 68, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:47', '超管', '2023-02-25 20:39:47');
+INSERT INTO `sys_log` VALUES (33538, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1868, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:39:51', NULL, '2023-02-25 20:39:51');
+INSERT INTO `sys_log` VALUES (33539, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 70, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:51', '超管', '2023-02-25 20:39:51');
+INSERT INTO `sys_log` VALUES (33540, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getDetailLogistics()', '120', 95, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:39:53', '超管', '2023-02-25 20:39:53');
+INSERT INTO `sys_log` VALUES (33541, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '120', 841, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:40:05', '超管', '2023-02-25 20:40:05');
+INSERT INTO `sys_log` VALUES (33542, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 61, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:40:05', '超管', '2023-02-25 20:40:05');
+INSERT INTO `sys_log` VALUES (33543, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '119', 574, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:40:08', '超管', '2023-02-25 20:40:08');
+INSERT INTO `sys_log` VALUES (33544, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 61, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:40:08', '超管', '2023-02-25 20:40:08');
+INSERT INTO `sys_log` VALUES (33545, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1273, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:41:04', NULL, '2023-02-25 20:41:04');
+INSERT INTO `sys_log` VALUES (33546, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 99, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:41:04', '超管', '2023-02-25 20:41:04');
+INSERT INTO `sys_log` VALUES (33547, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '122', 814, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:41:20', '超管', '2023-02-25 20:41:20');
+INSERT INTO `sys_log` VALUES (33548, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 61, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:41:20', '超管', '2023-02-25 20:41:20');
+INSERT INTO `sys_log` VALUES (33549, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '121', 573, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:41:22', '超管', '2023-02-25 20:41:22');
+INSERT INTO `sys_log` VALUES (33550, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 59, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:41:23', '超管', '2023-02-25 20:41:23');
+INSERT INTO `sys_log` VALUES (33551, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 518, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:44:15', '超管', '2023-02-25 20:44:15');
+INSERT INTO `sys_log` VALUES (33552, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 448, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:44:15', '超管', '2023-02-25 20:44:15');
+INSERT INTO `sys_log` VALUES (33553, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 28, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:44:15', '超管', '2023-02-25 20:44:15');
+INSERT INTO `sys_log` VALUES (33554, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1029, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:44:20', NULL, '2023-02-25 20:44:20');
+INSERT INTO `sys_log` VALUES (33555, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 62, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:44:21', '超管', '2023-02-25 20:44:21');
+INSERT INTO `sys_log` VALUES (33556, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 421, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:46:18', '超管', '2023-02-25 20:46:18');
+INSERT INTO `sys_log` VALUES (33557, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 445, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:46:18', '超管', '2023-02-25 20:46:18');
+INSERT INTO `sys_log` VALUES (33558, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 30, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:46:18', '超管', '2023-02-25 20:46:18');
+INSERT INTO `sys_log` VALUES (33559, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '125', 557, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:46:21', '超管', '2023-02-25 20:46:21');
+INSERT INTO `sys_log` VALUES (33560, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 61, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:46:21', '超管', '2023-02-25 20:46:21');
+INSERT INTO `sys_log` VALUES (33561, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getDetailLogistics()', '114', 103, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:48:00', '超管', '2023-02-25 20:48:00');
+INSERT INTO `sys_log` VALUES (33562, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 417, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:49:19', '超管', '2023-02-25 20:49:19');
+INSERT INTO `sys_log` VALUES (33563, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 446, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:49:19', '超管', '2023-02-25 20:49:19');
+INSERT INTO `sys_log` VALUES (33564, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 27, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:49:19', '超管', '2023-02-25 20:49:19');
+INSERT INTO `sys_log` VALUES (33565, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1564, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:49:35', NULL, '2023-02-25 20:49:35');
+INSERT INTO `sys_log` VALUES (33566, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1168, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:51:08', NULL, '2023-02-25 20:51:08');
+INSERT INTO `sys_log` VALUES (33567, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 54, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:51:52', '超管', '2023-02-25 20:51:52');
+INSERT INTO `sys_log` VALUES (33568, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 84, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:51:52', '超管', '2023-02-25 20:51:52');
+INSERT INTO `sys_log` VALUES (33569, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 27, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:51:52', '超管', '2023-02-25 20:51:52');
+INSERT INTO `sys_log` VALUES (33570, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 56, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:09', '超管', '2023-02-25 20:52:09');
+INSERT INTO `sys_log` VALUES (33571, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 87, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:09', '超管', '2023-02-25 20:52:09');
+INSERT INTO `sys_log` VALUES (33572, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 32, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:09', '超管', '2023-02-25 20:52:09');
+INSERT INTO `sys_log` VALUES (33573, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 55, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:13', '超管', '2023-02-25 20:52:13');
+INSERT INTO `sys_log` VALUES (33574, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 82, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:13', '超管', '2023-02-25 20:52:13');
+INSERT INTO `sys_log` VALUES (33575, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 28, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:13', '超管', '2023-02-25 20:52:13');
+INSERT INTO `sys_log` VALUES (33576, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1176, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 20:52:24', NULL, '2023-02-25 20:52:24');
+INSERT INTO `sys_log` VALUES (33577, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 52, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:32', '超管', '2023-02-25 20:52:32');
+INSERT INTO `sys_log` VALUES (33578, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 83, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:32', '超管', '2023-02-25 20:52:32');
+INSERT INTO `sys_log` VALUES (33579, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 27, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 20:52:32', '超管', '2023-02-25 20:52:32');
+INSERT INTO `sys_log` VALUES (33580, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 62, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:00:38', '超管', '2023-02-25 21:00:38');
+INSERT INTO `sys_log` VALUES (33581, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 89, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:00:38', '超管', '2023-02-25 21:00:38');
+INSERT INTO `sys_log` VALUES (33582, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 27, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:00:38', '超管', '2023-02-25 21:00:38');
+INSERT INTO `sys_log` VALUES (33583, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 52, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:00:49', '超管', '2023-02-25 21:00:49');
+INSERT INTO `sys_log` VALUES (33584, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 81, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:00:49', '超管', '2023-02-25 21:00:49');
+INSERT INTO `sys_log` VALUES (33585, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 28, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:00:49', '超管', '2023-02-25 21:00:49');
+INSERT INTO `sys_log` VALUES (33586, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 448, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:13:03', '超管', '2023-02-25 21:13:03');
+INSERT INTO `sys_log` VALUES (33587, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 477, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:13:03', '超管', '2023-02-25 21:13:03');
+INSERT INTO `sys_log` VALUES (33588, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 29, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:13:03', '超管', '2023-02-25 21:13:03');
+INSERT INTO `sys_log` VALUES (33589, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 0, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:13:05', '超管', '2023-02-25 21:13:05');
+INSERT INTO `sys_log` VALUES (33590, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 813, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:13:06', NULL, '2023-02-25 21:13:06');
+INSERT INTO `sys_log` VALUES (33591, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 487, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:15:04', '超管', '2023-02-25 21:15:04');
+INSERT INTO `sys_log` VALUES (33592, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 425, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:15:04', '超管', '2023-02-25 21:15:04');
+INSERT INTO `sys_log` VALUES (33593, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 26, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:15:04', '超管', '2023-02-25 21:15:04');
+INSERT INTO `sys_log` VALUES (33594, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 0, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:15:13', '超管', '2023-02-25 21:15:13');
+INSERT INTO `sys_log` VALUES (33595, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 508, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:15:14', NULL, '2023-02-25 21:15:14');
+INSERT INTO `sys_log` VALUES (33596, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 51, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:16:51', '超管', '2023-02-25 21:16:51');
+INSERT INTO `sys_log` VALUES (33597, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 84, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:16:51', '超管', '2023-02-25 21:16:51');
+INSERT INTO `sys_log` VALUES (33598, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 26, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:16:51', '超管', '2023-02-25 21:16:51');
+INSERT INTO `sys_log` VALUES (33599, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 0, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:16:54', '超管', '2023-02-25 21:16:54');
+INSERT INTO `sys_log` VALUES (33600, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 106, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:16:54', NULL, '2023-02-25 21:16:54');
+INSERT INTO `sys_log` VALUES (33601, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 444, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:19:43', '超管', '2023-02-25 21:19:43');
+INSERT INTO `sys_log` VALUES (33602, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 477, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:19:44', '超管', '2023-02-25 21:19:44');
+INSERT INTO `sys_log` VALUES (33603, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 30, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:19:44', '超管', '2023-02-25 21:19:44');
+INSERT INTO `sys_log` VALUES (33604, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 0, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:19:46', '超管', '2023-02-25 21:19:46');
+INSERT INTO `sys_log` VALUES (33605, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 631, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:19:47', NULL, '2023-02-25 21:19:47');
+INSERT INTO `sys_log` VALUES (33606, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 428, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:22:00', '超管', '2023-02-25 21:22:00');
+INSERT INTO `sys_log` VALUES (33607, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 455, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:22:00', '超管', '2023-02-25 21:22:00');
+INSERT INTO `sys_log` VALUES (33608, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 28, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:22:01', '超管', '2023-02-25 21:22:01');
+INSERT INTO `sys_log` VALUES (33609, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 0, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:22:05', '超管', '2023-02-25 21:22:05');
+INSERT INTO `sys_log` VALUES (33610, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.ExportExcel()', NULL, 634, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:22:05', NULL, '2023-02-25 21:22:05');
+INSERT INTO `sys_log` VALUES (33611, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 2, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:29:48', NULL, '2023-02-25 21:29:48');
+INSERT INTO `sys_log` VALUES (33612, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 2201, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:31:23', NULL, '2023-02-25 21:31:23');
+INSERT INTO `sys_log` VALUES (33613, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 116, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:31:24', '超管', '2023-02-25 21:31:24');
+INSERT INTO `sys_log` VALUES (33614, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getDetailLogistics()', '135', 90, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:31:36', '超管', '2023-02-25 21:31:36');
+INSERT INTO `sys_log` VALUES (33615, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 433, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36');
+INSERT INTO `sys_log` VALUES (33616, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 461, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36');
+INSERT INTO `sys_log` VALUES (33617, '超管', NULL, 'cn.edu.guet.controller.OwnCompanyController.getSelect()', NULL, 31, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:36', '超管', '2023-02-25 21:36:36');
+INSERT INTO `sys_log` VALUES (33618, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '135', 770, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:39', '超管', '2023-02-25 21:36:39');
+INSERT INTO `sys_log` VALUES (33619, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 57, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:39', '超管', '2023-02-25 21:36:39');
+INSERT INTO `sys_log` VALUES (33620, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.deleteById()', '134', 531, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:42', '超管', '2023-02-25 21:36:42');
+INSERT INTO `sys_log` VALUES (33621, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 54, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:42', '超管', '2023-02-25 21:36:42');
+INSERT INTO `sys_log` VALUES (33622, NULL, NULL, 'cn.edu.guet.controller.LogisticsContractController.purchaseImportExcel()', NULL, 1867, '0:0:0:0:0:0:0:1', NULL, '2023-02-25 21:36:47', NULL, '2023-02-25 21:36:47');
+INSERT INTO `sys_log` VALUES (33623, '超管', NULL, 'cn.edu.guet.controller.LogisticsContractController.getList()', '{\"currentPage\":1,\"logisticsContractNo\":\"\",\"pageSize\":10,\"saleContractNo\":\"\",\"squeezeSeason\":\"\"}', 80, '0:0:0:0:0:0:0:1', '超管', '2023-02-25 21:36:48', '超管', '2023-02-25 21:36:48');
 
 -- ----------------------------
 -- Table structure for sys_menu

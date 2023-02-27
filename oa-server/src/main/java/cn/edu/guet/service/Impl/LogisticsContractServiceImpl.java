@@ -1464,7 +1464,7 @@ public class LogisticsContractServiceImpl extends ServiceImpl<LogisticsContractM
             HttpResult add = add(map.get(item));
             if(!(boolean) add.getData()){
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                return ResultUtils.error(add.getMsg(),add.getData());
+                return ResultUtils.error("物流单号为"+item+"的信息出错"+add.getMsg(),add.getData());
             }
         }
         return ResultUtils.success("插入成功");
