@@ -27,13 +27,13 @@ public class ImportLogisticsContractModel {
     /**
      * 物流单合同编号（运输合同编号）
      */
-    @ExcelProperty(value = "物流单合同编号（自提请填写销售合同号）")
+    @ExcelProperty(value = "物流单合同编号（“自提”请填写销售合同号）")
     private String logisticsContractNo;
 
     /**
      * 销售/加工单合同编号
      */
-    @ExcelProperty(value = "销售/加工单合同编号（运往自家仓库请填写 000）")
+    @ExcelProperty(value = "销售/加工单合同编号（运往自家仓库请填写“000”）")
     private String saleContractNo;
 
     /**
@@ -63,7 +63,7 @@ public class ImportLogisticsContractModel {
     /**
      * 物流单合同签订时间
      */
-    @ExcelProperty(value = "物流单合同签订时间")
+    @ExcelProperty(value = "物流单合同签订时间（格式为xxxx-xx-xx）")
     private Date logisticsContractTime;
 
     /**
@@ -98,13 +98,13 @@ public class ImportLogisticsContractModel {
     /**
      * 采购/加工合同编号
      */
-    @ExcelProperty(value = "采购/加工合同编号（若从自家仓库出货填写 000）")
+    @ExcelProperty(value = "采购/加工合同编号（自家仓库出货请填写“000”）")
     private String detailPurchaseContractNo;
 
     /**
      * 出库日期
      */
-    @ExcelProperty(value = "出库日期")
+    @ExcelProperty(value = "出库日期（格式为xxxx-xx-xx）")
     private Date detailOutboundTime;
 
 

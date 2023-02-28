@@ -8,7 +8,7 @@
     </el-avatar>
   </el-tooltip>
   <h2>{{ user.userMessage.roleNames }}</h2>
-
+  <el-link style="margin-left: 30%;" href="http://120.77.28.123:9000/static/models/models.zip">点击下载导入模板</el-link>
 </template>
 
 <script setup lang="ts">
@@ -47,5 +47,15 @@ h2 {
   line-height: 100%;
   /* height: 100%;
   width: 100%; */
+}
+
+.el-link {
+  margin-right: 8px;
+  color: black;
+  font-size: 20px;
+}
+
+.el-link .el-icon--right.el-icon {
+  vertical-align: text-bottom;
 }
 </style>
