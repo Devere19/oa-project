@@ -79,6 +79,21 @@ public class CashierShipping implements Serializable {
     private String secondSealNo;
 
     /**
+     * 毛重
+     */
+    private BigDecimal rough;
+
+    /**
+     * 皮重
+     */
+    private BigDecimal tare;
+
+    /**
+     * 净重
+     */
+    private BigDecimal suttle;
+
+    /**
      * 理货员
      */
     private String tallyClerk;

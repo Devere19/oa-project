@@ -29,9 +29,12 @@
             <el-table-column property="firstSealNo" align="center" label="铅封号1" width="90" />
             <el-table-column property="secondContainerNo" align="center" label="集装箱号2" width="110" />
             <el-table-column property="secondSealNo" align="center" label="铅封号2" width="90" />
+            <el-table-column property="rough" align="center" label="毛重" width="100" />
+            <el-table-column property="tare" align="center" label="皮重" width="100" />
+            <el-table-column property="suttle" align="center" label="净重" width="100" />
             <el-table-column property="tallyClerk" align="center" label="理货员" width="90" />
             <el-table-column property="tallyClerkPrice" align="center" label="理货费用" width="100" />
-            <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" />
+            <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" width="200" show-overflow-tooltip />
             <el-table-column property="fleetManageName" align="center" label="车队管理名称" />
             <el-table-column property="departureFleet" align="center" label="起运承运车队" />
             <el-table-column property="departurePrice" align="center" label="起运车队费用" />
@@ -174,6 +177,28 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ ShippingContractDetail.secondSealNo }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        毛重：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.rough }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        皮重：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.tare }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        净重：
+                    </el-col>
+                    <el-col :span="18" class="moreDetailContent">
+                        {{ ShippingContractDetail.suttle }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -450,6 +475,9 @@ const ShippingContractDetail = reactive({
     firstSealNo: '',
     secondContainerNo: '',
     secondSealNo: '',
+    rough: '',
+    tare: '',
+    suttle: '',
     tallyClerk: '',
     tallyClerkPrice: '',
     tallyClerkRemark: '',
@@ -551,6 +579,9 @@ const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.firstSealNo = row.firstSealNo
     ShippingContractDetail.secondContainerNo = row.secondContainerNo
     ShippingContractDetail.secondSealNo = row.secondSealNo
+    ShippingContractDetail.rough = row.rough
+    ShippingContractDetail.tare = row.tare
+    ShippingContractDetail.suttle = row.suttle
     ShippingContractDetail.tallyClerk = row.tallyClerk
     ShippingContractDetail.tallyClerkPrice = row.tallyClerkPrice
     ShippingContractDetail.tallyClerkRemark = row.tallyClerkRemark

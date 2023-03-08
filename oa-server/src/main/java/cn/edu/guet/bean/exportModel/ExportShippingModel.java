@@ -1,6 +1,7 @@
 package cn.edu.guet.bean.exportModel;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -110,6 +111,24 @@ public class ExportShippingModel {
      */
     @Excel(name = "铅封号2")
     private String secondSealNo;
+
+    /**
+     * 毛重
+     */
+    @Excel(name = "毛重")
+    private BigDecimal rough;
+
+    /**
+     * 皮重
+     */
+    @Excel(name = "皮重")
+    private BigDecimal tare;
+
+    /**
+     * 净重
+     */
+    @Excel(name = "净重")
+    private BigDecimal suttle;
 
     /**
      * 理货员
