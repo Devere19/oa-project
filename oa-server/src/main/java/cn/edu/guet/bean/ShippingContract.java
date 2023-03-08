@@ -14,6 +14,7 @@ import lombok.Data;
 
 /**
  * 
+ * @author 陶祎祎
  * @TableName shipping_contract
  */
 @TableName(value ="shipping_contract")
@@ -87,6 +88,21 @@ public class ShippingContract implements Serializable {
      * 铅封号2
      */
     private String secondSealNo;
+
+    /**
+     * 毛重
+     */
+    private BigDecimal rough;
+
+    /**
+     * 皮重
+     */
+    private BigDecimal tare;
+
+    /**
+     * 净重
+     */
+    private BigDecimal suttle;
 
     /**
      * 理货员

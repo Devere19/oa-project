@@ -38,9 +38,12 @@
             <el-table-column property="firstSealNo" align="center" label="铅封号1" width="90" />
             <el-table-column property="secondContainerNo" align="center" label="集装箱号2" width="110" />
             <el-table-column property="secondSealNo" align="center" label="铅封号2" width="90" />
+            <el-table-column property="rough" align="center" label="毛重" width="100" />
+            <el-table-column property="tare" align="center" label="皮重" width="100" />
+            <el-table-column property="suttle" align="center" label="净重" width="100" />
             <el-table-column property="tallyClerk" align="center" label="理货员" width="90" />
             <el-table-column property="tallyClerkPrice" align="center" label="理货费用" width="100" />
-            <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" />
+            <el-table-column property="tallyClerkRemark" align="center" label="理货费用备注" width="200" show-overflow-tooltip />
             <el-table-column property="fleetManageName" align="center" label="车队管理名称" />
             <el-table-column property="departureFleet" align="center" label="起运承运车队" />
             <el-table-column property="departurePrice" align="center" label="起运车队费用" />
@@ -216,6 +219,25 @@
                     </el-row>
                     <el-row>
                         <el-col :span="12">
+                            <el-form-item label="毛重" prop="rough">
+                                <el-input v-model="NewShippingContractData.rough" size="large" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="皮重" prop="tare">
+                                <el-input v-model="NewShippingContractData.tare" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="净重" prop="suttle">
+                                <el-input v-model="NewShippingContractData.suttle" size="large" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
                             <el-form-item label="理货员" prop="tallyClerk">
                                 <el-input v-model="NewShippingContractData.tallyClerk" size="large" />
                             </el-form-item>
@@ -366,13 +388,14 @@
                             <!--30天内只能出现一次  -->
                             <el-form-item label="集装箱号1" prop="firstContainerNo">
                                 <el-input v-model="UpdateShippingContractData.firstContainerNo" size="large"
-                                    :suffix-icon="firstContainerSameFlag ? 'CloseBold' : 'Select'"
+                                    :suffix-icon="firstContainerSameFlag ? 'CloseBold' : 'Select'" :disabled="updateFlag"
                                     @input="checkFirstContainerNo" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="铅封号1" prop="firstSealNo">
-                                <el-input v-model="UpdateShippingContractData.firstSealNo" size="large" />
+                                <el-input v-model="UpdateShippingContractData.firstSealNo" size="large"
+                                    :disabled="updateFlag" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -381,13 +404,33 @@
                             <!--30天内只能出现一次  -->
                             <el-form-item label="集装箱号2" prop="secondContainerNo">
                                 <el-input v-model="UpdateShippingContractData.secondContainerNo" size="large"
-                                    :suffix-icon="secondContainerSameFlag ? 'CloseBold' : 'Select'"
+                                    :suffix-icon="secondContainerSameFlag ? 'CloseBold' : 'Select'" :disabled="updateFlag"
                                     @input="checkSecondContainerNo" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="铅封号2" prop="secondSealNo">
-                                <el-input v-model="UpdateShippingContractData.secondSealNo" size="large" />
+                                <el-input v-model="UpdateShippingContractData.secondSealNo" size="large"
+                                    :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="毛重" prop="rough">
+                                <el-input v-model="UpdateShippingContractData.rough" size="large" :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="皮重" prop="tare">
+                                <el-input v-model="UpdateShippingContractData.tare" size="large" :disabled="updateFlag" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="净重" prop="suttle">
+                                <el-input v-model="UpdateShippingContractData.suttle" size="large" :disabled="updateFlag" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -408,12 +451,14 @@
                     <el-row>
                         <el-col :span="12">
                             <el-form-item label="理货费用备注" prop="tallyClerkRemark">
-                                <el-input v-model="UpdateShippingContractData.tallyClerkRemark" autosize type="textarea" />
+                                <el-input v-model="UpdateShippingContractData.tallyClerkRemark" autosize type="textarea"
+                                    :disabled="updateFlag" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="车队管理名称" prop="fleetManageName">
-                                <el-input v-model="UpdateShippingContractData.fleetManageName" size="large" />
+                                <el-input v-model="UpdateShippingContractData.fleetManageName" size="large"
+                                    :disabled="updateFlag" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -579,6 +624,28 @@
                     </el-col>
                     <el-col :span="6" class="moreDetailContent">
                         {{ ShippingContractDetail.secondSealNo }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        毛重：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.rough }}
+                    </el-col>
+                    <el-col :span="6" class="moreDetailTitle">
+                        皮重：
+                    </el-col>
+                    <el-col :span="6" class="moreDetailContent">
+                        {{ ShippingContractDetail.tare }}
+                    </el-col>
+                </el-row>
+                <el-row justify="center">
+                    <el-col :span="6" class="moreDetailTitle">
+                        净重：
+                    </el-col>
+                    <el-col :span="18" class="moreDetailContent">
+                        {{ ShippingContractDetail.suttle }}
                     </el-col>
                 </el-row>
                 <el-row justify="center">
@@ -809,8 +876,8 @@ const firstFormRef = ref<FormInstance>()
 const secondFormRef = ref<FormInstance>()
 const addDialogTop = ref<any>()
 const updateDialogTop = ref<any>()
-const firstContainerSameFlag = ref(true)
-const secondContainerSameFlag = ref(true)
+const firstContainerSameFlag = ref(false)
+const secondContainerSameFlag = ref(false)
 const logisticsContractNoFlag = ref(false)
 const logisticsNoResult = ref()
 
@@ -838,6 +905,9 @@ const NewShippingContractData = reactive({
     firstSealNo: '',
     secondContainerNo: '',
     secondSealNo: '',
+    rough: '',
+    tare: '',
+    suttle: '',
     tallyClerk: '',
     tallyClerkPrice: '',
     tallyClerkRemark: '',
@@ -869,6 +939,9 @@ const UpdateShippingContractData = reactive({
     firstSealNo: '',
     secondContainerNo: '',
     secondSealNo: '',
+    rough: '',
+    tare: '',
+    suttle: '',
     tallyClerk: '',
     tallyClerkPrice: '',
     tallyClerkRemark: '',
@@ -899,6 +972,9 @@ const ShippingContractDetail = reactive({
     firstSealNo: '',
     secondContainerNo: '',
     secondSealNo: '',
+    rough: '',
+    tare: '',
+    suttle: '',
     tallyClerk: '',
     tallyClerkPrice: '',
     tallyClerkRemark: '',
@@ -962,6 +1038,15 @@ const firstRules = reactive<FormRules>({
         { required: true, trigger: ['change'] }
     ],
     firstSealNo: [
+        { required: true, trigger: ['change'] }
+    ],
+    rough: [
+        { required: true, trigger: ['change'] }
+    ],
+    tare: [
+        { required: true, trigger: ['change'] }
+    ],
+    suttle: [
         { required: true, trigger: ['change'] }
     ],
     tallyClerk: [
@@ -1176,6 +1261,9 @@ const openUpdateDialog = (row: any) => {
         UpdateShippingContractData.secondContainerNo = row.secondContainerNo
         tempSecondContainer.value = row.secondContainerNo
         UpdateShippingContractData.secondSealNo = row.secondSealNo
+        UpdateShippingContractData.rough = row.rough
+        UpdateShippingContractData.tare = row.tare
+        UpdateShippingContractData.suttle = row.suttle
         UpdateShippingContractData.tallyClerk = row.tallyClerk
         UpdateShippingContractData.tallyClerkPrice = row.tallyClerkPrice
         UpdateShippingContractData.tallyClerkRemark = row.tallyClerkRemark
@@ -1229,43 +1317,51 @@ const checkLogisticsContractNo = (e: any) => {
 }
 
 const checkFirstContainerNo = (e: any) => {
-    checkContainerNoApi(e).then(res => {
-        firstContainerSameFlag.value = res.data
-        if (res.data == true) {
-            ElMessage({
-                message: '集装箱号1在30天内已重复，请检查！',
-                type: 'error',
-                grouping: true,
-                duration: 4000
-            })
-        } else {
-            ElMessage({
-                message: '验证合法！',
-                type: 'success',
-                grouping: true,
-            })
-        }
-    })
+    if (e == "" || e == null) {
+        firstContainerSameFlag.value = false;
+    } else {
+        checkContainerNoApi(e).then(res => {
+            firstContainerSameFlag.value = res.data
+            if (res.data == true) {
+                ElMessage({
+                    message: '集装箱号1在30天内已重复，请检查！',
+                    type: 'error',
+                    grouping: true,
+                    duration: 4000
+                })
+            } else {
+                ElMessage({
+                    message: '验证合法！',
+                    type: 'success',
+                    grouping: true,
+                })
+            }
+        })
+    }
 }
 
 const checkSecondContainerNo = (e: any) => {
-    checkContainerNoApi(e).then(res => {
-        secondContainerSameFlag.value = res.data
-        if (res.data == true) {
-            ElMessage({
-                message: '集装箱号2在30天内已重复，请检查！',
-                type: 'error',
-                grouping: true,
-                duration: 4000
-            })
-        } else {
-            ElMessage({
-                message: '验证合法！',
-                type: 'success',
-                grouping: true,
-            })
-        }
-    })
+    if (e == "" || e == null) {
+        secondContainerSameFlag.value = false;
+    } else {
+        checkContainerNoApi(e).then(res => {
+            secondContainerSameFlag.value = res.data
+            if (res.data == true) {
+                ElMessage({
+                    message: '集装箱号2在30天内已重复，请检查！',
+                    type: 'error',
+                    grouping: true,
+                    duration: 4000
+                })
+            } else {
+                ElMessage({
+                    message: '验证合法！',
+                    type: 'success',
+                    grouping: true,
+                })
+            }
+        })
+    }
 }
 
 // 发送新增海运单请求
@@ -1460,6 +1556,9 @@ const openMordDetailDialog = async (row: any) => {
     ShippingContractDetail.firstSealNo = row.firstSealNo
     ShippingContractDetail.secondContainerNo = row.secondContainerNo
     ShippingContractDetail.secondSealNo = row.secondSealNo
+    ShippingContractDetail.rough = row.rough
+    ShippingContractDetail.tare = row.tare
+    ShippingContractDetail.suttle = row.suttle
     ShippingContractDetail.tallyClerk = row.tallyClerk
     ShippingContractDetail.tallyClerkPrice = row.tallyClerkPrice
     ShippingContractDetail.tallyClerkRemark = row.tallyClerkRemark

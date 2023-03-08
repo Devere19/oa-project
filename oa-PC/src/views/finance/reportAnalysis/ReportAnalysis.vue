@@ -1026,6 +1026,28 @@
             </el-row>
             <el-row justify="center">
                 <el-col :span="6" class="moreDetailTitle">
+                    毛重：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ ShippingContractDetail.rough }}
+                </el-col>
+                <el-col :span="6" class="moreDetailTitle">
+                    皮重：
+                </el-col>
+                <el-col :span="6" class="moreDetailContent">
+                    {{ ShippingContractDetail.tare }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
+                    净重：
+                </el-col>
+                <el-col :span="18" class="moreDetailContent">
+                    {{ ShippingContractDetail.suttle }}
+                </el-col>
+            </el-row>
+            <el-row justify="center">
+                <el-col :span="6" class="moreDetailTitle">
                     理货员：
                 </el-col>
                 <el-col :span="6" class="moreDetailContent">
@@ -1811,6 +1833,9 @@ const ShippingContractDetail = reactive({
     firstSealNo: '',
     secondContainerNo: '',
     secondSealNo: '',
+    rough: '',
+    tare: '',
+    suttle: '',
     tallyClerk: '',
     tallyClerkPrice: '',
     tallyClerkRemark: '',
@@ -2578,6 +2603,9 @@ const openShippingDetail = (row: any) => {
             ShippingContractDetail.firstSealNo = row.firstSealNo
             ShippingContractDetail.secondContainerNo = row.secondContainerNo
             ShippingContractDetail.secondSealNo = row.secondSealNo
+            ShippingContractDetail.rough = row.rough
+            ShippingContractDetail.tare = row.tare
+            ShippingContractDetail.suttle = row.suttle
             ShippingContractDetail.tallyClerk = row.tallyClerk
             ShippingContractDetail.tallyClerkPrice = row.tallyClerkPrice
             ShippingContractDetail.tallyClerkRemark = row.tallyClerkRemark

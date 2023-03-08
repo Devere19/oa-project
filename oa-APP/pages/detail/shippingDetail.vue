@@ -89,6 +89,30 @@
 				</uni-row>
 				<uni-row>
 					<uni-col :span="8" :offset="2">
+						<view class="headLine">毛重：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.rough}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">皮重：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.tare}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
+						<view class="headLine">净重：</view>
+					</uni-col>
+					<uni-col :span="13">
+						<view class="contractContent">{{shippingContract.suttle}}</view>
+					</uni-col>
+				</uni-row>
+				<uni-row>
+					<uni-col :span="8" :offset="2">
 						<view class="headLine">理货员：</view>
 					</uni-col>
 					<uni-col :span="13">
@@ -298,6 +322,9 @@
 					firstSealNo:null,
 					secondContainerNo:null,
 					secondSealNo:null,
+					rough:null,
+					tare:null,
+					suttle:null,
 					tallyClerk:null,
 					tallyClerkPrice:null,
 					tallyClerkRemark:null,

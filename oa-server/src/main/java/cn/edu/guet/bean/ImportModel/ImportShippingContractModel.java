@@ -84,6 +84,24 @@ public class ImportShippingContractModel {
     private String secondSealNo;
 
     /**
+     * 毛重
+     */
+    @ExcelProperty(value = "毛重")
+    private BigDecimal rough;
+
+    /**
+     * 皮重
+     */
+    @ExcelProperty(value = "皮重")
+    private BigDecimal tare;
+
+    /**
+     * 净重
+     */
+    @ExcelProperty(value = "净重")
+    private BigDecimal suttle;
+
+    /**
      * 理货员
      */
     @ExcelProperty(value = "理货员")
@@ -98,13 +116,13 @@ public class ImportShippingContractModel {
     /**
      * 理货费用备注
      */
-    @Excel(name = "理货费用备注")
+    @ExcelProperty(value = "理货费用备注")
     private String tallyClerkRemark;
 
     /**
      * 车队管理名称
      */
-    @Excel(name = "车队管理名称")
+    @ExcelProperty(value = "车队管理名称")
     private String fleetManageName;
 
     /**
