@@ -6,16 +6,21 @@ const request = (params) => {
 	})
 	return new Promise(function(resolve, reject) {
 		// const baseUrl = 'http://localhost:9000';
-		const baseUrl = 'http://120.77.28.123:9000';
+		// const baseUrl = 'http://120.77.28.123:9000';
+		let baseUrl='';
+		const baseUrlStorage = uni.getStorageSync('baseUrl');
+		if(baseUrlStorage!=null&&baseUrlStorage!=''){
+			baseUrl=baseUrlStorage.baseUrl;
+		}
 		let token_value='';
 		const token = uni.getStorageSync('token');
-		if(token!=null){
+		if(token!=null&&token!=''){
 			token_value=token.token;
 		}
 		uni.request({
 			method: params.method,
 			data: params.data,
-			url:baseUrl + params.url,
+			url:'http://'+baseUrl+':9000' + params.url,
 			header: {
                     // 此处是token 可不加，如果加了需要配置后端允许跨域
 				'token': token_value
