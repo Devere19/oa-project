@@ -35,7 +35,8 @@ public class PhotoController {
         FileOutputStream image=null;
         try {
 //            将MultipartFile文件转换成File文件
-            tempFile = File.createTempFile(fileName.substring(0, fileName.lastIndexOf(".")), prefix);
+            tempFile = prefix.length()>=3?File.createTempFile(fileName.substring(0, fileName.lastIndexOf(".")), prefix):
+                    File.createTempFile("111"+fileName.substring(0, fileName.lastIndexOf(".")), prefix);
             file.transferTo(tempFile);
 
 //            服务器使用--
@@ -74,8 +75,8 @@ public class PhotoController {
                 e.printStackTrace();
             }
         }
-//        return ResultUtils.success("修改成功","http://localhost:9000/static/images/" + uuid + ".jpg");
-        return ResultUtils.success("修改成功","http://120.77.28.123:9000/static/images/" + uuid + ".jpg");
+       return ResultUtils.success("修改成功","http://localhost:9000/static/images/" + uuid + ".jpg");
+//         return ResultUtils.success("修改成功","http://120.77.28.123:9000/static/images/" + uuid + ".jpg");
     }
 
     @RequestMapping("/deletePhoto")
