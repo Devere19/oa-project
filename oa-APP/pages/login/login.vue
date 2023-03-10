@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<image :src="JuNlogo" style="width: 86%;height:650rpx;margin-left: 7%;margin-right: 7%;"></image>
+		<image :src="JuNlogo" style="width: 86%;height:650rpx;margin-left: 7%;margin-right: 7%;" @tap="changeIP">
+		</image>
 		<uni-forms ref="form" :modelValue="formData" :rules="rules" err-show-type="toast">
 			<!-- prefixIcon为左侧 -->
 			<!-- suffixIcon为右侧 -->
@@ -14,21 +15,21 @@
 			</uni-forms-item>
 		</uni-forms>
 		<!-- <view style="display: flex;flex-direction: row;"> -->
-			<!-- 记住密码 -->
-<!-- 			<checkbox-group @change="remTF"
+		<!-- 记住密码 -->
+		<!-- 			<checkbox-group @change="remTF"
 				style="height: 80rpx;width: 28%;margin-left: 36%;margin-right: 36%;font-size: 85%;text-align: center;color: #2979FF;">
 				<label>
 					<checkbox value="yes" :checked="remenberPwd" />记住密码
 				</label>
 			</checkbox-group> -->
-			<!-- 记住密码和忘记密码 -->
-<!-- 			<checkbox-group @change="remTF"
+		<!-- 记住密码和忘记密码 -->
+		<!-- 			<checkbox-group @change="remTF"
 				style="height: 80rpx;width: 28%;margin-left: 16%;margin-right: 6%;font-size: 85%;text-align: center;color: #2979FF;">
 				<label>
 					<checkbox value="yes" :checked="remenberPwd" />记住密码
 				</label>
 			</checkbox-group> -->
-<!-- 			<view
+		<!-- 			<view
 				style="height: 80rpx;width: 28%;margin-left: 6%;margin-right: 16%;font-size: 85%;text-align: center;color: #2979FF;">
 				<label @click="forgetPwd">忘记密码 ?</label>
 			</view> -->
@@ -37,12 +38,17 @@
 			<!-- 仅登录 -->
 			<button type="primary" @click="submit"
 				style="height: 80rpx;width: 28%;margin-left: 36%;margin-right: 36%;font-size: 100%;">登录</button>
-				<!-- 登录和注册 -->
-<!-- 			<button type="primary" @click="submit"
+			<!-- 登录和注册 -->
+			<!-- 			<button type="primary" @click="submit"
 				style="height: 80rpx;width: 28%;margin-left: 16%;margin-right: 6%;font-size: 100%;">登录</button>
 			<button type="primary" @click="register"
 				style="height: 80rpx;width: 28%;margin-left: 6%;margin-right: 16%;font-size: 100%;">注册</button> -->
 		</view>
+		<!-- 输入框示例 -->
+		<uni-popup ref="inputDialog" type="dialog">
+			<uni-popup-dialog ref="inputClose" mode="input" title="请求IP地址修改" placeholder="请输入IP地址(如:120.77.28.123)"
+				@confirm="dialogInputConfirm"></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
@@ -82,7 +88,8 @@
 							}
 						]
 					}
-				}
+				},
+				changeIPFlag: 0,
 			}
 		},
 		onLoad(data) {
@@ -91,7 +98,7 @@
 			if (userData.username && userData.password) {
 				this.formData.username = userData.username;
 				this.formData.password = userData.password;
-				if(JSON.stringify(data)=='{}'){
+				if (JSON.stringify(data) == '{}') {
 					this.login(this.formData);
 				}
 			}
@@ -104,99 +111,138 @@
 					this.login(res);
 				})
 			},
-			login(res){
-				uni.request({
-					// url: 'http://localhost:9000/login',
-					url: 'http://120.77.28.123:9000/login',
-					method: "POST",
-					data: JSON.stringify(res),
-				}).then(
-					result => {
-						if (result[1].data.data != 0) {
-							// 存储token
-							uni.setStorage({
-								key: 'token',
-								data: {
-									token: result[1].data.data.token,
-								},
-								success: function() {
-									console.log('记录token');
-								}
-							});
-							// 获取用户信息
-							this.$request({
-								url: '/api/user/nickName/' + res.username,
-							}).then(userResult => {
-								if (userResult.code == 200) {
-									let loginFlag=false;
-									let roleNames=userResult.data.roleNames;
-									for(let i=0;i<roleNames.length;i++){
-										if(roleNames[i]=="董事会"&&userResult.data.status=="在职"){
-											loginFlag=true;
-											// 存储用户信息
-											uni.setStorage({
-												key: 'userInfo',
-												data: {
-													userId:userResult.data.id,
-													nickName: userResult.data.nickName,
-												},
-												success: function() {
-													console.log('记录当前登录用户信息');
-												}
+			login(res) {
+				let baseUrl='';
+				const baseUrlStorage = uni.getStorageSync('baseUrl');
+				if(baseUrlStorage!=null&&baseUrlStorage!=''){
+					baseUrl=baseUrlStorage.baseUrl;
+					uni.request({
+						// url: 'http://localhost:9000/login',
+						url: 'http://'+baseUrl+':9000/login',
+						method: "POST",
+						data: JSON.stringify(res),
+					}).then(
+						result => {
+							if (result[1].data.data != 0) {
+								// 存储token
+								uni.setStorage({
+									key: 'token',
+									data: {
+										token: result[1].data.data.token,
+									},
+									success: function() {
+										console.log('记录token');
+									}
+								});
+								// 获取用户信息
+								this.$request({
+									url: '/api/user/nickName/' + res.username,
+								}).then(userResult => {
+									if (userResult.code == 200) {
+										let loginFlag = false;
+										let roleNames = userResult.data.roleNames;
+										for (let i = 0; i < roleNames.length; i++) {
+											if (roleNames[i] == "董事会" && userResult.data.status == "在职") {
+												loginFlag = true;
+												// 存储用户信息
+												uni.setStorage({
+													key: 'userInfo',
+													data: {
+														userId: userResult.data.id,
+														nickName: userResult.data.nickName,
+													},
+													success: function() {
+														console.log('记录当前登录用户信息');
+													}
+												});
+												uni.reLaunch({
+													url: '/pages/MainInterface/audit'
+												})
+											}
+										}
+										if (loginFlag == false) {
+											uni.showModal({
+												content: '该账号无登录本系统的权限',
+												showCancel: false
 											});
-											uni.reLaunch({
-												url: '/pages/MainInterface/audit'
-											})
 										}
 									}
-									if(loginFlag==false){
-										uni.showModal({
-											content: '该账号无登录本系统的权限',
-											showCancel: false
-										});
+								});
+								// 自动登录，不再判断是否记住密码
+								uni.setStorage({
+									key: 'username',
+									data: this.formData,
+									success: function() {
+										console.log('账号信息缓存成功');
 									}
-								}
-							});
-							// 自动登录，不再判断是否记住密码
-							uni.setStorage({
-								key: 'username',
-								data: this.formData,
-								success: function() {
-									console.log('账号信息缓存成功');
-								}
-							})
-							// 记住密码的功能实现
-							// if (this.remenberPwd == true) {
-							// 	uni.setStorage({
-							// 		key: 'username',
-							// 		data: this.formData,
-							// 		success: function() {
-							// 			console.log('账号信息缓存成功');
-							// 		}
-							// 	})
-							// };
-							// if (this.remenberPwd == false) {
-							// 	uni.removeStorage({
-							// 		key: 'username',
-							// 		success: function(res) {
-							// 			console.log('移除上次的缓存');
-							// 		}
-							// 	});
-							// };
-						} else {
+								})
+								// 记住密码的功能实现
+								// if (this.remenberPwd == true) {
+								// 	uni.setStorage({
+								// 		key: 'username',
+								// 		data: this.formData,
+								// 		success: function() {
+								// 			console.log('账号信息缓存成功');
+								// 		}
+								// 	})
+								// };
+								// if (this.remenberPwd == false) {
+								// 	uni.removeStorage({
+								// 		key: 'username',
+								// 		success: function(res) {
+								// 			console.log('移除上次的缓存');
+								// 		}
+								// 	});
+								// };
+							} else {
+								uni.showModal({
+									content: result[1].data.msg + '，请检查',
+									showCancel: false
+								});
+							}
+						},
+						err => {
 							uni.showModal({
-								content: result[1].data.msg+'，请检查',
+								content: "请求服务失败",
 								showCancel: false
-							});
+							})
 						}
+					)
+				}else{
+					uni.showModal({
+						content: "请先设置请求IP地址",
+						showCancel: false
+					})
+				}
+			},
+			changeIP() {
+				if (this.changeIPFlag == 10) {
+					this.$refs.inputDialog.open();
+					this.changeIPFlag=0;
+				} else {
+					this.changeIPFlag = this.changeIPFlag + 1;
+				}
+			},
+			dialogInputConfirm(val) {
+				// 存储baseURL
+				uni.setStorage({
+					key: 'baseUrl',
+					data: {
+						baseUrl: val,
 					},
-					err => {
+					success: function() {
 						uni.showModal({
-							content: "请求服务失败",
+							content: '修改成功！',
 							showCancel: false
-						})
+						});
+					},
+					fail:function(){
+						uni.showModal({
+							content: '修改失败！',
+							showCancel: false
+						});
 					}
-				)
+				});
 			},
 			// 注册跳转
 			// register() {
