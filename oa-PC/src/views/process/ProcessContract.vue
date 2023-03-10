@@ -119,7 +119,7 @@
                         <el-input v-model="NewProcessContractData.concentratedSolutionConversionFormula" size="large" />
                     </el-form-item>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="AddPhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                        <el-upload v-model:file-list="AddPhotoData" action="http://localhost:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="addHandleRemove"
                             :on-success="addHandlePhotoSuccess">
                             <el-icon>
@@ -179,7 +179,7 @@
                             autosize size="large" :disabled="updateFlag" />
                     </el-form-item>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                        <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                             :on-success="updateHandlePhotoSuccess">
                             <el-icon>
@@ -626,7 +626,7 @@ const returnAllData = () => {
 //     sendExportParmApi(exportListParm).then(res => {
 //         if (res.code == 200) {
 //             const abtn = document.createElement("a");
-//             abtn.href = "http://120.77.28.123:9000/processContract/purchaseExportExcel"
+//             abtn.href = "http://localhost:9000/processContract/purchaseExportExcel"
 //             abtn.click();
 //         }
 //     })

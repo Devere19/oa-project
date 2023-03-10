@@ -20,10 +20,9 @@
       <!-- <el-button v-show="firstSelection?.[0] != null" class="moreDeleteButton" type="danger"
         @click="openMoreDeleteDialog">批量删除
       </el-button> -->
-      <el-upload class="moreDeleteButton" name="file"
-        action="http://120.77.28.123:9000/purchaseContract/purchaseImportExcel" :on-error="uploadFalse"
-        :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload" accept=".xlsx,.xls"
-        :show-file-list="false">
+      <el-upload class="moreDeleteButton" name="file" action="http://localhost:9000/purchaseContract/purchaseImportExcel"
+        :on-error="uploadFalse" :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1"
+        ref="upload" accept=".xlsx,.xls" :show-file-list="false">
         <el-button :icon="Upload" type="primary">批量导入</el-button>
       </el-upload>
       <el-button class="moreDeleteButton" :icon="Download" type="success" @click="exportExcel">导出
@@ -173,7 +172,7 @@
             <el-input v-model="NewPurchaseContractData.paymentAmount" size="large" />
           </el-form-item>
           <el-form-item label="合同照片">
-            <el-upload v-model:file-list="AddPhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+            <el-upload v-model:file-list="AddPhotoData" action="http://localhost:9000/addContractPhoto"
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="addHandleRemove"
               :on-success="addHandlePhotoSuccess">
               <el-icon>
@@ -262,7 +261,7 @@
             <el-input v-model="UpdatePurchaseContractData.paymentAmount" size="large" :disabled="updateFlag" />
           </el-form-item>
           <el-form-item label="合同照片">
-            <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+            <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
               :on-success="updateHandlePhotoSuccess">
               <el-icon>
@@ -721,7 +720,7 @@ const exportExcel = () => {
   sendExportParmApi(exportListParm).then(res => {
     if (res.code == 200) {
       const abtn = document.createElement("a");
-      abtn.href = "http://120.77.28.123:9000/purchaseContract/purchaseExportExcel"
+      abtn.href = "http://localhost:9000/purchaseContract/purchaseExportExcel"
       abtn.click();
     }
   })
