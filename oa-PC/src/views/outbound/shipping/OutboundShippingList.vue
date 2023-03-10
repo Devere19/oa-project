@@ -11,7 +11,7 @@
                 </template>
             </el-input>
             <el-upload class="moreDeleteButton" name="file"
-                action="http://120.77.28.123:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
+                action="http://localhost:9000/shippingContract/shippingImportExcel" :on-error="uploadFalse"
                 :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
@@ -312,7 +312,7 @@
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="AddPhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                        <el-upload v-model:file-list="AddPhotoData" action="http://localhost:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="addHandleRemove"
                             :on-success="addHandlePhotoSuccess">
                             <el-icon>
@@ -522,7 +522,7 @@
                         </el-col>
                     </el-row>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="UpdatePhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                        <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                             :on-success="updateHandlePhotoSuccess">
                             <el-icon>

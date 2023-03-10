@@ -254,7 +254,7 @@
                             style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="付款流水截图">
-                        <el-upload v-model:file-list="PhotoData" action="http://120.77.28.123:9000/addContractPhoto"
+                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
                             :on-success="handlePhotoSuccess">
                             <el-icon>
