@@ -10,8 +10,7 @@
                     <el-button :icon="Search" @click="searchTableData" />
                 </template>
             </el-input>
-            <el-upload class="moreDeleteButton" name="file"
-                action="http://localhost:9000/officeExpense/officeExpenseImportExcel" :on-error="uploadFalse"
+            <el-upload class="moreDeleteButton" name="file" :action=uploadPhotoUrl :on-error="uploadFalse"
                 :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
@@ -311,6 +310,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { officeExpenseModel, officeExpenseDirectorModel } from '@/api/officeExpense/officeExpenseModel'
 import { getOfficeExpenseDataApi, searchOfficeExpenseApi, addNewOfficeExpenseApi, updateOfficeExpenseApi, deleteOneOfficeExpenseApi, changeDirectorState, changeFinanceState } from '@/api/officeExpense'
 import { userStore } from '@/store/nickName'
+import { baseUrl } from '@/http/config'
+
 const userNickNameStore = userStore()
 
 const searchData = ref("")
@@ -335,6 +336,7 @@ const updateDialogTop = ref<any>()
 const loginUserName = ref("")
 const loginUserRole = ref("")
 const loginUserId = ref("")
+const uploadPhotoUrl = ref(baseUrl + '/officeExpense/officeExpenseImportExcel')
 
 const firstTableRef = ref<InstanceType<typeof ElTable>>()
 

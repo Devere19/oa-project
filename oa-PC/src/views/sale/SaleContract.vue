@@ -207,7 +207,7 @@
           </el-row>
           <el-row>
             <el-form-item prop="contractPhotoList" label="合同照片">
-              <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+              <el-upload v-model:file-list="UpdatePhotoData" :action=uploadPhotoUrl
                 list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                 :on-success="updateHandlePhotoSuccess">
                 <el-icon>
@@ -248,6 +248,7 @@ import useInstance from '@/hooks/useInstance';
 import { SelectCustomer, SelectOwnCompany } from "@/api/customer/CustomerModel";
 import { deletePhotoApi } from "@/api/handlePhoto";
 import { getOwnCompanySelectApi } from "@/api/ownCompany";
+import { baseUrl,uploadPhotoUrl } from '@/http/config'
 const { global } = useInstance()
 //表格属性
 const { listParm, tableList, tableHeight, sizeChange, currentChange, searchBtn, resetBtn, refresh, getList, searchPigeonholeZero, isPigeonhole } = useTable()
@@ -270,7 +271,7 @@ const exportOutBtn = async () => {
   let res = await exportApi(exportListParm)
   if (res && res.code == 200) {
     const abtn = document.createElement("a");
-    abtn.href = "http://localhost:9000/api/saleContract/exportExcel"
+    abtn.href = baseUrl+"/api/saleContract/exportExcel"
     abtn.click();
   }
 }

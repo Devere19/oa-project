@@ -99,7 +99,7 @@
         </el-row>
         <el-row>
           <el-form-item prop="contractPhotoList" label="合同照片">
-            <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+            <el-upload v-model:file-list="PhotoData" :action=uploadPhotoUrl
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
               :on-success="handlePhotoSuccess">
               <el-icon>
@@ -129,6 +129,7 @@ import useInstance from '@/hooks/useInstance';
 import OwnCompanyList from "../ownCompany/OwnCompanyList.vue";
 import { SelectOwnCompany } from "@/api/customer/CustomerModel"
 import { getOwnCompanySelectApi } from "@/api/ownCompany";
+import {uploadPhotoUrl } from '@/http/config'
 const { global } = useInstance()
 //弹框属性
 const { onClose, dialog, onConfirm, onShow } = useDialog()

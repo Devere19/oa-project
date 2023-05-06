@@ -25,14 +25,9 @@
         <el-button type="primary" @click="addBtn" :icon="Plus">新增</el-button>
         <el-button type="primary" @click="searchPigeonholeZero" :icon="Plus">{{ isPigeonhole ? "显示归档数据" : "显示原始数据" }}
         </el-button>
-        <!-- <el-upload class="moreDeleteButton" name="file"
-          action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
-          :on-success="uploadSuccess" :limit="1" ref="upload" accept=".xlsx,.xls" :show-file-list="false">
-          <el-button :icon="Upload" type="primary">批量导入</el-button>
-        </el-upload> -->
         <el-button type="success" @click="exportOutBtn" :icon="Plus">导出</el-button>
         <el-upload class="moreDeleteButton" name="file"
-          action="http://localhost:9000/api/logistics/logisContractImportExcel" :on-error="uploadFalse"
+          :action=uploadUrl :on-error="uploadFalse"
           :data="{ createBy: userNickNameStore.user.nickName }" :on-success="uploadSuccess" :limit="1" ref="upload"
           accept=".xlsx,.xls" :show-file-list="false" style="margin-left: 4px; margin-right: 5px; margin-top: 2px;">
           <el-button :icon="Upload" type="primary">导入</el-button>
@@ -179,7 +174,7 @@
           </el-row>
           <el-row>
             <el-form-item prop="contractPhotoList" label="合同照片" label-width='150px' label-position="right">
-              <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+              <el-upload v-model:file-list="UpdatePhotoData" :action=uploadPhotoUrl
                 list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                 :on-success="updateHandlePhotoSuccess">
                 <el-icon>
@@ -387,6 +382,8 @@ import { SelectOwnCompany } from '@/api/customer/CustomerModel';
 import { getOwnCompanySelectApi } from '@/api/ownCompany';
 import { addNewLogisticsPaymentContractApi, checkLogisticsContractNoApi } from '@/api/logisticsPaymentContract';
 import { userStore } from '@/store/nickName'
+import { baseUrl,uploadPhotoUrl } from '@/http/config'
+const uploadUrl=ref(baseUrl+"/api/logistics/logisContractImportExcel")
 const userNickNameStore = userStore()
 //表格相关属性
 const { listParm, searchBtn, resetBtn, tableList, tableHeight, isPigeonhole, refresh, searchPigeonholeZero, sizeChange, currentChange } = useTable()
@@ -410,8 +407,7 @@ const exportOutBtn = async () => {
   let res = await exportApi(exportListParm)
   if (res && res.code == 200) {
     const abtn = document.createElement("a");
-    abtn.href = "http://localhost:9000/api/logistics/exportExcel"
-    // abtn.href = "http://localhost:9000/api/logistics/exportExcel"
+    abtn.href = baseUrl+"/api/logistics/exportExcel"
     abtn.click();
   }
 }

@@ -1,11 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosRequestHeaders } from "axios";
 import { ElMessage } from 'element-plus';
-
-
+import { baseUrl } from './config';
 //axios配置
 const config = {
-  baseURL: 'http://localhost:9000',
-  // baseURL: 'http://120.77.28.123:9000',
+  // baseURL: 'http://localhost:9000',
+  baseURL: baseUrl,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   },

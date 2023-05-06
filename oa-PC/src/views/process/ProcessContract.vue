@@ -119,7 +119,7 @@
                         <el-input v-model="NewProcessContractData.concentratedSolutionConversionFormula" size="large" />
                     </el-form-item>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="AddPhotoData" action="http://localhost:9000/addContractPhoto"
+                        <el-upload v-model:file-list="AddPhotoData" :action=uploadPhotoUrl
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="addHandleRemove"
                             :on-success="addHandlePhotoSuccess">
                             <el-icon>
@@ -179,7 +179,7 @@
                             autosize size="large" :disabled="updateFlag" />
                     </el-form-item>
                     <el-form-item label="合同照片">
-                        <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+                        <el-upload v-model:file-list="UpdatePhotoData" :action=uploadPhotoUrl
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
                             :on-success="updateHandlePhotoSuccess">
                             <el-icon>
@@ -379,6 +379,7 @@ import {
 } from '@/api/processContract'
 import { addNewProcessPaymentContractApi } from '@/api/processPaymentContract'
 import { userStore } from '@/store/nickName'
+import {uploadPhotoUrl } from '@/http/config'
 const userNickNameStore = userStore()
 
 const searchData = ref("")
@@ -617,22 +618,6 @@ const returnAllData = () => {
     returnAll.value = false
 }
 
-//导出表格
-// const exportExcel = () => {
-//     exportListParm.searchWord = searchData.value
-//     exportListParm.showPigeonhole = showPigeonhole.value
-//     exportListParm.startDate = choosedDay.value != null ? choosedDay.value[0] : null
-//     exportListParm.endDate = choosedDay.value != null ? choosedDay.value[1] : null
-//     sendExportParmApi(exportListParm).then(res => {
-//         if (res.code == 200) {
-//             const abtn = document.createElement("a");
-//             abtn.href = "http://localhost:9000/processContract/purchaseExportExcel"
-//             abtn.click();
-//         }
-//     })
-// }
-
-// (scope.row.relationPaymentAuditState==1?(scope.row.contractPhoto!= null?true:false):(scope.row.relationLogisticsExistState==1?(scope.row.contractPhoto!= null?true:false):(scope.row.relationPaymentAuditState==1?(scope.row.contractPhoto!= null?true:false):false)))
 
 const getUpdateDisabled = (row: any) => {
     if (row.relationPaymentAuditState == 1) {

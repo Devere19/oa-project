@@ -11,7 +11,7 @@
                 </template>
             </el-input>
             <el-upload class="moreDeleteButton" name="file"
-                action="http://localhost:9000/processPaymentContract/processPaymentImportExcel" :on-error="uploadFalse"
+                :action=uploadUrl :on-error="uploadFalse"
                 :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
@@ -379,6 +379,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { processPaymentContractModel, processPaymentDirectorModel } from '@/api/processPaymentContract/ProcessPaymentContractModel'
 import { getProcessPaymentContractDataApi, searchProcessPaymentContractApi, checkProcessContractNoApi, addNewProcessPaymentContractApi, updateProcessPaymentContractApi, deleteOneProcessPaymentContractApi, changeFinanceState, changeDirectorState } from '@/api/processPaymentContract'
 import { userStore } from '@/store/nickName'
+import { baseUrl } from '@/http/config'
+const uploadUrl=ref(baseUrl+"/processPaymentContract/processPaymentImportExcel")
 const userNickNameStore = userStore()
 
 const searchData = ref("")

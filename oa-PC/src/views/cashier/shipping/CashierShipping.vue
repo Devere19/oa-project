@@ -403,7 +403,7 @@
                             style="width: 100%;" value-format="YYYY-MM-DD" size="large"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="付款流水截图">
-                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+                        <el-upload v-model:file-list="PhotoData" :action=uploadPhotoUrl
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
                             :on-success="handlePhotoSuccess">
                             <el-icon>
@@ -440,6 +440,8 @@ import { shippingContractModel, shippingDirectorModel } from '@/api/shippingCont
 import { getCashierShippingApi, searchCashierShippingApi, uploadCashierShippingApi, getLogisticsCustomerApi } from '@/api/cashier'
 import { userStore } from '@/store/nickName'
 import PrintFormDialog from '@/components/PrintFormDialog.vue'
+import { uploadPhotoUrl } from '@/http/config'
+
 const userNickNameStore = userStore()
 
 const searchData = ref("")
