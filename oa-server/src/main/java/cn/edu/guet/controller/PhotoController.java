@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.UUID;
 
 /**
@@ -16,7 +18,7 @@ import java.util.UUID;
 public class PhotoController {
 
     @RequestMapping("/addContractPhoto")
-    public HttpResult addContractPhoto(MultipartFile file){
+    public HttpResult addContractPhoto(MultipartFile file) throws UnknownHostException {
         // 获取文件名
         String fileName = file.getOriginalFilename();
         // 获取文件后缀
@@ -35,7 +37,7 @@ public class PhotoController {
         FileOutputStream image=null;
         try {
 //            将MultipartFile文件转换成File文件
-            tempFile = prefix.length()>=3?File.createTempFile(fileName.substring(0, fileName.lastIndexOf(".")), prefix):
+            tempFile = fileName.substring(0, fileName.lastIndexOf(".")).length()>=3?File.createTempFile(fileName.substring(0, fileName.lastIndexOf(".")), prefix):
                     File.createTempFile("111"+fileName.substring(0, fileName.lastIndexOf(".")), prefix);
             file.transferTo(tempFile);
 
@@ -75,7 +77,7 @@ public class PhotoController {
                 e.printStackTrace();
             }
         }
-       return ResultUtils.success("修改成功","http://localhost:9000/static/images/" + uuid + ".jpg");
+       return ResultUtils.success("修改成功","http://175.178.167.101:9000/static/images/" + uuid + ".jpg");
 //         return ResultUtils.success("修改成功","http://120.77.28.123:9000/static/images/" + uuid + ".jpg");
     }
 

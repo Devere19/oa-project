@@ -326,7 +326,8 @@ public class LogisticsPaymentContractServiceImpl extends ServiceImpl<LogisticsPa
 //        避免出现查userId=1，却查出userId=11这样的情况
         if(type==0){
             qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
-                    q.like("director_id",userId+"-").notLike("concat_director_state",userId+"-1")).orderByDesc("create_time","id");
+                    q.like("director_id",userId+"-").and(s->
+                            s.notLike("concat_director_state",userId+"-1")).or().isNull("concat_director_state")).orderByDesc("create_time","id");
         }else if(type==1){
             qw.isNotNull("finance_staff").isNotNull("finance_state").and(q->
                     q.like("director_id",userId+"-").like("concat_director_state",userId+"-1").ne("director_state","1,1,1")).orderByDesc("create_time","id");

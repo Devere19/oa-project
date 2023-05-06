@@ -20,7 +20,7 @@
                 </el-row>
                 <el-row>
                     <el-form-item prop="contractPhotoList" label="合同照片">
-                        <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+                        <el-upload v-model:file-list="PhotoData" :action=uploadPhotoUrl
                             list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
                             :on-success="handlePhotoSuccess">
                             <el-icon>
@@ -42,6 +42,7 @@ import { reactive, ref } from 'vue';
 import { ElMessage, FormInstance, UploadProps, UploadUserFile } from 'element-plus';
 import { deletePhotoApi } from '@/api/handlePhoto';
 import { editCashierSaleApi } from '@/api/cashier';
+import { uploadPhotoUrl } from '@/http/config'
 
 const addFormRef = ref<FormInstance>()
 

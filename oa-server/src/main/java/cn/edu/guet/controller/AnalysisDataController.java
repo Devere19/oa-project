@@ -109,7 +109,7 @@ public class AnalysisDataController {
         String fileName =null;
 
         if("0".equals(incomeSpendExportParams.getDataType())){
-            // 导出
+            // StringUtils.isEmpty(logisticsContract.getCreateBy())?SecurityUtils.getUsername(): logisticsContract.getCreateBy()
             if("0".equals(incomeSpendExportParams.getDataCompany())){
                 fileName = "整体业务-总体-"+incomeSpendExportParams.getChooseDate()+"收入支出细则.xlsx";
             }else if("1".equals(incomeSpendExportParams.getDataCompany())){

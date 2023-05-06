@@ -20,7 +20,7 @@
       <!-- <el-button v-show="firstSelection?.[0] != null" class="moreDeleteButton" type="danger"
         @click="openMoreDeleteDialog">批量删除
       </el-button> -->
-      <el-upload class="moreDeleteButton" name="file" action="http://localhost:9000/purchaseContract/purchaseImportExcel"
+      <el-upload class="moreDeleteButton" name="file" :action=uploadUrl
         :on-error="uploadFalse" :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1"
         ref="upload" accept=".xlsx,.xls" :show-file-list="false">
         <el-button :icon="Upload" type="primary">批量导入</el-button>
@@ -172,7 +172,7 @@
             <el-input v-model="NewPurchaseContractData.paymentAmount" size="large" />
           </el-form-item>
           <el-form-item label="合同照片">
-            <el-upload v-model:file-list="AddPhotoData" action="http://localhost:9000/addContractPhoto"
+            <el-upload v-model:file-list="AddPhotoData" :action=uploadPhotoUrl
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="addHandleRemove"
               :on-success="addHandlePhotoSuccess">
               <el-icon>
@@ -261,7 +261,7 @@
             <el-input v-model="UpdatePurchaseContractData.paymentAmount" size="large" :disabled="updateFlag" />
           </el-form-item>
           <el-form-item label="合同照片">
-            <el-upload v-model:file-list="UpdatePhotoData" action="http://localhost:9000/addContractPhoto"
+            <el-upload v-model:file-list="UpdatePhotoData" :action=uploadPhotoUrl
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="updateHandleRemove"
               :on-success="updateHandlePhotoSuccess">
               <el-icon>
@@ -453,6 +453,8 @@ import {
 } from '@/api/purchaseContract'
 import { addNewPurchasePaymentContractApi } from '@/api/purchasePaymentContract'
 import { userStore } from '@/store/nickName'
+import { baseUrl,uploadPhotoUrl } from '@/http/config'
+const uploadUrl=ref(baseUrl+"/purchaseContract/purchaseImportExcel")
 const userNickNameStore = userStore()
 
 const searchData = ref("")
@@ -720,7 +722,7 @@ const exportExcel = () => {
   sendExportParmApi(exportListParm).then(res => {
     if (res.code == 200) {
       const abtn = document.createElement("a");
-      abtn.href = "http://localhost:9000/purchaseContract/purchaseExportExcel"
+      abtn.href = baseUrl+"/purchaseContract/purchaseExportExcel"
       abtn.click();
     }
   })

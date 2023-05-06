@@ -11,7 +11,7 @@
                 </template>
             </el-input>
             <el-upload class="moreDeleteButton" name="file"
-                action="http://localhost:9000/logisticsPaymentContract/logisticsPaymentImportExcel" :on-error="uploadFalse"
+                :action=uploadUrl :on-error="uploadFalse"
                 :on-success="uploadSuccess" :on-progress="() => changeLoadingTrue()" :limit="1" ref="upload"
                 accept=".xlsx,.xls" :show-file-list="false">
                 <el-button :icon="Upload" type="primary">批量导入</el-button>
@@ -347,6 +347,8 @@ import { conversionDate, conversionDateTime, dateConversion, timeConversion } fr
 import { logisticsPaymentContractModel, logisticsPaymentDirectorModel } from '@/api/logisticsPaymentContract/LogisticsPaymentContractModel'
 import { getLogisticsPaymentContractDataApi, searchLogisticsPaymentContractApi, checkLogisticsContractNoApi, addNewLogisticsPaymentContractApi, updateLogisticsPaymentContractApi, deleteOneLogisticsPaymentContractApi, changeDirectorState, changeFinanceState } from '@/api/logisticsPaymentContract'
 import { userStore } from '@/store/nickName'
+import { baseUrl } from '@/http/config'
+const uploadUrl=ref(baseUrl+"/logisticsPaymentContract/logisticsPaymentImportExcel")
 const userNickNameStore = userStore()
 
 const searchData = ref("")

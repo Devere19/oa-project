@@ -73,7 +73,7 @@
         </el-row>
         <el-row>
           <el-form-item prop="contractPhotoList" label="合同照片" label-width='150px' label-position="right">
-            <el-upload v-model:file-list="PhotoData" action="http://localhost:9000/addContractPhoto"
+            <el-upload v-model:file-list="PhotoData" :action=uploadPhotoUrl
               list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
               :on-success="handlePhotoSuccess">
               <el-icon>
@@ -225,6 +225,7 @@ import { deletePhotoApi } from '@/api/handlePhoto';
 import { addLogisticsApi } from '@/api/logistics';
 import { getOwnCompanySelectApi } from '@/api/ownCompany';
 import { SelectOwnCompany } from '@/api/customer/CustomerModel';
+import { uploadPhotoUrl } from '@/http/config'
 const { dialog, onShow, onClose, onConfirm } = useDialog()
 
 const addFormRef = ref<FormInstance>()

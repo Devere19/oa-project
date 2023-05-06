@@ -34,8 +34,9 @@ public class LoginController {
         // 用户信息
         SysUser user = sysUserService.findByName(username);
 
-        String password = loginBean.getUsername().equals("admin")&&loginBean.getPassword().equals("admin")?
-                user.getPrePassword():loginBean.getPassword();
+        // String password = loginBean.getUsername().equals("admin")&&loginBean.getPassword().equals("admin")?
+        //         user.getPrePassword():loginBean.getPassword();
+        String password = loginBean.getPassword();
         // System.out.println(username);
         // System.out.println(password);
         // 账号不存在、密码错误

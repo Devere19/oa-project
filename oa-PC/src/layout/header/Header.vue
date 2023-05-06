@@ -8,12 +8,15 @@
     </el-avatar>
   </el-tooltip>
   <h2>{{ user.userMessage.roleNames }}</h2>
-  <el-link style="margin-left: 30%;" href="http://120.77.28.123:9000/static/models/models.zip">点击下载导入模板</el-link>
+  <el-link style="margin-left: 30%;" :href=modelsUrl>点击下载导入模板</el-link>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { userStore } from '@/store/nickName'
+import {baseUrl} from '@/http/config'
+
+const modelsUrl=ref(baseUrl+"/static/models/models.zip")
 
 const user = reactive({
   userMessage: {}

@@ -1383,6 +1383,7 @@ import {
 import echarts from "@/utils/echartsUtil";
 // 引入柱状图图表，图表后缀都为 Chart
 import { LineChart } from "echarts/charts";
+import { baseUrl } from '@/http/config'
 echarts.use([LineChart]);
 
 const dataType = ref();
@@ -2665,7 +2666,7 @@ const exportExcel = () => {
             console.log("传递成功");
             console.log(res.data);
             const abtn = document.createElement("a");
-            abtn.href = "http://localhost:9000/finance/incomeSpendExportExcel"
+            abtn.href = baseUrl+"/finance/incomeSpendExportExcel"
             abtn.click();
         }
     })
