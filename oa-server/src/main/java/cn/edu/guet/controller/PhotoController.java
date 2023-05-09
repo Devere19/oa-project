@@ -77,8 +77,7 @@ public class PhotoController {
                 e.printStackTrace();
             }
         }
-       return ResultUtils.success("修改成功","http://175.178.167.101:9000/static/images/" + uuid + ".jpg");
-//         return ResultUtils.success("修改成功","http://120.77.28.123:9000/static/images/" + uuid + ".jpg");
+       return ResultUtils.success("修改成功","http://43.136.24.231:9000/static/images/" + uuid + ".jpg");
     }
 
     @RequestMapping("/deletePhoto")
