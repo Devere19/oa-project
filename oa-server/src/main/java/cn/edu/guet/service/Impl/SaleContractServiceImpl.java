@@ -272,13 +272,17 @@ public class SaleContractServiceImpl extends ServiceImpl<SaleContractMapper, Sal
     @Override
     public BigDecimal getRemainingOutboundVolume(String saleContractNo) {
         //拿到所有物流单中销售单号是saleContract的
+        BigDecimal result = BigDecimal.valueOf(0);
         QueryWrapper<LogisticsContract> query = new QueryWrapper<>();
         query.lambda().eq(LogisticsContract::getSaleContractNo, saleContractNo);
         List<LogisticsContract> list = logisticsContractService.list(query);
-        BigDecimal result = BigDecimal.valueOf(0);
-        //拿到所有的物流单中的重量，得到总数， 如果没有的话返回0
         for (LogisticsContract logisticsContract : list) {
-            result = result.add(logisticsContract.getTotalWeight());
+            QueryWrapper<LogisticsDetail> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(LogisticsDetail::getLogisticsContractNo,logisticsContract.getLogisticsContractNo());
+            List<LogisticsDetail> logisticsDetailList = logisticsDetailService.list(queryWrapper);
+            for (LogisticsDetail logisticsDetail : logisticsDetailList) {
+                result=result.add(logisticsDetail.getGoodsWeight());
+            }
         }
         return result;
     }

@@ -233,7 +233,7 @@ public class LogisticsContractController {
                     logisticsContract.setLogisticsContractNo(importLogisticsContractModel.getLogisticsContractNo());
                     logisticsContract.setSaleContractNo(importLogisticsContractModel.getSaleContractNo());
                     logisticsContract.setOwnCompanyName(importLogisticsContractModel.getOwnCompanyName());
-                    logisticsContract.setTotalWeight(importLogisticsContractModel.getTotalWeight());
+                    logisticsContract.setTotalWeight(importLogisticsContractModel.getDetailGoodsWeight());
                     logisticsContract.setGoodsUnit(importLogisticsContractModel.getGoodsUnit());
                     logisticsContract.setFreight(importLogisticsContractModel.getFreight());
                     logisticsContract.setLogisticsContractTime(importLogisticsContractModel.getLogisticsContractTime());

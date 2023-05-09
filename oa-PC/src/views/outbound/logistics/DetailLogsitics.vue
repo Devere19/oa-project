@@ -14,7 +14,7 @@
         <el-table-column prop="outboundTime" label="出库日期" :formatter="conversionDate"></el-table-column>
         <el-table-column prop="licensePlateNumber" label="车牌号"></el-table-column>
         <el-table-column prop="goodsWeight" label="载货量"></el-table-column>
-        <el-table-column prop="uploadingWeight" label="些货量"></el-table-column>
+        <el-table-column prop="uploadingWeight" label="卸货量"></el-table-column>
         <el-table-column prop="goodsUnit" label="重量单位"></el-table-column>
         <el-table-column prop="calculationMethod" label="结算方式"></el-table-column>
       </el-table>

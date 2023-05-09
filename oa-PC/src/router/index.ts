@@ -8,9 +8,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/index',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/oa/dashboard',
     children: [{
-      path: '/dashboard',
+      path: '/oa/dashboard',
       component: () => import('@/layout/Index/Index.vue'),
       name: 'index',
       meta: {
@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/system',
+    path: '/oa/system',
     name: 'system',
     component: Layout,
     meta: {
@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/userList',
+        path: '/oa/userList',
         name: 'userList',
         component: () => import('@/views/system/user/UserList.vue'),
         meta: {
@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/roleList',
+        path: '/oa/roleList',
         name: 'roleList',
         component: () => import('@/views/system/role/RoleList.vue'),
         meta: {
@@ -51,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/menuList',
+        path: '/oa/menuList',
         name: 'menuList',
         component: () => import('@/views/system/menu/MenuList.vue'),
         meta: {
@@ -61,7 +61,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/logList',
+        path: '/oa/logList',
         name: 'logList',
         component: () => import('@/views/system/log/LogList.vue'),
         meta: {
@@ -73,11 +73,11 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/purchaseContract',
+    path: '/oa/purchaseContract',
     component: Layout,
-    redirect: '/purchaseContract',
+    redirect: '/oa/purchaseContract',
     children: [{
-      path: '/purchaseContract',
+      path: '/oa/purchaseContract',
       component: () => import('@/views/purchase/PurchaseContract.vue'),
       name: 'purchaseContract',
       meta: {
@@ -88,11 +88,11 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/processContract',
+    path: '/oa/processContract',
     component: Layout,
-    redirect: '/processContract',
+    redirect: '/oa/processContract',
     children: [{
-      path: '/processContract',
+      path: '/oa/processContract',
       component: () => import('@/views/process/ProcessContract.vue'),
       name: 'processContract',
       meta: {
@@ -103,7 +103,7 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/cashier',
+    path: '/oa/cashier',
     name: 'cashier',
     component: Layout,
     meta: {
@@ -113,7 +113,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/cashier/cashierPurchasePayment',
+        path: '/oa/cashier/cashierPurchasePayment',
         name: 'cashierPurchasePayment',
         component: () => import('@/views/cashier/purchasePayment/CashierPurchasePayment.vue'),
         meta: {
@@ -123,7 +123,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/cashier/cashierProcessPayment',
+        path: '/oa/cashier/cashierProcessPayment',
         name: 'cashierProcessPayment',
         component: () => import('@/views/cashier/processPayment/CashierProcessPayment.vue'),
         meta: {
@@ -133,7 +133,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/cashier/cashierSale',
+        path: '/oa/cashier/cashierSale',
         name: 'cashierSale',
         component: () => import('@/views/cashier/sale/CashierSale.vue'),
         meta: {
@@ -143,7 +143,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/cashier/cashierLogisticsPayment',
+        path: '/oa/cashier/cashierLogisticsPayment',
         name: 'cashierLogisticsPayment',
         component: () => import('@/views/cashier/logisticsPayment/CashierLogisticsPayment.vue'),
         meta: {
@@ -153,7 +153,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/cashier/cashierShipping',
+        path: '/oa/cashier/cashierShipping',
         name: 'cashierShipping',
         component: () => import('@/views/cashier/shipping/CashierShipping.vue'),
         meta: {
@@ -163,7 +163,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/cashier/cashierOfficeExpense',
+        path: '/oa/cashier/cashierOfficeExpense',
         name: 'cashierOfficeExpense',
         component: () => import('@/views/cashier/officeExpense/CashierOfficeExpense.vue'),
         meta: {
@@ -175,11 +175,11 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/warehouseManagement',
+    path: '/oa/warehouseManagement',
     component: Layout,
-    redirect: '/warehouseManagement',
+    redirect: '/oa/warehouseManagement',
     children: [{
-      path: '/warehouseManagement',
+      path: '/oa/warehouseManagement',
       component: () => import('@/views/warehouse/WarehouseManagement.vue'),
       name: 'warehouseManagement',
       meta: {
@@ -190,11 +190,11 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/saleContract',
+    path: '/oa/saleContract',
     component: Layout,
-    redirect: '/saleContract',
+    redirect: '/oa/saleContract',
     children: [{
-      path: '/saleContract',
+      path: '/oa/saleContract',
       component: () => import('@/views/sale/SaleContract.vue'),
       name: 'saleContract',
       meta: {
@@ -205,7 +205,7 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/outbound',
+    path: '/oa/outbound',
     name: 'outbound',
     component: Layout,
     meta: {
@@ -215,7 +215,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/outbound/outboundLogisticsList',
+        path: '/oa/outbound/outboundLogisticsList',
         name: 'outboundLogisticsList',
         component: () => import('@/views/outbound/logistics/OutboundLogisticsList.vue'),
         meta: {
@@ -225,7 +225,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/outbound/outboundShippingList',
+        path: '/oa/outbound/outboundShippingList',
         name: 'outboundShippingList',
         component: () => import('@/views/outbound/shipping/OutboundShippingList.vue'),
         meta: {
@@ -237,7 +237,7 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/finance',
+    path: '/oa/finance',
     name: 'finance',
     component: Layout,
     meta: {
@@ -247,7 +247,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/finance/reportAnalysis',
+        path: '/oa/finance/reportAnalysis',
         name: 'reportAnalysis',
         component: () => import('@/views/finance/reportAnalysis/ReportAnalysis.vue'),
         meta: {
@@ -257,7 +257,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/finance/officeExpense',
+        path: '/oa/finance/officeExpense',
         name: 'officeExpense',
         component: () => import('@/views/finance/officeExpense/OfficeExpense.vue'),
         meta: {
@@ -267,7 +267,7 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
-        path: '/finance/priceTrend',
+        path: '/oa/finance/priceTrend',
         name: 'priceTrend',
         component: () => import('@/views/finance/priceTrend/PriceTrend.vue'),
         meta: {
@@ -279,11 +279,11 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: '/purchasePaymentContract',
+    path: '/oa/purchasePaymentContract',
     component: Layout,
-    redirect: '/purchasePaymentContract',
+    redirect: '/oa/purchasePaymentContract',
     children: [{
-      path: '/purchasePaymentContract',
+      path: '/oa/purchasePaymentContract',
       component: () => import('@/views/purchasePayment/PurchasePaymentContract.vue'),
       name: 'purchasePaymentContract',
       meta: {
@@ -294,11 +294,11 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/processPaymentContract',
+    path: '/oa/processPaymentContract',
     component: Layout,
     redirect: '/processPaymentContract',
     children: [{
-      path: '/processPaymentContract',
+      path: '/oa/processPaymentContract',
       component: () => import('@/views/processPayment/ProcessPaymentContract.vue'),
       name: 'processPaymentContract',
       meta: {
@@ -309,11 +309,11 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/logisticsPaymentContract',
+    path: '/oa/logisticsPaymentContract',
     component: Layout,
-    redirect: '/logisticsPaymentContract',
+    redirect: '/oa/logisticsPaymentContract',
     children: [{
-      path: '/logisticsPaymentContract',
+      path: '/oa/logisticsPaymentContract',
       component: () => import('@/views/logisticsPayment/LogisticsPaymentContract.vue'),
       name: 'logisticsPaymentContract',
       meta: {
@@ -324,11 +324,11 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/customerList',
+    path: '/oa/customerList',
     component: Layout,
-    redirect: '/customerList',
+    redirect: '/oa/customerList',
     children: [{
-      path: '/customerList',
+      path: '/oa/customerList',
       component: () => import('@/views/customer/CustomerList.vue'),
       name: 'customerList',
       meta: {
@@ -339,11 +339,11 @@ const routes: Array<RouteRecordRaw> = [
     }]
   },
   {
-    path: '/ownCompanyList',
+    path: '/oa/ownCompanyList',
     component: Layout,
-    redirect: '/ownCompanyList',
+    redirect: '/oa/ownCompanyList',
     children: [{
-      path: '/ownCompanyList',
+      path: '/oa/ownCompanyList',
       component: () => import('@/views/ownCompany/OwnCompanyList.vue'),
       name: 'ownCompanyList',
       meta: {

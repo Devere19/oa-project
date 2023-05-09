@@ -144,7 +144,7 @@ public class  PurchaseContractServiceImpl extends ServiceImpl<PurchaseContractMa
         if (contractPhotos != "") {
             purchaseContract.setContractPhoto(contractPhotos);
         }
-        String urlString=purchaseContract.getInboundData().get(0).getFactoryName();
+        String urlString="";
         for (int i = 0; i < purchaseContract.getInboundData().size(); i++) {
 //            当不是自家仓库时，即外商仓库
 //            修改，不存在自家仓库的情况，只能从外商入

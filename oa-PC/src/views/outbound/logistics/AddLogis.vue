@@ -70,12 +70,16 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="12" :offset="0">
+            <el-form-item label="实际重量" label-width='150px' label-position="right">
+              <el-input v-model="calWeight" disabled></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-form-item prop="contractPhotoList" label="合同照片" label-width='150px' label-position="right">
-            <el-upload v-model:file-list="PhotoData" :action=uploadPhotoUrl
-              list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove"
-              :on-success="handlePhotoSuccess">
+            <el-upload v-model:file-list="PhotoData" :action=uploadPhotoUrl list-type="picture-card"
+              :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-success="handlePhotoSuccess">
               <el-icon>
                 <Plus />
               </el-icon>
@@ -238,6 +242,15 @@ const getLogisticsDetailList = computed(() => {
 const roleData = reactive<SelectOwnCompany>({
   list: []
 })
+// 计算属性：总重量
+const calWeight = computed(() => {
+  let sum = 0;
+  addModel.logisticsDetailList.forEach(detail => {
+    sum += Number(detail.goodsWeight)
+  });
+  addModel.totalWeight = sum + ''
+  return sum;
+});
 
 onMounted(() => {
   getOwnCompanySelectApi().then(res => {

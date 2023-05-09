@@ -7,9 +7,10 @@
       <span class="title">销售方公司名:</span>{{ detailTableList.customerEnterpriseName }}
       <span class="title">己方公司名:</span>{{ detailTableList.ownCompanyName }}
       <span class="title">销售总量:</span>{{ detailTableList.goodsCount }}{{ detailTableList.goodsUnit }}<br />
-      <span class="title">剩余出库量:</span>{{ detailTableList.goodsCount - remainingOutboundVolume }}{{
+      <span class="title">剩余出库量:</span>{{ new Decimal(detailTableList.goodsCount).minus(new
+        Decimal(remainingOutboundVolume)) }}{{
     detailTableList.goodsUnit
-}}<br />
+  }}<br />
       <span class="title" style="line-height: 50px;">出库详情:</span><br />
 
       <!-- 出库详情表格 -->
@@ -19,7 +20,7 @@
         <el-table-column prop="goodsFactory" label="取货厂名"></el-table-column>
         <el-table-column prop="unloadingLocation" label="卸货地点"></el-table-column>
         <el-table-column prop="unitPrice" label="运输单价"></el-table-column>
-        <el-table-column prop="outboundTime" label="出库日期" :formatter="CTTOdate"></el-table-column>
+        <el-table-column prop="outboundTime" label="出库日期" :formatter="conversionDate"></el-table-column>
         <el-table-column prop="licensePlateNumber" label="车牌号"></el-table-column>
         <el-table-column prop="goodsWeight" label="载货量"></el-table-column>
         <el-table-column prop="goodsUnit" label="重量单位"></el-table-column>
@@ -28,7 +29,6 @@
 
 
   </SysDialog>
-
 </template>
 
 <script setup lang="ts">
@@ -38,7 +38,11 @@ import useDialog from '@/hooks/useDialog';
 import { reactive, ref } from 'vue';
 import useInstance from '@/hooks/useInstance';
 import { getRemainingOutboundVolumeApi, getDetailSaleContract } from '@/api/sale';
+import { Decimal } from 'decimal.js';
+import { conversionDate } from '@/utils/timeFormat'
 const { global } = useInstance()
+
+
 
 const { onShow, dialog, onConfirm, onClose } = useDialog()
 
@@ -63,15 +67,11 @@ const show = async (addModel: AddSaleModel) => {
   dialog.title = '销售单详情'
   dialog.height = 400
   dialog.width = 800
+  console.log(remainingOutboundVolume)
   onShow()
 }
 
-//时间格式化
-const CTTOdate = (row: { createTime: string | number | Date; }) => {
-  let dateee = new Date(row.createTime).toJSON();
-  return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
-  // return new Date(new Date(dateee)).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').substring(0, 10)
-}
+
 
 
 // //表单绑定的对象
